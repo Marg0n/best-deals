@@ -35,6 +35,9 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     // Send a ping to confirm a successful connection
+
+    app.use("/user", async (req, res) => {});
+
     await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
@@ -47,7 +50,7 @@ async function run() {
 run().catch(console.dir);
 
 app.get("/", (req, res) => {
-  res.send("Best Deal is Running");
+  res.send("Best Deal Is A Running");
 });
 
 app.listen(port, () => {
