@@ -1,34 +1,41 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 const ProductsCard = ({ product }) => {
+  const {
+    productName,
+    brandName,
+    productImage,
+    description,
+    price,
+    category,
+    ratings,
+    creationDateTime,
+  } = product;
 
-    const { productName, brandName, productImage, description, price, category, ratings, creationDateTime } = product
-
-    return (
-        <div>
-            <div className="card card-compact bg-base-100 w-72 shadow-xl">
-                <figure>
-                    <img className="h-52"
-                        src={productImage}
-                        alt={productName} />
-                </figure>
-                <div className="card-body">
-                    <h2 className="text-xl font-bold">{productName.length > 20 ? productName.substring(0, 20) + '...' : productName}</h2>
-                    <h2 className="font-semibold">Brand : {brandName}</h2>
-                    <p>{description}</p>
-                    <h2 className="font-semibold">Category : {category}</h2>
-                    <h2 className="font-semibold">Uploaded at : {creationDateTime}</h2>
-                    <div className="card-actions justify-end">
-                        <button className="btn bg-orange-300">Rating : {ratings}</button>
-                        <button className="btn bg-orange-300">Price : {price}$</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+  return (
+    <div className="p-6 rounded-md shadow-md dark:bg-gray-50 dark:text-gray-900">
+      <img
+        src={productImage}
+        alt=""
+        className="object-cover object-center w-full rounded-md h-72 dark:bg-gray-500"
+      />
+      <div className="mt-6 mb-2">
+        <span className="block text-xs font-medium tracking-widest uppercase dark:text-violet-600">
+          Quisque
+        </span>
+        <h2 className="text-xl font-semibold tracking-wide">
+          Nam maximus purus
+        </h2>
+      </div>
+      <p className="dark:text-gray-800">
+        Mauris et lorem at elit tristique dignissim et ullamcorper elit. In sed
+        feugiat mi. Etiam ut lacinia dui.
+      </p>
+    </div>
+  );
 };
 
 ProductsCard.propTypes = {
-    product: PropTypes.object.isRequired
-}
+  product: PropTypes.object.isRequired,
+};
 
 export default ProductsCard;
