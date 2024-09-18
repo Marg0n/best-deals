@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 const ProductsCard = ({ product }) => {
-
+//fine
     const { productName, brandName, productImage, description, price, category, ratings, creationDateTime } = product
 
     return (
@@ -9,7 +9,7 @@ const ProductsCard = ({ product }) => {
                 <figure>
                     <img className="h-52"
                         src={productImage}
-                        alt={productName} />
+                        alt={productName}/>
                 </figure>
                 <div className="card-body">
                     <h2 className="text-xl font-bold">{productName.length > 20 ? productName.substring(0, 20) + '...' : productName}</h2>
