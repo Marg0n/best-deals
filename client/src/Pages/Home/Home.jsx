@@ -9,7 +9,7 @@ const Home = () => {
     queryKey: ["payments"],
     queryFn: async () => {
       const res = await axios.get(`https://needscart-server.vercel.app/all`);
-      console.log(res.data);
+
       return res.data;
     },
   });
