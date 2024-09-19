@@ -12,6 +12,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.56.2",
     "animate.css": "^4.1.1",
+    "aos": "^2.3.4",
     "axios": "^1.7.7",
     "firebase": "^10.13.2",
     "prop-types": "^15.8.1",
