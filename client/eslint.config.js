@@ -5,7 +5,10 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 
 export default [
-  { ignores: ['dist'] },
+  { 
+    root: true,
+    env: { browser: true, es2020: true, node: true },
+    ignores: ['dist'] },
   {
     files: ['**/*.{js,jsx}'],
     languageOptions: {
