@@ -22,7 +22,7 @@ const Home = () => {
         <LeftMenubar></LeftMenubar>
       </div>
 
-      {/* Products display section */}
+      
       <div className="w-full lg:w-3/4 ">
 
         {isLoading ?
