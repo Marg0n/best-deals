@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { ClimbingBoxLoader } from "react-spinners";
 
 
 const Navbar = () => {
@@ -12,7 +15,7 @@ const Navbar = () => {
                 </div>
                 <div className="navbar-end">
                     {/* TODO : This button will toggole */}
-                    <a className="btn"><FaUserAlt></FaUserAlt></a> 
+                    <Link to='/login' className="btn"><FaUserAlt></FaUserAlt></Link>
                 </div>
             </div>
 
