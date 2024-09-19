@@ -1,31 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
-
-
-const Navbar = () => {
-    return (
-        <div>
-            <div className="navbar bg-[#775050] dark:text-gray-900 ">
-                <div className="navbar-start">
-                    <img className="h-16 " src="https://i.ibb.co.com/jg7qSw4/Best-Deal-final-logo.png" alt="BestDeal" />
-                </div>
-                <div className="navbar-center hidden lg:flex">
-                </div>
-                <div className="navbar-end">
-                    {/* TODO : This button will toggole */}
-                    <Link to='/login' className="btn"><FaUserAlt></FaUserAlt></Link>
-                </div>
-            </div>
-=======
 import { ClimbingBoxLoader } from "react-spinners";
 import { FiShoppingCart } from "react-icons/fi";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 const Navbar = () => {
     
   const { user, loggedOut } = useContext(AuthContext);
->>>>>>> e02d41220a98fa14d3653ef7967f9fb9d9cbf856
 
   return (
     <div className="bg-gray-100 fixed w-full">
