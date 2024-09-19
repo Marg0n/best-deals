@@ -1,32 +1,5 @@
-<<<<<<< HEAD
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
-const ProductsCard = ({ product }) => {
-	const { productName, brandName, productImage, description, price, category, ratings, creationDateTime, _id } = product
-
-	return (
-		
-		<div className='items-center mt-20'>
-			<div className=" rounded-md shadow-md bg-gray-900 text-gray-100">
-				<img src={productImage} alt="" className="object-cover object-center w-full rounded-t-md h-72 bg-gray-500" />
-				<div className="flex flex-col justify-between">
-					<div className="">
-						<h2 className="text-xl font-semibold ">{productName}</h2>
-						
-					</div>
-					<Link to={`/details/${_id}`}>
-					<button type="button" className="flex items-center justify-center w-full p-3 font-semibold tracking-wide rounded-md bg-default-400 text-gray-100">Read more</button></Link>
-				</div>
-			</div>
-		</div>
-	);
-};
-
-ProductsCard.propTypes = {
-	product: PropTypes.object.isRequired
-}
-=======
 import PropTypes from "prop-types";
+import { useState } from "react";
 const ProductsCard = ({ product }) => {
   const {
     productName,
@@ -37,27 +10,63 @@ const ProductsCard = ({ product }) => {
     category,
     ratings,
     creationDateTime,
-  } = product;
+    _id } = product;
+
+
+  const [isHovered, setIsHovered] = useState(false);
+
 
   return (
-    <div className="p-6 rounded-md shadow-md dark:bg-gray-50 dark:text-gray-900">
-      <img
-        src={productImage}
-        alt=""
-        className="object-cover object-center w-full rounded-md h-72 dark:bg-gray-500"
-      />
-      <div className="mt-6 mb-2">
-        <span className="block text-xs font-medium tracking-widest uppercase dark:text-violet-600">
-          Quisque
-        </span>
-        <h2 className="text-xl font-semibold tracking-wide">
-          Nam maximus purus
-        </h2>
+
+    <div className="relative flex">
+      <div
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        className="p-6 overflow-hidden rounded-md shadow-md dark:bg-gray-50 dark:text-gray-900">
+        <img
+          src={productImage}
+          alt=""
+          className={`object-cover object-center w-full h-72 transition-transform duration-300 ${isHovered ? "scale-110" : "scale-100"
+            }`}
+        />
+        <div className="mt-6 mb-2">
+          <span className="block text-xs font-medium tracking-widest uppercase dark:text-violet-600">
+            ${price}
+          </span>
+          <h2 className="text-xl font-semibold tracking-wide">
+            {productName}
+          </h2>
+        </div>
+
+
+        {/* Hover effect */}
+        <div>
+          {isHovered && (
+            <div
+              data-aos="fade-in"
+              data-aos-duration="1500"
+              className="absolute hero-overlay bg-opacity-90 z-50 left-full top-10 -ml-20 p-3 rounded-md shadow-md dark:bg-gray-50 dark:text-gray-900"
+              style={{ maxHeight: '15rem', maxWidth: '15rem' }}
+            >
+              <div className="mt-4 mb-2 bg-transparent">
+                <span className="block text-xs font-medium tracking-widest uppercase text-white ">
+                  Ratings : {ratings}
+                </span>
+                <h2 className="text-xl font-semibold tracking-wide text-white">
+                  Brand : {brandName}
+                </h2>
+              </div>
+              <p className="text-white">
+                {description.length > 20 ? description.substring(0, 50) + '...' : description}
+              </p>
+              <Link to={`/details/${_id}`}>
+              <button className="btn bg-[#775050] border-none text-white w-full mt-3"> View Details</button>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
-      <p className="dark:text-gray-800">
-        Mauris et lorem at elit tristique dignissim et ullamcorper elit. In sed
-        feugiat mi. Etiam ut lacinia dui.
-      </p>
+
     </div>
   );
 };
@@ -65,6 +74,5 @@ const ProductsCard = ({ product }) => {
 ProductsCard.propTypes = {
   product: PropTypes.object.isRequired,
 };
->>>>>>> 140e59cbf615aa02fdd265e7eb80da25a5973bee
 
 export default ProductsCard;
