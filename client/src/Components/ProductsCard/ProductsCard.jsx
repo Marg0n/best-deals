@@ -49,7 +49,7 @@ const ProductsCard = ({ product }) => {
             <div
               data-aos="fade-in"
               data-aos-duration="1500"
-              className="absolute hero-overlay bg-opacity-90 z-50 left-full top-10 -ml-20 p-3 rounded-md shadow-md"
+              className="absolute hero-overlay bg-opacity-90 z-50 right-full top-10 -mr-20 p-3 rounded-md shadow-md"
               style={{ maxHeight: '15rem', maxWidth: '15rem' }}
             >
               <div className="mt-4 mb-2 bg-transparent">
