@@ -3,6 +3,7 @@ import LeftMenubar from "../../Components/LeftMenubar/LeftMenubar";
 import { useQuery } from "@tanstack/react-query";
 import ProductsCard from "../../Components/ProductsCard/ProductsCard";
 import { ClimbingBoxLoader } from "react-spinners";
+import FeaturedProducts from "../../Components/FeaturedProducts/FeaturedProducts";
 
 const Home = () => {
   const { data: products, isLoading } = useQuery({
@@ -22,7 +23,7 @@ const Home = () => {
 
       
       <div className="w-full lg:w-3/4 ">
-
+      <FeaturedProducts></FeaturedProducts>
         {isLoading ?
           (
             <div className="flex justify-center items-center h-screen">
