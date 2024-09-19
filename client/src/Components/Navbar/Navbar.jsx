@@ -5,6 +5,7 @@ import { ClimbingBoxLoader } from "react-spinners";
 import { FiShoppingCart } from "react-icons/fi";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 const Navbar = () => {
+    
   const { user, loggedOut } = useContext(AuthContext);
 
   return (
