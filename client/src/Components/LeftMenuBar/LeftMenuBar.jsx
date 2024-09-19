@@ -4,9 +4,9 @@ import { CiSearch } from "react-icons/ci";
 
 const LeftMenubar = () => {
     return (
-        <div>
+        <div className="mt-20">
             {/*Left Side menubar / categorybar  */}
-            <div className="lg:flex-1  hidden lg:block py-5">
+            <div className="lg:flex-1  hidden lg:block py-5 fixed">
                 {/* SearchBar */}
                 <div className="w-3/4 mx-auto">
                     <label className="input input-bordered flex items-center gap-2">

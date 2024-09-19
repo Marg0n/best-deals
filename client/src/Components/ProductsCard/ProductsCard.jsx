@@ -1,34 +1,28 @@
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 const ProductsCard = ({ product }) => {
-//fine
-    const { productName, brandName, productImage, description, price, category, ratings, creationDateTime } = product
+	const { productName, brandName, productImage, description, price, category, ratings, creationDateTime, _id } = product
 
-    return (
-        <div>
-            <div className="card card-compact bg-base-100 w-72 shadow-xl">
-                <figure>
-                    <img className="h-52"
-                        src={productImage}
-                        alt={productName}/>
-                </figure>
-                <div className="card-body">
-                    <h2 className="text-xl font-bold">{productName.length > 20 ? productName.substring(0, 20) + '...' : productName}</h2>
-                    <h2 className="font-semibold">Brand : {brandName}</h2>
-                    <p>{description}</p>
-                    <h2 className="font-semibold">Category : {category}</h2>
-                    <h2 className="font-semibold">Uploaded at : {creationDateTime}</h2>
-                    <div className="card-actions justify-end">
-                        <button className="btn bg-orange-300">Rating : {ratings}</button>
-                        <button className="btn bg-orange-300">Price : {price}$</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
+	return (
+		
+		<div className='items-center mt-20'>
+			<div className=" rounded-md shadow-md bg-gray-900 text-gray-100">
+				<img src={productImage} alt="" className="object-cover object-center w-full rounded-t-md h-72 bg-gray-500" />
+				<div className="flex flex-col justify-between">
+					<div className="">
+						<h2 className="text-xl font-semibold ">{productName}</h2>
+						
+					</div>
+					<Link to={`/details/${_id}`}>
+					<button type="button" className="flex items-center justify-center w-full p-3 font-semibold tracking-wide rounded-md bg-default-400 text-gray-100">Read more</button></Link>
+				</div>
+			</div>
+		</div>
+	);
 };
 
 ProductsCard.propTypes = {
-    product: PropTypes.object.isRequired
+	product: PropTypes.object.isRequired
 }
 
 export default ProductsCard;
