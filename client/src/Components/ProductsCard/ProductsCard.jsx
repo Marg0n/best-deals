@@ -10,7 +10,7 @@ const ProductsCard = ({ product }) => {
     category,
     ratings,
     creationDateTime,
-  } = product;
+    _id } = product;
 
 
   const [isHovered, setIsHovered] = useState(false);
@@ -59,7 +59,9 @@ const ProductsCard = ({ product }) => {
               <p className="text-white">
                 {description.length > 20 ? description.substring(0, 50) + '...' : description}
               </p>
+              <Link to={`/details/${_id}`}>
               <button className="btn bg-[#775050] border-none text-white w-full mt-3"> View Details</button>
+              </Link>
             </div>
           )}
         </div>

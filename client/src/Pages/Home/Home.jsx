@@ -9,7 +9,7 @@ const Home = () => {
     queryKey: ["payments"],
     queryFn: async () => {
       const res = await axios.get(`https://needscart-server.vercel.app/all`);
-      console.log(res.data);
+
       return res.data;
     },
   });
@@ -20,8 +20,24 @@ const Home = () => {
         <LeftMenubar></LeftMenubar>
       </div>
 
-      {/* Products display section */}
+      
       <div className="w-full lg:w-3/4 ">
+
+        {isLoading ?
+          (
+            <div className="flex justify-center items-center h-screen">
+              <ClimbingBoxLoader color="#36d7b7" />
+            </div>
+          ) :
+          (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
+              {products.map(product =>
+              <ProductsCard
+              key={product._id}
+              product={product}
+              ></ProductsCard>)}
+            </div>      
+          )}
         {isLoading ? (
           <div className="flex justify-center items-center h-screen">
             <ClimbingBoxLoader color="#36d7b7" />
