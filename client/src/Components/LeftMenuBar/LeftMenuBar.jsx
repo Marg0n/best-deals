@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 
 const LeftMenubar = () => {
+    
   return (
     <div>
       {/*Left Side menubar / categorybar  */}
