@@ -2,9 +2,8 @@ import { Link } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 
 const LeftMenubar = () => {
-    
   return (
-    <div>
+    <div className="mt-[100px] fixed">
       {/*Left Side menubar / categorybar  */}
       <div className="lg:flex-1  hidden lg:block py-5">
         {/* SearchBar */}
