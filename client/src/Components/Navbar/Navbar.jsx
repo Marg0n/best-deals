@@ -1,43 +1,27 @@
 import { useContext, useEffect, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
-<<<<<<< HEAD
-
-
-const Navbar = () => {
-    return (
-        <div>
-            <div className="navbar bg-[#775050] dark:text-gray-900 ">
-                <div className="navbar-start">
-                    <img className="h-16 " src="https://i.ibb.co.com/jg7qSw4/Best-Deal-final-logo.png" alt="BestDeal" />
-                </div>
-                <div className="navbar-center hidden lg:flex">
-                </div>
-                <div className="navbar-end">
-                    {/* TODO : This button will toggole */}
-                    <Link to='/login' className="btn"><FaUserAlt></FaUserAlt></Link>
-                </div>
-            </div>
-=======
 import { ClimbingBoxLoader } from "react-spinners";
 import { FiShoppingCart } from "react-icons/fi";
 import { AuthContext } from "../../AuthProvider/AuthProvider";
 const Navbar = () => {
-    
   const { user, loggedOut } = useContext(AuthContext);
->>>>>>> e02d41220a98fa14d3653ef7967f9fb9d9cbf856
 
   return (
-    <div className="bg-gray-100 fixed w-full">
+    <div className="bg-[#775050]  fixed w-full z-50 ">
       <div className="navbar py-6">
         <div className="flex-1">
           <img
             className="h-10 lg:h-16"
-            src="https://i.ibb.co.com/w0Td3FL/Best-Deal.png"
+            src="https://i.ibb.co.com/rtTfZsH/Bestdeal-white-text-log.png"
             alt="BestDeal"
           />
         </div>
         <div className="flex-none lg:space-x-4 space-x-2">
+          <button className="bg-[#34394c] text-white font-semibold px-8 lg:flex hidden rounded-full py-[15px]">
+            Be a vendor
+          </button>
+          <Link to="/login"> <FaUserAlt className="h-6 w-6 mr-5"> </FaUserAlt></Link>
           {user ? (
             <>
               <fieldset className="w-full space-y-1 dark:text-gray-800 lg:hidden flex">
