@@ -8,7 +8,7 @@ const Navbar = () => {
   const { user, loggedOut } = useContext(AuthContext);
 
   return (
-    <div className="bg-[#775050]  fixed w-full z-50 hi">
+    <div className="bg-[#775050]  fixed w-full z-50 ">
       <div className="navbar py-6">
         <div className="flex-1">
           <img

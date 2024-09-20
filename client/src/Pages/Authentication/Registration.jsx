@@ -150,7 +150,7 @@ const Registration = () => {
 
 
   return (
-    <div className='flex justify-center items-center min-h-[calc(100vh-370px)] '>
+    <div className='flex justify-center h-screen items-center min-h-[calc(100vh-370px)] '>
       <Helmet>
         <title>Best Deal | Registration</title>
       </Helmet>
