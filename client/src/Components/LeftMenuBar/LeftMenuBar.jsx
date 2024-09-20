@@ -11,7 +11,7 @@ const LeftMenubar = () => {
           <label className="input input-bordered flex items-center gap-2">
             <input type="text" className="grow" placeholder="Search" />
             <button>
-              <CiSearch className="h-10 w-10 "></CiSearch>
+              <CiSearch className="h-10 w-10"></CiSearch>
             </button>
           </label>
         </div>
