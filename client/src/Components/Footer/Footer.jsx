@@ -1,12 +1,12 @@
 
 const Footer = () => {
     return (
-        <footer className="px-4 divide-y bg-gray-700 text-white">
+        <footer className="px-4 divide-y bg-[#775050] text-white">
             <div className="container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
                 <div className="lg:w-1/3">
                     <a rel="noopener noreferrer" href="#" className="flex justify-center space-x-3 lg:justify-start">
                         <div className="flex items-center justify-center rounded-full dark:bg-violet-600">
-                           <img src="https://i.ibb.co.com/w0Td3FL/Best-Deal.png" />
+                           <img className="h-10 lg:h-16" src="https://i.ibb.co.com/rtTfZsH/Bestdeal-white-text-log.png" />
                         </div>
                         
                     </a>

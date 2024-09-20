@@ -3,7 +3,7 @@ import { CiSearch } from "react-icons/ci";
 
 const LeftMenubar = () => {
   return (
-    <div className="mt-[100px] fixed">
+    <div className="mt-[100px] ">
       {/*Left Side menubar / categorybar  */}
       <div className="lg:flex-1  hidden lg:block py-5">
         {/* SearchBar */}
@@ -11,7 +11,7 @@ const LeftMenubar = () => {
           <label className="input input-bordered flex items-center gap-2">
             <input type="text" className="grow" placeholder="Search" />
             <button>
-              <CiSearch className="h-10 w-10"></CiSearch>
+              <CiSearch className="h-10 w-10 "></CiSearch>
             </button>
           </label>
         </div>
