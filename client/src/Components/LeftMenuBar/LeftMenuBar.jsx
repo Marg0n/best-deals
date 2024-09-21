@@ -3,7 +3,7 @@ import { CiSearch } from "react-icons/ci";
 
 const LeftMenubar = () => {
   return (
-    <div className="mt-[100px] fixed">
+    <div className="mt-[100px]">
       {/*Left Side menubar / categorybar  */}
       <div className="lg:flex-1  hidden lg:block py-5">
         {/* SearchBar */}
@@ -17,7 +17,7 @@ const LeftMenubar = () => {
         </div>
 
         <div>
-          <Link className="underline underline-offset-1">Home</Link>
+          <Link to='\' className="underline underline-offset-1">Home</Link>
           <div className="ml-5 mt-5">
             <h1>Categories :</h1>
             <ul className="ml-10">
