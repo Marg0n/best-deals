@@ -8,8 +8,8 @@ const Navbar = () => {
   const { user, loggedOut } = useContext(AuthContext);
 
   return (
-    <div className="bg-gray-100 fixed w-full z-50">
-      <div className="navbar py-6 container mx-auto">
+    <div className="supports-backdrop-blur:bg-[#775050]/90 sticky top-0 z-40 w-full bg-[#775050]/40 backdrop-blur-lg">
+      <div className="navbar  container mx-auto">
         <div className="flex-1">
           <img
             className="h-10 lg:h-16"

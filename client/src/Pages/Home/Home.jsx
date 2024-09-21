@@ -15,7 +15,7 @@ const Home = () => {
     },
   });
   return (
-    <div className="flex p-5 gap-5">
+    <div className=" flex p-5 gap-5">
       {/*Left Side menubar / categorybar  */}
       <div  className="flex-1">
         <LeftMenubar></LeftMenubar>
