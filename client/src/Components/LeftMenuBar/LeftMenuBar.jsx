@@ -17,7 +17,7 @@ const LeftMenubar = () => {
         </div>
 
         <div>
-          <Link className="underline underline-offset-1">Home</Link>
+          <Link to='/' className="underline underline-offset-1">Home</Link>
           <div className="ml-5 mt-5">
             <h1>Categories :</h1>
             <ul className="ml-10">

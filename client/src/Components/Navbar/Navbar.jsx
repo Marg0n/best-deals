@@ -65,6 +65,7 @@ const Navbar = () => {
                   className="btn btn-ghost btn-circle"
                 >
                   <div className="indicator">
+                    
                     <FiShoppingCart size={30} />
                     <span className="badge badge-sm indicator-item">1</span>
                   </div>
@@ -78,6 +79,7 @@ const Navbar = () => {
                     <span className="text-base font-semibold">
                       Content Here
                     </span>
+                    <Link to="/cartlist"> <h1>View Carts Details</h1></Link>
                   </div>
                 </div>
               </div>
@@ -166,6 +168,7 @@ const Navbar = () => {
                     <span className="text-base font-semibold">
                       Content Here
                     </span>
+                    <Link to="/cartlist"> <h1>View Carts Details</h1></Link>
                   </div>
                 </div>
               </div>
