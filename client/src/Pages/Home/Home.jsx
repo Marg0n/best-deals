@@ -1,9 +1,9 @@
 import axios from "axios";
-import LeftMenubar from "../../Components/LeftMenubar/LeftMenubar";
 import { useQuery } from "@tanstack/react-query";
 import ProductsCard from "../../Components/ProductsCard/ProductsCard";
 import { ClimbingBoxLoader } from "react-spinners";
 import FeaturedProducts from "../../Components/FeaturedProducts/FeaturedProducts";
+import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 
 const Home = () => {
   const { data: products, isLoading } = useQuery({
@@ -17,7 +17,7 @@ const Home = () => {
   return (
     <div className="flex p-5 gap-5">
       {/*Left Side menubar / categorybar  */}
-      <div className="flex-1">
+      <div  className="flex-1">
         <LeftMenubar></LeftMenubar>
       </div>
 

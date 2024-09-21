@@ -13,11 +13,18 @@ const Navbar = () => {
         <div className="flex-1">
           <img
             className="h-10 lg:h-16"
-            src="https://i.ibb.co.com/w0Td3FL/Best-Deal.png"
+            src="https://i.ibb.co.com/rtTfZsH/Bestdeal-white-text-log.png"
             alt="BestDeal"
           />
         </div>
         <div className="flex-none lg:space-x-4 space-x-2">
+          <button className="bg-[#34394c] text-white font-semibold px-8 lg:flex hidden rounded-full py-[15px]">
+            Be a vendor
+          </button>
+          <Link to="/login">
+            {" "}
+            <FaUserAlt className="h-6 w-6 mr-5"> </FaUserAlt>
+          </Link>
           {user ? (
             <>
               <fieldset className="w-full space-y-1 dark:text-gray-800 lg:hidden flex">
