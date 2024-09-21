@@ -11,7 +11,7 @@ const Details = () => {
         <div className='flex items-start pt-32'>
             <div className='w-8/12 flex '>
                 <div className='w-1/2 p-3'>
-                    <p className='text-[#775050] text-lg font-normal'><Link to='/'>Home</Link> > Kitchen Appliances > Oven </p>
+                    <p className='text-[#775050] text-lg font-normal'><Link to='/'>Home</Link> {'>'} Kitchen Appliances {'>'} Oven </p>
                     <div className='flex items-center gap-3 justify-end'>
                         <a className='text-[#775050] text-lg font-normal underline' href="">view comments</a>
                         <div className="rating">
