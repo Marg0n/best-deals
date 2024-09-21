@@ -18,18 +18,18 @@ const ProductsCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div>
-      <div className="relative flex">
+    <div className="w-full">
+      <div className="relative">
         <Link to={`/details/${_id}`}>
           <div
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="p-6 overflow-hidden rounded-md shadow-md dark:bg-gray-50 dark:text-gray-900"
+            className="p-6 overflow-hidden rounded-md lg:h-[420px] shadow-md dark:bg-gray-50 dark:text-gray-900"
           >
             <img
               src={productImage}
               alt=""
-              className={`object-cover object-center w-full h-72 transition-transform duration-300 ${
+              className={`object-fit object-center w-full h-72 transition-transform duration-300 ${
                 isHovered ? "scale-110" : "scale-100"
               }`}
             />

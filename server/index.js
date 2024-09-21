@@ -1,21 +1,114 @@
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Configuration Start
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 4000;
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const port = process.env.PORT || 4000;
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Configuration End
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Middleware Start
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 app.use(express.json());
 app.use(cookieParser());
-require("dotenv").config();
-app.use(cors());
+app.use(cors({
+  origin: [
+    'http://localhost:5173',
+    "https://magenta-peony-5d02de.netlify.app",
+    // server-side
+  ],
+  credentials: true,
+  optionsSuccessStatus: 200,
+}));
 
+// ===================================
+// CookieParser Options
+// ===================================
 const cookieOptions = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
 };
 
+
+// ===================================
+// jwt validation middleware
+// ===================================
+const verifyToken = async (req, res, next) => {
+
+
+  const initialToken = await req.headers.authorization
+
+  // ===================================
+  // for local storage only
+  // ===================================
+  if (!initialToken) {
+    return res.status(401).send({ message: 'Unauthorized access!!' });
+  }
+
+  // ===================================
+  // validate local storage token
+  // ===================================
+  const token = await initialToken.split(' ')[1];
+
+  // const token = req?.cookies?.token;
+  // console.log('token :::>', token)
+
+  if (!token) {
+    return res.status(401).send({ message: 'Unauthorized access...' });
+  }
+
+  if (token) {
+    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
+      if (err) {
+        console.log('err token :::>', err)
+        return res.status(401).send({ message: 'Unauthorized access' });
+      }
+      // console.log(decoded)
+      req.decoded = decoded
+      next()
+    })
+  }
+}
+
+
+// ===================================
+//creating Token
+// ===================================
+app.post("/jwt", async (req, res) => {
+  const user = req.body;
+  const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10h' });
+
+  res
+    // .cookie("token", token, cookieOptions)
+    // .send({ success: true });
+    .send({ token });
+});
+
+//clearing Token
+app.get("/logout", async (req, res) => {
+  const user = req.body;
+  console.log("logging out", user);
+  res
+    // .clearCookie("token", { ...cookieOptions, maxAge: 0 })
+    .send({ success: true });
+});
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// Middleware End
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// MongoDB connection Start
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.rgxjhma.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -28,15 +121,69 @@ const client = new MongoClient(uri, {
   },
 });
 
-const BestDealUserCollection = client.db("BestDeal").collection("Users");
+
+// ===================================
+// Check if the server is up and running
+// ===================================
+app.get("/", (req, res) => {
+  res.send("Best Deal Is A Running");
+});
+
+app.listen(port, () => {
+  console.log(`Best Deal is listening on port ${port}`);
+});
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// MongoDB connection End
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 async function run() {
   try {
-    // Connect the client to the server	(optional starting in v4.7)
-    // await client.connect();
-    // Send a ping to confirm a successful connection
 
-    app.use("/user", async (req, res) => {});
+    await client.connect();
+
+
+    // ===================================
+    // DB Connection
+    // ===================================
+
+    const BestDealUserCollection = client.db("BestDeal").collection("Users");
+
+
+    // ==================================
+    // Admin verify 
+    // ==================================
+    const verifyAdmin = async (req, res, next) => {
+      const email = req.decoded.email;
+      // console.log('from verify admin -->', email);
+      const query = { email: email };
+      const user = await usersCollection.findOne(query);
+      const isAdmin = user?.isAdmin === true;
+      if (!isAdmin) {
+        return res.status(403).send({ message: "Unauthorized!!" });
+      }
+
+      next();
+    }
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // API Connections Starts
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // ==================================
+    // Users login
+    // ==================================
+    app.get('/users/:email', async (req, res) => {
+      const mail = req.params?.email;
+      const results = await BestDealUserCollection.find({ email: mail }).toArray();
+      res.send(results);
+    });
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // API Connections End
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    app.use("/user", async (req, res) => { });
 
     await client.db("admin").command({ ping: 1 });
     console.log(
@@ -44,15 +191,7 @@ async function run() {
     );
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // await client.close();
   }
 }
 run().catch(console.dir);
-
-app.get("/", (req, res) => {
-  res.send("Best Deal Is A Running");
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
