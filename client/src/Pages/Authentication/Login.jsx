@@ -45,9 +45,9 @@ const Login = () => {
                 // console.log(result.user)
                 const loggedUser = { email };
                 axios.post(`${import.meta.env.VITE_SERVER}/jwt`, loggedUser, { withCredentials: true })
-                    .then(res => {
-                        console.log(res.data)
-                    })
+                    // .then(res => {
+                    //     console.log(res.data)
+                    // })
                 toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
 
                 if (result.user) {
@@ -77,8 +77,7 @@ const Login = () => {
                 if (result.user) {
                     // console.log(result.user)
                     axios.post(`${import.meta.env.VITE_SERVER}/jwt`, {
-                        email: (result?.user?.email !== null ? result.user?.email : result.user?.displayName),
-                        // email: result?.user?.email,
+                        email: result?.user?.email,
                     },
                         { withCredentials: true }
                     )
