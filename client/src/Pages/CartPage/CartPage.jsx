@@ -1,3 +1,4 @@
+import { Helmet } from "react-helmet-async";
 import CartCard from "../../Components/CartCard/CartCard";
 import CheckOutForm from "../../Components/CheckOutFrom/CheckOutForm";
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
@@ -5,6 +6,9 @@ import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 const CartPage = () => {
     return (
         <div className=" flex p-5 gap-5">
+            <Helmet>
+                <title>Best Deal | Cart list</title>
+            </Helmet>
             {/*Left Side menubar / categorybar  */}
             <div className="flex-1">
                 <LeftMenubar></LeftMenubar>

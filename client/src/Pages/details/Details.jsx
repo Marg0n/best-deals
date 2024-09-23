@@ -3,6 +3,7 @@ import { Carousel } from 'react-responsive-carousel';
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Rating } from '@mui/material';
+import { Helmet } from 'react-helmet-async';
 
 const Details = () => {
     const products = useLoaderData();
@@ -10,6 +11,9 @@ const Details = () => {
     const product = products.find(product => product._id === _id);
     return (
         <div className='flex-1 lg:flex items-start '>
+            <Helmet>
+                <title>Best Deal | {product.productName}</title>
+            </Helmet>
             <div className='lg:w-8/12 flex-1 lg:flex '>
                 <div className='lg:w-1/2 p-3'>
                     <p className='text-[#775050] text-lg font-normal'><Link to='/'>Home</Link> {'>'} Kitchen Appliances {'>'} Oven </p>
@@ -112,7 +116,7 @@ const Details = () => {
                     </div>
                 </div>
 
-                
+
             </div>
         </div>
     );
