@@ -7,7 +7,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Configuration End
@@ -109,8 +109,8 @@ app.get("/logout", async (req, res) => {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // MongoDB connection Start
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-const { MongoClient, ServerApiVersion } = require("mongodb");
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.rgxjhma.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.zuxua.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -146,7 +146,7 @@ async function run() {
     // DB Connection
     // ===================================
 
-    const BestDealUserCollection = client.db("BestDeal").collection("Users");
+    const usersCollection = client.db("BestDeals").collection("UserCollection");
 
 
     // ==================================
@@ -157,7 +157,8 @@ async function run() {
       // console.log('from verify admin -->', email);
       const query = { email: email };
       const user = await usersCollection.findOne(query);
-      const isAdmin = user?.isAdmin === true;
+      const isAdmin = user?.role === 'Admin';
+
       if (!isAdmin) {
         return res.status(403).send({ message: "Unauthorized!!" });
       }
@@ -170,12 +171,54 @@ async function run() {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
     // ==================================
+    // Users registration
+    // ==================================
+    app.post('/users', async (req, res) => {
+      const newUser = req.body;
+      const result = await usersCollection.insertOne(newUser);
+      res.send(result);
+    })
+
+    // ==================================
     // Users login
     // ==================================
     app.get('/users/:email', async (req, res) => {
       const mail = req.params?.email;
-      const results = await BestDealUserCollection.find({ email: mail }).toArray();
+      const results = await usersCollection.find({ email: mail }).toArray();
       res.send(results);
+    });
+
+    // ==================================
+    // Users profile data
+    // ==================================
+    app.get('/profile/:email', async (req, res) => {
+      const mail = req.params?.email;
+      const results = await usersCollection.find({ email: mail }).toArray();
+      res.send(results);
+    });
+
+    // ==================================
+    // Patch Users' last login
+    // ==================================
+    app.patch('/lastLogin/:email', async (req, res) => {
+      try {
+        const mail = req.params?.email;
+        const updateBody = req.body;
+        const query = { email: mail };
+        const updateDoc = {
+          $set: {
+            lastLogin: updateBody.lastLogin
+          },
+        }
+        const results = await usersCollection.updateOne(query, updateDoc);
+        res.send(results);
+      }
+      catch {
+        // If an error occurs during execution, catch it here
+        console.error('Error updating user status:', err);
+        // Send an error response to the client
+        res.status(500).json({ message: 'Internal server error from last login' });
+      }
     });
 
 

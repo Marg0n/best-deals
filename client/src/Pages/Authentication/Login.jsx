@@ -1,16 +1,17 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { RxEyeClosed } from "react-icons/rx";
 import { TfiEye } from "react-icons/tfi";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
+import { ClimbingBoxLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import bgImg from '../../assets/login.png';
 import useAuth from "../../hooks/useAuth";
-import { ClimbingBoxLoader } from "react-spinners";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
 import logo from '/rmv_bg_logo1.png';
-import axios from "axios";
 
 
 const Login = () => {
@@ -22,6 +23,12 @@ const Login = () => {
 
     // password show
     const [passShow, setPassShow] = useState(false);
+
+    // import custom axios functions
+    const axiosCommon = useAxiosCommon();
+
+    // creation date
+    const lastLogin = new Date();
 
     // Navigation
     const navigate = useNavigate();
@@ -38,6 +45,8 @@ const Login = () => {
     const onSubmit = (data) => {
         const { email, password } = data;
 
+        const userInfo = { lastLogin };
+
         signInUser(email, password)
             .then(result => {
 
@@ -45,9 +54,13 @@ const Login = () => {
                 // console.log(result.user)
                 const loggedUser = { email };
                 axios.post(`${import.meta.env.VITE_SERVER}/jwt`, loggedUser, { withCredentials: true })
-                    // .then(res => {
-                    //     console.log(res.data)
-                    // })
+                // .then(res => {
+                //     console.log(res.data)
+                // })
+
+                // last login timestamp
+                axiosCommon.patch(`/lastLogin/${email}`, userInfo)
+
                 toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
 
                 if (result.user) {

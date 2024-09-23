@@ -12,13 +12,14 @@ import useAuth from "../../hooks/useAuth";
 import { ClimbingBoxLoader } from "react-spinners";
 import logo from '/rmv_bg_logo1.png';
 import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { imageUpload } from "../../utils/imageUpload";
 
 
 const Registration = () => {
 
   const { createUser, user, updateUserProfile, loggedOut, googleLogin } = useAuth();
 
-  
+  // import custom axios functions
   const axiosCommon = useAxiosCommon();
 
   // custom loader for registration
@@ -39,7 +40,7 @@ const Registration = () => {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, e) => {
 
     const image = e.target.avatar.files[0]
 
