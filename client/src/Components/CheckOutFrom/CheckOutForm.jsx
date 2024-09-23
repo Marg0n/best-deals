@@ -1,5 +1,7 @@
 
+
 const CheckOutForm = () => {
+
     return (
         <div>
             <form >
@@ -20,7 +22,7 @@ const CheckOutForm = () => {
                         <textarea required name="feedback" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
                     </div>
                 </div>
-                
+
                 <div>
                     <h2 className="font-bold mt-4 ">Payment Method</h2>
                     <label className="flex items-center">
@@ -43,9 +45,9 @@ const CheckOutForm = () => {
                     </label>
                 </div>
 
-
-                <button type="submit" className="mt-8 w-full btn block px-8 py-2.5 bg-[#775050] text-white hover:bg-[#533131]">Proceed to Checkout</button>
+                <button  type="submit" className="mt-8 w-full btn block px-8 py-2.5 bg-[#775050] text-white hover:bg-[#533131]">Proceed to Checkout</button>
             </form>
+
         </div>
     );
 };

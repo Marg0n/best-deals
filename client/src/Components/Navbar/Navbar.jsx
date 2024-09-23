@@ -5,13 +5,11 @@ import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import unknown from "../..//assets/anonymous.png";
 import useAuth from "../../hooks/useAuth";
-import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 
 const Navbar = () => {
-  const { user, loggedOut } = useAuth(AuthContext);
+  const { user, loggedOut } = useAuth();
   const cartProducts = JSON.parse(localStorage.getItem('cart')) || [];
-  
 
 
   // State to track whether the dropdown is open or closed
