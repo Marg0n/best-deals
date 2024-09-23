@@ -4,11 +4,34 @@ import { Link, useLoaderData, useParams } from 'react-router-dom';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Rating } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
+import toast from "react-hot-toast";
+
 
 const Details = () => {
     const products = useLoaderData();
     const { _id } = useParams();
     const product = products.find(product => product._id === _id);
+
+    // add product to local storage
+    const handleAddToCart = () => {
+        // get cart from local storage
+        const cart = JSON.parse(localStorage.getItem('cart')) || []
+
+        // check the product is exist in cart
+        const productExist = cart.find(item => item._id === product._id)
+
+        if (!productExist) {
+            cart.push(product)
+            // save the updated cart in local storage
+            localStorage.setItem('cart', JSON.stringify(cart))
+            toast.success(`${product.productName} is added to cart`)
+        }
+        else {
+            toast.error('This iteam is already added to your cart')
+        }
+
+    }
+
     return (
         <div className='flex-1 lg:flex items-start '>
             <Helmet>
@@ -45,11 +68,12 @@ const Details = () => {
                         </Carousel>
                     </div>
                     <div className='flex justify-center gap-6'>
-                        <button className='bg-[#d9cfaf] rounded-[86px] text-black text-sm font-bold px-4 py-2'>Add To Cart </button>
+                        <button onClick={() => handleAddToCart(product)} className='bg-[#d9cfaf] rounded-[86px] text-black text-sm font-bold px-4 py-2'>Add To Cart </button>
                         <button className='bg-black rounded-[86px] text-white text-sm font-bold px-4 py-2'>Add To Wish List </button>
                     </div>
                     <div className='text-center mt-4'>
-                        <button className='bg-[#ff6b1c] rounded-[86px] text-white text-sm font-bold px-8 py-2'>Buy Now</button>
+
+                        <Link to={`/single-checkout/${_id}`}><button onClick={() => handleBuyNow(product)} className='bg-[#ff6b1c] rounded-[86px] text-white text-sm font-bold px-8 py-2'>Buy Now</button></Link>
                     </div>
                 </div>
                 <div className='p-3 lg:w-1/2'>

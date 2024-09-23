@@ -5,10 +5,14 @@ import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import unknown from "../..//assets/anonymous.png";
 import useAuth from "../../hooks/useAuth";
+import { AuthContext } from "../../AuthProvider/AuthProvider";
 
 
 const Navbar = () => {
-  const { user, loggedOut } = useAuth();
+  const { user, loggedOut } = useAuth(AuthContext);
+  const cartProducts = JSON.parse(localStorage.getItem('cart')) || [];
+  
+
 
   // State to track whether the dropdown is open or closed
   const [dropdown, setDropdown] = useState(false);
@@ -92,7 +96,7 @@ const Navbar = () => {
             >
               <div className="indicator">
                 <FiShoppingCart size={30} />
-                <span className="badge badge-sm indicator-item">1</span>
+                <span className="badge badge-sm indicator-item">{cartProducts.length}</span>
               </div>
             </div>
             <div
