@@ -11,11 +11,15 @@ import bgImg from '../../assets/register.png';
 import useAuth from "../../hooks/useAuth";
 import { ClimbingBoxLoader } from "react-spinners";
 import logo from '/rmv_bg_logo1.png';
+import useAxiosCommon from "../../hooks/useAxiosCommon";
 
 
 const Registration = () => {
 
   const { createUser, user, updateUserProfile, loggedOut, googleLogin } = useAuth();
+
+  
+  const axiosCommon = useAxiosCommon();
 
   // custom loader for registration
   const [customLoader, setCustomLoader] = useState(false);
@@ -40,8 +44,15 @@ const Registration = () => {
     const image = e.target.avatar.files[0]
 
     // upload image and get image url
-    const image_url = await imageUpload(image);
+    const photo = await imageUpload(image);
 
+    // creation date
+    const createdTime = new Date();
+
+    // role
+    const role = 'User';
+
+    // fetch data from the form
     const { email, password, name } = data;
 
 
@@ -58,10 +69,15 @@ const Registration = () => {
         { autoClose: 4000, theme: "colored" })
     }
 
+    const userInfo = { email, password, name, photo, createdTime, role  };
+
+    // insert user data in mongo DB
+    await axiosCommon.post('/users', userInfo)
+
     // create user profile and update user
     createUser(email, password)
       .then(() => {
-        updateUserProfile(name, image_url)
+        updateUserProfile(name, photo)
           .then(() => {
 
             setCustomLoader(true)
@@ -81,7 +97,7 @@ const Registration = () => {
             const errorMessage = errors.message.split(':')[1].split('(')[0].trim();
 
             toast.error(errorMessage, { autoClose: 3000, theme: "colored" });
-            navigate('/register');
+            navigate('/registration');
           });
 
         // console.log(result)
@@ -99,7 +115,7 @@ const Registration = () => {
         const message = capitalizedWords.join(' ');
 
         toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
-        navigate('/register');
+        navigate('/registration');
       })
   }
 
@@ -144,7 +160,6 @@ const Registration = () => {
   }
 
   if (user && location?.pathname == '/login' && location?.state == null) {
-    // toast.info(`Dear, ${user?.displayName || user?.email}! You are already Logged in!`, { autoClose: 3000, theme: "colored" });
     return <Navigate to='/' state={location?.pathname || '/'} />
   }
 
