@@ -1,10 +1,15 @@
+import { Helmet } from "react-helmet-async";
 import CartCard from "../../Components/CartCard/CartCard";
 import CheckOutForm from "../../Components/CheckOutFrom/CheckOutForm";
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 
 const CartPage = () => {
+    const cartProducts = JSON.parse(localStorage.getItem('cart')) || [];
     return (
         <div className=" flex p-5 gap-5">
+            <Helmet>
+                <title>Best Deal | Cart list</title>
+            </Helmet>
             {/*Left Side menubar / categorybar  */}
             <div className="flex-1">
                 <LeftMenubar></LeftMenubar>
@@ -13,22 +18,13 @@ const CartPage = () => {
             {/* cart list */}
             <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] border border-red-50">
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
-                    <CartCard></CartCard>
+                    {
+                        cartProducts?.map(product => 
+                            <CartCard
+                            key={product?._id}
+                            product={product}
+                            ></CartCard>)
+                    }
                 </div>
 
                 {/* Total bill Table */}
