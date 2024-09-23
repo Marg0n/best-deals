@@ -7,7 +7,7 @@ import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 
 const Home = () => {
   const { data: products, isLoading } = useQuery({
-    queryKey: ["payments"],
+    queryKey: ["products"],
     queryFn: async () => {
       const res = await axios.get(`https://needscart-server.vercel.app/all`);
 
