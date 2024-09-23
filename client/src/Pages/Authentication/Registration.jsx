@@ -13,6 +13,7 @@ import { ClimbingBoxLoader } from "react-spinners";
 import logo from '/rmv_bg_logo1.png';
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { imageUpload } from "../../utils/imageUpload";
+import { TbFidgetSpinner } from "react-icons/tb";
 
 
 const Registration = () => {
@@ -24,6 +25,7 @@ const Registration = () => {
 
   // custom loader for registration
   const [customLoader, setCustomLoader] = useState(false);
+  const [processLoader, setProcessLoader] = useState(false);
 
   // password show
   const [passShow, setPassShow] = useState('');
@@ -42,10 +44,9 @@ const Registration = () => {
 
   const onSubmit = async (data, e) => {
 
-    const image = e.target.avatar.files[0]
+    setProcessLoader(true);
 
-    // upload image and get image url
-    const photo = await imageUpload(image);
+    const image = e.target.avatar.files[0]
 
     // creation date
     const createdTime = new Date();
@@ -70,14 +71,24 @@ const Registration = () => {
         { autoClose: 4000, theme: "colored" })
     }
 
-    const userInfo = { email, password, name, photo, createdTime, role  };
 
-    // insert user data in mongo DB
-    await axiosCommon.post('/users', userInfo)
+
 
     // create user profile and update user
     createUser(email, password)
-      .then(() => {
+      .then(async () => {
+
+
+        // upload image and get image url
+        const photo = await imageUpload(image);
+
+
+        const userInfo = { email, name, photo, createdTime, role };
+
+        // insert user data in mongo DB    
+        await axiosCommon.post('/users', userInfo);
+
+        //update user profile in firebase
         updateUserProfile(name, photo)
           .then(() => {
 
@@ -88,12 +99,14 @@ const Registration = () => {
 
             // loader
             setCustomLoader(false)
+            setProcessLoader(false);
             loggedOut();
             navigate(whereTo, { replace: true })
 
           }).catch((errors) => {
 
             setCustomLoader(false)
+            setProcessLoader(false);
             // An error occurred
             const errorMessage = errors.message.split(':')[1].split('(')[0].trim();
 
@@ -107,6 +120,7 @@ const Registration = () => {
       .catch(errors => {
 
         setCustomLoader(false)
+        setProcessLoader(false);
         // An error occurred                
         const errorCode = errors.code;
         // Remove 'auth/' prefix and '-' characters
@@ -118,15 +132,37 @@ const Registration = () => {
         toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
         navigate('/registration');
       })
+
+    setProcessLoader(false);
   }
 
   // Navigation handler for all social platform
-  const handleSocialLogin = socialLoginProvider => {
-    socialLoginProvider()
-      .then(result => {
-        if (result.user) {
-          toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
-          navigate(whereTo)
+  const handleSocialLogin = async socialLoginProvider => {
+    await socialLoginProvider()
+      .then(async result => {
+        
+        setProcessLoader(true);
+
+        if (result?.user) {
+
+          const userData = {
+            email: result?.user?.email,
+            name: result?.user?.displayName,
+            photo: result?.user?.photoURL,
+            createdTime: result?.user?.metadata.creationTime,
+            lastLogin: result?.user?.metadata?.lastSignInTime,
+            role: "User"
+          }
+
+          // Send user data to your server
+          await axiosCommon.post('/users', userData)
+            .then(() => {
+              setProcessLoader(false)
+              toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
+              setTimeout(() => {
+                navigate('/')
+              }, 1000);
+            })
         }
       })
       .catch(error => {
@@ -136,6 +172,8 @@ const Registration = () => {
         const words = cleanedErrorCode.split('-');
         const capitalizedWords = words.map(word => word.charAt(1).toUpperCase() + word.slice(2));
         const message = capitalizedWords.join(' ');
+
+        setProcessLoader(false);
 
         toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
         navigate('/login')
@@ -307,7 +345,7 @@ const Registration = () => {
                 type='submit'
                 className='w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50'
               >
-                Register
+                {(customLoader || processLoader) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : 'Register'}
               </button>
             </div>
           </form>

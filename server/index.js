@@ -174,9 +174,31 @@ async function run() {
     // Users registration
     // ==================================
     app.post('/users', async (req, res) => {
-      const newUser = req.body;
-      const result = await usersCollection.insertOne(newUser);
-      res.send(result);
+      try {
+        const newUser = req.body;
+        console.log(newUser);
+
+        // Check if user already exists
+        const query = await usersCollection.findOne({ email: newUser?.email });
+
+        if (!query) {
+          // const newUser = req.body; 
+          const result = await usersCollection.insertOne(newUser);
+          res.send(result);
+        }
+        else {
+          const mail = newUser?.email;
+          const results = await usersCollection.find({ email: mail }).toArray();
+          res.send(results);
+        }
+
+      }
+      catch {
+        // If an error occurs during execution, catch it here
+        console.error('Error updating user status:', err);
+        // Send an error response to the client
+        res.status(500).json({ message: 'Internal server error during registration' });
+      }
     })
 
     // ==================================
