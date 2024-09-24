@@ -31,6 +31,7 @@ By utilizing the MERN (MongoDB, Express, React, Node.js) stack, the platform wil
 - [react-toastify](https://www.npmjs.com/package/react-toastify)
 - [AXIOS](https://axios-http.com/docs/intro)
 - [React Spinners](https://www.npmjs.com/package/react-spinners)
+- [Redux](https://redux-toolkit.js.org/introduction/getting-started)
 
 ### Backend:
 
