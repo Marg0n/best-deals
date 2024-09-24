@@ -1,15 +1,19 @@
-import { Tooltip } from "@mui/material";
 import { useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import unknown from "../..//assets/anonymous.png";
 import useAuth from "../../hooks/useAuth";
+import { Tooltip } from 'react-tooltip';
+import useUserProfile from './../../hooks/useUserProfile';
 
 
 const Navbar = () => {
   const { user, loggedOut } = useAuth();
   const cartProducts = JSON.parse(localStorage.getItem('cart')) || [];
+
+  // user profile data
+  const { profile } = useUserProfile();
 
 
   // State to track whether the dropdown is open or closed
@@ -129,12 +133,12 @@ const Navbar = () => {
                   <img
                     alt="profile"
                     data-tooltip-id="name-tooltip"
-                    data-tooltip-content={`${user?.displayName || user?.name}`}
+                    data-tooltip-content={`${user?.displayName || profile[0]?.name}`}
                     referrerPolicy="no-referrer"
                     src=
                     {
                       user?.photoURL ? user?.photoURL
-                        : (user?.photo ? user?.photo : unknown)
+                        : (profile[0]?.photo ? profile[0]?.photo : unknown)
                     }
                   />
                   <Tooltip id="name-tooltip" />
@@ -147,12 +151,12 @@ const Navbar = () => {
                   className="mt-3 z-[2] p-2 shadow-2xl menu menu-sm dropdown-content  rounded-box w-64 bg-[#0cc0df]/90 "
                 >
                   <li>
-                    <p className="flex justify-center items-center">
+                    <p className="flex justify-center items-center font-medium">
                       Hi,
-                      <span className="text-info badge-outline">{user?.role ? user?.role : ""}</span>
-                      <span className=" text-blue-500 font-serif">
+                      <span className={`${profile[0]?.role !== 'Admin'? (profile[0]?.role === 'User' ? 'text-[#423f3f] font-mono badge badge-neutral badge-outline' : 'text-base badge badge-neutral font-mono ') :'text-base badge badge-primary font-mono '}`}>{profile[0]?.role ? profile[0]?.role : ""}</span>
+                      <span className=" text-[#333333] font-serif font-bold">
                         {
-                          user?.displayName || user?.name
+                          user?.displayName || profile[0]?.name
                         }
                       </span>
                     </p>
