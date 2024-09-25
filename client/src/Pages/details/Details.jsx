@@ -8,15 +8,9 @@ import toast from "react-hot-toast";
 
 
 const Details = () => {
-    const products = useLoaderData();
-    console.log(products);
-    
-    const { _id } = useParams();
-    console.log(_id);
-    
-    const product = products?.find(product => product._id === _id);
-    console.log(product);
-    
+    const products = useLoaderData();    
+    const { _id } = useParams();    
+    const product = products?.find(product => product._id === _id);    
 
     // add product to local storage
     const handleAddToCart = () => {
