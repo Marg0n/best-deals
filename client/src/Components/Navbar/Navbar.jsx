@@ -1,20 +1,20 @@
-import { Tooltip } from 'react-tooltip'
 import { useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import unknown from "../..//assets/anonymous.png";
 import useAuth from "../../hooks/useAuth";
-import useUserProfile from '../../hooks/useUserProfile';
+import { Tooltip } from 'react-tooltip';
+import useUserProfile from './../../hooks/useUserProfile';
 
 
 const Navbar = () => {
-
-  // Firebase API
   const { user, loggedOut } = useAuth();
+  const cartProducts = JSON.parse(localStorage.getItem('cart')) || [];
 
-  // Profile info
+  // user profile data
   const { profile } = useUserProfile();
+
 
   // State to track whether the dropdown is open or closed
   const [dropdown, setDropdown] = useState(false);
@@ -30,7 +30,7 @@ const Navbar = () => {
     <li>
       <Link to='' className="text-base font-semibold">Settings</Link>
     </li>
-    {profile[0]?.role === 'User' && <li>
+    {user?.role === 'User' && <li>
       <Link to='' className="text-base font-semibold">Be a Vendor</Link>
     </li>
     }
@@ -98,7 +98,7 @@ const Navbar = () => {
             >
               <div className="indicator">
                 <FiShoppingCart size={30} />
-                <span className="badge badge-sm indicator-item">1</span>
+                <span className="badge badge-sm indicator-item">{cartProducts.length}</span>
               </div>
             </div>
             <div
@@ -151,10 +151,10 @@ const Navbar = () => {
                   className="mt-3 z-[2] p-2 shadow-2xl menu menu-sm dropdown-content  rounded-box w-64 bg-[#0cc0df]/90 "
                 >
                   <li>
-                    <p className="flex justify-center items-center">
+                    <p className="flex justify-center items-center font-medium">
                       Hi,
-                      <span className={`${profile[0]?.role !== "Admin" ? (profile[0]?.role === "User" ? 'badge  badge-neutral badge-outline':'badge  badge-neutral') : 'badge  badge-primary badge-outline'}`}>{profile[0]?.role ? profile[0]?.role : ""}</span>
-                      <span className=" text-[#0A032F] font-serif font-bold">
+                      <span className={`${profile[0]?.role !== 'Admin'? (profile[0]?.role === 'User' ? 'text-[#423f3f] font-mono badge badge-neutral badge-outline' : 'text-base badge badge-neutral font-mono ') :'text-base badge badge-primary font-mono '}`}>{profile[0]?.role ? profile[0]?.role : ""}</span>
+                      <span className=" text-[#333333] font-serif font-bold">
                         {
                           user?.displayName || profile[0]?.name
                         }

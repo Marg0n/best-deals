@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import HoverdCardDetails from "../HoverdCardDetails/HoverdCardDetails";
+
 const ProductsCard = ({ product }) => {
   const {
     productName,

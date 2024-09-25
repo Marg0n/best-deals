@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Footer from "../Components/Footer/Footer";
+import { Toaster } from "react-hot-toast";
+
 
 const Root = () => {
   useEffect(() => {
@@ -13,6 +15,7 @@ const Root = () => {
   }, []);
   return (
     <div>
+      <Toaster/>
       <Navbar></Navbar>
       <div className="max-w-[1440px] mx-auto ">
         <Outlet />

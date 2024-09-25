@@ -12,11 +12,12 @@ import bgImg from '../../assets/login.png';
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import logo from '/rmv_bg_logo1.png';
+import { TbFidgetSpinner } from "react-icons/tb";
 
 
 const Login = () => {
 
-    const { signInUser, googleLogin, user } = useAuth();
+    const { signInUser, googleLogin, user, loading } = useAuth();
 
     // custom loader for login
     const [customLoader, setCustomLoader] = useState(false);
@@ -84,21 +85,42 @@ const Login = () => {
     }
 
     // Navigation handler for all social platform
-    const handleSocialLogin = socialLoginProvider => {
-        socialLoginProvider()
-            .then(result => {
-                if (result.user) {
-                    // console.log(result.user)
-                    axios.post(`${import.meta.env.VITE_SERVER}/jwt`, {
+    const handleSocialLogin = async socialLoginProvider => {
+        await socialLoginProvider()
+            .then(async result => {
+
+                if (result?.user) {
+
+                    const userData = {
                         email: result?.user?.email,
-                    },
-                        { withCredentials: true }
-                    )
+                        name: result?.user?.displayName,
+                        photo: result?.user?.photoURL,
+                        createdTime: result?.user?.metadata.creationTime,
+                        lastLogin: result?.user?.metadata?.lastSignInTime,
+                        role: "User"
+                      }
+            
+                      // Send user data to your server
+                      await axiosCommon.post('/users', userData)
+                        .then(() => {
+                          setProcessLoader(false)
+                          toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
+                          setTimeout(() => {
+                            navigate(whereTo)
+                          }, 1000);
+                        })
+
+                    // console.log(result.user)
+                    // axios.post(`${import.meta.env.VITE_SERVER}/jwt`, {
+                    //     email: result?.user?.email,
+                    // },
+                    //     { withCredentials: true }
+                    // )
                     // .then(res => {
                     //   console.log(res.data)
                     // })
-                    toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
-                    navigate(whereTo)
+                    // toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
+                    // navigate(whereTo)
                 }
             })
             .catch(error => {
@@ -257,7 +279,7 @@ const Login = () => {
                                 type='submit'
                                 className='w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50'
                             >
-                                Log In
+                                {(customLoader || loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full"/> : 'Log In'} 
                             </button>
                         </div>
                     </form>

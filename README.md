@@ -12,6 +12,8 @@ By utilizing the MERN (MongoDB, Express, React, Node.js) stack, the platform wil
 
 ## Resources:
 
+### Frontend:
+
 - [Prop-Types](https://www.npmjs.com/package/prop-types)
 - [Daisy UI](https://daisyui.com/)
 - [TailwindCSS](https://tailwindcss.com/)
@@ -29,3 +31,15 @@ By utilizing the MERN (MongoDB, Express, React, Node.js) stack, the platform wil
 - [react-toastify](https://www.npmjs.com/package/react-toastify)
 - [AXIOS](https://axios-http.com/docs/intro)
 - [React Spinners](https://www.npmjs.com/package/react-spinners)
+
+### Backend:
+
+- [Express](https://expressjs.com)
+- [MongoDB](https://cloud.mongodb.com)
+- [JWT](https://jwt.io/libraries?language=Node.js)
+- [CORS](https://www.npmjs.com/package/cors)
+- [nodemon](https://www.npmjs.com/package/nodemon)
+- [dotenv](https://www.npmjs.com/package/dotenv)
+- [cookie-parser](https://www.npmjs.com/package/cookie-parser)
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
+- [Stripe](https://docs.stripe.com/checkout/quickstart?client=react&lang=node)

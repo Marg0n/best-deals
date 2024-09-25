@@ -39,14 +39,14 @@ const AuthProvider = ({ children }) => {
   };
 
   // Google login
-  const googleLogin = () => {
+  const googleLogin = async() => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    return await signInWithPopup(auth, googleProvider);
   };
 
   // Update user Profile
-  const updateUserProfile = (name, image) => {
-    return updateProfile(auth.currentUser, {
+  const updateUserProfile = async(name, image) => {
+    return await updateProfile(auth.currentUser, {
       displayName: name,
       photoURL: image,
     });

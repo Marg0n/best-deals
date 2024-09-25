@@ -7,6 +7,7 @@ import Login from "../Pages/Authentication/Login";
 import Registration from "../Pages/Authentication/Registration";
 import CartPage from "../Pages/CartPage/CartPage";
 import InvoiceHistory from "../Pages/invoiceHistory/InvoiceHistory";
+import SingleProductCheckoutPage from "../Pages/SingleProductCheckoutPage/SingleProductCheckoutPage";
 
 const Router = createBrowserRouter([
   {
@@ -29,6 +30,11 @@ const Router = createBrowserRouter([
       {
         path: "/InvoiceHistory",
         element: <InvoiceHistory />,
+      },
+      {
+        path: "/single-checkout/:_id",
+        element: <SingleProductCheckoutPage />,
+        loader: () => fetch("https://needscart-server.vercel.app/all"),
       },
     ],
   },
