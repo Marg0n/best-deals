@@ -226,12 +226,18 @@ async function run() {
     // ==================================
     app.get('/all-products', async (req, res) => {
       const search = req.query.search || '';
+      const minPrice = parseFloat(req.query.minPrice) || 0;
+      const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_VALUE;
       const category = req.query.selectedCategory ? req.query.selectedCategory : '';
 
       // search by products name and filter by price 
       let query = {
-        productName: { $regex: search, $options: 'i' }
+        productName: { $regex: search, $options: 'i' },
+        price: { $gte: minPrice, $lte: maxPrice },
       };
+
+      console.log(minPrice , maxPrice);
+      
 
       // If the client sets the category, then filter by category from MongoDB
       if (category) {
