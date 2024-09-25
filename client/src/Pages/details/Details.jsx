@@ -9,8 +9,14 @@ import toast from "react-hot-toast";
 
 const Details = () => {
     const products = useLoaderData();
+    console.log(products);
+    
     const { _id } = useParams();
-    const product = products.find(product => product._id === _id);
+    console.log(_id);
+    
+    const product = products?.find(product => product._id === _id);
+    console.log(product);
+    
 
     // add product to local storage
     const handleAddToCart = () => {
@@ -35,7 +41,7 @@ const Details = () => {
     return (
         <div className='flex-1 lg:flex items-start '>
             <Helmet>
-                <title>Best Deal | {product.productName}</title>
+                <title>Best Deal | {product?.productName}</title>
             </Helmet>
             <div className='lg:w-8/12 flex-1 lg:flex '>
                 <div className='lg:w-1/2 p-3'>

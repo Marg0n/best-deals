@@ -10,36 +10,45 @@ import { useState } from "react";
 const Home = () => {
 
   // search state data 
-  const [search, setSearch] = useState(""); 
-  const [selectedCategory , setSelectedCategory] = useState(""); 
+  const [search, setSearch] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [priceRange, setPriceRange] = useState([0, 1000]);
+console.log(priceRange);
+
 
   // This fetch is for collect all data from mongoDB
   const axiosCommon = useAxiosCommon();
   const { data: products, isLoading } = useQuery({
-    queryKey: ["products", search , selectedCategory], 
+    queryKey: ["products", search, selectedCategory , priceRange],
     queryFn: async () => {
       const res = await axiosCommon.get(`/all-products`, {
-        params:  { search , selectedCategory } 
+        params: {
+          search,
+          selectedCategory,
+          minPrice: priceRange[0],
+          maxPrice: priceRange[1],
+        }
       });
       console.log(res.data);
-      
+
       return res.data;
     },
   });
 
   console.log(selectedCategory);
-  
 
 
-    
+
+
 
   return (
     <div className="flex p-5 gap-5">
       {/* Left Side menubar / category bar */}
       <div className="flex-1">
-        <LeftMenubar 
-        setSearch={setSearch}
-        setSelectedCategory={setSelectedCategory} />
+        <LeftMenubar
+          setSearch={setSearch}
+          setSelectedCategory={setSelectedCategory}
+          setPriceRange={setPriceRange} />
       </div>
 
       <div className="w-full lg:w-3/4 ">
