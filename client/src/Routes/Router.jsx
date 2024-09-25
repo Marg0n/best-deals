@@ -21,7 +21,7 @@ const Router = createBrowserRouter([
       {
         path: "/details/:_id",
         element: <Details></Details>,
-        loader: () => fetch("https://needscart-server.vercel.app/all"),
+        loader: () => fetch("http://localhost:5000/all-products"),
       },
       {
         path: "/cartlist",
@@ -34,7 +34,7 @@ const Router = createBrowserRouter([
       {
         path: "/single-checkout/:_id",
         element: <SingleProductCheckoutPage />,
-        loader: () => fetch("https://needscart-server.vercel.app/all"),
+        loader: () => fetch("http://localhost:5000/all-products"),
       },
     ],
   },
