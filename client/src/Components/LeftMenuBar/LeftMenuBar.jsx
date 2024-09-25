@@ -9,7 +9,11 @@ const LeftMenubar = () => {
         {/* SearchBar */}
         <div className="w-3/4 mx-auto">
           <label className="input input-bordered flex items-center gap-2">
-            <input type="text" className="w-full px-3 py-1" placeholder="Search" />
+            <input
+              type="text"
+              className="w-full px-3 py-1"
+              placeholder="Search"
+            />
             <button>
               <CiSearch className="h-10 w-10"></CiSearch>
             </button>
@@ -17,7 +21,9 @@ const LeftMenubar = () => {
         </div>
 
         <div>
-          <Link to='/' className="underline underline-offset-1">Home</Link>
+          <Link to="/" className="underline underline-offset-1">
+            Home
+          </Link>
           <div className="ml-5 mt-5">
             <h1>Categories :</h1>
             <ul className="ml-10">
@@ -42,6 +48,9 @@ const LeftMenubar = () => {
               <li>My Wish list</li>
               <li>My token</li>
               <li>Favorite Vendor</li>
+              <li>
+                <Link to="/invoiceHistory">Invoice History</Link>
+              </li>
             </ul>
           </div>
         </div>
