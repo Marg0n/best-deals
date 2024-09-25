@@ -4,13 +4,15 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 
-const LeftMenubar = ({ setSearch, setSelectedCategory}) => {
+const LeftMenubar = ({ setSearch, setSelectedCategory , setPriceRange }) => {
   const [searchText, setSearchText] = useState('');
   const [clickeCategory, setClickedCategory] = useState('')
+  const [priceRangeFilter, setPriceRangeFilter] = useState([0, 1000]);
+
 
   // This fetch is for get all categories from mongoDB
   const axiosCommon = useAxiosCommon();
-  const { data: products} = useQuery({
+  const { data: products } = useQuery({
     queryKey: ["products"],
     queryFn: async () => {
       const res = await axiosCommon.get(`/all-products`);
@@ -25,8 +27,8 @@ const LeftMenubar = ({ setSearch, setSelectedCategory}) => {
     ? [...new Set(products.map(product => product.category))]
     : [];
 
-    console.log(allCategories);
-    
+  console.log(allCategories);
+
 
   // Handle search submission
   const handleSearch = (e) => {
@@ -34,19 +36,28 @@ const LeftMenubar = ({ setSearch, setSelectedCategory}) => {
     setSearch(searchText);
   };
 
-  // Handle cleat the search 
+  // Handle clear the search 
   const handleClearSearch = (e) => {
     e.preventDefault();
     setSearchText('')
     setSearch('')
     setClickedCategory('')
     setSelectedCategory('')
+    setPriceRangeFilter([0, 1000])
+    setPriceRange([0,1000])
   }
 
+  // Select category to filter product
   const handleSelectCategory = (category) => {
     setSelectedCategory(category)
     setClickedCategory(category)
   }
+
+  // handle price rage
+  const handlePriceChange = (e) => {
+    setPriceRangeFilter([0, e.target.value])
+    setPriceRange(priceRangeFilter)
+}
 
   return (
     <div className="sticky top-16 h-[calc(100vh-8rem)] z-30 overflow-y-auto">
@@ -88,6 +99,20 @@ const LeftMenubar = ({ setSearch, setSelectedCategory}) => {
                 }
               </ul>
             </div>
+          </div>
+          {/* Price Filter */}
+          <h2 className="font-semibold mt-2">Price Range</h2>
+          <div className="flex items-center gap-2">
+            <span>${priceRangeFilter[0]}</span>
+            <input
+              type="range"
+              min="0"
+              max="1000"
+              value={priceRangeFilter[1]}
+              onChange={handlePriceChange}
+              className="range range-info"
+            />
+            <span className="px-2">${priceRangeFilter[1]}</span>
           </div>
           <hr className="w-3/4 mx-auto my-5" />
           <div>
