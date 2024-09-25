@@ -147,6 +147,7 @@ async function run() {
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
+    const productCollection = client.db("BestDeals").collection("ProductCollection");
 
 
     // ==================================
@@ -218,6 +219,30 @@ async function run() {
       const results = await usersCollection.find({ email: mail }).toArray();
       res.send(results);
     });
+
+
+    // ==================================
+    // All products API
+    // ==================================
+    app.get('/all-products', async (req, res) => {
+      const search = req.query.search || '';
+      const category = req.query.selectedCategory ? req.query.selectedCategory : '';
+
+      // search by products name and filter by price 
+      let query = {
+        productName: { $regex: search, $options: 'i' }
+      };
+
+      // If the client sets the category, then filter by category from MongoDB
+      if (category) {
+        query.category = category
+      }
+      const results = await productCollection.find(query).toArray();
+      res.send(results);
+    });
+
+
+
 
     // ==================================
     // Patch Users' last login
