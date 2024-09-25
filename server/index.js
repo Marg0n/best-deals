@@ -226,12 +226,17 @@ async function run() {
     // ==================================
     app.get('/all-products', async (req, res) => {
       const search = req.query.search || '';
-      console.log(search);
-      
+      const category = req.query.selectedCategory ? req.query.selectedCategory : '';
+
       // search by products name and filter by price 
       let query = {
         productName: { $regex: search, $options: 'i' }
       };
+
+      // If the client sets the category, then filter by category from MongoDB
+      if (category) {
+        query.category = category
+      }
       const results = await productCollection.find(query).toArray();
       res.send(results);
     });
