@@ -8,27 +8,38 @@ import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useState } from "react";
 
 const Home = () => {
-  const axiosCommon = useAxiosCommon();
 
   // search state data 
   const [search, setSearch] = useState(""); 
+  const [selectedCategory , setSelectedCategory] = useState(""); 
 
+  // This fetch is for collect all data from mongoDB
+  const axiosCommon = useAxiosCommon();
   const { data: products, isLoading } = useQuery({
-    queryKey: ["products", search], 
+    queryKey: ["products", search , selectedCategory], 
     queryFn: async () => {
       const res = await axiosCommon.get(`/all-products`, {
-        params:  { search } 
+        params:  { search , selectedCategory } 
       });
+      console.log(res.data);
+      
       return res.data;
     },
   });
+
+  console.log(selectedCategory);
+  
+
+
+    
 
   return (
     <div className="flex p-5 gap-5">
       {/* Left Side menubar / category bar */}
       <div className="flex-1">
         <LeftMenubar 
-        setSearch={setSearch} />
+        setSearch={setSearch}
+        setSelectedCategory={setSelectedCategory} />
       </div>
 
       <div className="w-full lg:w-3/4 ">
