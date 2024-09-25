@@ -180,6 +180,12 @@ const CheckOutForm = () => {
                 >
                     Close
                 </button>
+                <button
+                    
+                    className="mt-4 btn px-4 py-2 bg-blue-500 text-white hover:bg-blue-700"
+                >
+                    Print
+                </button>
             </Modal>
         </div>
     );
