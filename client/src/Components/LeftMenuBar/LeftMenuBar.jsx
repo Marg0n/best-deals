@@ -70,6 +70,9 @@ const LeftMenubar = ({ setSearch }) => {
                 <li>My Wish list</li>
                 <li>My token</li>
                 <li>Favorite Vendor</li>
+                <li>
+                <Link to="/invoiceHistory">Invoice History</Link>
+              </li>
               </ul>
             </div>
           </div>
