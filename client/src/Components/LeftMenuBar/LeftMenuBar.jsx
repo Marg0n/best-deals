@@ -36,7 +36,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory , setPriceRange }) => {
     setSearch(searchText);
   };
 
-  // Handle clear the search 
+  // Handle clean the search 
   const handleClearSearch = (e) => {
     e.preventDefault();
     setSearchText('')

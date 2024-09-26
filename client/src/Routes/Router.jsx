@@ -8,6 +8,10 @@ import Registration from "../Pages/Authentication/Registration";
 import CartPage from "../Pages/CartPage/CartPage";
 import InvoiceHistory from "../Pages/invoiceHistory/InvoiceHistory";
 import SingleProductCheckoutPage from "../Pages/SingleProductCheckoutPage/SingleProductCheckoutPage";
+import VendorDashboard from "../Components/Dashboards/VendorDashboard/VendorDashboard";
+import VendorHome from "../Components/Dashboards/VendorDashboard/VendorHome/VendorHome";
+import VendorOrders from "../Components/Dashboards/VendorDashboard/VendorOrders/VendorOrders";
+import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
 
 const Router = createBrowserRouter([
   {
@@ -46,6 +50,24 @@ const Router = createBrowserRouter([
     path: "/registration",
     element: <Registration />,
   },
+  {
+    path: '/vendorDashboard',
+    element: <VendorDashboard/>,
+    children: [
+        {
+          path: '/vendorDashboard',
+          element: <VendorHome/>
+        },
+        {
+          path: '/vendorDashboard/orders',
+          element: <VendorOrders/>
+        },
+        {
+          path: '/vendorDashboard/products',
+          element: <VendorAddProduct/>
+        }
+    ]
+  }
 ]);
 
 export default Router;
