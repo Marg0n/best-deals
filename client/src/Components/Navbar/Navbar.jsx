@@ -28,6 +28,9 @@ const Navbar = () => {
   const list = <>
 
     <li>
+      <Link to='vendorDashboard' className="text-base font-semibold">Dashboard</Link>
+    </li>
+    <li>
       <Link to='' className="text-base font-semibold">Settings</Link>
     </li>
     {user?.role === 'User' && <li>
