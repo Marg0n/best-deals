@@ -228,6 +228,7 @@ async function run() {
       const search = req.query.search || '';
       const minPrice = parseFloat(req.query.minPrice) || 0;
       const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_VALUE;
+      const isFeatured = req.query.isFeatured === 'true';
       const category = req.query.selectedCategory ? req.query.selectedCategory : '';
 
       // search by products name and filter by price 
@@ -236,13 +237,17 @@ async function run() {
         price: { $gte: minPrice, $lte: maxPrice },
       };
 
-      console.log(minPrice , maxPrice);
-      
 
       // If the client sets the category, then filter by category from MongoDB
       if (category) {
         query.category = category
       }
+
+      // If the `isFeatured` query param is passed and it's true, filter by `isFeatured`
+      if (req.query.isFeatured) {
+        query.isFeatured = isFeatured; // Filter for featured products
+      }
+      
       const results = await productCollection.find(query).toArray();
       res.send(results);
     });
