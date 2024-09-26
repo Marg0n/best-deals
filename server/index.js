@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const stripe = require("stripe")(process.env.STRIPE_API_KEY_SERVER);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Configuration End
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,6 +86,7 @@ const verifyToken = async (req, res, next) => {
 // ===================================
 app.post("/jwt", async (req, res) => {
   const user = req.body;
+  console.log(user)
   const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10h' });
 
   res
@@ -167,6 +169,40 @@ async function run() {
       next();
     }
 
+    // =================================
+    // Stripe payment connection
+    // =================================
+
+    app.post("/create-payment-intent", verifyToken, async (req, res) => {
+      const { price } = req.body;
+      // console.log(price)
+      const amounts = parseFloat(price * 100)
+      // console.log(amounts)
+
+      // return if...
+      // if (amounts <= 0) return
+
+      // Create a PaymentIntent with the order amount and currency
+      const paymentIntent = await stripe.paymentIntents.create({
+        // amount: calculateOrderAmount(amounts),
+        amount: amounts,
+        currency: "usd",
+        payment_method_types: [
+          "card",
+        ],
+        // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default. it cannot be used with 'payment_method_types' parameter
+        // automatic_payment_methods: {
+        //   enabled: true,
+        // },
+      });
+
+      // console.log(paymentIntent)
+
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      });
+    });
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections Starts
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -236,8 +272,6 @@ async function run() {
         price: { $gte: minPrice, $lte: maxPrice },
       };
 
-      console.log(minPrice , maxPrice);
-      
 
       // If the client sets the category, then filter by category from MongoDB
       if (category) {

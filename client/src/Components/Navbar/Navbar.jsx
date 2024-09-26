@@ -29,14 +29,17 @@ const Navbar = ({toggleTheme ,theme } ) => {
   const list = <>
 
     <li>
-      <Link to='' className="text-base font-semibold">Settings</Link>
+      <Link to='vendorDashboard' className="text-base-100 font-semibold">Dashboard</Link>
+    </li>
+    <li>
+      <Link to='' className="text-base-100 font-semibold">Settings</Link>
     </li>
     {user?.role === 'User' && <li>
-      <Link to='' className="text-base font-semibold">Be a Vendor</Link>
+      <Link to='' className="text-base-100 font-semibold">Be a Vendor</Link>
     </li>
     }
     <li>
-      <Link to='' className="text-base font-semibold">anything!</Link>
+      <Link to='' className="text-base-100 font-semibold">anything!</Link>
     </li>
     <li
       className="rounded-xl p-2 m-2 text-right"
@@ -160,7 +163,7 @@ const Navbar = ({toggleTheme ,theme } ) => {
                   className="mt-3 z-[2] p-2 shadow-2xl menu menu-sm dropdown-content  rounded-box w-64 bg-[#0cc0df]/90 "
                 >
                   <li>
-                    <p className="flex justify-center items-center font-medium">
+                    <p className="flex justify-center items-center font-medium text-base-100">
                       Hi,
                       <span className={`${profile[0]?.role !== 'Admin' ? (profile[0]?.role === 'User' ? 'text-[#423f3f] font-mono badge badge-neutral badge-outline' : 'text-base badge badge-neutral font-mono ') : 'text-base badge badge-primary font-mono '}`}>{profile[0]?.role ? profile[0]?.role : ""}</span>
                       <span className=" text-[#333333] font-serif font-bold">

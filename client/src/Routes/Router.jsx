@@ -12,6 +12,7 @@ import VendorDashboard from "../Components/Dashboards/VendorDashboard/VendorDash
 import VendorHome from "../Components/Dashboards/VendorDashboard/VendorHome/VendorHome";
 import VendorOrders from "../Components/Dashboards/VendorDashboard/VendorOrders/VendorOrders";
 import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
+import PrivateRoute from './PrivateRoute';
 
 const Router = createBrowserRouter([
   {
@@ -29,7 +30,7 @@ const Router = createBrowserRouter([
       },
       {
         path: "/cartlist",
-        element: <CartPage></CartPage>,
+        element: <PrivateRoute><CartPage/></PrivateRoute> ,
       },
       {
         path: "/InvoiceHistory",
@@ -40,6 +41,7 @@ const Router = createBrowserRouter([
         element: <SingleProductCheckoutPage />,
         loader: () => fetch(`${import.meta.env.VITE_SERVER}/all-products`),
       },
+
     ],
   },
   {

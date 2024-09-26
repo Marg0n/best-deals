@@ -1,15 +1,16 @@
+import { Link } from "react-router-dom";
 
 const Footer = () => {
     return (
         <footer className="px-4 divide-y bg-[#775050] dark:bg-[#1D2236] text-white z-[3]">
             <div className="container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
                 <div className="lg:w-1/3">
-                    <a rel="noopener noreferrer" href="#" className="flex justify-center space-x-3 lg:justify-start">
+                    <Link to='' rel="noopener noreferrer" href="#" className="flex justify-center space-x-3 lg:justify-start">
                         <div className="flex items-center justify-center rounded-full">
                            <img className="h-10 lg:h-16" src="https://i.ibb.co.com/rtTfZsH/Bestdeal-white-text-log.png" />
                         </div>
                         
-                    </a>
+                    </Link>
                 </div>
                 <div className="grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4">
                     <div className="space-y-3">

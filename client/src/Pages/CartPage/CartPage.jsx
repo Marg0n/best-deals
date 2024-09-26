@@ -1,10 +1,13 @@
 import { Helmet } from "react-helmet-async";
 import CartCard from "../../Components/CartCard/CartCard";
-import CheckOutForm from "../../Components/CheckOutFrom/CheckOutForm";
+import CheckOutForm from "../../Components/CheckOutForm/CheckOutForm";
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
+import PaymentModal from "../../Components/Modals/PaymentModal";
+
 
 const CartPage = () => {
     const cartProducts = JSON.parse(localStorage.getItem('cart')) || [];
+
     return (
         <div className=" flex p-5 gap-5">
             <Helmet>
@@ -19,10 +22,10 @@ const CartPage = () => {
             <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] ">
                     {
-                        cartProducts?.map(product => 
+                        cartProducts?.map(product =>
                             <CartCard
-                            key={product?._id}
-                            product={product}
+                                key={product?._id}
+                                product={product}
                             ></CartCard>)
                     }
                 </div>
@@ -62,6 +65,10 @@ const CartPage = () => {
 
                     <div>
                         <CheckOutForm></CheckOutForm>
+
+
+                        <PaymentModal />
+
                     </div>
                 </div>
 

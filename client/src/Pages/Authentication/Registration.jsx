@@ -140,7 +140,7 @@ const Registration = () => {
   const handleSocialLogin = async socialLoginProvider => {
     await socialLoginProvider()
       .then(async result => {
-        
+
         setProcessLoader(true);
 
         if (result?.user) {
@@ -156,6 +156,10 @@ const Registration = () => {
 
           // Send user data to your server
           await axiosCommon.post('/users', userData)
+          // jwt token
+          axiosSecoure.post(`/jwt`, {
+            email: result?.user?.email,
+          })
             .then(() => {
               setProcessLoader(false)
               toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
