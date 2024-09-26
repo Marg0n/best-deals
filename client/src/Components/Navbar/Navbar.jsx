@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaUserAlt } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
@@ -6,9 +6,10 @@ import unknown from "../..//assets/anonymous.png";
 import useAuth from "../../hooks/useAuth";
 import { Tooltip } from 'react-tooltip';
 import useUserProfile from './../../hooks/useUserProfile';
+import ThemeController from "../ThemeController/ThemeController";
 
 
-const Navbar = () => {
+const Navbar = ({toggleTheme ,theme } ) => {
   const { user, loggedOut } = useAuth();
   const cartProducts = JSON.parse(localStorage.getItem('cart')) || [];
 
@@ -45,8 +46,10 @@ const Navbar = () => {
     </li>
   </>
 
+
+
   return (
-    <div className="supports-backdrop-blur:bg-[#775050]/90 sticky top-0 z-40 w-full bg-[#775050]/40 backdrop-blur-lg">
+    <div className={`supports-backdrop-blur:bg-[#775050]/90 sticky top-0 z-40 w-full backdrop-blur-lg ${theme === 'light' ? 'bg-[#775050]/40' : 'bg-[#ACBCDF]/40'}`}>
       <div className="navbar  container mx-auto">
         {/* logo */}
         <div className="flex-1">
@@ -58,6 +61,12 @@ const Navbar = () => {
         </div>
 
         <div className="flex-none lg:space-x-4 space-x-2">
+
+          {/* Dark mode light mode buttone */}
+          <button><ThemeController theme={theme} toggleTheme={toggleTheme} /></button>
+          {/* <button className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
+            {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+          </button> */}
 
           {/* nav bar search */}
           <fieldset className="w-full space-y-1 dark:text-gray-800 lg:hidden flex">
@@ -153,7 +162,7 @@ const Navbar = () => {
                   <li>
                     <p className="flex justify-center items-center font-medium">
                       Hi,
-                      <span className={`${profile[0]?.role !== 'Admin'? (profile[0]?.role === 'User' ? 'text-[#423f3f] font-mono badge badge-neutral badge-outline' : 'text-base badge badge-neutral font-mono ') :'text-base badge badge-primary font-mono '}`}>{profile[0]?.role ? profile[0]?.role : ""}</span>
+                      <span className={`${profile[0]?.role !== 'Admin' ? (profile[0]?.role === 'User' ? 'text-[#423f3f] font-mono badge badge-neutral badge-outline' : 'text-base badge badge-neutral font-mono ') : 'text-base badge badge-primary font-mono '}`}>{profile[0]?.role ? profile[0]?.role : ""}</span>
                       <span className=" text-[#333333] font-serif font-bold">
                         {
                           user?.displayName || profile[0]?.name

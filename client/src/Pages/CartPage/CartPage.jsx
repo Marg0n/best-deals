@@ -17,7 +17,7 @@ const CartPage = () => {
 
             {/* cart list */}
             <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
-                <div className="w-full lg:w-[65%] border border-red-50">
+                <div className="w-full lg:w-[65%] ">
                     {
                         cartProducts?.map(product => 
                             <CartCard
