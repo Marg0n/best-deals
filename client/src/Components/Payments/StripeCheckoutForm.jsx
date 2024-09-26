@@ -1,15 +1,15 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import './CheckoutForm.css';
-import { useEffect, useState } from "react";
 import { PropTypes } from 'prop-types';
+import { useEffect, useState } from "react";
+import { ImSpinner9 } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { ImSpinner9 } from "react-icons/im";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import './StripeCheckoutForm.css';
 
 
-const CheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking,handleBookNow }) => {
+const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handleBookNow }) => {
 
     // strip hooks
     const stripe = useStripe();
@@ -171,7 +171,7 @@ const CheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking,handleBookNo
     );
 };
 
-CheckoutForm.propTypes = {
+StripeCheckoutForm.propTypes = {
     CheckoutPrice: PropTypes.number,
     refetch: PropTypes.func,
     closeModal: PropTypes.func,
@@ -180,4 +180,4 @@ CheckoutForm.propTypes = {
     // isOpen: PropTypes.bool,
 }
 
-export default CheckoutForm;
+export default StripeCheckoutForm;

@@ -19,13 +19,13 @@ const ProductsCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="w-full">
+    <div className="w-full ">
       <div className="relative">
         <Link to={`/details/${_id}`}>
           <div
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="p-6 overflow-hidden rounded-md lg:h-[420px] shadow-md dark:bg-gray-50 dark:text-gray-900"
+            className="p-6 overflow-hidden rounded-md lg:h-[420px] shadow-md bg-[#D9D9D9] dark:bg-[#3f629e] dark:text-white"
           >
             <img
               src={productImage}
@@ -34,8 +34,8 @@ const ProductsCard = ({ product }) => {
                 isHovered ? "scale-110" : "scale-100"
               }`}
             />
-            <div className="mt-6 mb-2">
-              <span className="block text-xs font-medium tracking-widest uppercase dark:text-violet-600">
+            <div className="mt-6 mb-2 dark:text-white">
+              <span className="block text-xs font-medium tracking-widest uppercase ">
                 ${price}
               </span>
               <h2 className="text-xl font-semibold tracking-wide">

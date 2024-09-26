@@ -6,6 +6,7 @@ import FeaturedProducts from "../../Components/FeaturedProducts/FeaturedProducts
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useState } from "react";
+import NoData from "../../Components/NoData/NoData";
 
 const Home = () => {
 
@@ -13,13 +14,13 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState([0, 1000]);
-console.log(priceRange);
+  console.log(priceRange);
 
 
   // This fetch is for collect all data from mongoDB
   const axiosCommon = useAxiosCommon();
   const { data: products, isLoading } = useQuery({
-    queryKey: ["products", search, selectedCategory , priceRange],
+    queryKey: ["products", search, selectedCategory, priceRange],
     queryFn: async () => {
       const res = await axiosCommon.get(`/all-products`, {
         params: {
@@ -58,11 +59,15 @@ console.log(priceRange);
             <ClimbingBoxLoader color="#36d7b7" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
-            {products?.map((product) => (
-              <ProductsCard key={product._id} product={product} />
-            ))}
-          </div>
+          products.length > 0 ?
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
+              {products?.map((product) => (
+                <ProductsCard
+                  key={product._id}
+                  product={product} />
+              ))}
+            </div> :
+            <NoData></NoData>
         )}
       </div>
     </div>

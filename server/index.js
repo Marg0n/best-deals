@@ -86,6 +86,7 @@ const verifyToken = async (req, res, next) => {
 // ===================================
 app.post("/jwt", async (req, res) => {
   const user = req.body;
+  console.log(user)
   const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10h' });
 
   res

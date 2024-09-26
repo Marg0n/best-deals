@@ -1,13 +1,12 @@
-import { useState } from "react";
 import Modal from 'react-modal';
 import BankDetail from '../BankDetail/BankDetail';
 import CompanyInfo from '../CompanyInfo/CompanyInfo';
 import img from "../image/Best_Deal.png";
-import PaymentModal from "../Modals/PaymentModal";
+import { useState } from 'react';
 Modal.setAppElement('#root');
 
 
-const Invoice = () => {
+const CheckOutForm = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleCheckoutClick = (e) => {
@@ -18,6 +17,7 @@ const Invoice = () => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+
     return (
         <div>
             <form >
@@ -39,7 +39,7 @@ const Invoice = () => {
                     </div>
                 </div>
 
-                <div>
+                <div className="dark:text-white ">
                     <h2 className="font-bold mt-4 ">Payment Method</h2>
                     <label className="flex items-center">
                         <input
@@ -56,13 +56,14 @@ const Invoice = () => {
                             name="paymentMethod"
                             value="Card"
                             className="radio mt-1"
+                            defaultChecked
                         />
-                        <span className="ml-2">Debit card / Credit Card</span>
+                        <span className="ml-2 ">Debit card / Credit Card</span>
                     </label>
                 </div>
 
 
-                <button onClick={handleCheckoutClick} type="submit" className="mt-8 w-full btn block px-8 py-2.5 bg-[#775050] text-white hover:bg-[#533131]">Proceed to Payment</button>
+                <button onClick={handleCheckoutClick} type="submit" className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">Show Invoice</button>
             </form>
             <Modal
                 isOpen={isModalOpen}
@@ -178,23 +179,21 @@ const Invoice = () => {
                 </div>
 
                 {/* buttons */}
-                <div className="flex justify-between items-center mt-4">
-                    <div className="flex gap-4">
-                        <button
-                            onClick={closeModal}
-                            className=" btn px-4 py-2 bg-blue-500 text-white hover:bg-blue-700"
-                        >
-                            Close
-                        </button>
-                        <button
+                <div className="flex items-center mt-4 gap-4">
 
-                            className=" btn px-4 py-2 bg-blue-500 text-white hover:bg-blue-700"
-                        >
-                            Print
-                        </button>
-                    </div>
+                    <button
+                        onClick={closeModal}
+                        className=" btn px-4 py-2 bg-blue-500 text-white hover:bg-blue-700"
+                    >
+                        Close
+                    </button>
+                    <button
 
-                    <PaymentModal />
+                        className=" btn px-4 py-2 bg-blue-500 text-white hover:bg-blue-700"
+                    >
+                        Print
+                    </button>
+
                 </div>
 
             </Modal>
@@ -202,4 +201,4 @@ const Invoice = () => {
     );
 };
 
-export default Invoice;
+export default CheckOutForm;

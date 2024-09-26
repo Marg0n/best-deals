@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import CheckoutForm from '../Payments/CheckoutForm';
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import React, { useState } from 'react';
+import StripeCheckoutForm from '../Payments/StripeCheckoutForm';
 
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid recreating the `Stripe` object on every render.
@@ -27,7 +27,7 @@ const PaymentModal = () => {
                     {/* <p className="py-4">Press ESC key or click the button below to close</p> */}
 
                     <Elements stripe={stripePromise}>
-                        <CheckoutForm
+                        <StripeCheckoutForm
                             CheckoutPrice={100}
                             // refetch={refetch} 
                             closeModal={closeModal}
@@ -47,7 +47,7 @@ const PaymentModal = () => {
             </dialog>
 
             <button
-                className=" w-full btn block px-8 py-2.5 bg-[#775050] text-white hover:bg-[#533131]"
+                className="mt-8 w-full btn block px-8 py-2.5 bg-[#775050] text-white hover:bg-[#533131]"
                 onClick={() => setIsOpen(true)}
             >
                 Checkout
