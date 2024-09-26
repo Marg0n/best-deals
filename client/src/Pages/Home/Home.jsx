@@ -7,6 +7,7 @@ import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useState } from "react";
 import NoData from "../../Components/NoData/NoData";
+import SectionHeader from "../../Components/ReUsableComponent/SectionHeader";
 
 const Home = () => {
 
@@ -39,9 +40,6 @@ const Home = () => {
   console.log(selectedCategory);
 
 
-
-
-
   return (
     <div className="flex p-5 gap-5">
       {/* Left Side menubar / category bar */}
@@ -53,22 +51,30 @@ const Home = () => {
       </div>
 
       <div className="w-full lg:w-3/4 ">
-        <FeaturedProducts />
+
+        {/* all products title */}
+        <SectionHeader
+        title={'Best Deal All products'}
+        description={''}
+        ></SectionHeader>
+
+        {/* all products display */}
         {isLoading ? (
           <div className="flex justify-center items-center h-screen">
             <ClimbingBoxLoader color="#36d7b7" />
           </div>
         ) : (
           products.length > 0 ?
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
               {products?.map((product) => (
                 <ProductsCard
-                  key={product._id}
-                  product={product} />
+                key={product._id}
+                product={product} />
               ))}
             </div> :
             <NoData></NoData>
-        )}
+          )}
+          <FeaturedProducts />
       </div>
     </div>
   );
