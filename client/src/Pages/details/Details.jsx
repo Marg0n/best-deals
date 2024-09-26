@@ -8,15 +8,9 @@ import toast from "react-hot-toast";
 
 
 const Details = () => {
-    const products = useLoaderData();
-    console.log(products);
-    
-    const { _id } = useParams();
-    console.log(_id);
-    
-    const product = products?.find(product => product._id === _id);
-    console.log(product);
-    
+    const products = useLoaderData();    
+    const { _id } = useParams();    
+    const product = products?.find(product => product._id === _id);    
 
     // add product to local storage
     const handleAddToCart = () => {
@@ -45,9 +39,9 @@ const Details = () => {
             </Helmet>
             <div className='lg:w-8/12 flex-1 lg:flex '>
                 <div className='lg:w-1/2 p-3'>
-                    <p className='text-[#775050] text-lg font-normal'><Link to='/'>Home</Link> {'>'} Kitchen Appliances {'>'} Oven </p>
+                    <p className='text-[#775050] dark:text-white  text-lg font-normal'><Link to='/'>Home</Link> {'>'} Kitchen Appliances {'>'} Oven </p>
                     <div className='flex items-center gap-3 justify-end'>
-                        <a className='text-[#775050] text-lg font-normal underline' href="">view comments</a>
+                        <a className='text-[#775050] dark:text-white  text-lg font-normal underline' href="">view comments</a>
                         <span className="block text-xs font-medium tracking-widest uppercase text-white ">
                             Ratings :{product.ratings} <Rating name="half-rating" size="small" defaultValue={product.ratings} precision={0.1} />
 
@@ -83,17 +77,17 @@ const Details = () => {
                     </div>
                 </div>
                 <div className='p-3 lg:w-1/2'>
-                    <h3 className='text-[#775050] text-2xl font-normal'>{product.productName}</h3>
-                    <h3 className='text-[#ff6b1c] text-3xl font-bold py-4'>${product.price}</h3>
+                    <h3 className='text-[#775050] dark:text-white  text-2xl font-normal'>{product.productName}</h3>
+                    <h3 className='text-[#ff6b1c] dark:text-white  text-3xl font-bold py-4'>${product.price}</h3>
                     <hr className='border-2 border-[#1d2236] w-full' />
-                    <p className='text-[#775050] text-lg font-normal pt-2'>Brand: {product.brandName}</p>
-                    <p className='text-[#775050] text-lg font-normal'>Description: {product.description}</p>
+                    <p className='text-[#775050] dark:text-white  text-lg font-normal pt-2'>Brand: {product.brandName}</p>
+                    <p className='text-[#775050] dark:text-white  text-lg font-normal'>Description: {product.description}</p>
 
                 </div>
             </div>
-            <div className='lg:w-4/12 h-full bg-[#d9d9d9] p-2'>
+            <div className='lg:w-4/12 h-full bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
                 <h3 className='text-white text-2xl font-bold'>More suggestions :</h3>
-                <div className='flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
+                <div className='dark:bg-[#D6DFF2] flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
                     <img className='w-24 h-20 rounded-[27px]' src={product.productImage} alt="" />
                     <div className="flex-1">
                         <p className='text-[#020202] text-base font-normal pb-5'>{product.productName}</p>
@@ -106,7 +100,7 @@ const Details = () => {
                         </div>
                     </div>
                 </div>
-                <div className='flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
+                <div className='dark:bg-[#D6DFF2] flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
                     <img className='w-24 h-20 rounded-[27px]' src={product.productImage} alt="" />
                     <div className="flex-1">
                         <p className='text-[#020202] text-base font-normal pb-5'>{product.productName}</p>
@@ -119,7 +113,7 @@ const Details = () => {
                         </div>
                     </div>
                 </div>
-                <div className='flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
+                <div className='dark:bg-[#D6DFF2] flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
                     <img className='w-24 h-20 rounded-[27px]' src={product.productImage} alt="" />
                     <div className="flex-1">
                         <p className='text-[#020202] text-base font-normal pb-5'>{product.productName}</p>
@@ -132,7 +126,7 @@ const Details = () => {
                         </div>
                     </div>
                 </div>
-                <div className='flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
+                <div className='dark:bg-[#D6DFF2] flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
                     <img className='w-24 h-20 rounded-[27px]' src={product.productImage} alt="" />
                     <div className="flex-1">
                         <p className='text-[#020202] text-base font-normal pb-5'>{product.productName}</p>
