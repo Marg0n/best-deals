@@ -29,14 +29,14 @@ const CartPage = () => {
 
                 {/* Total bill Table */}
                 <div className="flex-grow" >
-                    <div className=" bg-[#d9d9d9]  h-fit">
+                    <div className=" bg-[#d9d9d9] dark:bg-[#34394C] dark:text-white  h-fit">
                         <div className="overflow-x-auto">
                             <table className="table">
                                 {/* head */}
                                 <thead>
                                     <tr>
-                                        <th className="text-white bg-[#775050]">Quantity</th>
-                                        <th className="text-white bg-[#775050]">Total Ammount</th>
+                                        <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Quantity</th>
+                                        <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Ammount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
