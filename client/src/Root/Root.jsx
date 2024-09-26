@@ -8,29 +8,32 @@ import { Toaster } from "react-hot-toast";
 
 const Root = () => {
   // Dark mode light mode control
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
-
-  // Effect for toggle dark and light mode
-  useEffect(() => {
-    const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    console.log(userPrefersDark);
-    
-
-    if (!localStorage.getItem('theme')) {
-      setTheme(userPrefersDark ? 'dark' : 'light');
+  const [theme, setTheme] = useState(() => {
+    // Get the saved theme from localStorage or default to the system preference
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      return savedTheme;
     }
+    
+    // Get the system theme preference
+    const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return userPrefersDark ? 'dark' : 'light';
+  });
 
+  useEffect(() => {
+    // Apply the theme to the document
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
     }
 
+    // Save the theme to localStorage
     localStorage.setItem('theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
+    setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
   useEffect(() => {
