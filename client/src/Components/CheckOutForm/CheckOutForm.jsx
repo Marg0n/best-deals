@@ -15,6 +15,7 @@ const CheckOutForm = () => {
     const closeModal = () => {
         setIsModalOpen(false);
     };
+
     return (
         <div>
             <form >
@@ -36,7 +37,7 @@ const CheckOutForm = () => {
                     </div>
                 </div>
 
-                <div>
+                <div className="dark:text-white ">
                     <h2 className="font-bold mt-4 ">Payment Method</h2>
                     <label className="flex items-center">
                         <input
@@ -53,13 +54,14 @@ const CheckOutForm = () => {
                             name="paymentMethod"
                             value="Card"
                             className="radio mt-1"
+                            defaultChecked
                         />
-                        <span className="ml-2">Debit card / Credit Card</span>
+                        <span className="ml-2 ">Debit card / Credit Card</span>
                     </label>
                 </div>
 
 
-                <button onClick={handleCheckoutClick} type="submit" className="mt-8 w-full btn block px-8 py-2.5 bg-[#775050] text-white hover:bg-[#533131]">Proceed to Checkout</button>
+                <button onClick={handleCheckoutClick} type="submit" className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">Show Invoice</button>
             </form>
             <Modal
                 isOpen={isModalOpen}

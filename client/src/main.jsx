@@ -8,17 +8,20 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Provider } from 'react-redux'
+import store from "./app/store.js";
 
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-      
       <HelmetProvider>
         <AuthProvider>
-          <RouterProvider router={Router}/>
-          <ToastContainer />
+          <Provider store={store}>
+            <RouterProvider router={Router} />
+            <ToastContainer />
+          </Provider>
         </AuthProvider>
       </HelmetProvider>
     </QueryClientProvider>

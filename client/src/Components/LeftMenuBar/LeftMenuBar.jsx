@@ -36,7 +36,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory , setPriceRange }) => {
     setSearch(searchText);
   };
 
-  // Handle clear the search 
+  // Handle clean the search 
   const handleClearSearch = (e) => {
     e.preventDefault();
     setSearchText('')
@@ -60,7 +60,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory , setPriceRange }) => {
 }
 
   return (
-    <div className="sticky top-16 h-[calc(100vh-8rem)] z-30 overflow-y-auto">
+    <div className="sticky top-16 h-[calc(100vh-8rem)]  z-30 overflow-y-auto dark:bg-[#34394C]">
       {/* Left Side menubar / categorybar */}
       <div className="lg:flex-1 hidden lg:block py-5">
         <form onSubmit={handleSearch}>
@@ -80,7 +80,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory , setPriceRange }) => {
             </label>
           </div>
 
-          <div>
+          <div className="text-[#775050] dark:text-white">
             <div className="flex justify-between mt-1 px-3">
               <div className="flex">
                 <Link to="/" className="underline underline-offset-1">
@@ -101,8 +101,8 @@ const LeftMenubar = ({ setSearch, setSelectedCategory , setPriceRange }) => {
             </div>
           </div>
           {/* Price Filter */}
-          <h2 className="font-semibold mt-2">Price Range</h2>
-          <div className="flex items-center gap-2">
+          <h2 className="font-semibold mt-2 px-2 text-[#775050] dark:text-white">Price Range</h2>
+          <div className="flex px-2 items-center gap-2 text-[#775050] dark:text-white">
             <span>${priceRangeFilter[0]}</span>
             <input
               type="range"
@@ -116,7 +116,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory , setPriceRange }) => {
           </div>
           <hr className="w-3/4 mx-auto my-5" />
           <div>
-            <div className="ml-5 mt-5">
+            <div className="ml-5 mt-5 text-[#775050] dark:text-white">
               <h1>My List :</h1>
               <ul className="ml-10">
                 <li>My Orders</li>
@@ -131,7 +131,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory , setPriceRange }) => {
           </div>
           <hr className="w-3/4 mx-auto my-5" />
           <div>
-            <div className="ml-5 mt-5">
+            <div className="ml-5 mt-5 text-[#775050] dark:text-white">
               <ul className="ml-10">
                 <li>Account Settings</li>
                 <li>About Us</li>
