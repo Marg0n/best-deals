@@ -13,7 +13,7 @@ const HoverdCardDetails = ({ product }) => {
         creationDateTime,
         _id } = product;
     return (
-        <div>
+        <div className="hidden lg:block">
             <div
                 data-aos="fade-in"
                 data-aos-duration="1500"

@@ -13,6 +13,8 @@ const Root = () => {
   // Effect for toggle dark and light mode
   useEffect(() => {
     const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    console.log(userPrefersDark);
+    
 
     if (!localStorage.getItem('theme')) {
       setTheme(userPrefersDark ? 'dark' : 'light');
