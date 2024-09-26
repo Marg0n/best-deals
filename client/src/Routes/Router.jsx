@@ -21,7 +21,7 @@ const Router = createBrowserRouter([
       {
         path: "/details/:_id",
         element: <Details></Details>,
-        loader: () => fetch("http://localhost:5000/all-products"),
+        loader: () => fetch(`${import.meta.env.VITE_SERVER}/all-products`),
       },
       {
         path: "/cartlist",
@@ -34,7 +34,7 @@ const Router = createBrowserRouter([
       {
         path: "/single-checkout/:_id",
         element: <SingleProductCheckoutPage />,
-        loader: () => fetch("http://localhost:5000/all-products"),
+        loader: () => fetch(`${import.meta.env.VITE_SERVER}/all-products`),
       },
     ],
   },
