@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const port = process.env.PORT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const stripe = require("stripe")(process.env.STRIPE_API_KEY_SERVER);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Configuration End
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -85,6 +86,7 @@ const verifyToken = async (req, res, next) => {
 // ===================================
 app.post("/jwt", async (req, res) => {
   const user = req.body;
+  console.log(user)
   const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10h' });
 
   res
@@ -147,6 +149,7 @@ async function run() {
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
+    const productCollection = client.db("BestDeals").collection("ProductCollection");
 
 
     // ==================================
@@ -165,6 +168,40 @@ async function run() {
 
       next();
     }
+
+    // =================================
+    // Stripe payment connection
+    // =================================
+
+    app.post("/create-payment-intent", verifyToken, async (req, res) => {
+      const { price } = req.body;
+      // console.log(price)
+      const amounts = parseFloat(price * 100)
+      // console.log(amounts)
+
+      // return if...
+      // if (amounts <= 0) return
+
+      // Create a PaymentIntent with the order amount and currency
+      const paymentIntent = await stripe.paymentIntents.create({
+        // amount: calculateOrderAmount(amounts),
+        amount: amounts,
+        currency: "usd",
+        payment_method_types: [
+          "card",
+        ],
+        // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default. it cannot be used with 'payment_method_types' parameter
+        // automatic_payment_methods: {
+        //   enabled: true,
+        // },
+      });
+
+      // console.log(paymentIntent)
+
+      res.send({
+        clientSecret: paymentIntent.client_secret,
+      });
+    });
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections Starts
@@ -218,6 +255,41 @@ async function run() {
       const results = await usersCollection.find({ email: mail }).toArray();
       res.send(results);
     });
+
+
+    // ==================================
+    // All products API
+    // ==================================
+    app.get('/all-products', async (req, res) => {
+      const search = req.query.search || '';
+      const minPrice = parseFloat(req.query.minPrice) || 0;
+      const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_VALUE;
+      const isFeatured = req.query.isFeatured === 'true';
+      const category = req.query.selectedCategory ? req.query.selectedCategory : '';
+
+      // search by products name and filter by price 
+      let query = {
+        productName: { $regex: search, $options: 'i' },
+        price: { $gte: minPrice, $lte: maxPrice },
+      };
+
+
+      // If the client sets the category, then filter by category from MongoDB
+      if (category) {
+        query.category = category
+      }
+
+      // If the `isFeatured` query param is passed and it's true, filter by `isFeatured`
+      if (req.query.isFeatured) {
+        query.isFeatured = isFeatured; // Filter for featured products
+      }
+      
+      const results = await productCollection.find(query).toArray();
+      res.send(results);
+    });
+
+
+
 
     // ==================================
     // Patch Users' last login
