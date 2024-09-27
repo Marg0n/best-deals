@@ -61,7 +61,7 @@ const Invoice = ({ closeModal }) => {
     
 
     return (
-        <div ref={invoiceRef}>
+        <div ref ={invoiceRef}>
             <div className='px-4 py-3 bg-[#f2f4f7] rounded-[20px] border border-[#eaedf2] justify-between flex items-center'>
                 <p className='text-[#191c21] text-xs font-semibold'>Invoice <span className='text-[#5e6470] text-xs font-semibold'>#AB2324-01</span></p>
                 <p className='text-[#191c21] text-xs font-semibold'>Date <span className='text-[#5e6470] text-xs font-semibold'>01 Aug, 2023</span></p>

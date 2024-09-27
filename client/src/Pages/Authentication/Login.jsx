@@ -36,6 +36,7 @@ const Login = () => {
     // Navigation
     const navigate = useNavigate();
     const location = useLocation();
+    console.log(location)
     const whereTo = location?.state || '/';
 
     // React hook form
@@ -112,10 +113,10 @@ const Login = () => {
                         .then(() => {
                             setProcessLoader(false);
                             toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
-                            setTimeout(() => {
-                                navigate(whereTo)
-                            }, 1000);
                         })
+                        setTimeout(() => {
+                            navigate(whereTo, { replace: true })
+                        }, 1000);
 
                     
                 }
