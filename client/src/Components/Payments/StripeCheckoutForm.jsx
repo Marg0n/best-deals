@@ -36,7 +36,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handl
     const getClientSecret = async price => {
         // Create PaymentIntent as soon as the page loads
         const { data } = await axiosSecure.post("/create-payment-intent", price)
-        // console.log('clientSecret from server--->', data.clientSecret)
+        console.log('clientSecret from server--->', data.clientSecret)
         setClientSecret(data.clientSecret);
     }
 
