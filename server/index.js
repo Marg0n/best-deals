@@ -7,28 +7,29 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const port = process.env.PORT || 3000;
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY_SERVER);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Configuration End
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Middleware Start
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({
-  origin: [
-    'http://localhost:5173',
-    "https://magenta-peony-5d02de.netlify.app",
-    // server-side
-  ],
-  credentials: true,
-  optionsSuccessStatus: 200,
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://magenta-peony-5d02de.netlify.app",
+      // server-side
+    ],
+    credentials: true,
+    optionsSuccessStatus: 200,
+  })
+);
 
 // ===================================
 // CookieParser Options
@@ -39,55 +40,53 @@ const cookieOptions = {
   sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
 };
 
-
 // ===================================
 // jwt validation middleware
 // ===================================
 const verifyToken = async (req, res, next) => {
-
-
-  const initialToken = await req.headers.authorization
+  const initialToken = await req.headers.authorization;
 
   // ===================================
   // for local storage only
   // ===================================
   if (!initialToken) {
-    return res.status(401).send({ message: 'Unauthorized access!!' });
+    return res.status(401).send({ message: "Unauthorized access!!" });
   }
 
   // ===================================
   // validate local storage token
   // ===================================
-  const token = await initialToken.split(' ')[1];
+  const token = await initialToken.split(" ")[1];
 
   // const token = req?.cookies?.token;
   // console.log('token :::>', token)
 
   if (!token) {
-    return res.status(401).send({ message: 'Unauthorized access...' });
+    return res.status(401).send({ message: "Unauthorized access..." });
   }
 
   if (token) {
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
       if (err) {
-        console.log('err token :::>', err)
-        return res.status(401).send({ message: 'Unauthorized access' });
+        console.log("err token :::>", err);
+        return res.status(401).send({ message: "Unauthorized access" });
       }
       // console.log(decoded)
-      req.decoded = decoded
-      next()
-    })
+      req.decoded = decoded;
+      next();
+    });
   }
-}
-
+};
 
 // ===================================
 //creating Token
 // ===================================
 app.post("/jwt", async (req, res) => {
   const user = req.body;
-  console.log(user)
-  const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '10h' });
+  console.log(user);
+  const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "10h",
+  });
 
   res
     // .cookie("token", token, cookieOptions)
@@ -107,7 +106,6 @@ app.get("/logout", async (req, res) => {
 // Middleware End
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // MongoDB connection Start
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,7 +120,6 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-
 
 // ===================================
 // Check if the server is up and running
@@ -140,34 +137,33 @@ app.listen(port, () => {
 
 async function run() {
   try {
-
     await client.connect();
-
 
     // ===================================
     // DB Connection
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
-    const productCollection = client.db("BestDeals").collection("ProductCollection");
-
+    const productCollection = client
+      .db("BestDeals")
+      .collection("ProductCollection");
 
     // ==================================
-    // Admin verify 
+    // Admin verify
     // ==================================
     const verifyAdmin = async (req, res, next) => {
       const email = req.decoded.email;
       // console.log('from verify admin -->', email);
       const query = { email: email };
       const user = await usersCollection.findOne(query);
-      const isAdmin = user?.role === 'Admin';
+      const isAdmin = user?.role === "Admin";
 
       if (!isAdmin) {
         return res.status(403).send({ message: "Unauthorized!!" });
       }
 
       next();
-    }
+    };
 
     // =================================
     // Stripe payment connection
@@ -176,7 +172,7 @@ async function run() {
     app.post("/create-payment-intent", verifyToken, async (req, res) => {
       const { price } = req.body;
       // console.log(price)
-      const amounts = parseFloat(price * 100)
+      const amounts = parseFloat(price * 100);
       // console.log(amounts)
 
       // return if...
@@ -187,9 +183,7 @@ async function run() {
         // amount: calculateOrderAmount(amounts),
         amount: amounts,
         currency: "usd",
-        payment_method_types: [
-          "card",
-        ],
+        payment_method_types: ["card"],
         // In the latest version of the API, specifying the `automatic_payment_methods` parameter is optional because Stripe enables its functionality by default. it cannot be used with 'payment_method_types' parameter
         // automatic_payment_methods: {
         //   enabled: true,
@@ -210,7 +204,7 @@ async function run() {
     // ==================================
     // Users registration
     // ==================================
-    app.post('/users', async (req, res) => {
+    app.post("/users", async (req, res) => {
       try {
         const newUser = req.body;
         console.log(newUser);
@@ -219,29 +213,28 @@ async function run() {
         const query = await usersCollection.findOne({ email: newUser?.email });
 
         if (!query) {
-          // const newUser = req.body; 
+          // const newUser = req.body;
           const result = await usersCollection.insertOne(newUser);
           res.send(result);
-        }
-        else {
+        } else {
           const mail = newUser?.email;
           const results = await usersCollection.find({ email: mail }).toArray();
           res.send(results);
         }
-
-      }
-      catch {
+      } catch {
         // If an error occurs during execution, catch it here
-        console.error('Error updating user status:', err);
+        console.error("Error updating user status:", err);
         // Send an error response to the client
-        res.status(500).json({ message: 'Internal server error during registration' });
+        res
+          .status(500)
+          .json({ message: "Internal server error during registration" });
       }
-    })
+    });
 
     // ==================================
     // Users login
     // ==================================
-    app.get('/users/:email', async (req, res) => {
+    app.get("/users/:email", async (req, res) => {
       const mail = req.params?.email;
       const results = await usersCollection.find({ email: mail }).toArray();
       res.send(results);
@@ -250,77 +243,74 @@ async function run() {
     // ==================================
     // Users profile data
     // ==================================
-    app.get('/profile/:email', async (req, res) => {
+    app.get("/profile/:email", async (req, res) => {
       const mail = req.params?.email;
       const results = await usersCollection.find({ email: mail }).toArray();
       res.send(results);
     });
 
-
     // ==================================
     // All products API
     // ==================================
-    app.get('/all-products', async (req, res) => {
-      const search = req.query.search || '';
+    app.get("/all-products", async (req, res) => {
+      const search = req.query.search || "";
       const minPrice = parseFloat(req.query.minPrice) || 0;
       const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_VALUE;
-      const isFeatured = req.query.isFeatured === 'true';
-      const category = req.query.selectedCategory ? req.query.selectedCategory : '';
+      const isFeatured = req.query.isFeatured === "true";
+      const category = req.query.selectedCategory
+        ? req.query.selectedCategory
+        : "";
 
-      // search by products name and filter by price 
+      // search by products name and filter by price
       let query = {
-        productName: { $regex: search, $options: 'i' },
+        productName: { $regex: search, $options: "i" },
         price: { $gte: minPrice, $lte: maxPrice },
       };
 
-
       // If the client sets the category, then filter by category from MongoDB
       if (category) {
-        query.category = category
+        query.category = category;
       }
 
       // If the `isFeatured` query param is passed and it's true, filter by `isFeatured`
       if (req.query.isFeatured) {
         query.isFeatured = isFeatured; // Filter for featured products
       }
-      
+
       const results = await productCollection.find(query).toArray();
       res.send(results);
     });
 
-
-
-
     // ==================================
     // Patch Users' last login
     // ==================================
-    app.patch('/lastLogin/:email', async (req, res) => {
+    app.patch("/lastLogin/:email", async (req, res) => {
       try {
         const mail = req.params?.email;
         const updateBody = req.body;
         const query = { email: mail };
         const updateDoc = {
           $set: {
-            lastLogin: updateBody.lastLogin
+            lastLogin: updateBody.lastLogin,
           },
-        }
+        };
         const results = await usersCollection.updateOne(query, updateDoc);
         res.send(results);
-      }
-      catch {
+      } catch {
         // If an error occurs during execution, catch it here
-        console.error('Error updating user status:', err);
+        console.error("Error updating user status:", err);
         // Send an error response to the client
-        res.status(500).json({ message: 'Internal server error from last login' });
+        res
+          .status(500)
+          .json({ message: "Internal server error from last login" });
       }
     });
-
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => { });
+    app.use("/user", async (req, res) => {});
 
     await client.db("admin").command({ ping: 1 });
     console.log(
