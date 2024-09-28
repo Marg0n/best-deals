@@ -60,8 +60,9 @@ const Details = () => {
                             </div>
                         </Carousel>
                     </div>
+                    <h1 className='dark:text-white'>This counter button is not working , have to work on this</h1>
                     <div className='flex justify-center gap-6'>
-
+                      
                         <ProductsCounter
                         key={product._id}
                         product={product}
