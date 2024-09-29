@@ -3,10 +3,14 @@ import CartCard from "../../Components/CartCard/CartCard";
 import CheckOutForm from "../../Components/CheckOutForm/CheckOutForm";
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import PaymentModal from "../../Components/Modals/PaymentModal";
+import { useSelector } from "react-redux";
 
 
 const CartPage = () => {
-    const cartProducts = JSON.parse(localStorage.getItem('cart')) || [];
+
+    // cart data from redux store
+    const cart = useSelector((state) => state.cart)
+    console.log(cart.cartIteams);
 
     return (
         <div className=" flex p-5 gap-5">
@@ -22,11 +26,16 @@ const CartPage = () => {
             <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] ">
                     {
-                        cartProducts?.map(product =>
-                            <CartCard
-                                key={product?._id}
-                                product={product}
-                            ></CartCard>)
+                        cart.cartIteams.length === 0 ? "No products" : 
+                    <div>
+                        {
+                            cart.cartIteams?.map(product =>
+                                <CartCard
+                                    key={product?._id}
+                                    product={product}
+                                ></CartCard>)
+                        }
+                    </div>
                     }
                 </div>
 
@@ -39,7 +48,7 @@ const CartPage = () => {
                                 <thead>
                                     <tr>
                                         <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Quantity</th>
-                                        <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Ammount</th>
+                                        <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Ammounts</th>
                                     </tr>
                                 </thead>
                                 <tbody>

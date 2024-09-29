@@ -7,11 +7,14 @@ import useAuth from "../../hooks/useAuth";
 import { Tooltip } from 'react-tooltip';
 import useUserProfile from './../../hooks/useUserProfile';
 import ThemeController from "../ThemeController/ThemeController";
+import { useSelector } from "react-redux";
 
 
 const Navbar = ({toggleTheme ,theme } ) => {
   const { user, loggedOut } = useAuth();
-  const cartProducts = JSON.parse(localStorage.getItem('cart')) || [];
+
+  // cart data from redux store
+  const cart = useSelector((state)=>state.cart)
 
   // user profile data
   const { profile } = useUserProfile();
@@ -110,7 +113,7 @@ const Navbar = ({toggleTheme ,theme } ) => {
             >
               <div className="indicator">
                 <FiShoppingCart size={30} />
-                <span className="badge badge-sm indicator-item">{cartProducts.length}</span>
+                <span className="badge badge-sm indicator-item">{cart.cartIteams.length}</span>
               </div>
             </div>
             <div
