@@ -37,7 +37,7 @@ const Navbar = ({toggleTheme ,theme } ) => {
     <li>
       <Link to='' className="text-base-100 font-semibold">Settings</Link>
     </li>
-    {user?.role === 'User' && <li>
+    {profile[0]?.role === 'User' && <li>
       <Link to='' className="text-base-100 font-semibold">Be a Vendor</Link>
     </li>
     }

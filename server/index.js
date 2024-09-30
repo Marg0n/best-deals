@@ -79,7 +79,7 @@ const verifyToken = async (req, res, next) => {
 };
 
 // ===================================
-//creating Token
+// creating Token
 // ===================================
 app.post("/jwt", async (req, res) => {
   const user = req.body;
@@ -178,7 +178,9 @@ async function run() {
       // return if...
       // if (amounts <= 0) return
 
+      // =================================
       // Create a PaymentIntent with the order amount and currency
+      // =================================
       const paymentIntent = await stripe.paymentIntents.create({
         // amount: calculateOrderAmount(amounts),
         amount: amounts,
@@ -207,7 +209,7 @@ async function run() {
     app.post("/users", async (req, res) => {
       try {
         const newUser = req.body;
-        console.log(newUser);
+        // console.log(newUser);
 
         // Check if user already exists
         const query = await usersCollection.findOne({ email: newUser?.email });
