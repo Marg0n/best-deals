@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -14,6 +14,11 @@ const Details = () => {
     const { _id } = useParams();    
     const product = products?.find(product => product._id === _id);    
     console.log(product);
+
+    // set quality from details
+    const [quantity , setQuality] = useState(1)
+    console.log(quantity);
+    
     
 
     // dispatch products to redux
@@ -21,9 +26,10 @@ const Details = () => {
 
     // add product to redux store
     const handleAddToCart = (product) => {
-        dispatch(addToCart(product))
+        dispatch(addToCart({ ...product, cartQuantity: quantity }));
+    };
 
-    }
+
 
     return (
         <div className='flex-1 lg:flex items-start '>
@@ -66,6 +72,8 @@ const Details = () => {
                         <ProductsCounter
                         key={product._id}
                         product={product}
+                        setQuality={setQuality}
+                        quality={quantity}
                         ></ProductsCounter>
 
                         <button onClick={() => handleAddToCart(product)} className='bg-[#d9cfaf] rounded-[86px] text-black text-sm font-bold px-4 py-2'>Add To Cart </button>
