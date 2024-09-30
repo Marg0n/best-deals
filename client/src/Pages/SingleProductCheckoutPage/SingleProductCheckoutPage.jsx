@@ -9,7 +9,7 @@ const SingleProductCheckoutPage = () => {
     return (
         <div>
             <CartCard
-            key={product.product?._id}
+            key={product._id}
             product={product}
             ></CartCard>
         </div>

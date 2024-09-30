@@ -4,31 +4,24 @@ import { Link, useLoaderData, useParams } from 'react-router-dom';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Rating } from '@mui/material';
 import { Helmet } from 'react-helmet-async';
-import toast from "react-hot-toast";
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../features/CartSlice/CartSlice';
+import ProductsCounter from '../../Components/ProductCounter/ProductsCounter';
 
 
 const Details = () => {
     const products = useLoaderData();    
     const { _id } = useParams();    
     const product = products?.find(product => product._id === _id);    
+    console.log(product);
+    
 
-    // add product to local storage
-    const handleAddToCart = () => {
-        // get cart from local storage
-        const cart = JSON.parse(localStorage.getItem('cart')) || []
+    // dispatch products to redux
+    const dispatch = useDispatch()
 
-        // check the product is exist in cart
-        const productExist = cart.find(item => item._id === product._id)
-
-        if (!productExist) {
-            cart.push(product)
-            // save the updated cart in local storage
-            localStorage.setItem('cart', JSON.stringify(cart))
-            toast.success(`${product.productName} is added to cart`)
-        }
-        else {
-            toast.error('This iteam is already added to your cart')
-        }
+    // add product to redux store
+    const handleAddToCart = (product) => {
+        dispatch(addToCart(product))
 
     }
 
@@ -67,7 +60,14 @@ const Details = () => {
                             </div>
                         </Carousel>
                     </div>
+                    <h1 className='dark:text-white'>This counter button is not working , have to work on this</h1>
                     <div className='flex justify-center gap-6'>
+                      
+                        <ProductsCounter
+                        key={product._id}
+                        product={product}
+                        ></ProductsCounter>
+
                         <button onClick={() => handleAddToCart(product)} className='bg-[#d9cfaf] rounded-[86px] text-black text-sm font-bold px-4 py-2'>Add To Cart </button>
                         <button className='bg-black rounded-[86px] text-white text-sm font-bold px-4 py-2'>Add To Wish List </button>
                     </div>
