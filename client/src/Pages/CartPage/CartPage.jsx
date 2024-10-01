@@ -60,21 +60,21 @@ const CartPage = () => {
                                 <thead>
                                     <tr>
                                         <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Quantity</th>
-                                        <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Ammounts</th>
+                                        <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Amounts</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {/* row 1 */}
+                                    {/* Quantity & Total Amounts */}
                                     <tr>
                                         <td>{totalQuantity}</td>
                                         <td>$ {totalAmount.toFixed(2)}</td>
                                     </tr>
-                                    {/* row 2 */}
+                                    {/* Discount */}
                                     <tr>
                                         <td>Discount</td>
                                         <td>5%</td>
                                     </tr>
-                                    {/* row 3 */}
+                                    {/* Grand Total */}
                                     <tr>
                                         <td>Grand Total</td>
                                         <td>$ {grandTotal.toFixed(2)}</td>
@@ -87,7 +87,7 @@ const CartPage = () => {
                     <div>
                         <CheckOutForm></CheckOutForm>
 
-
+                        {/* payment method */}
                         <PaymentModal />
 
                     </div>

@@ -1,25 +1,25 @@
-import React, { useState } from 'react';
-import { Carousel } from 'react-responsive-carousel';
-import { Link, useLoaderData, useParams } from 'react-router-dom';
-import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Rating } from '@mui/material';
+import React, { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '../../features/CartSlice/CartSlice';
+import { Carousel } from 'react-responsive-carousel';
+import 'react-responsive-carousel/lib/styles/carousel.min.css';
+import { Link, useLoaderData, useParams } from 'react-router-dom';
 import ProductsCounter from '../../Components/ProductCounter/ProductsCounter';
+import { addToCart } from '../../features/CartSlice/CartSlice';
 
 
 const Details = () => {
-    const products = useLoaderData();    
-    const { _id } = useParams();    
-    const product = products?.find(product => product._id === _id);    
+    const products = useLoaderData();
+    const { _id } = useParams();
+    const product = products?.find(product => product._id === _id);
     console.log(product);
 
     // set quality from details
-    const [quantity , setQuality] = useState(1)
+    const [quantity, setQuality] = useState(1)
     console.log(quantity);
-    
-    
+
+
 
     // dispatch products to redux
     const dispatch = useDispatch()
@@ -38,9 +38,16 @@ const Details = () => {
             </Helmet>
             <div className='lg:w-8/12 flex-1 lg:flex '>
                 <div className='lg:w-1/2 p-3'>
-                    <p className='text-[#775050] dark:text-white  text-lg font-normal'><Link to='/'>Home</Link> {'>'} Kitchen Appliances {'>'} Oven </p>
+                    {/* path indication */}
+                    <p className='text-[#775050] dark:text-white  text-lg font-normal'>
+                        <Link to='/'>Home</Link> {'>'} Kitchen Appliances {'>'} Oven
+                    </p>
+
+                    {/* View comments */}
                     <div className='flex items-center gap-3 justify-end'>
-                        <a className='text-[#775050] dark:text-white  text-lg font-normal underline' href="">view comments</a>
+                        <Link className='text-[#775050] dark:text-white  text-lg font-normal underline' to="">
+                            view comments
+                        </Link>
                         <span className="block text-xs font-medium tracking-widest uppercase text-white ">
                             Ratings :{product.ratings} <Rating name="half-rating" size="small" defaultValue={product.ratings} precision={0.1} />
 
@@ -68,12 +75,12 @@ const Details = () => {
                     </div>
                     <h1 className='dark:text-white'>This counter button is not working , have to work on this</h1>
                     <div className='flex justify-center gap-6'>
-                      
+
                         <ProductsCounter
-                        key={product._id}
-                        product={product}
-                        setQuality={setQuality}
-                        quality={quantity}
+                            key={product._id}
+                            product={product}
+                            setQuality={setQuality}
+                            quality={quantity}
                         ></ProductsCounter>
 
                         <button onClick={() => handleAddToCart(product)} className='bg-[#d9cfaf] rounded-[86px] text-black text-sm font-bold px-4 py-2'>Add To Cart </button>
@@ -81,7 +88,9 @@ const Details = () => {
                     </div>
                     <div className='text-center mt-4'>
 
-                        <Link to={`/single-checkout/${_id}`}><button onClick={() => handleBuyNow(product)} className='bg-[#ff6b1c] rounded-[86px] text-white text-sm font-bold px-8 py-2'>Buy Now</button></Link>
+                        <Link to={`/single-checkout/${_id}`} onClick={() => handleBuyNow(product)} className='bg-[#ff6b1c] rounded-[86px] text-white text-sm font-bold px-8 py-2'>
+                            Buy Now
+                        </Link>
                     </div>
                 </div>
                 <div className='p-3 lg:w-1/2'>
