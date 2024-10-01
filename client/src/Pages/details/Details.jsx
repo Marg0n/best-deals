@@ -13,11 +13,11 @@ const Details = () => {
     const products = useLoaderData();
     const { _id } = useParams();
     const product = products?.find(product => product._id === _id);
-    console.log(product);
+    // console.log(product);
 
     // set quality from details
     const [quantity, setQuality] = useState(1)
-    console.log(quantity);
+    // console.log(quantity);
 
 
 
@@ -84,7 +84,7 @@ const Details = () => {
                         ></ProductsCounter>
 
                         <button onClick={() => handleAddToCart(product)} className='bg-[#d9cfaf] rounded-[86px] text-black text-sm font-bold px-4 py-2'>Add To Cart </button>
-                        <button className='bg-black rounded-[86px] text-white text-sm font-bold px-4 py-2'>Add To Wish List </button>
+                        {/* <button className='bg-black rounded-[86px] text-white text-sm font-bold px-4 py-2'>Add To Wish List </button> */}
                     </div>
                     <div className='text-center mt-4'>
 
