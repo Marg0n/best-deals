@@ -49,6 +49,10 @@ const cartSlice = createSlice({
             );
             if (state.cartIteams[itemIndex].cartQuantity > 1) {
                 state.cartIteams[itemIndex].cartQuantity--;
+                console.log(state.cartIteams[itemIndex].cartQuantity);   
+            }
+            else{
+                
             }
         },
 
@@ -60,6 +64,7 @@ const cartSlice = createSlice({
             state.cartIteams = nextCartItems;
             toast.success('Item removed')
         },
+
 
 
     }

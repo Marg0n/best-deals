@@ -8,6 +8,8 @@ import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useState } from "react";
 import NoData from "../../Components/NoData/NoData";
 import SectionHeader from "../../Components/ReUsableComponent/SectionHeader";
+import { Helmet } from "react-helmet-async";
+import CardSkelaton from "../../Components/CardSkelaton/CardSkelaton";
 
 const Home = () => {
 
@@ -40,6 +42,11 @@ const Home = () => {
 
   return (
     <div className="flex p-5 gap-5">
+      <div>
+        <Helmet>
+          <title>Best Deals | Home</title>
+        </Helmet>
+      </div>
       {/* Left Side menubar / category bar */}
       <div className="flex-1">
         <LeftMenubar
@@ -58,8 +65,8 @@ const Home = () => {
 
         {/* all products display */}
         {isLoading ? (
-          <div className="flex justify-center items-center h-screen">
-            <ClimbingBoxLoader color="#36d7b7" />
+          <div className="">
+            <CardSkelaton/>
           </div>
         ) : (
           products?.length > 0 ?
@@ -72,7 +79,7 @@ const Home = () => {
             </div> :
             <NoData></NoData>
           )}
-          <FeaturedProducts />
+          <FeaturedProducts  />
       </div>
     </div>
   );

@@ -23,6 +23,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      "https://best-deal-909.web.app",
       "https://magenta-peony-5d02de.netlify.app",
       // server-side
     ],
