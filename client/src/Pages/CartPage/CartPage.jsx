@@ -5,6 +5,7 @@ import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import PaymentModal from "../../Components/Modals/PaymentModal";
 import { useSelector } from "react-redux";
 import NoData from "../../Components/NoData/NoData";
+import { ScrollRestoration } from "react-router-dom";
 
 
 
@@ -28,6 +29,8 @@ const CartPage = () => {
             <Helmet>
                 <title>Best Deal | Cart list</title>
             </Helmet>
+            <ScrollRestoration></ScrollRestoration>
+
             {/*Left Side menubar / categorybar  */}
             <div className="flex-1">
                 <LeftMenubar></LeftMenubar>

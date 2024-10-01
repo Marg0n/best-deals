@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Link, useLoaderData, useParams } from 'react-router-dom';
+import { Link, ScrollRestoration, useLoaderData, useParams } from 'react-router-dom';
 import ProductsCounter from '../../Components/ProductCounter/ProductsCounter';
 import { addToCart } from '../../features/CartSlice/CartSlice';
 import MoreSuggetionCard from '../../Components/MoreSuggetionCard/MoreSuggetionCard';
@@ -42,6 +42,7 @@ const Details = () => {
             <Helmet>
                 <title>Best Deal | {product?.productName}</title>
             </Helmet>
+            <ScrollRestoration></ScrollRestoration>
             <div className='lg:w-8/12 flex-1 lg:flex '>
                 <div className='lg:w-1/2 p-3'>
                     {/* path indication */}
@@ -54,8 +55,8 @@ const Details = () => {
                         <Link className='text-[#775050] dark:text-white  text-lg font-normal underline' to="">
                             view comments
                         </Link>
-                        <span className="block text-xs font-medium tracking-widest uppercase text-white ">
-                            Ratings :{product.ratings} <Rating name="half-rating" size="small" defaultValue={product.ratings} precision={0.1} />
+                        <span className="block text-xs font-medium tracking-widest uppercase dark:text-white text-[#775050]">
+                            Ratings :{product.rating}<Rating name="read-only" size="small" value={product.rating} precision={0.1} readOnly />
 
                         </span>
                     </div>
@@ -110,8 +111,8 @@ const Details = () => {
 
             {
                 productsInSameCategory.length >0 ?
-                <div className='lg:w-4/12 h-full mt-10 rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
-                <h3 className='text-white text-2xl font-bold mb-5'>More suggestions :</h3>
+                <div className='lg:w-4/12 h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
+                <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
 
                 {
                     productsInSameCategory.map(item =>
