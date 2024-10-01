@@ -7,7 +7,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 4000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY_SERVER);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -84,7 +84,7 @@ const verifyToken = async (req, res, next) => {
 // ===================================
 app.post("/jwt", async (req, res) => {
   const user = req.body;
-  console.log(user);
+  // console.log(user);
   const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: "10h",
   });

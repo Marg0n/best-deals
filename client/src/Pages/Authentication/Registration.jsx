@@ -49,7 +49,7 @@ const Registration = () => {
     const image = e.target.avatar.files[0]
 
     // creation date
-    const createdTime = new Date();
+    const createdTime = new Date().toUTCString();
 
     // role
     const role = 'User';

@@ -129,17 +129,17 @@ const Navbar = ({ toggleTheme, theme }) => {
                   Items
                 </p>
                 {/* simple wishlists */}
-                <p className="text-sm font-semibold p-4">
+                <div className="text-sm font-semibold p-4">
                   {
                     cart.cartIteams.length === 0
                       ? 'Noting Here!😥'
                       : <ul className="list-decimal">
-                        {cart.cartIteams?.map(product => <li>
+                        {cart.cartIteams?.map(product => <li key={product._id}>
                           {product.productName}
                         </li>)}
                       </ul>
                   }
-                </p>
+                </div>
                 <Link to="/cartlist" >
                   <p className={cart.cartIteams.length === 0
                     ? ``
