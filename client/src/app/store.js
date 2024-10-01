@@ -8,7 +8,7 @@ const persistedState = loadState();
 
 const store = configureStore({
     reducer: {
-        cart: CartReducer
+        cart: CartReducer,
     },
     // Use preloaded state from localStorage if available
     preloadedState: persistedState,

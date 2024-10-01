@@ -7,7 +7,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY_SERVER);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -23,6 +23,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      "https://best-deal-909.web.app",
       "https://magenta-peony-5d02de.netlify.app",
       // server-side
     ],
@@ -79,11 +80,11 @@ const verifyToken = async (req, res, next) => {
 };
 
 // ===================================
-//creating Token
+// creating Token
 // ===================================
 app.post("/jwt", async (req, res) => {
   const user = req.body;
-  console.log(user);
+  // console.log(user);
   const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: "10h",
   });
@@ -144,9 +145,7 @@ async function run() {
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
-    const productCollection = client
-      .db("BestDeals")
-      .collection("ProductCollection");
+    const productCollection = client.db("BestDeals").collection("ProductCollection");
 
     // ==================================
     // Admin verify
@@ -178,7 +177,9 @@ async function run() {
       // return if...
       // if (amounts <= 0) return
 
+      // =================================
       // Create a PaymentIntent with the order amount and currency
+      // =================================
       const paymentIntent = await stripe.paymentIntents.create({
         // amount: calculateOrderAmount(amounts),
         amount: amounts,
@@ -207,7 +208,7 @@ async function run() {
     app.post("/users", async (req, res) => {
       try {
         const newUser = req.body;
-        console.log(newUser);
+        // console.log(newUser);
 
         // Check if user already exists
         const query = await usersCollection.findOne({ email: newUser?.email });
@@ -305,6 +306,59 @@ async function run() {
           .json({ message: "Internal server error from last login" });
       }
     });
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // fetch comments
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    app.get('/api/products/:id', async (req, res) => {
+      const productId = req.params.id;
+    
+      try {
+        // Find product using string _id
+        const product = await productCollection.findOne({ _id: productId });
+    
+        if (product) {
+          res.status(200).json(product);
+        } else {
+          res.status(404).json({ message: 'Product not found' });
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // add comments
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    app.post('/api/products/:id/comments', async (req, res) => {
+      const productId = req.params.id;
+      const { comment, userRating, name, userPhoto } = req.body;
+    
+      // Check if all required fields are provided
+      if (!comment || !userRating || !name || !userPhoto) {
+        return res.status(400).json({ message: 'Missing fields' });
+      }
+    
+      const newComment = { name, userPhoto, comment, userRating: userRating };
+    
+      try {
+        const result = await productCollection.updateOne(
+          { _id: productId }, 
+          { $push: { comments: newComment } } 
+        );
+    
+        if (result.modifiedCount === 1) {
+          res.status(200).json({ message: 'Comment added successfully' });
+        } else {
+          res.status(404).json({ message: 'Product not found' });
+        }
+      } catch (error) {
+        console.error('Error adding comment:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+    
+
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
