@@ -9,7 +9,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import './StripeCheckoutForm.css';
 
 
-const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handleBookNow }) => {
+const StripeCheckoutForm = ({ CheckoutPrice, closeModal, booking, handleInvoice }) => {
 
     // strip hooks
     const stripe = useStripe();
@@ -158,7 +158,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handl
             <button
                 type="submit"
                 className="btn btn-primary w-full"
-                onClick={handleBookNow}
+                onClick={handleInvoice}
                 disabled={!stripe || !clientSecret || processing}>
                 {processing ? (
                     <ImSpinner9 className='animate-spin m-auto' size={24} />
@@ -173,10 +173,10 @@ const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handl
 
 StripeCheckoutForm.propTypes = {
     CheckoutPrice: PropTypes.number,
-    refetch: PropTypes.func,
+    // refetch: PropTypes.func,
     closeModal: PropTypes.func,
     booking: PropTypes.object,
-    handleBookNow: PropTypes.func,
+    handleInvoice: PropTypes.func,
     // isOpen: PropTypes.bool,
 }
 
