@@ -15,7 +15,7 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState([0, 1000]);
-  console.log(priceRange);
+  // console.log(priceRange);
 
 
   // This fetch is for collect all data from mongoDB
@@ -31,7 +31,7 @@ const Home = () => {
           maxPrice: priceRange[1],
         }
       });
-      console.log(res.data);
+      // console.log(res.data);
 
       return res.data;
     },
