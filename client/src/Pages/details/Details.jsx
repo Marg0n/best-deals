@@ -4,18 +4,24 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Link, useLoaderData, useParams } from 'react-router-dom';
+import { Link, ScrollRestoration, useLoaderData, useParams } from 'react-router-dom';
 import ProductsCounter from '../../Components/ProductCounter/ProductsCounter';
 import { addToCart } from '../../features/CartSlice/CartSlice';
 import CommentModal from '../../Components/CommentModal/CommentModal';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
+import MoreSuggetionCard from '../../Components/MoreSuggetionCard/MoreSuggetionCard';
 
 
 const Details = () => {
     const products = useLoaderData();
     const { _id } = useParams();
     const product = products?.find(product => product._id === _id);
-    // console.log(product);
+
+
+
+    // finding same category products but not the same product
+    const productsInSameCategory = products?.filter(item => item.category === product.category && item._id !== product._id);
+    
 
     const {user} = useContext(AuthContext)
 
@@ -47,11 +53,12 @@ const Details = () => {
             <Helmet>
                 <title>Best Deal | {product?.productName}</title>
             </Helmet>
+            <ScrollRestoration></ScrollRestoration>
             <div className='lg:w-8/12 flex-1 lg:flex '>
                 <div className='lg:w-1/2 p-3'>
                     {/* path indication */}
                     <p className='text-[#775050] dark:text-white  text-lg font-normal'>
-                        <Link to='/'>Home</Link> {'>'} Kitchen Appliances {'>'} Oven
+                        <Link to='/'>Home</Link> {'>'} <Link>{product.category}</Link> {'>'} <Link>{product.productName}</Link>
                     </p>
 
                     {/* View comments */}
@@ -59,8 +66,8 @@ const Details = () => {
                         <Link onClick={handleOpen} className='text-[#775050] dark:text-white  text-lg font-normal underline' to="">
                             view comments
                         </Link>
-                        <span className="block text-xs font-medium tracking-widest uppercase text-white ">
-                            Ratings :{product.ratings} <Rating name="half-rating" size="small" defaultValue={product.ratings} precision={0.1} />
+                        <span className="block text-xs font-medium tracking-widest uppercase dark:text-white text-[#775050]">
+                            Ratings :{product.rating}<Rating name="read-only" size="small" value={product.rating} precision={0.1} readOnly />
 
                         </span>
                         {/* Use the modal component */}
@@ -86,7 +93,7 @@ const Details = () => {
                             </div>
                         </Carousel>
                     </div>
-                    <h1 className='dark:text-white'>This counter button is not working , have to work on this</h1>
+
                     <div className='flex justify-center gap-6'>
 
                         <ProductsCounter
@@ -112,66 +119,28 @@ const Details = () => {
                     <hr className='border-2 border-[#1d2236] w-full' />
                     <p className='text-[#775050] dark:text-white  text-lg font-normal pt-2'>Brand: {product.brandName}</p>
                     <p className='text-[#775050] dark:text-white  text-lg font-normal'>Description: {product.description}</p>
-
                 </div>
             </div>
-            <div className='lg:w-4/12 h-full bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
-                <h3 className='text-white text-2xl font-bold'>More suggestions :</h3>
-                <div className='dark:bg-[#D6DFF2] flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
-                    <img className='w-24 h-20 rounded-[27px]' src={product.productImage} alt="" />
-                    <div className="flex-1">
-                        <p className='text-[#020202] text-base font-normal pb-5'>{product.productName}</p>
-                        <div className='flex items-center justify-between w-full'>
-                            <span className="text-xs font-medium tracking-widest uppercase text-[#1d2236] flex items-center gap-2">
 
-                                <Rating name="half-rating" size="small" defaultValue={product.ratings} precision={0.1} />
-                            </span>
-                            <h5 className='text-[#1d2236] text-xl font-bold'>${product.price}</h5>
-                        </div>
-                    </div>
-                </div>
-                <div className='dark:bg-[#D6DFF2] flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
-                    <img className='w-24 h-20 rounded-[27px]' src={product.productImage} alt="" />
-                    <div className="flex-1">
-                        <p className='text-[#020202] text-base font-normal pb-5'>{product.productName}</p>
-                        <div className='flex items-center justify-between w-full'>
-                            <span className="text-xs font-medium tracking-widest uppercase text-[#1d2236] flex items-center gap-2">
+            {
+                productsInSameCategory.length >0 ?
+                <div className='lg:w-4/12 h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
+                <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
 
-                                <Rating name="half-rating" size="small" defaultValue={product.ratings} precision={0.1} />
-                            </span>
-                            <h5 className='text-[#1d2236] text-xl font-bold'>${product.price}</h5>
-                        </div>
-                    </div>
-                </div>
-                <div className='dark:bg-[#D6DFF2] flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
-                    <img className='w-24 h-20 rounded-[27px]' src={product.productImage} alt="" />
-                    <div className="flex-1">
-                        <p className='text-[#020202] text-base font-normal pb-5'>{product.productName}</p>
-                        <div className='flex items-center justify-between w-full'>
-                            <span className="text-xs font-medium tracking-widest uppercase text-[#1d2236] flex items-center gap-2">
-
-                                <Rating name="half-rating" size="small" defaultValue={product.ratings} precision={0.1} />
-                            </span>
-                            <h5 className='text-[#1d2236] text-xl font-bold'>${product.price}</h5>
-                        </div>
-                    </div>
-                </div>
-                <div className='dark:bg-[#D6DFF2] flex items-center gap-2 bg-white p-3 rounded-[22px] mb-3'>
-                    <img className='w-24 h-20 rounded-[27px]' src={product.productImage} alt="" />
-                    <div className="flex-1">
-                        <p className='text-[#020202] text-base font-normal pb-5'>{product.productName}</p>
-                        <div className='flex items-center justify-between w-full'>
-                            <span className="text-xs font-medium tracking-widest uppercase text-[#1d2236] flex items-center gap-2">
-
-                                <Rating name="half-rating" size="small" defaultValue={product.ratings} precision={0.1} />
-                            </span>
-                            <h5 className='text-[#1d2236] text-xl font-bold'>${product.price}</h5>
-                        </div>
-                    </div>
-                </div>
+                {
+                    productsInSameCategory.map(item =>
+                    <MoreSuggetionCard
+                    key={item._id}
+                    product={item}
+                    ></MoreSuggetionCard>)
+                }
 
 
             </div>
+            : ''
+
+            }
+            
         </div>
     );
 };

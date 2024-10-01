@@ -1,10 +1,11 @@
 import { Helmet } from "react-helmet-async";
+import { useSelector } from "react-redux";
 import CartCard from "../../Components/CartCard/CartCard";
 import CheckOutForm from "../../Components/CheckOutForm/CheckOutForm";
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import PaymentModal from "../../Components/Modals/PaymentModal";
-import { useSelector } from "react-redux";
 import NoData from "../../Components/NoData/NoData";
+import { ScrollRestoration } from "react-router-dom";
 
 
 
@@ -20,7 +21,7 @@ const CartPage = () => {
     const totalAmount = cart.cartIteams.reduce((total, item) => total + (item.cartQuantity * item.price), 0);
 
     // Apply discount 
-    const discount = 0.05 * totalAmount;
+    const discount = 0.00 * totalAmount;
     const grandTotal = totalAmount - discount;
 
     return (
@@ -28,6 +29,8 @@ const CartPage = () => {
             <Helmet>
                 <title>Best Deal | Cart list</title>
             </Helmet>
+            <ScrollRestoration></ScrollRestoration>
+
             {/*Left Side menubar / categorybar  */}
             <div className="flex-1">
                 <LeftMenubar></LeftMenubar>
@@ -37,17 +40,17 @@ const CartPage = () => {
             <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] ">
                     {
-                        cart.cartIteams.length === 0 ? 
-                        <div><NoData></NoData></div> : 
-                    <div>
-                        {
-                            cart.cartIteams?.map(product =>
-                                <CartCard
-                                    key={product._id}
-                                    product={product}
-                                ></CartCard>)
-                        }
-                    </div>
+                        cart.cartIteams.length === 0 ?
+                            <div><NoData></NoData></div> :
+                            <div>
+                                {
+                                    cart.cartIteams?.map(product =>
+                                        <CartCard
+                                            key={product._id}
+                                            product={product}
+                                        ></CartCard>)
+                                }
+                            </div>
                     }
                 </div>
 
@@ -72,7 +75,7 @@ const CartPage = () => {
                                     {/* Discount */}
                                     <tr>
                                         <td>Discount</td>
-                                        <td>5%</td>
+                                        <td>0%</td>
                                     </tr>
                                     {/* Grand Total */}
                                     <tr>
@@ -88,7 +91,9 @@ const CartPage = () => {
                         <CheckOutForm></CheckOutForm>
 
                         {/* payment method */}
-                        <PaymentModal />
+                        <PaymentModal
+                            CheckoutPrice={parseInt(grandTotal.toFixed(2))}
+                        />
 
                     </div>
                 </div>

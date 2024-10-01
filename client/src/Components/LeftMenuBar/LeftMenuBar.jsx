@@ -131,10 +131,18 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
             <div className="ml-5 mt-5 text-[#775050] dark:text-white">
               <h1>My List :</h1>
               <ul className="ml-10">
-                <li>My Orders</li>
-                <li>My Wish list</li>
-                <li>My token</li>
-                <li>Favorite Vendor</li>
+                <li>
+                  <Link to="/myOrders">My Orders</Link>
+                </li>
+                <li>
+                  <Link to="/myWishList">My Wish list</Link>
+                </li>
+                <li>
+                  <Link to="/myToken">My token</Link>
+                </li>
+                <li>
+                  <Link to="/favoriteVendor">Favorite Vendor</Link>
+                </li>
                 <li>
                   <Link to="/invoiceHistory">Invoice History</Link>
                 </li>
@@ -145,9 +153,15 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
           <div>
             <div className="ml-5 mt-5 text-[#775050] dark:text-white">
               <ul className="ml-10">
-                <li>Account Settings</li>
-                <li>About Us</li>
-                <li>Feedback</li>
+                <li>
+                  <Link to="/accountSettings">Account Settings</Link>
+                </li>
+                <li>
+                  <Link to="/aboutUs">About Us</Link>
+                </li>
+                <li>
+                  <Link to="/feedback">Feedback </Link>
+                </li>
                 <li>Complain Vendor</li>
               </ul>
             </div>

@@ -16,7 +16,7 @@ const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
             const fetchComments = async () => {
                 setLoading(true);
                 try {
-                    const response = await fetch(`http://localhost:5000/api/products/${productId}`); // Include the full URL
+                    const response = await fetch(`http://localhost:4000/api/products/${productId}`); // Include the full URL
 
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -52,7 +52,7 @@ const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
         };
 
         try {
-            const response = await fetch(`http://localhost:5000/api/products/${productId}/comments`, {
+            const response = await fetch(`http://localhost:4000/api/products/${productId}/comments`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
