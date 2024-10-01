@@ -313,7 +313,7 @@ async function run() {
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => { });
+    app.use("/user", async (req, res) => {});
 
     await client.db("admin").command({ ping: 1 });
     console.log(
