@@ -6,6 +6,7 @@ import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import PaymentModal from "../../Components/Modals/PaymentModal";
 import NoData from "../../Components/NoData/NoData";
 import { ScrollRestoration } from "react-router-dom";
+import { useState } from "react";
 
 
 
@@ -23,6 +24,18 @@ const CartPage = () => {
     // Apply discount 
     const discount = 0.00 * totalAmount;
     const grandTotal = totalAmount - discount;
+
+    // state for contact information
+    const [contactInfo, setContactInfo] = useState({})
+
+    // contact info
+    const onSubmit = async (data) => {
+
+        // fetch data from the form
+        const { address, contact, name, paymentMethod } = data;
+
+        setContactInfo(data);
+    }
 
     return (
         <div className=" flex p-5 gap-5">
@@ -88,12 +101,24 @@ const CartPage = () => {
                     </div>
 
                     <div>
-                        <CheckOutForm></CheckOutForm>
+
+
+                        {(contactInfo !== undefined || contactInfo !== null)
+                            ? <CheckOutForm onSubmit={onSubmit}></CheckOutForm>
+                            : <div className="hidden">
+                            <CheckOutForm onSubmit={onSubmit}></CheckOutForm>
+                            </div>
+                        }
+
 
                         {/* payment method */}
-                        <PaymentModal
-                            CheckoutPrice={parseInt(grandTotal.toFixed(2))}
-                        />
+                        {
+                            contactInfo?.paymentMethod === "Card"
+                            && <PaymentModal
+                                CheckoutPrice={parseInt(grandTotal.toFixed(2))}
+                                contactInfo={contactInfo}
+                            />
+                        }
 
                     </div>
                 </div>

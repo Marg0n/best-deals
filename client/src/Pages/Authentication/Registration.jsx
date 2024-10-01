@@ -14,6 +14,7 @@ import logo from '/rmv_bg_logo1.png';
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { imageUpload } from "../../utils/imageUpload";
 import { TbFidgetSpinner } from "react-icons/tb";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 
 const Registration = () => {
@@ -22,6 +23,7 @@ const Registration = () => {
 
   // import custom axios functions
   const axiosCommon = useAxiosCommon();
+  const axiosSecure = useAxiosSecure();
 
   // custom loader for registration
   const [customLoader, setCustomLoader] = useState(false);
@@ -157,7 +159,7 @@ const Registration = () => {
           // Send user data to your server
           await axiosCommon.post('/users', userData)
           // jwt token
-          axiosSecoure.post(`/jwt`, {
+          axiosSecure.post(`/jwt`, {
             email: result?.user?.email,
           })
             .then(() => {

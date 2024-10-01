@@ -12,7 +12,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 // Make sure to call `loadStripe` outside of a component’s render to avoid recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_API_KEY_CLIENT);
 
-const PaymentModal = ({ CheckoutPrice }) => {
+const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
 
 
     // modal close/open
@@ -23,7 +23,7 @@ const PaymentModal = ({ CheckoutPrice }) => {
     }
 
     // loading
-    const [ loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // custom axios request
     const axiosSecure = useAxiosSecure();
@@ -44,44 +44,46 @@ const PaymentModal = ({ CheckoutPrice }) => {
     const paymentMethod = '';
     const shippingAddress = [];
 
-    const booking = { orderId, orderDate, items, totalAmount, status, paymentMethod,shippingAddress };
+    const booking = { orderId, orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
 
-    console.log('invoice related ==>',booking);
+    const userAddress = contactInfo;
 
 
     const handleInvoice = async () => {
 
-        try {
-            // loading
-            setLoading(true);
+        console.log('invoice related ==>', booking, contactInfo);
 
-            const { data } = await axiosSecure.post(`/purchaseHistory`, booking)
+        // try {
+        //     // loading
+        //     setLoading(true);
 
-            if (data) {
-                Swal.fire({
-                    title: `Successfully Payed!`,
-                    text: `Your Payment is successful! 🎉`,
-                    icon: 'success',
-                    confirmButtonText: 'Cool!'
-                }).then(() => {
-                    // loader
-                    setLoading(false)
-                    // refetch()
-                });
-            } else {
-                toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
-                // loader
-                setLoading(false)
-                // refetch()
-            }
+        //     const { data } = await axiosSecure.post(`/purchaseHistory`, booking)
 
-        }
-        catch (err) {
-            // console.log(err);
-            toast.error(err.response.data, { autoClose: 5000, theme: "colored" });
-            setLoading(false);
-            // refetch()
-        }
+        //     if (data) {
+        //         Swal.fire({
+        //             title: `Successfully Payed!`,
+        //             text: `Your Payment is successful! 🎉`,
+        //             icon: 'success',
+        //             confirmButtonText: 'Cool!'
+        //         }).then(() => {
+        //             // loader
+        //             setLoading(false)
+        //             // refetch()
+        //         });
+        //     } else {
+        //         toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
+        //         // loader
+        //         setLoading(false)
+        //         // refetch()
+        //     }
+
+        // }
+        // catch (err) {
+        //     // console.log(err);
+        //     toast.error(err.response.data, { autoClose: 5000, theme: "colored" });
+        //     setLoading(false);
+        //     // refetch()
+        // }
     }
 
 
@@ -114,7 +116,7 @@ const PaymentModal = ({ CheckoutPrice }) => {
             </dialog>
 
             <button
-                className="mt-8 w-full btn block px-8 py-2.5 bg-[#775050] text-white hover:bg-[#533131]"
+                className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
                 onClick={() => setIsOpen(true)}
             >
                 Checkout
@@ -126,6 +128,7 @@ const PaymentModal = ({ CheckoutPrice }) => {
 
 PaymentModal.propTypes = {
     CheckoutPrice: PropTypes.number,
+    contactInfo: PropTypes.object,
 }
 
 export default PaymentModal;
