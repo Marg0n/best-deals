@@ -4,13 +4,24 @@ import CheckOutForm from "../../Components/CheckOutForm/CheckOutForm";
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import PaymentModal from "../../Components/Modals/PaymentModal";
 import { useSelector } from "react-redux";
+import NoData from "../../Components/NoData/NoData";
+
 
 
 const CartPage = () => {
 
     // cart data from redux store
     const cart = useSelector((state) => state.cart)
-    console.log(cart.cartIteams);
+
+
+    // Calculate total quantity and total amount
+    const totalQuantity = cart.cartIteams.reduce((total, item) => total + item.cartQuantity, 0);
+
+    const totalAmount = cart.cartIteams.reduce((total, item) => total + (item.cartQuantity * item.price), 0);
+
+    // Apply discount 
+    const discount = 0.05 * totalAmount;
+    const grandTotal = totalAmount - discount;
 
     return (
         <div className=" flex p-5 gap-5">
@@ -26,12 +37,13 @@ const CartPage = () => {
             <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] ">
                     {
-                        cart.cartIteams.length === 0 ? "No products" : 
+                        cart.cartIteams.length === 0 ? 
+                        <div><NoData></NoData></div> : 
                     <div>
                         {
                             cart.cartIteams?.map(product =>
                                 <CartCard
-                                    key={product?._id}
+                                    key={product._id}
                                     product={product}
                                 ></CartCard>)
                         }
@@ -41,7 +53,7 @@ const CartPage = () => {
 
                 {/* Total bill Table */}
                 <div className="flex-grow" >
-                    <div className=" bg-[#d9d9d9] dark:bg-[#34394C] dark:text-white  h-fit">
+                    <div className=" bg-[rgb(217,217,217)] dark:bg-[#34394C] dark:text-white  h-fit">
                         <div className="overflow-x-auto">
                             <table className="table">
                                 {/* head */}
@@ -54,8 +66,8 @@ const CartPage = () => {
                                 <tbody>
                                     {/* Quantity & Total Amounts */}
                                     <tr>
-                                        <td>10</td>
-                                        <td>50000</td>
+                                        <td>{totalQuantity}</td>
+                                        <td>$ {totalAmount.toFixed(2)}</td>
                                     </tr>
                                     {/* Discount */}
                                     <tr>
@@ -65,7 +77,7 @@ const CartPage = () => {
                                     {/* Grand Total */}
                                     <tr>
                                         <td>Grand Total</td>
-                                        <td>47000</td>
+                                        <td>$ {grandTotal.toFixed(2)}</td>
                                     </tr>
                                 </tbody>
                             </table>
