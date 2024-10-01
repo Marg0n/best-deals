@@ -3,15 +3,20 @@ import { incrementQuantity, decrementQuantity } from "../../features/CartSlice/C
 import { FiMinusCircle, FiPlusCircle } from "react-icons/fi";
 
 
-const ProductsCounter = ({ product , setQuantity }) => {
+const ProductsCounter = ({ product , quality , setQuality }) => {
 
     const dispatch = useDispatch();
 
-    const { cartQuantity } = product
+    const { cartQuantity } = product;
+
+    // const [quality, setQuality] = useState(1)
 
 
     // plus product quantity
     const handleIncrement = () => {
+        if (quality >= 1) {
+            setQuality(quality + 1)
+        }
         if (cartQuantity >= 1) {
             dispatch(incrementQuantity(product._id));
         }
@@ -19,12 +24,16 @@ const ProductsCounter = ({ product , setQuantity }) => {
 
     // minus product quantity
     const handleDecrement = () => {
+        if (quality >= 2) {
+            setQuality(quality - 1)
+        }
         if (cartQuantity > 1) {
             dispatch(decrementQuantity(product._id));
         }
     }
 
   
+
 
     return (
         <div className="flex justify-between gap-5 bg-[#775050] rounded-[3rem] p-1">
@@ -34,7 +43,8 @@ const ProductsCounter = ({ product , setQuantity }) => {
                 </button>
             </div>
             <div className="text-white font-semibold text-lg">
-                <h1>{cartQuantity}</h1>
+                {/* {cartQuantity? cartQuantity : 1} */}
+                {cartQuantity ? cartQuantity : quality}
             </div>
             <div>
                 <button onClick={handleDecrement} className="btn btn-xs btn-circle mt-1">

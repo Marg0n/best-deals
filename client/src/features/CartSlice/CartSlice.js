@@ -26,7 +26,7 @@ const cartSlice = createSlice({
                 });
             }
             else {
-                const tempProducts = { ...action.payload, cartQuantity: 1 }
+                const tempProducts = { ...action.payload, cartQuantity: action.payload.cartQuantity };
                 toast.success('Added to the cart')
                 state.cartIteams.push(tempProducts)
             }
@@ -62,6 +62,7 @@ const cartSlice = createSlice({
                 (item) => item._id !== action.payload
             );
             state.cartIteams = nextCartItems;
+            toast.success('Item removed')
         },
 
 
@@ -69,5 +70,5 @@ const cartSlice = createSlice({
     }
 })
 
-export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart, changeQuantity } = cartSlice.actions
+export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart } = cartSlice.actions
 export default cartSlice.reducer
