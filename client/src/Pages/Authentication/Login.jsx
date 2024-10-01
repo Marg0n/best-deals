@@ -31,7 +31,7 @@ const Login = () => {
     const axiosSecoure = useAxiosSecure();
 
     // creation date
-    const lastLogin = new Date();
+    const lastLogin = new Date().toUTCString();
 
     // Navigation
     const navigate = useNavigate();
