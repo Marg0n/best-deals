@@ -17,16 +17,16 @@ const Footer = () => {
                         <h3 className="tracking-wide uppercase">Product</h3>
                         <ul className="space-y-1">
                             <li>
-                                <a rel="noopener noreferrer" href="#">Features</a>
+                                <Link rel="noopener noreferrer" to="#">Features</Link>
                             </li>
                             <li>
-                                <a rel="noopener noreferrer" href="#">Integrations</a>
+                                <Link rel="noopener noreferrer" to="#">Integrations</Link>
                             </li>
                             <li>
-                                <a rel="noopener noreferrer" href="#">Pricing</a>
+                                <Link rel="noopener noreferrer" to="#">Pricing</Link>
                             </li>
                             <li>
-                                <a rel="noopener noreferrer" href="#">FAQ</a>
+                                <Link rel="noopener noreferrer" to="#">FAQ</Link>
                             </li>
                         </ul>
                     </div>
@@ -34,10 +34,10 @@ const Footer = () => {
                         <h3 className="tracking-wide uppercase ">Company</h3>
                         <ul className="space-y-1">
                             <li>
-                                <a rel="noopener noreferrer" href="#">Privacy</a>
+                                <Link rel="noopener noreferrer" to="#">Privacy</Link>
                             </li>
                             <li>
-                                <a rel="noopener noreferrer" href="#">Terms of Service</a>
+                                <Link rel="noopener noreferrer" to="#">Terms of Service</Link>
                             </li>
                         </ul>
                     </div>
@@ -45,13 +45,13 @@ const Footer = () => {
                         <h3 className="uppercase ">Developers</h3>
                         <ul className="space-y-1">
                             <li>
-                                <a rel="noopener noreferrer" href="#">Public API</a>
+                                <Link rel="noopener noreferrer" to="#">Public API</Link>
                             </li>
                             <li>
-                                <a rel="noopener noreferrer" href="#">Documentation</a>
+                                <Link rel="noopener noreferrer" to="#">Documentation</Link>
                             </li>
                             <li>
-                                <a rel="noopener noreferrer" href="#">Guides</a>
+                                <Link rel="noopener noreferrer" to="#">Guides</Link>
                             </li>
                         </ul>
                     </div>

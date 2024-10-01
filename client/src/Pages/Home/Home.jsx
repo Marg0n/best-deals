@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import { useQuery } from "@tanstack/react-query";
 import ProductsCard from "../../Components/ProductsCard/ProductsCard";
 import { ClimbingBoxLoader } from "react-spinners";
