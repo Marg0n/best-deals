@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import { useQuery } from "@tanstack/react-query";
 import ProductsCard from "../../Components/ProductsCard/ProductsCard";
 import { ClimbingBoxLoader } from "react-spinners";
@@ -17,7 +17,7 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState([0, 1000]);
-  console.log(priceRange);
+  // console.log(priceRange);
 
 
   // This fetch is for collect all data from mongoDB
@@ -33,13 +33,11 @@ const Home = () => {
           maxPrice: priceRange[1],
         }
       });
-      console.log(res.data);
+      // console.log(res.data);
 
       return res.data;
     },
   });
-
-  console.log(selectedCategory);
 
 
   return (
@@ -71,7 +69,7 @@ const Home = () => {
             <CardSkelaton/>
           </div>
         ) : (
-          products.length > 0 ?
+          products?.length > 0 ?
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
               {products?.map((product) => (
                 <ProductsCard

@@ -10,11 +10,11 @@ import ThemeController from "../ThemeController/ThemeController";
 import { useSelector } from "react-redux";
 
 
-const Navbar = ({toggleTheme ,theme } ) => {
+const Navbar = ({ toggleTheme, theme }) => {
   const { user, loggedOut } = useAuth();
 
   // cart data from redux store
-  const cart = useSelector((state)=>state.cart)
+  const cart = useSelector((state) => state.cart)
 
   // user profile data
   const { profile } = useUserProfile();
@@ -37,7 +37,7 @@ const Navbar = ({toggleTheme ,theme } ) => {
     <li>
       <Link to='' className="text-base-100 font-semibold">Settings</Link>
     </li>
-    {user?.role === 'User' && <li>
+    {profile[0]?.role === 'User' && <li>
       <Link to='' className="text-base-100 font-semibold">Be a Vendor</Link>
     </li>
     }
@@ -118,14 +118,35 @@ const Navbar = ({toggleTheme ,theme } ) => {
             </div>
             <div
               tabIndex={0}
-              className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow"
+              className="card card-compact dropdown-content bg-base-100 z-[1] mt-8 w-52 shadow"
             >
               <div className="card-body">
-                <span className="text-lg font-bold">1 Items</span>
-                <span className="text-base font-semibold">
-                  Content Here
-                </span>
-                <Link to="/cartlist"> <h1>View Carts Details</h1></Link>
+                <p className="text-lg font-bold">
+                  {/* items count of wishlists */}
+                  <span className=" text-red-600 mr-2">
+                    {cart.cartIteams.length}
+                  </span>
+                  Items
+                </p>
+                {/* simple wishlists */}
+                <p className="text-sm font-semibold p-4">
+                  {
+                    cart.cartIteams.length === 0
+                      ? 'Noting Here!😥'
+                      : <ul className="list-decimal">
+                        {cart.cartIteams?.map(product => <li>
+                          {product.productName}
+                        </li>)}
+                      </ul>
+                  }
+                </p>
+                <Link to="/cartlist" >
+                  <p className={cart.cartIteams.length === 0
+                    ? ``
+                    : `font-semibold text-red-500 animate-pulse hover:animate-none`}>
+                    View Carts Details
+                  </p>
+                </Link>
               </div>
             </div>
           </div>

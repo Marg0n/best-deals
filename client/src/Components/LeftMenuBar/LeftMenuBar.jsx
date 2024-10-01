@@ -15,7 +15,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
     queryKey: ["products"],
     queryFn: async () => {
       const res = await axiosCommon.get(`/all-products`);
-      console.log(res.data);
+      // console.log(res.data);
 
       return res.data;
     },
@@ -26,7 +26,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
     ? [...new Set(products.map((product) => product.category))]
     : [];
 
-  console.log(allCategories);
+  // console.log(allCategories);
 
   // Handle search submission
   const handleSearch = (e) => {
