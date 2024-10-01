@@ -4,21 +4,19 @@ import { FiShoppingCart } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import unknown from "../..//assets/anonymous.png";
 import useAuth from "../../hooks/useAuth";
-import { Tooltip } from 'react-tooltip';
-import useUserProfile from './../../hooks/useUserProfile';
+import { Tooltip } from "react-tooltip";
+import useUserProfile from "./../../hooks/useUserProfile";
 import ThemeController from "../ThemeController/ThemeController";
 import { useSelector } from "react-redux";
-
 
 const Navbar = ({ toggleTheme, theme }) => {
   const { user, loggedOut } = useAuth();
 
   // cart data from redux store
-  const cart = useSelector((state) => state.cart)
+  const cart = useSelector((state) => state.cart);
 
   // user profile data
   const { profile } = useUserProfile();
-
 
   // State to track whether the dropdown is open or closed
   const [dropdown, setDropdown] = useState(false);
@@ -29,33 +27,44 @@ const Navbar = ({ toggleTheme, theme }) => {
   };
 
   // user lists
-  const list = <>
-
-    <li>
-      <Link to='vendorDashboard' className="text-base-100 font-semibold">Dashboard</Link>
-    </li>
-    <li>
-      <Link to='' className="text-base-100 font-semibold">Settings</Link>
-    </li>
-    {profile[0]?.role === 'User' && <li>
-      <Link to='' className="text-base-100 font-semibold">Be a Vendor</Link>
-    </li>
-    }
-    <li>
-      <Link to='' className="text-base-100 font-semibold">anything!</Link>
-    </li>
-    <li
-      className="rounded-xl p-2 m-2 text-right"
-      onClick={loggedOut}
-    >
-      <button className='bg-base-300 hover:bg-[#737373] hover:text-white block text-center text-base font-semibold'>Logout</button>
-    </li>
-  </>
-
-
+  const list = (
+    <>
+      <li>
+        <Link to="vendorDashboard" className="text-base-100 font-semibold">
+          Dashboard
+        </Link>
+      </li>
+      <li>
+        <Link to="" className="text-base-100 font-semibold">
+          Settings
+        </Link>
+      </li>
+      {profile[0]?.role === "User" && (
+        <li>
+          <Link to="" className="text-base-100 font-semibold">
+            Be a Vendor
+          </Link>
+        </li>
+      )}
+      <li>
+        <Link to="" className="text-base-100 font-semibold">
+          anything!
+        </Link>
+      </li>
+      <li className="rounded-xl p-2 m-2 text-right" onClick={loggedOut}>
+        <button className="bg-base-300 hover:bg-[#737373] hover:text-white block text-center text-base font-semibold">
+          Logout
+        </button>
+      </li>
+    </>
+  );
 
   return (
-    <div className={`supports-backdrop-blur:bg-[#775050]/90 sticky top-0 z-40 w-full backdrop-blur-lg ${theme === 'light' ? 'bg-[#775050]/40' : 'bg-[#ACBCDF]/40'}`}>
+    <div
+      className={`supports-backdrop-blur:bg-[#775050]/90 sticky top-0 z-40 w-full backdrop-blur-lg ${
+        theme === "light" ? "bg-[#775050]/40" : "bg-[#ACBCDF]/40"
+      }`}
+    >
       <div className="navbar  container mx-auto">
         {/* logo */}
         <div className="flex-1">
@@ -67,9 +76,10 @@ const Navbar = ({ toggleTheme, theme }) => {
         </div>
 
         <div className="flex-none lg:space-x-4 space-x-2">
-
           {/* Dark mode light mode buttone */}
-          <button><ThemeController theme={theme} toggleTheme={toggleTheme} /></button>
+          <button>
+            <ThemeController theme={theme} toggleTheme={toggleTheme} />
+          </button>
           {/* <button className="p-2 rounded-lg bg-gray-200 dark:bg-gray-700">
             {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
           </button> */}
@@ -113,7 +123,9 @@ const Navbar = ({ toggleTheme, theme }) => {
             >
               <div className="indicator">
                 <FiShoppingCart size={30} />
-                <span className="badge badge-sm indicator-item">{cart.cartIteams.length}</span>
+                <span className="badge badge-sm indicator-item">
+                  {cart.cartIteams.length}
+                </span>
               </div>
             </div>
             <div
@@ -130,20 +142,24 @@ const Navbar = ({ toggleTheme, theme }) => {
                 </p>
                 {/* simple wishlists */}
                 <p className="text-sm font-semibold p-4">
-                  {
-                    cart.cartIteams.length === 0
-                      ? 'Noting Here!😥'
-                      : <ul className="list-decimal">
-                        {cart.cartIteams?.map(product => <li>
-                          {product.productName}
-                        </li>)}
-                      </ul>
-                  }
+                  {cart.cartIteams.length === 0 ? (
+                    "Noting Here!😥"
+                  ) : (
+                    <ul className="list-decimal">
+                      {cart.cartIteams?.map((product, idx) => (
+                        <li key={idx}>{product.productName}</li>
+                      ))}
+                    </ul>
+                  )}
                 </p>
-                <Link to="/cartlist" >
-                  <p className={cart.cartIteams.length === 0
-                    ? ``
-                    : `font-semibold text-red-500 animate-pulse hover:animate-none`}>
+                <Link to="/cartlist">
+                  <p
+                    className={
+                      cart.cartIteams.length === 0
+                        ? ``
+                        : `font-semibold text-red-500 animate-pulse hover:animate-none`
+                    }
+                  >
                     View Carts Details
                   </p>
                 </Link>
@@ -151,59 +167,77 @@ const Navbar = ({ toggleTheme, theme }) => {
             </div>
           </div>
 
-          {!user ? (<>
-
-            <Link to="/login">
-              {" "}
-              <FaUserAlt size={25} className="p-1 btn btn-ghost btn-circle btn-outline avatar animate-pulse hover:animate-none"> </FaUserAlt>
-            </Link>
-
-          </>) : (<>
-            <div className="dropdown dropdown-end" onClick={toggleDropdown}>
-              <div
-                tabIndex={0}
-                role="button"
-                className="btn btn-ghost btn-circle avatar"
-              >
-                <div className=" btn btn-ghost btn-circle btn-outline avatar">
-                  <img
-                    alt="profile"
-                    data-tooltip-id="name-tooltip"
-                    data-tooltip-content={`${user?.displayName || profile[0]?.name}`}
-                    referrerPolicy="no-referrer"
-                    src=
-                    {
-                      user?.photoURL ? user?.photoURL
-                        : (profile[0]?.photo ? profile[0]?.photo : unknown)
-                    }
-                  />
-                  <Tooltip id="name-tooltip" />
-                </div>
-              </div>
-
-              {dropdown && (
-                <ul
-                  tabIndex={0}
-                  className="mt-3 z-[2] p-2 shadow-2xl menu menu-sm dropdown-content  rounded-box w-64 bg-[#0cc0df]/90 "
+          {!user ? (
+            <>
+              <Link to="/login">
+                {" "}
+                <FaUserAlt
+                  size={25}
+                  className="p-1 btn btn-ghost btn-circle btn-outline avatar animate-pulse hover:animate-none"
                 >
-                  <li>
-                    <p className="flex justify-center items-center font-medium text-base-100">
-                      Hi,
-                      <span className={`${profile[0]?.role !== 'Admin' ? (profile[0]?.role === 'User' ? 'text-[#423f3f] font-mono badge badge-neutral badge-outline' : 'text-base badge badge-neutral font-mono ') : 'text-base badge badge-primary font-mono '}`}>{profile[0]?.role ? profile[0]?.role : ""}</span>
-                      <span className=" text-[#333333] font-serif font-bold">
-                        {
-                          user?.displayName || profile[0]?.name
-                        }
-                      </span>
-                    </p>
-                  </li>
-                  <div className="divider divider-[#ff914d] my-0" ></div>
-                  {list}
-                </ul>
-              )}
-            </div>
-          </>)}
+                  {" "}
+                </FaUserAlt>
+              </Link>
+            </>
+          ) : (
+            <>
+              <div className="dropdown dropdown-end" onClick={toggleDropdown}>
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="btn btn-ghost btn-circle avatar"
+                >
+                  <div className=" btn btn-ghost btn-circle btn-outline avatar">
+                    <img
+                      alt="profile"
+                      data-tooltip-id="name-tooltip"
+                      data-tooltip-content={`${
+                        user?.displayName || profile[0]?.name
+                      }`}
+                      referrerPolicy="no-referrer"
+                      src={
+                        user?.photoURL
+                          ? user?.photoURL
+                          : profile[0]?.photo
+                          ? profile[0]?.photo
+                          : unknown
+                      }
+                    />
+                    <Tooltip id="name-tooltip" />
+                  </div>
+                </div>
 
+                {dropdown && (
+                  <ul
+                    tabIndex={0}
+                    className="mt-3 z-[2] p-2 shadow-2xl menu menu-sm dropdown-content  rounded-box w-64 bg-[#0cc0df]/90 "
+                  >
+                    <li>
+                      <p className="flex justify-center items-center font-medium text-base-100">
+                        Hi,
+                        <span
+                          className={`${
+                            profile[0]?.role !== "Admin"
+                              ? profile[0]?.role === "User"
+                                ? "text-[#423f3f] font-mono badge badge-neutral badge-outline"
+                                : "text-base badge badge-neutral font-mono "
+                              : "text-base badge badge-primary font-mono "
+                          }`}
+                        >
+                          {profile[0]?.role ? profile[0]?.role : ""}
+                        </span>
+                        <span className=" text-[#333333] font-serif font-bold">
+                          {user?.displayName || profile[0]?.name}
+                        </span>
+                      </p>
+                    </li>
+                    <div className="divider divider-[#ff914d] my-0"></div>
+                    {list}
+                  </ul>
+                )}
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
