@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Carousel } from 'react-responsive-carousel';
 import { Link, useLoaderData, useParams } from 'react-router-dom';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
@@ -13,7 +13,8 @@ const Details = () => {
     const products = useLoaderData();    
     const { _id } = useParams();    
     const product = products?.find(product => product._id === _id);    
-    console.log(product);
+
+    const [quantity , setQuantity]= useState(1)
     
 
     // dispatch products to redux
@@ -66,6 +67,7 @@ const Details = () => {
                         <ProductsCounter
                         key={product._id}
                         product={product}
+                        setQuantity= {setQuantity}
                         ></ProductsCounter>
 
                         <button onClick={() => handleAddToCart(product)} className='bg-[#d9cfaf] rounded-[86px] text-black text-sm font-bold px-4 py-2'>Add To Cart </button>

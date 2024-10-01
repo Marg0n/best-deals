@@ -37,7 +37,7 @@ const cartSlice = createSlice({
             const itemIndex = state.cartIteams.findIndex(
                 (item) => item._id === action.payload
             );
-            if ( state.cartIteams[itemIndex].cartQuantity >= 1) {
+            if (state.cartIteams[itemIndex].cartQuantity >= 1) {
                 state.cartIteams[itemIndex].cartQuantity++;
             }
         },
@@ -49,6 +49,10 @@ const cartSlice = createSlice({
             );
             if (state.cartIteams[itemIndex].cartQuantity > 1) {
                 state.cartIteams[itemIndex].cartQuantity--;
+                console.log(state.cartIteams[itemIndex].cartQuantity);   
+            }
+            else{
+                
             }
         },
 
@@ -61,8 +65,9 @@ const cartSlice = createSlice({
         },
 
 
+
     }
 })
 
-export const { addToCart, decrementQuantity, incrementQuantity , removeFromCart } = cartSlice.actions
+export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart, changeQuantity } = cartSlice.actions
 export default cartSlice.reducer
