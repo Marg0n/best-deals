@@ -1,5 +1,5 @@
 import { Rating } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
@@ -7,6 +7,8 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link, ScrollRestoration, useLoaderData, useParams } from 'react-router-dom';
 import ProductsCounter from '../../Components/ProductCounter/ProductsCounter';
 import { addToCart } from '../../features/CartSlice/CartSlice';
+import CommentModal from '../../Components/CommentModal/CommentModal';
+import { AuthContext } from '../../AuthProvider/AuthProvider';
 import MoreSuggetionCard from '../../Components/MoreSuggetionCard/MoreSuggetionCard';
 
 
@@ -21,11 +23,20 @@ const Details = () => {
     const productsInSameCategory = products?.filter(item => item.category === product.category && item._id !== product._id);
     
 
+    const {user} = useContext(AuthContext)
+
+
+     
     // set quality from details
     const [quantity, setQuality] = useState(1)
     // console.log(quantity);
 
 
+    const [open, setOpen] = useState(false);
+    
+
+    const handleOpen = () => setOpen(true);
+    const handleClose = () => setOpen(false);
 
     // dispatch products to redux
     const dispatch = useDispatch()
@@ -52,13 +63,15 @@ const Details = () => {
 
                     {/* View comments */}
                     <div className='flex items-center gap-3 justify-end'>
-                        <Link className='text-[#775050] dark:text-white  text-lg font-normal underline' to="">
+                        <Link onClick={handleOpen} className='text-[#775050] dark:text-white  text-lg font-normal underline' to="">
                             view comments
                         </Link>
                         <span className="block text-xs font-medium tracking-widest uppercase dark:text-white text-[#775050]">
                             Ratings :{product.rating}<Rating name="read-only" size="small" value={product.rating} precision={0.1} readOnly />
 
                         </span>
+                        {/* Use the modal component */}
+                        <CommentModal open={open} handleClose={handleClose}  userName={user?.displayName} photo={user?.photoURL} productId={_id} />
                     </div>
                     <div>
                         <Carousel showArrows={true} showThumbs={true}>

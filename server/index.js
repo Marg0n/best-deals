@@ -145,9 +145,7 @@ async function run() {
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
-    const productCollection = client
-      .db("BestDeals")
-      .collection("ProductCollection");
+    const productCollection = client.db("BestDeals").collection("ProductCollection");
 
     // ==================================
     // Admin verify
@@ -308,6 +306,59 @@ async function run() {
           .json({ message: "Internal server error from last login" });
       }
     });
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // fetch comments
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    app.get('/api/products/:id', async (req, res) => {
+      const productId = req.params.id;
+    
+      try {
+        // Find product using string _id
+        const product = await productCollection.findOne({ _id: productId });
+    
+        if (product) {
+          res.status(200).json(product);
+        } else {
+          res.status(404).json({ message: 'Product not found' });
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+    
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // add comments
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    app.post('/api/products/:id/comments', async (req, res) => {
+      const productId = req.params.id;
+      const { comment, userRating, name, userPhoto } = req.body;
+    
+      // Check if all required fields are provided
+      if (!comment || !userRating || !name || !userPhoto) {
+        return res.status(400).json({ message: 'Missing fields' });
+      }
+    
+      const newComment = { name, userPhoto, comment, userRating: userRating };
+    
+      try {
+        const result = await productCollection.updateOne(
+          { _id: productId }, 
+          { $push: { comments: newComment } } 
+        );
+    
+        if (result.modifiedCount === 1) {
+          res.status(200).json({ message: 'Comment added successfully' });
+        } else {
+          res.status(404).json({ message: 'Product not found' });
+        }
+      } catch (error) {
+        console.error('Error adding comment:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+    
+
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
