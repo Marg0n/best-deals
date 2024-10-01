@@ -31,7 +31,12 @@ const Navbar = ({ toggleTheme, theme }) => {
     <>
       <li>
         <Link to="vendorDashboard" className="text-base-100 font-semibold">
-          Dashboard
+         Vendor Dashboard
+        </Link>
+      </li>
+      <li>
+        <Link to="vendorDashboard" className="text-base-100 font-semibold">
+         Admin Dashboard
         </Link>
       </li>
       <li>
