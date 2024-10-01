@@ -32,7 +32,10 @@ const Navbar = ({toggleTheme ,theme } ) => {
   const list = <>
 
     <li>
-      <Link to='vendorDashboard' className="text-base-100 font-semibold">Dashboard</Link>
+      <Link to='vendorDashboard' className="text-base-100 font-semibold">Vendor Dashboard</Link>
+    </li>
+    <li>
+      <Link to='adminDashboard' className="text-base-100 font-semibold">Admin Dashboard</Link>
     </li>
     <li>
       <Link to='' className="text-base-100 font-semibold">Settings</Link>

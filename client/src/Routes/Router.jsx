@@ -13,6 +13,11 @@ import VendorHome from "../Components/Dashboards/VendorDashboard/VendorHome/Vend
 import VendorOrders from "../Components/Dashboards/VendorDashboard/VendorOrders/VendorOrders";
 import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
 import PrivateRoute from './PrivateRoute';
+import AdminDashboard from "../Components/Dashboards/AdminDashboard/AdminDashboard";
+import AdminHome from "../Components/Dashboards/AdminDashboard/AdminHome/AdminHome";
+import AdminAllUsers from "../Components/Dashboards/AdminDashboard/AdminAllUser/AdminAllUsers";
+import AdminAllVendors from "../Components/Dashboards/AdminDashboard/AdminAllVendor/AdminAllVendors";
+import AdminVendorRequest from "../Components/Dashboards/AdminDashboard/AdminVendorRequest/AdminVendorRequest";
 
 const Router = createBrowserRouter([
   {
@@ -68,6 +73,28 @@ const Router = createBrowserRouter([
           path: '/vendorDashboard/products',
           element: <VendorAddProduct/>
         }
+    ]
+  },
+  {
+    path: '/adminDashboard',
+    element: <AdminDashboard/>,
+    children: [
+      {
+        path: '/adminDashboard',
+        element: <AdminHome/>
+      }, 
+      {
+        path: '/adminDashboard/allUsers',
+        element: <AdminAllUsers/>
+      },
+      {
+        path: '/adminDashboard/allVendors',
+        element: <AdminAllVendors/>
+      },
+      {
+        path: '/adminDashboard/vendorRequest',
+        element: <AdminVendorRequest/>
+      }
     ]
   }
 ]);
