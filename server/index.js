@@ -233,7 +233,7 @@ async function run() {
     });
 
     // ==================================
-    // Users login
+    // Users login / profile data
     // ==================================
     app.get("/users/:email", async (req, res) => {
       const mail = req.params?.email;
@@ -242,9 +242,18 @@ async function run() {
     });
 
     // ==================================
-    // Users profile data
+    // Users profiles' Purchase History data
     // ==================================
-    app.get("/profile/:email", async (req, res) => {
+    app.post("/purchaseHistory/:email", async (req, res) => {
+      const mail = req.params?.email;
+      const results = await usersCollection.find({ email: mail }).toArray();
+      res.send(results);
+    });
+
+    // ==================================
+    // Users profiles' Billing Address data
+    // ==================================
+    app.post("/billingAddress/:email", async (req, res) => {
       const mail = req.params?.email;
       const results = await usersCollection.find({ email: mail }).toArray();
       res.send(results);

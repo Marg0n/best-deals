@@ -7,9 +7,10 @@ import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import './StripeCheckoutForm.css';
+import Swal from "sweetalert2";
 
 
-const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, handleInvoice }) => {
+const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking }) => {
 
     // strip hooks
     const stripe = useStripe();
@@ -100,29 +101,31 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
         if (paymentIntent.status === 'succeeded') {
             // console.log('succeed payment ===>', paymentIntent)
             // 1. Create payment info object
-            const paymentInfo = {
+            const billingAddress = [contactInfo];
+            const paymentInfo = [{
                 ...booking,
-                orderId: booking.orderId,
-                transactionId: paymentIntent.id,
-                orderDate: booking.orderDate,
-                items: booking.items,
-                status: booking.status,
-                paymentMethod: booking.paymentMethod,
-                shippingAddress: booking.shippingAddress
-            }
+                transactionId: paymentIntent.id
+            }]
             delete paymentInfo._id
             // console.log(paymentInfo)
             try {
                 // 2. save payment info in booking collection (db)
                 const { data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
-                const { data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, booking)
+                const { data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, billingAddress)
                 console.log('from stripe checkout =>', data1, data2)
 
                 // update ui
                 // refetch()
                 closeModal()
-                toast.success('Room Booked Successfully', { autoClose: 2000, theme: "colored" })
-                navigate('/cartlist')
+                Swal.fire({
+                    title: `Successfully Payed!`,
+                    text: `Your Payment is successful! 🎉`,
+                    icon: 'success',
+                    confirmButtonText: 'Cool!'
+                }).then(() => {
+                    toast.success('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
+                    // refetch()
+                });
             } catch (err) {
                 // console.log(err)
                 toast.error(`Something went Wrong! : ${err.message}`, { autoClose: 2000, theme: "colored" })
@@ -158,7 +161,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
             <button
                 type="submit"
                 className="btn btn-primary w-full"
-                onClick={handleInvoice}
+                // onClick={handleInvoice}
                 disabled={!stripe || !clientSecret || processing}>
                 {processing ? (
                     <ImSpinner9 className='animate-spin m-auto' size={24} />
@@ -177,7 +180,7 @@ StripeCheckoutForm.propTypes = {
     closeModal: PropTypes.func,
     booking: PropTypes.object,
     contactInfo: PropTypes.object,
-    handleInvoice: PropTypes.func,
+    // handleInvoice: PropTypes.func,
     // isOpen: PropTypes.bool,
 }
 

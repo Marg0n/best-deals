@@ -41,7 +41,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
     const totalAmount = cart.cartIteams.reduce((total, item) => total + (item.cartQuantity * item.price), 0);
 
     // insert checkout data into purchaseHistory
-    const orderId = Date.now();
+    // const orderId = Date.now();
     const orderDate = new Date().toUTCString();
     const items = [cart.cartIteams];
     const status = 'Pending';
@@ -50,47 +50,47 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
 
     const booking = { orderId, orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
 
-    const userAddress = contactInfo;
+    // const userAddress = contactInfo;
 
 
-    const handleInvoice = async () => {
+    // const handleInvoice = async () => {
 
-        console.log('invoice related ==>', booking, contactInfo, user?.email);
+    //     console.log('invoice related ==>', booking, contactInfo, user?.email);
 
-        try {
-            // loading
-            setLoading(true);
+    //     try {
+    //         // loading
+    //         setLoading(true);
 
-            const { data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, booking)
-            const { data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, booking)
+    //         const { data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, booking)
+    //         const { data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, userAddress)
 
-            if (data1 && data2) {
-                Swal.fire({
-                    title: `Successfully Payed!`,
-                    text: `Your Payment is successful! 🎉`,
-                    icon: 'success',
-                    confirmButtonText: 'Cool!'
-                }).then(() => {
-                    // loader
-                    setLoading(false)
-                    toast('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
-                    // refetch()
-                });
-            } else {
-                toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
-                // loader
-                setLoading(false)
-                // refetch()
-            }
+    //         if (data1 && data2) {
+    //             Swal.fire({
+    //                 title: `Successfully Payed!`,
+    //                 text: `Your Payment is successful! 🎉`,
+    //                 icon: 'success',
+    //                 confirmButtonText: 'Cool!'
+    //             }).then(() => {
+    //                 // loader
+    //                 setLoading(false)
+    //                 toast('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
+    //                 // refetch()
+    //             });
+    //         } else {
+    //             toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
+    //             // loader
+    //             setLoading(false)
+    //             // refetch()
+    //         }
 
-        }
-        catch (err) {
-            // loader
-            setLoading(false);
-            toast.error(err.response.data, { autoClose: 5000, theme: "colored" });
-            // refetch()
-        }
-    }
+    //     }
+    //     catch (err) {
+    //         // loader
+    //         setLoading(false);
+    //         toast.error(err.response.data, { autoClose: 5000, theme: "colored" });
+    //         // refetch()
+    //     }
+    // }
 
 
     return (
