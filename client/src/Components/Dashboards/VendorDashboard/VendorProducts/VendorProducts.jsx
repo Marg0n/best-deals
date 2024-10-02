@@ -1,130 +1,138 @@
-import React, { useMemo, useState } from 'react';
-import { useTable, usePagination } from 'react-table';
+import React, { useState } from 'react';
 import {
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Menu, MenuItem, Button, Typography, TextField
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    TextField,
+    Button,
+    Typography,
+    IconButton,
+    Menu,
+    MenuItem,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DownloadIcon from '@mui/icons-material/Download';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
+import useUserProfile from '../../../../hooks/useUserProfile';
+import { useQuery } from '@tanstack/react-query';
 
 const VendorProducts = () => {
+    const vendorMail = useUserProfile();
+    const vendorProducts = useAxiosSecure();
+
+    const { data: products = [], isLoading } = useQuery({
+        queryKey: ["products"],
+        queryFn: async () => {
+            const res = await vendorProducts.get('/all-products');
+            return res.data; // Ensure you handle the data correctly here
+        },
+    });
+
+    const allVendorProducts = products.filter(product => product?.email === vendorMail.profile[0]?.email) || [];
+
+    const initialData = allVendorProducts.map(product => ({
+        id: product._id,
+        name: product.productName,
+        category: product.category || 'N/A', // Assuming you might want to add category
+        price: product.price || 'N/A', // Assuming you might want to add price
+    }));
 
     const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const rowsPerPage = 5; // Set number of rows per page
 
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
+    const filteredData = initialData.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const combinedData = [...filteredData];
+
+    const totalPages = Math.ceil(combinedData.length / rowsPerPage);
+    const currentRows = combinedData.slice(
+        currentPage * rowsPerPage,
+        currentPage * rowsPerPage + rowsPerPage
+    );
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages - 1) {
+            setCurrentPage(prevPage => prevPage + 1);
+        }
     };
 
-    // Define columns (memoized to avoid re-rendering issues)
-    const columns = useMemo(() => [
-        { Header: 'ID', accessor: 'id' },
-        { Header:'Product Name', accessor: 'name'},
-        { Header: 'Category', accessor: 'category' },
-        { Header: 'Stock', accessor: 'stock' },
-        { Header: 'Sold', accessor: 'sold'},
-        { Header: 'Price', accessor: 'price' },
-        { Header: 'Rating', accessor: 'rating' },
-        { Header: 'Action', accessor: 'action', Cell: ({ row }) => <ActionMenu row={row} /> }
-    ], []);
+    const handlePreviousPage = () => {
+        if (currentPage > 0) {
+            setCurrentPage(prevPage => prevPage - 1);
+        }
+    };
 
-    // Sample data
-    const data = useMemo(() => [
-        { id: 1,  stock:6, sold:100, name:'test kit', category: 'health', price: 200, rating: 5, },
-        { id: 2,  stock:61, sold:120, name:'socks', category: 'men', price: 203, rating: 4.5, },
-        { id: 3,  stock:26, sold:140, name:'comb', category: 'women', price: 500, rating: 5, },
-        { id: 4,  stock:36, sold:120, name:'jersey', category: 'men', price: 600, rating: 4.5, },
-        { id: 5,  stock:61, sold:110, name:'doll', category: 'kids', price: 700, rating: 3, },
-        { id: 6,  stock:46, sold:100, name:'knife', category: 'kitchen', price: 800, rating: 3.5, },
-        { id: 7,  stock:5, sold:50, name:'tomato', category: 'grocery', price: 700, rating: 5, },
-        { id: 8,  stock:4, sold:200, name:'earphone', category: 'accessories', price: 500, rating: 4, },
-        { id: 9,  stock:0, sold:40, name:'sound box', category: 'electronic', price: 500, rating: 3.5, },
-        { id: 10, stock:1, sold:200, name:'glamour', category: 'beauty', price: 2300, rating: 5, },
-        { id: 11, stock:2, sold:140, name:'boots', category: 'men', price: 240, rating: 4, },
-        { id: 12, stock:4, sold:108, name:'pressure machine', category: 'health', price: 230, rating: 5, },
-        { id: 13, stock:5, sold:190, name:'clip', category: 'women', price: 220, rating: 4, },
-        { id: 14, stock:6, sold:100, name:'sphagmomanometer', category: 'health', price: 230, rating: 5, },
-    ], []);
+    if (isLoading) {
+        return <Typography>Loading...</Typography>; // Show loading state
+    }
 
-    const filteredData = useMemo(() => {
-        return data.filter((order) => order.name.toLowerCase().includes(searchTerm.toLowerCase()));
-    }, [searchTerm, data]);
-
-
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        prepareRow,
-        page,
-        nextPage,
-        previousPage,
-        canNextPage,
-        canPreviousPage,
-        pageOptions,
-        state: { pageIndex },
-    } = useTable(
-        { columns, data: filteredData, initialState: { pageIndex: 0 } },
-        usePagination
-    );
     return (
-        <div className="p-4 bg-gray-200">
-            <div className="flex justify-between items-center mb-4">
-                <Typography variant="h5" className="font-extrabold text-black">All Products</Typography>
-            </div>
+        <div className="p-4 bg-white rounded-lg">
+            <h1 className="text-3xl mb-4 text-black">All Products</h1>
 
-            {/* Search Input */}
-            <div className="mb-4 bg-white w-1/3 rounded-lg">
+            <div className='w-1/3 mb-4'>
                 <TextField
-                    label="Search By Product Name"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    fullWidth
+                    label="Search by Product Name"
                     variant="outlined"
+                    className='bg-gray-200'
+                    fullWidth
+                    margin="normal"
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(0); // Reset to first page on search
+                    }}
                 />
             </div>
 
-            {/* Table */}
-            <TableContainer component={Paper}>
-                <Table {...getTableProps()} className="min-w-full">
+            <div className='border-2'><TableContainer component={Paper}>
+                <Table>
                     <TableHead>
-                        {headerGroups.map((headerGroup) => (
-                            <TableRow {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <TableCell {...column.getHeaderProps()}>{column.render('Header')}</TableCell>
-                                ))}
+                        <TableRow>
+                            <TableCell>ID</TableCell>
+                            <TableCell>Product Name</TableCell>
+                            <TableCell>Category</TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell>Action</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {currentRows.map((row, rowIndex) => (
+                            <TableRow key={rowIndex}>
+                                <TableCell>{row.id}</TableCell>
+                                <TableCell>{row.name}</TableCell>
+                                <TableCell>{row.category}</TableCell>
+                                <TableCell>{row.price}</TableCell>
+                                <TableCell>
+                                    <ActionMenu row={row} />
+                                </TableCell>
                             </TableRow>
                         ))}
-                    </TableHead>
-
-                    <TableBody {...getTableBodyProps()}>
-                        {page.map((row) => {
-                            prepareRow(row);
-                            return (
-                                <TableRow {...row.getRowProps()}>
-                                    {row.cells.map((cell) => (
-                                        <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>
-                                    ))}
-                                </TableRow>
-                            );
-                        })}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer></div>
 
-            {/* Pagination */}
             <div className="flex justify-between items-center my-4">
                 <Button
-                    onClick={previousPage}
-                    disabled={!canPreviousPage}
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
                     variant="outlined"
                 >
                     Previous
                 </Button>
-                <Typography>Page {pageIndex + 1} of {pageOptions.length}</Typography>
+                <Typography>
+                    Page {currentPage + 1} of {totalPages}
+                </Typography>
                 <Button
-                    onClick={nextPage}
-                    disabled={!canNextPage}
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages - 1}
                     variant="outlined"
                 >
                     Next
@@ -146,22 +154,33 @@ const ActionMenu = ({ row }) => {
         setAnchorEl(null);
     };
 
+    const handleEdit = () => {
+        console.log('Edit Product:', row);
+        handleClose(); // Close menu after action
+        // Add your edit logic here (e.g., open a modal with the product data)
+    };
+
+    const handleDelete = () => {
+        console.log('Delete Product:', row);
+        handleClose(); // Close menu after action
+        // Add your delete logic here (e.g., confirm and delete the product)
+    };
+
     return (
         <div>
             <IconButton onClick={handleClick}>
                 <MoreVertIcon />
             </IconButton>
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={handleClose}>
+                <MenuItem onClick={handleEdit}>
                     <EditIcon fontSize="small" /> Edit Product
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <DeleteIcon fontSize="small" className='text-red-500'/> Delete
+                <MenuItem onClick={handleDelete}>
+                    <DeleteIcon fontSize="small" className='text-red-500' /> Delete
                 </MenuItem>
             </Menu>
         </div>
     );
-
 };
 
 export default VendorProducts;
