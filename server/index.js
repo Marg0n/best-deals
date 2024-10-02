@@ -242,22 +242,44 @@ async function run() {
     });
 
     // ==================================
-    // Users profiles' Purchase History data
-    // ==================================
-    app.post("/purchaseHistory/:email", async (req, res) => {
-      const mail = req.params?.email;
-      const results = await usersCollection.find({ email: mail }).toArray();
-      res.send(results);
-    });
+// Users profiles' Purchase History data
+// ==================================
+app.post("/purchaseHistory/:email", async (req, res) => {
+  const mail = req.params?.email;
+  const body = req?.body;
+  try {
+    const result = await usersCollection.updateOne(
+      { email: mail },
+      { $push: { purchaseHistory: body } },
+      { upsert: true }
+    );
+    console.log('from history', result);
+    res.send(result);
+  } catch (error) {
+    console.error('Error inserting purchase history:', error);
+    res.status(500).send({ error: 'Failed to insert purchase history' });
+  }
+});
 
-    // ==================================
-    // Users profiles' Billing Address data
-    // ==================================
-    app.post("/billingAddress/:email", async (req, res) => {
-      const mail = req.params?.email;
-      const results = await usersCollection.find({ email: mail }).toArray();
-      res.send(results);
-    });
+// ==================================
+// Users profiles' Billing Address data
+// ==================================
+app.post("/billingAddress/:email", async (req, res) => {
+  const mail = req.params?.email;
+  const body = req?.body;
+  try {
+    const result = await usersCollection.updateOne(
+      { email: mail },
+      { $push: { billingAddress: body } },
+      { upsert: true }
+    );
+    console.log('from billing', result);
+    res.send(result);
+  } catch (error) {
+    console.error('Error inserting billing address:', error);
+    res.status(500).send({ error: 'Failed to insert billing address' });
+  }
+});
 
     // ==================================
     // All products API
@@ -320,11 +342,11 @@ async function run() {
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     app.get('/api/products/:id', async (req, res) => {
       const productId = req.params.id;
-    
+
       try {
         // Find product using string _id
         const product = await productCollection.findOne({ _id: productId });
-    
+
         if (product) {
           res.status(200).json(product);
         } else {
@@ -335,27 +357,27 @@ async function run() {
         res.status(500).json({ message: 'Server error' });
       }
     });
-    
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // add comments
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     app.post('/api/products/:id/comments', async (req, res) => {
       const productId = req.params.id;
       const { comment, userRating, name, userPhoto } = req.body;
-    
+
       // Check if all required fields are provided
       if (!comment || !userRating || !name || !userPhoto) {
         return res.status(400).json({ message: 'Missing fields' });
       }
-    
+
       const newComment = { name, userPhoto, comment, userRating: userRating };
-    
+
       try {
         const result = await productCollection.updateOne(
-          { _id: productId }, 
-          { $push: { comments: newComment } } 
+          { _id: productId },
+          { $push: { comments: newComment } }
         );
-    
+
         if (result.modifiedCount === 1) {
           res.status(200).json({ message: 'Comment added successfully' });
         } else {
@@ -366,14 +388,14 @@ async function run() {
         res.status(500).json({ message: 'Server error' });
       }
     });
-    
+
 
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => {});
+    app.use("/user", async (req, res) => { });
 
     await client.db("admin").command({ ping: 1 });
     console.log(

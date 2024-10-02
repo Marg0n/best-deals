@@ -91,7 +91,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking })
 
         // payment error
         if (confirmError) {
-            // console.log('confirm payment error ===>', confirmError)
+            console.log('confirm payment error ===>', confirmError)
             setPaymentError(confirmError.message)
             setProcessing(false)
             return
@@ -101,31 +101,37 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking })
         if (paymentIntent.status === 'succeeded') {
             // console.log('succeed payment ===>', paymentIntent)
             // 1. Create payment info object
-            const billingAddress = [contactInfo];
-            const paymentInfo = [{
+            const billingAddress = contactInfo;
+            const paymentInfo = {
                 ...booking,
                 transactionId: paymentIntent.id
-            }]
+            }
             delete paymentInfo._id
             // console.log(paymentInfo)
             try {
                 // 2. save payment info in booking collection (db)
-                const { data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
-                const { data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, billingAddress)
+                const { data: data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
+                const { data: data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, billingAddress)
                 console.log('from stripe checkout =>', data1, data2)
 
                 // update ui
                 // refetch()
                 closeModal()
-                Swal.fire({
-                    title: `Successfully Payed!`,
-                    text: `Your Payment is successful! 🎉`,
-                    icon: 'success',
-                    confirmButtonText: 'Cool!'
-                }).then(() => {
-                    toast.success('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
+                if (data1 && data2) {
+                    Swal.fire({
+                        title: `Successfully Payed!`,
+                        text: `Your Payment is successful! 🎉`,
+                        icon: 'success',
+                        confirmButtonText: 'Cool!'
+                    }).then(() => {
+                        toast.success('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
+                        // refetch()
+                    });
+                } else {
+                    toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
                     // refetch()
-                });
+                }
+
             } catch (err) {
                 // console.log(err)
                 toast.error(`Something went Wrong! : ${err.message}`, { autoClose: 2000, theme: "colored" })

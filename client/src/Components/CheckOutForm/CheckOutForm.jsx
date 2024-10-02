@@ -105,7 +105,7 @@ const CheckOutForm = ({onSubmit}) => {
                 </div>
 
                 <button type="submit" className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
-                    Send
+                    Confirm
                 </button>
 
 

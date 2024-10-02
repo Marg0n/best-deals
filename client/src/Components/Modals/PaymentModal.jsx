@@ -48,7 +48,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
     const paymentMethod = contactInfo.paymentMethod;
     const shippingAddress = contactInfo.address;
 
-    const booking = { orderId, orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
+    const booking = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
 
     // const userAddress = contactInfo;
 
