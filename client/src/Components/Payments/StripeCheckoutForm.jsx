@@ -9,7 +9,7 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import './StripeCheckoutForm.css';
 
 
-const StripeCheckoutForm = ({ CheckoutPrice, closeModal, booking, handleInvoice }) => {
+const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, handleInvoice }) => {
 
     // strip hooks
     const stripe = useStripe();
@@ -102,27 +102,27 @@ const StripeCheckoutForm = ({ CheckoutPrice, closeModal, booking, handleInvoice 
             // 1. Create payment info object
             const paymentInfo = {
                 ...booking,
-                roomId: booking._id,
+                orderId: booking.orderId,
                 transactionId: paymentIntent.id,
-                date: new Date(),
+                orderDate: booking.orderDate,
+                items: booking.items,
+                status: booking.status,
+                paymentMethod: booking.paymentMethod,
+                shippingAddress: booking.shippingAddress
             }
             delete paymentInfo._id
             // console.log(paymentInfo)
             try {
                 // 2. save payment info in booking collection (db)
-                //   const { data } = await axiosSecure.post('/booking', paymentInfo)
-                //   console.log(data)
-
-                // 3. change room status to booked in db
-                //   await axiosSecure.patch(`/room/status/${bookingInfo?._id}`, {
-                //     status: true,
-                //   })
+                const { data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
+                const { data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, booking)
+                console.log('from stripe checkout =>', data1, data2)
 
                 // update ui
-                refetch()
+                // refetch()
                 closeModal()
                 toast.success('Room Booked Successfully', { autoClose: 2000, theme: "colored" })
-                navigate('/allTestPage')
+                navigate('/cartlist')
             } catch (err) {
                 // console.log(err)
                 toast.error(`Something went Wrong! : ${err.message}`, { autoClose: 2000, theme: "colored" })
@@ -176,6 +176,7 @@ StripeCheckoutForm.propTypes = {
     // refetch: PropTypes.func,
     closeModal: PropTypes.func,
     booking: PropTypes.object,
+    contactInfo: PropTypes.object,
     handleInvoice: PropTypes.func,
     // isOpen: PropTypes.bool,
 }

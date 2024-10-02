@@ -7,6 +7,8 @@ import Swal from "sweetalert2";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useAuth from "../../hooks/useAuth";
+import { TbFidgetSpinner } from 'react-icons/tb';
 
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid recreating the `Stripe` object on every render.
@@ -14,6 +16,8 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_API_KEY_CLIENT);
 
 const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
 
+    // user info from firebase
+    const { user } = useAuth();
 
     // modal close/open
     const [isOpen, setIsOpen] = useState(false);
@@ -41,8 +45,8 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
     const orderDate = new Date().toUTCString();
     const items = [cart.cartIteams];
     const status = 'Pending';
-    const paymentMethod = '';
-    const shippingAddress = [];
+    const paymentMethod = contactInfo.paymentMethod;
+    const shippingAddress = contactInfo.address;
 
     const booking = { orderId, orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
 
@@ -51,39 +55,41 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
 
     const handleInvoice = async () => {
 
-        console.log('invoice related ==>', booking, contactInfo);
+        console.log('invoice related ==>', booking, contactInfo, user?.email);
 
-        // try {
-        //     // loading
-        //     setLoading(true);
+        try {
+            // loading
+            setLoading(true);
 
-        //     const { data } = await axiosSecure.post(`/purchaseHistory`, booking)
+            const { data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, booking)
+            const { data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, booking)
 
-        //     if (data) {
-        //         Swal.fire({
-        //             title: `Successfully Payed!`,
-        //             text: `Your Payment is successful! 🎉`,
-        //             icon: 'success',
-        //             confirmButtonText: 'Cool!'
-        //         }).then(() => {
-        //             // loader
-        //             setLoading(false)
-        //             // refetch()
-        //         });
-        //     } else {
-        //         toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
-        //         // loader
-        //         setLoading(false)
-        //         // refetch()
-        //     }
+            if (data1 && data2) {
+                Swal.fire({
+                    title: `Successfully Payed!`,
+                    text: `Your Payment is successful! 🎉`,
+                    icon: 'success',
+                    confirmButtonText: 'Cool!'
+                }).then(() => {
+                    // loader
+                    setLoading(false)
+                    toast('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
+                    // refetch()
+                });
+            } else {
+                toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
+                // loader
+                setLoading(false)
+                // refetch()
+            }
 
-        // }
-        // catch (err) {
-        //     // console.log(err);
-        //     toast.error(err.response.data, { autoClose: 5000, theme: "colored" });
-        //     setLoading(false);
-        //     // refetch()
-        // }
+        }
+        catch (err) {
+            // loader
+            setLoading(false);
+            toast.error(err.response.data, { autoClose: 5000, theme: "colored" });
+            // refetch()
+        }
     }
 
 
@@ -98,9 +104,9 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
                     <Elements stripe={stripePromise}>
                         <StripeCheckoutForm
                             CheckoutPrice={CheckoutPrice}
-                            // refetch={refetch} 
+                            contactInfo={contactInfo} 
                             closeModal={closeModal}
-                        // booking={booking} 
+                            booking={booking}
                         // handleInvoice={handleInvoice} 
                         />
                     </Elements>
@@ -119,7 +125,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
                 className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
                 onClick={() => setIsOpen(true)}
             >
-                Checkout
+                {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : 'Checkout'}
             </button>
 
         </div>

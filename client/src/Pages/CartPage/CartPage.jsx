@@ -105,7 +105,7 @@ const CartPage = () => {
 
                         {(contactInfo !== undefined || contactInfo !== null)
                             ? <CheckOutForm onSubmit={onSubmit}></CheckOutForm>
-                            : <div className="hidden">
+                            : <div className="disabled:">
                             <CheckOutForm onSubmit={onSubmit}></CheckOutForm>
                             </div>
                         }
