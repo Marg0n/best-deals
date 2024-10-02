@@ -36,7 +36,7 @@ const Login = () => {
     // Navigation
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location)
+    // console.log(location)
     const whereTo = location?.state || '/';
 
     // React hook form
