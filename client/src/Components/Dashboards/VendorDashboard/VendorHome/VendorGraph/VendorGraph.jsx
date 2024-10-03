@@ -1,14 +1,36 @@
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-
-const data = [
-    { month: 'Jan', earnings: 4000, expenses: 2400 },
-    { month: 'Feb', earnings: 3000, expenses: 1398 },
-    { month: 'Mar', earnings: 2000, expenses: 9800 },
-    // Add more data
-];
+import useUserProfile from '../../../../../hooks/useUserProfile';
+import useAxiosSecure from '../../../../../hooks/useAxiosSecure';
 
 const VendorGraph = () => {
+
+    const vendorMail = useUserProfile();
+    const vendorProducts = useAxiosSecure();
+
+    const { data: allOrders = [] } = useQuery({
+        queryKey: ["allOrders"],
+        queryFn: async () => {
+            const res = await vendorProducts.get('/all-orders');
+            console.log(res.data);
+            return res.data; // Ensure you handle the data correctly here
+        },
+    });
+
+    const allVendorOrders = allOrders?.filter(product => product?.vendorEmail === vendorMail.profile[0]?.email) || [];
+
+    let total = allVendorOrders?.reduce((previousValue, currentValue) => {
+        return (previousValue + (currentValue.itemsCount * currentValue.totalAmount));
+    }, 0);
+
+    const data = [
+        { month: 'Jan', earnings: total, expenses: 400 },
+        { month: 'Feb', earnings: total, expenses: 200 }
+
+        // Add more data
+    ];
+
     return (
         <div className="bg-white p-4 rounded shadow">
             <h3 className="text-lg font-semibold mb-4">Revenue Graph</h3>

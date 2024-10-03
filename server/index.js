@@ -146,6 +146,7 @@ async function run() {
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
     const productCollection = client.db("BestDeals").collection("ProductCollection");
+    const orderCollection = client.db("BestDeals").collection("OrderManagement");
 
     // ==================================
     // Admin verify
@@ -312,6 +313,24 @@ app.post("/billingAddress/:email", async (req, res) => {
       const results = await productCollection.find(query).toArray();
       res.send(results);
     });
+    
+    // ==================================
+    // Get All orders
+    // ==================================
+    app.get("/all-orders", async(req, res) => {
+      const results = await orderCollection.find().toArray();
+      res.send(results);
+    })
+
+    // ==================================
+    // Post Products
+    // ==================================
+     
+    app.post("/all-products", async(req, res) => {
+      const postProduct = req.body;
+      const results = await productCollection.insertOne(postProduct);
+      res.send(results);
+    })
 
     // ==================================
     // Patch Users' last login
