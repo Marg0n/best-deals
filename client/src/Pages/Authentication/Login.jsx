@@ -31,12 +31,12 @@ const Login = () => {
     const axiosSecoure = useAxiosSecure();
 
     // creation date
-    const lastLogin = new Date();
+    const lastLogin = new Date().toUTCString();
 
     // Navigation
     const navigate = useNavigate();
     const location = useLocation();
-    console.log(location)
+    // console.log(location)
     const whereTo = location?.state || '/';
 
     // React hook form
@@ -94,6 +94,8 @@ const Login = () => {
 
                 if (result?.user) {
 
+                    setCustomLoader(true);
+
                     const userData = {
                         email: result?.user?.email,
                         name: result?.user?.displayName,
@@ -111,7 +113,7 @@ const Login = () => {
                         email: result?.user?.email,
                     })
                         .then(() => {
-                            setProcessLoader(false);
+                            setCustomLoader(false);
                             toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
                         })
                         setTimeout(() => {

@@ -1,4 +1,4 @@
-import axios from "axios";
+
 import { useQuery } from "@tanstack/react-query";
 import ProductsCard from "../../Components/ProductsCard/ProductsCard";
 import { ClimbingBoxLoader } from "react-spinners";
@@ -8,6 +8,8 @@ import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useState } from "react";
 import NoData from "../../Components/NoData/NoData";
 import SectionHeader from "../../Components/ReUsableComponent/SectionHeader";
+import { Helmet } from "react-helmet-async";
+import CardSkelaton from "../../Components/CardSkelaton/CardSkelaton";
 
 const Home = () => {
 
@@ -15,7 +17,7 @@ const Home = () => {
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [priceRange, setPriceRange] = useState([0, 1000]);
-  console.log(priceRange);
+  // console.log(priceRange);
 
 
   // This fetch is for collect all data from mongoDB
@@ -31,17 +33,20 @@ const Home = () => {
           maxPrice: priceRange[1],
         }
       });
-      console.log(res.data);
+      // console.log(res.data);
 
       return res.data;
     },
   });
 
-  console.log(selectedCategory);
-
 
   return (
-    <div className="flex p-5 gap-5">
+    <div className="flex p-5 gap-y-5 md:gap-5">
+      <div>
+        <Helmet>
+          <title>Best Deals | Home</title>
+        </Helmet>
+      </div>
       {/* Left Side menubar / category bar */}
       <div className="flex-1">
         <LeftMenubar
@@ -60,12 +65,12 @@ const Home = () => {
 
         {/* all products display */}
         {isLoading ? (
-          <div className="flex justify-center items-center h-screen">
-            <ClimbingBoxLoader color="#36d7b7" />
+          <div className="">
+            <CardSkelaton/>
           </div>
         ) : (
-          products.length > 0 ?
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 ">
+          products?.length > 0 ?
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-5 md:gap-5  mx-auto">
               {products?.map((product) => (
                 <ProductsCard
                 key={product._id}
@@ -74,7 +79,7 @@ const Home = () => {
             </div> :
             <NoData></NoData>
           )}
-          <FeaturedProducts />
+          <FeaturedProducts  />
       </div>
     </div>
   );

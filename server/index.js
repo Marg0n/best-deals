@@ -23,7 +23,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      'https://best-deal-909.web.app',
+      "https://best-deal-909.web.app",
       "https://magenta-peony-5d02de.netlify.app",
       
     ],
@@ -80,11 +80,11 @@ const verifyToken = async (req, res, next) => {
 };
 
 // ===================================
-//creating Token
+// creating Token
 // ===================================
 app.post("/jwt", async (req, res) => {
   const user = req.body;
-  console.log(user);
+  // console.log(user);
   const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: "10h",
   });
@@ -145,9 +145,7 @@ async function run() {
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
-    const productCollection = client
-      .db("BestDeals")
-      .collection("ProductCollection");
+    const productCollection = client.db("BestDeals").collection("ProductCollection");
 
     // ==================================
     // Admin verify
@@ -179,7 +177,9 @@ async function run() {
       // return if...
       // if (amounts <= 0) return
 
+      // =================================
       // Create a PaymentIntent with the order amount and currency
+      // =================================
       const paymentIntent = await stripe.paymentIntents.create({
         // amount: calculateOrderAmount(amounts),
         amount: amounts,
@@ -208,7 +208,7 @@ async function run() {
     app.post("/users", async (req, res) => {
       try {
         const newUser = req.body;
-        console.log(newUser);
+        // console.log(newUser);
 
         // Check if user already exists
         const query = await usersCollection.findOne({ email: newUser?.email });
@@ -233,7 +233,7 @@ async function run() {
     });
 
     // ==================================
-    // Users login
+    // Users login / profile data
     // ==================================
     app.get("/users/:email", async (req, res) => {
       const mail = req.params?.email;
@@ -242,13 +242,44 @@ async function run() {
     });
 
     // ==================================
-    // Users profile data
-    // ==================================
-    app.get("/profile/:email", async (req, res) => {
-      const mail = req.params?.email;
-      const results = await usersCollection.find({ email: mail }).toArray();
-      res.send(results);
-    });
+// Users profiles' Purchase History data
+// ==================================
+app.post("/purchaseHistory/:email", async (req, res) => {
+  const mail = req.params?.email;
+  const body = req?.body;
+  try {
+    const result = await usersCollection.updateOne(
+      { email: mail },
+      { $push: { purchaseHistory: body } },
+      { upsert: true }
+    );
+    console.log('from history', result);
+    res.send(result);
+  } catch (error) {
+    console.error('Error inserting purchase history:', error);
+    res.status(500).send({ error: 'Failed to insert purchase history' });
+  }
+});
+
+// ==================================
+// Users profiles' Billing Address data
+// ==================================
+app.post("/billingAddress/:email", async (req, res) => {
+  const mail = req.params?.email;
+  const body = req?.body;
+  try {
+    const result = await usersCollection.updateOne(
+      { email: mail },
+      { $push: { billingAddress: body } },
+      { upsert: true }
+    );
+    console.log('from billing', result);
+    res.send(result);
+  } catch (error) {
+    console.error('Error inserting billing address:', error);
+    res.status(500).send({ error: 'Failed to insert billing address' });
+  }
+});
 
     // ==================================
     // All products API
@@ -306,12 +337,65 @@ async function run() {
           .json({ message: "Internal server error from last login" });
       }
     });
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // fetch comments
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    app.get('/api/products/:id', async (req, res) => {
+      const productId = req.params.id;
+
+      try {
+        // Find product using string _id
+        const product = await productCollection.findOne({ _id: productId });
+
+        if (product) {
+          res.status(200).json(product);
+        } else {
+          res.status(404).json({ message: 'Product not found' });
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // add comments
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    app.post('/api/products/:id/comments', async (req, res) => {
+      const productId = req.params.id;
+      const { comment, userRating, name, userPhoto } = req.body;
+
+      // Check if all required fields are provided
+      if (!comment || !userRating || !name || !userPhoto) {
+        return res.status(400).json({ message: 'Missing fields' });
+      }
+
+      const newComment = { name, userPhoto, comment, userRating: userRating };
+
+      try {
+        const result = await productCollection.updateOne(
+          { _id: productId },
+          { $push: { comments: newComment } }
+        );
+
+        if (result.modifiedCount === 1) {
+          res.status(200).json({ message: 'Comment added successfully' });
+        } else {
+          res.status(404).json({ message: 'Product not found' });
+        }
+      } catch (error) {
+        console.error('Error adding comment:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
+
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => {});
+    app.use("/user", async (req, res) => { });
 
     await client.db("admin").command({ ping: 1 });
     console.log(

@@ -12,7 +12,19 @@ import VendorDashboard from "../Components/Dashboards/VendorDashboard/VendorDash
 import VendorHome from "../Components/Dashboards/VendorDashboard/VendorHome/VendorHome";
 import VendorOrders from "../Components/Dashboards/VendorDashboard/VendorOrders/VendorOrders";
 import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
-import PrivateRoute from './PrivateRoute';
+import AdminDashboard from "../Components/Dashboards/AdminDashboard/AdminDashboard";
+import AdminHome from "../Components/Dashboards/AdminDashboard/AdminHome/AdminHome";
+import AdminAllUsers from "../Components/Dashboards/AdminDashboard/AdminAllUser/AdminAllUsers";
+import AdminAllVendors from "../Components/Dashboards/AdminDashboard/AdminAllVendor/AdminAllVendors";
+import AdminVendorRequest from "../Components/Dashboards/AdminDashboard/AdminVendorRequest/AdminVendorRequest";
+import PrivateRoute from "./PrivateRoute";
+import MyOrders from "../Pages/MyOrders/MyOrders";
+import MyWishList from "../Pages/MyWishList/MyWishList";
+import MyToken from "../Pages/MyToken/MyToken";
+import FavoriteVendor from "../Pages/FavoriteVendor/FavoriteVendor";
+import AccountSettings from "../Pages/AccountSettings/AccountSettings";
+import AboutUs from "../Pages/AboutUs/AboutUs";
+import Feedback from "../Pages/Feedback/Feedback";
 
 const Router = createBrowserRouter([
   {
@@ -30,18 +42,49 @@ const Router = createBrowserRouter([
       },
       {
         path: "/cartlist",
-        element: <PrivateRoute><CartPage/></PrivateRoute> ,
+        element: (
+          <PrivateRoute>
+            <CartPage />
+          </PrivateRoute>
+        ),
       },
       {
         path: "/InvoiceHistory",
         element: <InvoiceHistory />,
       },
       {
+        path: "/myOrders",
+        element: <MyOrders />,
+      },
+      {
+        path: "/myWishList",
+        element: <MyWishList />,
+      },
+      {
+        path: "/myToken",
+        element: <MyToken />,
+      },
+      {
+        path: "/favoriteVendor",
+        element: <FavoriteVendor />,
+      },
+      {
+        path: "/accountSettings",
+        element: <AccountSettings />,
+      },
+      {
+        path: "/aboutUs",
+        element: <AboutUs />,
+      },
+      {
+        path: "/feedback",
+        element: <Feedback />,
+      },
+      {
         path: "/single-checkout/:_id",
         element: <SingleProductCheckoutPage />,
         loader: () => fetch(`${import.meta.env.VITE_SERVER}/all-products`),
       },
-
     ],
   },
   {
@@ -53,8 +96,8 @@ const Router = createBrowserRouter([
     element: <Registration />,
   },
   {
-    path: '/vendorDashboard',
-    element: <VendorDashboard/>,
+    path: "/vendorDashboard",
+    element: <VendorDashboard />,
     children: [
         {
           path: '/vendorDashboard',
@@ -68,6 +111,28 @@ const Router = createBrowserRouter([
           path: '/vendorDashboard/products',
           element: <VendorAddProduct/>
         }
+    ]
+  },
+  {
+    path: '/adminDashboard',
+    element: <AdminDashboard/>,
+    children: [
+      {
+        path: '/adminDashboard',
+        element: <AdminHome/>
+      }, 
+      {
+        path: '/adminDashboard/allUsers',
+        element: <AdminAllUsers/>
+      },
+      {
+        path: '/adminDashboard/allVendors',
+        element: <AdminAllVendors/>
+      },
+      {
+        path: '/adminDashboard/vendorRequest',
+        element: <AdminVendorRequest/>
+      }
     ]
   }
 ]);

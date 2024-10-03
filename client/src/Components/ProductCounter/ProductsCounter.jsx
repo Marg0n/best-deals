@@ -32,6 +32,7 @@ const ProductsCounter = ({ product , quality , setQuality }) => {
         }
     }
 
+  
 
 
     return (

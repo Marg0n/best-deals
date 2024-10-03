@@ -114,7 +114,7 @@ const AuthProvider = ({ children }) => {
   };
 }, []);
 
-console.log(user);
+// console.log(user);
 
 const userInfo = {
   createUser,

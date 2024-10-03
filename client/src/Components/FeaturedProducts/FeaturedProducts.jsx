@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import useAxiosCommon from '../../hooks/useAxiosCommon';
 import SectionHeader from '../ReUsableComponent/SectionHeader';
 import ProductsCard from '../ProductsCard/ProductsCard';
+import CardSkelaton from '../CardSkelaton/CardSkelaton';
 
 
 
@@ -21,10 +22,8 @@ const FeaturedProducts = () => {
   });
 
   // Loading state
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className='mt-10'><CardSkelaton/></div>;
 
-  // Error state
-  if (isError) return <div>Error loading featured products</div>;
 
   // Render the featured products
   return (

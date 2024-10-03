@@ -7,9 +7,10 @@ import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import './StripeCheckoutForm.css';
+import Swal from "sweetalert2";
 
 
-const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handleBookNow }) => {
+const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking }) => {
 
     // strip hooks
     const stripe = useStripe();
@@ -90,7 +91,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handl
 
         // payment error
         if (confirmError) {
-            // console.log('confirm payment error ===>', confirmError)
+            console.log('confirm payment error ===>', confirmError)
             setPaymentError(confirmError.message)
             setProcessing(false)
             return
@@ -100,29 +101,37 @@ const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handl
         if (paymentIntent.status === 'succeeded') {
             // console.log('succeed payment ===>', paymentIntent)
             // 1. Create payment info object
+            const billingAddress = contactInfo;
             const paymentInfo = {
                 ...booking,
-                roomId: booking._id,
-                transactionId: paymentIntent.id,
-                date: new Date(),
+                transactionId: paymentIntent.id
             }
             delete paymentInfo._id
             // console.log(paymentInfo)
             try {
                 // 2. save payment info in booking collection (db)
-                //   const { data } = await axiosSecure.post('/booking', paymentInfo)
-                //   console.log(data)
-
-                // 3. change room status to booked in db
-                //   await axiosSecure.patch(`/room/status/${bookingInfo?._id}`, {
-                //     status: true,
-                //   })
+                const { data: data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
+                const { data: data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, billingAddress)
+                console.log('from stripe checkout =>', data1, data2)
 
                 // update ui
-                refetch()
+                // refetch()
                 closeModal()
-                toast.success('Room Booked Successfully', { autoClose: 2000, theme: "colored" })
-                navigate('/allTestPage')
+                if (data1 && data2) {
+                    Swal.fire({
+                        title: `Successfully Payed!`,
+                        text: `Your Payment is successful! 🎉`,
+                        icon: 'success',
+                        confirmButtonText: 'Cool!'
+                    }).then(() => {
+                        toast.success('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
+                        // refetch()
+                    });
+                } else {
+                    toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
+                    // refetch()
+                }
+
             } catch (err) {
                 // console.log(err)
                 toast.error(`Something went Wrong! : ${err.message}`, { autoClose: 2000, theme: "colored" })
@@ -158,7 +167,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handl
             <button
                 type="submit"
                 className="btn btn-primary w-full"
-                onClick={handleBookNow}
+                // onClick={handleInvoice}
                 disabled={!stripe || !clientSecret || processing}>
                 {processing ? (
                     <ImSpinner9 className='animate-spin m-auto' size={24} />
@@ -173,10 +182,11 @@ const StripeCheckoutForm = ({ CheckoutPrice, refetch, closeModal, booking, handl
 
 StripeCheckoutForm.propTypes = {
     CheckoutPrice: PropTypes.number,
-    refetch: PropTypes.func,
+    // refetch: PropTypes.func,
     closeModal: PropTypes.func,
     booking: PropTypes.object,
-    handleBookNow: PropTypes.func,
+    contactInfo: PropTypes.object,
+    // handleInvoice: PropTypes.func,
     // isOpen: PropTypes.bool,
 }
 

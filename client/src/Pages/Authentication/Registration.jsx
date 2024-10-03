@@ -14,14 +14,16 @@ import logo from '/rmv_bg_logo1.png';
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { imageUpload } from "../../utils/imageUpload";
 import { TbFidgetSpinner } from "react-icons/tb";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 
 const Registration = () => {
 
-  const { createUser, user, updateUserProfile, loggedOut, googleLogin } = useAuth();
+  const { createUser, user, updateUserProfile, loggedOut, googleLogin, loading } = useAuth();
 
   // import custom axios functions
   const axiosCommon = useAxiosCommon();
+  const axiosSecure = useAxiosSecure();
 
   // custom loader for registration
   const [customLoader, setCustomLoader] = useState(false);
@@ -49,7 +51,7 @@ const Registration = () => {
     const image = e.target.avatar.files[0]
 
     // creation date
-    const createdTime = new Date();
+    const createdTime = new Date().toUTCString();
 
     // role
     const role = 'User';
@@ -157,7 +159,7 @@ const Registration = () => {
           // Send user data to your server
           await axiosCommon.post('/users', userData)
           // jwt token
-          axiosSecoure.post(`/jwt`, {
+          axiosSecure.post(`/jwt`, {
             email: result?.user?.email,
           })
             .then(() => {
@@ -349,7 +351,7 @@ const Registration = () => {
                 type='submit'
                 className='w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50'
               >
-                {(customLoader || processLoader) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : 'Register'}
+                {(customLoader || processLoader || loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : 'Register'}
               </button>
             </div>
           </form>

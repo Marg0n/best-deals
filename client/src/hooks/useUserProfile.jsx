@@ -11,7 +11,7 @@ const useUserProfile = () => {
     const { data: profile = [], refetch: profileRefetch, isLoading: profileLoading } = useQuery({
         queryKey: ['profile', user],
         queryFn: async () => {
-            const { data } = await axiosCommon(`/profile/${user?.email}`)
+            const { data } = await axiosCommon(`/users/${user?.email}`)
             return data
         }
     })
