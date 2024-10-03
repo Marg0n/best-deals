@@ -10,6 +10,7 @@ import { addToCart } from '../../features/CartSlice/CartSlice';
 import CommentModal from '../../Components/CommentModal/CommentModal';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 import MoreSuggetionCard from '../../Components/MoreSuggetionCard/MoreSuggetionCard';
+import useAuth from '../../hooks/useAuth';
 
 
 const Details = () => {
@@ -18,12 +19,11 @@ const Details = () => {
     const product = products?.find(product => product._id === _id);
 
 
-
     // finding same category products but not the same product
     const productsInSameCategory = products?.filter(item => item.category === product.category && item._id !== product._id);
+    
 
-
-    const { user } = useContext(AuthContext)
+    const {user} = useAuth()   
 
 
     // set quality from details

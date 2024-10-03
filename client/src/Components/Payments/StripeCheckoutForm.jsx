@@ -9,9 +9,13 @@ import useAxiosSecure from "../../hooks/useAxiosSecure";
 import './StripeCheckoutForm.css';
 import Swal from "sweetalert2";
 import InvoiceModal from "../Invoice/InvoiceModal";
+import { useDispatch } from "react-redux";
+import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 
 
 const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, handleClearCartList,setChangeInvoice }) => {
+
+    const dispatch= useDispatch()
 
     // strip hooks
     const stripe = useStripe();
@@ -132,6 +136,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                         icon: 'success',
                         confirmButtonText: 'Cool!'
                     }).then((result) => {
+                        dispatch(removeAllFromCartlist())
                         // toast.success('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
                         if (result.isConfirmed) {
                             Swal.fire({
