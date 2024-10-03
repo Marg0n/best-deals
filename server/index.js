@@ -7,7 +7,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY_SERVER);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -23,8 +23,9 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
+      'https://best-deal-909.web.app',
       "https://magenta-peony-5d02de.netlify.app",
-      // server-side
+      
     ],
     credentials: true,
     optionsSuccessStatus: 200,
