@@ -14,10 +14,13 @@ import { TbFidgetSpinner } from 'react-icons/tb';
 // Make sure to call `loadStripe` outside of a component’s render to avoid recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_API_KEY_CLIENT);
 
-const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
+const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList }) => {
 
     // user info from firebase
     const { user } = useAuth();
+
+    // state of invoice button
+    const [changeInvoice, setChangeInvoice] = useState(false);
 
     // modal close/open
     const [isOpen, setIsOpen] = useState(false);
@@ -44,7 +47,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
     // const orderId = Date.now();
     const orderDate = new Date().toUTCString();
     const items = [cart.cartIteams];
-    const status = 'Pending';
+    const status = 'Payed';
     const paymentMethod = contactInfo.paymentMethod;
     const shippingAddress = contactInfo.address;
 
@@ -98,16 +101,23 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
             <dialog id="my_modal_1" className="modal" open={isOpen} onClose={closeModal}>
 
                 <div className="modal-box">
-                    <h3 className="font-bold text-lg text-center mb-4">Pay to Proceed!</h3>
+                    {
+                        !changeInvoice ? <>
+                            <h3 className="font-bold text-lg text-center mb-4">Pay to Proceed!</h3>
+                        </> : <>
+                            <h3 className="font-bold text-lg text-center mb-4">Your Invoice!</h3>
+                        </>
+                    }
 
                     {/* stripe payment */}
                     <Elements stripe={stripePromise}>
                         <StripeCheckoutForm
                             CheckoutPrice={CheckoutPrice}
-                            contactInfo={contactInfo} 
+                            contactInfo={contactInfo}
                             closeModal={closeModal}
                             booking={booking}
-                        // handleInvoice={handleInvoice} 
+                            handleClearCartList={handleClearCartList}
+                            setChangeInvoice={setChangeInvoice}
                         />
                     </Elements>
 
@@ -125,7 +135,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
                 className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
                 onClick={() => setIsOpen(true)}
             >
-                {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : 'Checkout'}
+                {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? 'Checkout': 'Invoice')}
             </button>
 
         </div>
@@ -135,6 +145,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo }) => {
 PaymentModal.propTypes = {
     CheckoutPrice: PropTypes.number,
     contactInfo: PropTypes.object,
+    handleClearCartList: PropTypes.func,
 }
 
 export default PaymentModal;

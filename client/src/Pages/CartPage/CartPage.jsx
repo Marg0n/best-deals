@@ -32,7 +32,7 @@ const CartPage = () => {
     const grandTotal = totalAmount - discount;
 
     // state for contact information
-    const [contactInfo, setContactInfo] = useState({})
+    const [contactInfo, setContactInfo] = useState(null)
 
     // contact info
     const onSubmit = async (data) => {
@@ -48,7 +48,7 @@ const CartPage = () => {
     const handleClearCartList = () => {
 
         Swal.fire({
-            title: `Are you sure?`,
+            title: `Do you want to remove your Cart list?`,
             text: ` It will remove ${cart.cartIteams.length} items from your cart `,
             imageUrl: "https://i.ibb.co.com/rpHtZmy/oh-no-message-bubble-sticker-vector-removebg-preview.png",
             imageWidth: 200,
@@ -62,7 +62,7 @@ const CartPage = () => {
             if (result.isConfirmed) {
                 Swal.fire({
                     title: "Deleted!",
-                    text: "Your Cart is Empty",
+                    text: "Your Cart is now Empty!",
                     icon: "success"
                 });
                 dispacth(removeAllFromCartlist())
@@ -141,12 +141,11 @@ const CartPage = () => {
                     <div>
 
 
-                        {(contactInfo !== undefined || contactInfo !== null)
-                            ? <CheckOutForm onSubmit={onSubmit}></CheckOutForm>
-                            : <div className="disabled:">
-                                <CheckOutForm onSubmit={onSubmit}></CheckOutForm>
-                            </div>
-                        }
+                        <CheckOutForm
+                            onSubmit={onSubmit}
+                            contactInfo={contactInfo}
+                        ></CheckOutForm>
+
 
 
                         {/* payment method */}
@@ -155,6 +154,7 @@ const CartPage = () => {
                             && <PaymentModal
                                 CheckoutPrice={parseInt(grandTotal.toFixed(2))}
                                 contactInfo={contactInfo}
+                                handleClearCartList={handleClearCartList}
                             />
                         }
 

@@ -32,7 +32,7 @@ const Details = () => {
 
 
     const [open, setOpen] = useState(false);
-    
+
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -42,7 +42,8 @@ const Details = () => {
 
     // add product to redux store
     const handleAddToCart = (product) => {
-        dispatch(addToCart({ ...product, cartQuantity: quantity }));
+        const addingToCart = { ...product, cartQuantity: quantity }
+        dispatch(addToCart(addingToCart));
     };
 
 
@@ -70,7 +71,7 @@ const Details = () => {
 
                         </span>
                         {/* Use the modal component */}
-                        <CommentModal open={open} handleClose={handleClose}  userName={user?.displayName} photo={user?.photoURL} productId={_id} />
+                        <CommentModal open={open} handleClose={handleClose} userName={user?.displayName} photo={user?.photoURL} productId={_id} />
                     </div>
                     <div>
                         <Carousel showArrows={true} showThumbs={true}>
@@ -107,7 +108,12 @@ const Details = () => {
                     </div>
                     <div className='text-center mt-4'>
 
-                        <Link to={`/single-checkout/${_id}`} onClick={() => handleBuyNow(product)} className='bg-[#ff6b1c] rounded-[86px] text-white text-sm font-bold px-8 py-2'>
+                        <Link
+                            to={`/cartlist`} 
+                            // to={`/single-checkout/${_id}`} 
+                            // onClick={() => handleBuyNow(product)}
+                            onClick={() => handleAddToCart(product)}
+                            className='bg-[#ff6b1c] rounded-[86px] text-white text-sm font-bold px-8 py-2'>
                             Buy Now
                         </Link>
                     </div>
@@ -122,24 +128,24 @@ const Details = () => {
             </div>
 
             {
-                productsInSameCategory.length >0 ?
-                <div className='lg:w-4/12 h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
-                <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
+                productsInSameCategory.length > 0 ?
+                    <div className='lg:w-4/12 h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
+                        <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
 
-                {
-                    productsInSameCategory.map(item =>
-                    <MoreSuggetionCard
-                    key={item._id}
-                    product={item}
-                    ></MoreSuggetionCard>)
-                }
+                        {
+                            productsInSameCategory.map(item =>
+                                <MoreSuggetionCard
+                                    key={item._id}
+                                    product={item}
+                                ></MoreSuggetionCard>)
+                        }
 
 
-            </div>
-            : ''
+                    </div>
+                    : ''
 
             }
-            
+
         </div>
     );
 };
