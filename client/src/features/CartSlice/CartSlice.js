@@ -65,10 +65,15 @@ const cartSlice = createSlice({
             toast.success('Item removed')
         },
 
+        // Remove all items from cartList
+        removeAllFromCartlist(state) {
+            state.cartIteams = [];
+        },
+
 
 
     }
 })
 
-export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart } = cartSlice.actions
+export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart , removeAllFromCartlist } = cartSlice.actions
 export default cartSlice.reducer
