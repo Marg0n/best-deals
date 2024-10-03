@@ -2,14 +2,45 @@ import React from 'react';
 import VendorStats from './VendorStats/VendorStats';
 import VendorGraph from './VendorGraph/VendorGraph';
 import VendorProducts from '../VendorProducts/VendorProducts';
+import useUserProfile from '../../../../hooks/useUserProfile';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
+import { useQuery } from '@tanstack/react-query';
 
 const VendorHome = () => {
 
-    //testing data for stats
+  const vendorMail = useUserProfile();
+    const vendorProducts = useAxiosSecure();
+
+    const { data: products = [], isLoading } = useQuery({
+        queryKey: ["products"],
+        queryFn: async () => {
+            const res = await vendorProducts.get('/all-products');
+            return res.data; // Ensure you handle the data correctly here
+        },
+    });
+
+    const { data: allOrders = [] } = useQuery({
+        queryKey: ["allOrders"],
+        queryFn: async () => {
+            const res = await vendorProducts.get('/all-orders');
+            console.log(res.data);
+            return res.data; // Ensure you handle the data correctly here
+        },
+    });
+
+    const allVendorOrders = allOrders?.filter(product => product?.vendorEmail === vendorMail.profile[0]?.email) || [];
+
+    const allVendorProducts = products?.filter(product => product?.email === vendorMail.profile[0]?.email) || [];
+
+    
+    let total = allVendorOrders?.reduce((previousValue, currentValue) => {
+      return (previousValue + (currentValue.itemsCount * currentValue.totalAmount));
+    }, 0);
+  
   const stats = {
-    totalProducts: 50,
-    totalOrders: 45580,
-    totalEarnings: 51580,
+    totalProducts: allVendorProducts.length,
+    totalOrders: allVendorOrders.length,
+    totalEarnings: Math.round(total),
   };
 
     return (

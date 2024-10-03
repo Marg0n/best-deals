@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
-import { styled } from '@mui/material/styles';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import Select from 'react-select';
-import { Button, TextField, Radio, RadioGroup, FormControlLabel, Typography} from '@mui/material';
+import { Button, TextField, Radio, RadioGroup, FormControlLabel, Typography } from '@mui/material';
+import useAuth from '../../../../hooks/useAuth';
+import { imageUpload } from '../../../../utils/imageUpload';
+import useAxiosCommon from '../../../../hooks/useAxiosCommon';
+import Swal from 'sweetalert2';
 
 
 const VendorAddProduct = () => {
     const { register, handleSubmit, reset, control } = useForm();
-    const [selectedSize, setSelectedSize] = useState(null); // For tracking selected size
-
+    const [imageText, setImageText] = useState('');
+    const { user } = useAuth();
+    const axiosCommon = useAxiosCommon();
+   
     const categories = [
         { value: 'Men', label: 'Men' },
         { value: 'healthcare', label: 'healthcare' },
@@ -19,25 +23,49 @@ const VendorAddProduct = () => {
 
     ];
 
-    const onSubmit = (data) => {
-        console.log(data);
+    const onSubmit = async (data, e) => {
+
+        const productImage = e.target.photo.files[0];
+        const imageUrl = await imageUpload(productImage);
+
+        const addProduct = {
+            email: user?.email,
+            companyName: data.companyName || '',
+            productName: data.productName,
+            description: data.productDescription,
+            category: data.category,
+            price: data.price,
+            stockQuantity: data.stock,
+            rating: 0.0,
+            discount: data.discount,
+            isFeatured: false,
+            productImage: imageUrl || '',
+            attributes: [
+                {
+                    color: '',
+                    size: data.size,
+                    gender: data.gender || '',
+                }
+            ]
+        }
+    
+        const res = await axiosCommon.post('/all-products', addProduct);
+
+        if(res.data.insertedId){
+            Swal.fire({
+                position: "center",
+                icon: "success",
+                title: `Your Product Has Been Added`,
+                showConfirmButton: true,
+                
+            });
+            reset();
+        }
+        // console.log(addProduct);
+
+        
     };
 
-    const handleSizeClick = (size) => {
-        setSelectedSize(size); // Update the selected size
-    };
-
-    const VisuallyHiddenInput = styled('input')({
-        clip: 'rect(0 0 0 0)',
-        clipPath: 'inset(50%)',
-        height: 1,
-        overflow: 'hidden',
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        whiteSpace: 'nowrap',
-        width: 1,
-      });
 
 
     return (
@@ -51,18 +79,20 @@ const VendorAddProduct = () => {
                             <Typography variant="h6" className="mb-4 font-semibold">General Information</Typography>
 
                             {/* Name Product */}
-                            <div className="my-8">
+                            <div className="my-4">
                                 <TextField
                                     fullWidth
-                                    label="Name Product"
+                                    label="Product Name"
+                                    required
                                     {...register('productName')}
-
+ 
                                 />
                             </div>
 
                             {/* Description Product */}
                             <div className="mb-4">
                                 <TextField
+                                    required
                                     fullWidth
                                     multiline
                                     rows={4}
@@ -75,18 +105,8 @@ const VendorAddProduct = () => {
                             {/* Size and Gender Section */}
                             {/* Size */}
                             <div className="w-1/2 mb-4">
-                                <div className="mb-2"><Typography variant="body1" >Size</Typography></div>
                                 <div className="flex gap-2">
-                                    {['XS', 'S', 'M', 'L', 'XL', 'XXL'].map((size) => (
-                                        <Button
-                                            key={size}
-                                            variant={selectedSize === size ? 'contained' : 'outlined'}
-                                            className={`w-10 ${selectedSize === size ? 'bg-green-500 text-white' : ''}`}
-                                            onClick={() => handleSizeClick(size)}
-                                        >
-                                            {size}
-                                        </Button>
-                                    ))}
+                                    <TextField fullWidth label="Product Size" {...register('size')} />
                                 </div>
                             </div>
 
@@ -106,37 +126,38 @@ const VendorAddProduct = () => {
                         <div className="bg-white shadow-md p-6 rounded-md mt-6">
                             <div className='mb-3'><Typography variant="h6" className="mb-4 font-semibold">Pricing And Stock</Typography></div>
                             <div className="grid grid-cols-2 gap-4">
-                                <TextField fullWidth label="Base Pricing" {...register('price')} />
-                                <TextField fullWidth label="Stock" {...register('stock')} />
-                                <TextField fullWidth label="Discount" {...register('discount')} />
+                                <TextField type='number' required fullWidth label="Base Pricing" {...register('price')} />
+                                <TextField type='number' required fullWidth label="Stock" {...register('stock')} />
+                                <TextField type='number' fullWidth label="Discount" {...register('discount')} />
                             </div>
                         </div>
                     </div>
 
                     {/* Right Section */}
 
-                    {/* Category Section */}
+                
                     <div className="space-y-6">
                         {/* Upload Image Section */}
                         <div className="bg-white shadow-md p-6 rounded-md">
                             <div className='mb-2'>
                                 <Typography variant="h6" className="mb-4 font-semibold">Upload Image</Typography>
                             </div>
-                            <Button
-                                component="label"
-                                role={undefined}
-                                variant="contained"
-                                tabIndex={-1}
-                                startIcon={<CloudUploadIcon />}
-                            >
-                                Upload files
-                                <VisuallyHiddenInput
-                                    type="file"
-                                    onChange={(event) => console.log(event.target.files)}
-                                    multiple
-                                    {...register('photo')}
-                                />
-                            </Button>
+                            <input
+                             type="file" 
+                             name='photo'
+                             id='photo'
+                             accept='image/*'
+                             required
+                             multiple
+                             onChange={(e)=>{
+                                handleImage(e);
+                             }}
+                             className="file-input file-input-bordered w-full max-w-xs" 
+                             {...register('photo')}
+                             />
+                             <div>
+                                {imageText}
+                             </div>
                         </div>
 
                         {/* Category Section with Datalist */}
@@ -148,7 +169,7 @@ const VendorAddProduct = () => {
                                 <Controller
                                     control={control}
                                     defaultValue={categories.map(c => c.value[0])}
-                                    name="category"
+                                    {...register('category')}
                                     render={({ field: { onChange, value, ref } }) => (
                                         <Select
                                             inputRef={ref}
@@ -156,6 +177,7 @@ const VendorAddProduct = () => {
                                             onChange={val => onChange(val.map(c => c.value))}
                                             options={categories}
                                             isMulti
+
                                         />
                                     )}
                                 />
