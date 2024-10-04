@@ -42,7 +42,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
     setClickedCategory("");
     setSelectedCategory("");
     setPriceRangeFilter([0, 1000]);
-    setPriceRange([0, 1000]);
+    setPriceRange([0, '']);
   };
 
   // Select category to filter product
