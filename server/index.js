@@ -171,9 +171,9 @@ async function run() {
 
     app.post("/create-payment-intent", verifyToken, async (req, res) => {
       const { price } = req.body;
-      // console.log(price)
+
       const amounts = parseFloat(price * 100);
-      // console.log(amounts)
+
 
       // return if...
       // if (amounts <= 0) return
@@ -192,7 +192,7 @@ async function run() {
         // },
       });
 
-      // console.log(paymentIntent)
+
 
       res.send({
         clientSecret: paymentIntent.client_secret,
@@ -209,7 +209,7 @@ async function run() {
     app.post("/users", async (req, res) => {
       try {
         const newUser = req.body;
-        // console.log(newUser);
+
 
         // Check if user already exists
         const query = await usersCollection.findOne({ email: newUser?.email });
@@ -243,48 +243,62 @@ async function run() {
     });
 
     // ==================================
-// Users profiles' Purchase History data
-// ==================================
-app.post("/purchaseHistory/:email", async (req, res) => {
-  const mail = req.params?.email;
-  const body = req?.body;
-  try {
-    const result = await usersCollection.updateOne(
-      { email: mail },
-      { $push: { purchaseHistory: body } },
-      { upsert: true }
-    );
-    console.log('from history', result);
-    res.send(result);
-  } catch (error) {
-    console.error('Error inserting purchase history:', error);
-    res.status(500).send({ error: 'Failed to insert purchase history' });
-  }
-});
+    // Users profiles' Purchase History data
+    // ==================================
+    app.post("/purchaseHistory/:email", async (req, res) => {
+      const mail = req.params?.email;
+      const body = req?.body;
+      try {
+        const result = await usersCollection.updateOne(
+          { email: mail },
+          { $push: { purchaseHistory: body } },
+          { upsert: true }
+        );
 
-// ==================================
-// Users profiles' Billing Address data
-// ==================================
-app.post("/billingAddress/:email", async (req, res) => {
-  const mail = req.params?.email;
-  const body = req?.body;
-  try {
-    const result = await usersCollection.updateOne(
-      { email: mail },
-      { $push: { billingAddress: body } },
-      { upsert: true }
-    );
-    console.log('from billing', result);
-    res.send(result);
-  } catch (error) {
-    console.error('Error inserting billing address:', error);
-    res.status(500).send({ error: 'Failed to insert billing address' });
-  }
-});
+        res.send(result);
+      } catch (error) {
+        console.error('Error inserting purchase history:', error);
+        res.status(500).send({ error: 'Failed to insert purchase history' });
+      }
+    });
+
+    // ==================================
+    // all users data
+    // ==================================
+    app.get('/allUsers', async function (req, res) {
+      const vendor = req?.query?.role;
+      let query = {};
+      if (vendor) {
+        query = { role: { $eq: vendor } };
+      }
+      const results = await usersCollection.find(query).toArray();
+      res.send(results);
+    })
+
+    // ==================================
+    // Users profiles' Billing Address data
+    // ==================================
+    app.post("/billingAddress/:email", async (req, res) => {
+      const mail = req.params?.email;
+      const body = req?.body;
+      try {
+        const result = await usersCollection.updateOne(
+          { email: mail },
+          { $push: { billingAddress: body } },
+          { upsert: true }
+        );
+
+        res.send(result);
+      } catch (error) {
+        console.error('Error inserting billing address:', error);
+        res.status(500).send({ error: 'Failed to insert billing address' });
+      }
+    });
 
     // ==================================
     // All products API
     // ==================================
+
     app.get("/all-products", async (req, res) => {
       const search = req.query.search || "";
       const minPrice = parseFloat(req.query.minPrice) || 0;
@@ -313,11 +327,20 @@ app.post("/billingAddress/:email", async (req, res) => {
       const results = await productCollection.find(query).toArray();
       res.send(results);
     });
-    
+
+    // ==================================
+    // get all products
+    // ==================================
+
+    app.get('/allVendorProducts', async (req, res) => {
+      const results = await productCollection.find().toArray();
+      res.send(results);
+    })
+
     // ==================================
     // Get All orders
     // ==================================
-    app.get("/all-orders", async(req, res) => {
+    app.get("/all-orders", async (req, res) => {
       const results = await orderCollection.find().toArray();
       res.send(results);
     })
@@ -325,8 +348,8 @@ app.post("/billingAddress/:email", async (req, res) => {
     // ==================================
     // Post Products
     // ==================================
-     
-    app.post("/all-products", async(req, res) => {
+
+    app.post("/all-products", async (req, res) => {
       const postProduct = req.body;
       const results = await productCollection.insertOne(postProduct);
       res.send(results);

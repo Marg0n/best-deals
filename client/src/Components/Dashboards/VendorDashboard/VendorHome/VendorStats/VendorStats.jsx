@@ -8,12 +8,12 @@ const VendorStats = ({ title, value, percentage, icon }) => {
                 <Typography variant="h3" color="textPrimary">
                     {value}
                 </Typography>
-                <Typography
+                {/* <Typography
                     variant="subtitle1"
                     color={percentage > 0 ? 'success.main' : 'error.main'}
                 >
                     {percentage > 0 ? `+${percentage}%` : `${percentage}%`}
-                </Typography>
+                </Typography> */}
             </CardContent>
         </Card>
     );

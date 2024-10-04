@@ -127,7 +127,7 @@ const Navbar = ({ toggleTheme, theme }) => {
               className="btn btn-ghost btn-circle"
             >
               <div className="indicator">
-                <FiShoppingCart size={30} />
+                <FiShoppingCart className="text-gray-700" size={30} />
                 <span className="badge badge-sm indicator-item">
                   {cart.cartIteams.length}
                 </span>
@@ -178,7 +178,7 @@ const Navbar = ({ toggleTheme, theme }) => {
                 {" "}
                 <FaUserAlt
                   size={25}
-                  className="p-1 btn btn-ghost btn-circle btn-outline avatar animate-pulse hover:animate-none"
+                  className="p-1 btn btn-ghost btn-circle btn-outline bg-[#775050] avatar animate-pulse hover:animate-none"
                 >
                   {" "}
                 </FaUserAlt>

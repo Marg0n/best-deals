@@ -2,25 +2,26 @@ import React from 'react';
 import VendorStats from './VendorStats/VendorStats';
 import VendorGraph from './VendorGraph/VendorGraph';
 import VendorProducts from '../VendorProducts/VendorProducts';
-import useUserProfile from '../../../../hooks/useUserProfile';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
+import useAuth from '../../../../hooks/useAuth';
 
 const VendorHome = () => {
 
-  const vendorMail = useUserProfile();
-    const vendorProducts = useAxiosSecure();
+
+  const {user} = useAuth()
+  const vendorProducts = useAxiosSecure();
 
     const { data: products = [], isLoading } = useQuery({
-        queryKey: ["products"],
+        queryKey: ["vendorProductsForVendorDashboard"],
         queryFn: async () => {
-            const res = await vendorProducts.get('/all-products');
+            const res = await vendorProducts.get('/allVendorProducts');
             return res.data; // Ensure you handle the data correctly here
         },
     });
 
     const { data: allOrders = [] } = useQuery({
-        queryKey: ["allOrders"],
+        queryKey: ["allOrdersForHome"],
         queryFn: async () => {
             const res = await vendorProducts.get('/all-orders');
             console.log(res.data);
@@ -28,9 +29,9 @@ const VendorHome = () => {
         },
     });
 
-    const allVendorOrders = allOrders?.filter(product => product?.vendorEmail === vendorMail.profile[0]?.email) || [];
+    const allVendorOrders = allOrders?.filter(product => product?.vendorEmail === user?.email);
 
-    const allVendorProducts = products?.filter(product => product?.email === vendorMail.profile[0]?.email) || [];
+    const allVendorProducts = products?.filter(product => product?.email === user?.email);
 
     
     let total = allVendorOrders?.reduce((previousValue, currentValue) => {
@@ -47,15 +48,14 @@ const VendorHome = () => {
         <div className="space-y-4">
             {/* Stats Cards */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 place-items-center mx-auto">
-                <VendorStats title="Total Products" value={stats.totalProducts} percentage={5.9} />
-                <VendorStats title="Total Orders" value={stats.totalOrders} percentage={10.9} />
-                <VendorStats title="Total Earnings" value={stats.totalEarnings} percentage={5.9} />
+                <VendorStats title="Total Products" value={stats.totalProducts} />
+                <VendorStats title="Total Orders" value={stats.totalOrders} />
+                <VendorStats title="Total Earnings" value={stats.totalEarnings} />
             </div>
 
             {/* Revenue Graph */}
             <VendorGraph />
 
-            {/* Best Selling Products */}
             <VendorProducts/>
         </div>
     );

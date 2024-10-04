@@ -41,27 +41,29 @@ const Home = () => {
 
 
   return (
-    <div className="flex p-5 gap-y-5 md:gap-5">
+    <div className="flex">
       <div>
         <Helmet>
           <title>Best Deals | Home</title>
         </Helmet>
       </div>
       {/* Left Side menubar / category bar */}
-      <div className="flex-1">
+      <div>
         <LeftMenubar
           setSearch={setSearch}
           setSelectedCategory={setSelectedCategory}
           setPriceRange={setPriceRange} />
       </div>
 
-      <div className="w-full lg:w-3/4 ">
+      <div className="w-full lg:w-3/4 mx-auto">
 
         {/* all products title */}
+        <div className="my-4 text-black">
         <SectionHeader
         title={'Best Deal All products'}
         description={''}
         ></SectionHeader>
+        </div>
 
         {/* all products display */}
         {isLoading ? (
@@ -70,7 +72,7 @@ const Home = () => {
           </div>
         ) : (
           products?.length > 0 ?
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-5 md:gap-5  mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-5 md:gap-5 text-black mx-auto">
               {products?.map((product) => (
                 <ProductsCard
                 key={product._id}
