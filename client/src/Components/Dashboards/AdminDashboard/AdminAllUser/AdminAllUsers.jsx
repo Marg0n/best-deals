@@ -15,36 +15,32 @@ import {
     MenuItem,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
-import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import InfoIcon from '@mui/icons-material/Info';
+import DeleteIcon from '@mui/icons-material/Delete';
+import WarningIcon from '@mui/icons-material/Warning';
+import BlockIcon from '@mui/icons-material/Block';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
-import useUserProfile from '../../../../hooks/useUserProfile';
 import { useQuery } from '@tanstack/react-query';
 
 const VendorProducts = () => {
-    const vendorMail = useUserProfile();
+
     const vendorProducts = useAxiosSecure();
 
-    const { data: allOrders = [], isLoading } = useQuery({
-        queryKey: ["allOrdersForVendor"],
+    const { data: allUserInAdmin = [], isLoading } = useQuery({
+        queryKey: ["allUserInAdmin"],
         queryFn: async () => {
-            const res = await vendorProducts.get('/all-orders');
-            console.log(res.data);
+            const res = await vendorProducts.get('/allUsers');
             return res.data; // Ensure you handle the data correctly here
         },
     });
 
-    const allVendorOrders = allOrders.filter(product => product?.vendorEmail === vendorMail.profile[0]?.email) || [];
-
-    const initialData = allVendorOrders.map(order => ({
-        id: order._id,
-        productId: order.productId,
-        name: order.productName,
-        customer: order.customerName || 'N/A', // Assuming you might want to add category
-        items: order.itemsCount || 'N/A', // Assuming you might want to add price
-        price: order.totalAmount,
-        payment: order.paymentStatus,
-        track: order.orderStatus
+    const initialData = allUserInAdmin.map(user => ({
+        id: user._id,
+        name: user.name,
+        email: user.email, // Assuming you might want to add category
+        lastLogin: user.lastLogin,
+        joined: user.createdTime
+        // Assuming you might want to add price
     }));
 
     const [searchTerm, setSearchTerm] = useState('');
@@ -81,7 +77,7 @@ const VendorProducts = () => {
 
     return (
         <div className="p-4 bg-white rounded-lg">
-            <h1 className="text-3xl mb-4 text-black">All Products</h1>
+            <h1 className="text-3xl mb-4 text-black">All Users</h1>
 
             <div className='w-1/3 mb-4'>
                 <TextField
@@ -101,14 +97,11 @@ const VendorProducts = () => {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <TableCell>Order ID</TableCell>
-                            <TableCell>Product ID</TableCell>
-                            <TableCell>Product Name</TableCell>
-                            <TableCell>Customer</TableCell>
-                            <TableCell>Items</TableCell>
-                            <TableCell>Price</TableCell>
-                            <TableCell>Payment</TableCell>
-                            <TableCell>Track</TableCell>
+                            <TableCell>ID</TableCell>
+                            <TableCell>User Name</TableCell>
+                            <TableCell>E-mail</TableCell>
+                            <TableCell>Joined</TableCell>
+                            <TableCell>Last Login</TableCell>
                             <TableCell>Action</TableCell>
                         </TableRow>
                     </TableHead>
@@ -116,13 +109,10 @@ const VendorProducts = () => {
                         {currentRows.map((row, rowIndex) => (
                             <TableRow key={rowIndex}>
                                 <TableCell>{row.id}</TableCell>
-                                <TableCell>{row.productId}</TableCell>
                                 <TableCell>{row.name}</TableCell>
-                                <TableCell>{row.customer}</TableCell>
-                                <TableCell>{row.items}</TableCell>
-                                <TableCell>{row.price}</TableCell>
-                                <TableCell>{row.payment}</TableCell>
-                                <TableCell>{row.track}</TableCell>
+                                <TableCell>{row.email}</TableCell>
+                                <TableCell>{row.joined}</TableCell>
+                                <TableCell>{row.lastLogin}</TableCell>
                                 <TableCell>
                                     <ActionMenu row={row} />
                                 </TableCell>
@@ -186,10 +176,16 @@ const ActionMenu = ({ row }) => {
             </IconButton>
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
                 <MenuItem onClick={handleClose}>
-                    <FlipCameraAndroidIcon fontSize="small" className='text-green-500'/> <span className='ml-1'>Refund</span>
+                    <InfoIcon fontSize="small" className='text-green-600' /> Details
                 </MenuItem>
                 <MenuItem onClick={handleClose}>
-                    <LocalShippingIcon fontSize="small" className='text-orange-500'/> <span className='ml-1'>Send to Shipment</span> 
+                    <WarningIcon fontSize="small" className='text-yellow-500' /> Warning
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                    <BlockIcon fontSize="small" className='text-zinc-800' /> Ban
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                    <DeleteIcon fontSize="small" className='text-red-500' /> Delete
                 </MenuItem>
             </Menu>
         </div>
@@ -197,33 +193,3 @@ const ActionMenu = ({ row }) => {
 };
 
 export default VendorProducts;
-
-
-
-{/* <IconButton onClick={handleClick}>
-                <MoreVertIcon />
-            </IconButton>
-            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-                <MenuItem onClick={handleClose}>
-                    <DownloadIcon fontSize="small" /> Download
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <EditIcon fontSize="small" /> Edit Order
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <DeleteIcon fontSize="small" /> Delete
-                </MenuItem>
-            </Menu> */}
-
-            // const columns = useMemo(() => [
-            //     { Header: '#', accessor: 'id' },
-            //     { Header: 'Order ID', accessor: 'orderID' },
-            //     { Header: 'Customer Name', accessor: 'customerName' }, 
-            //     { Header: 'Date', accessor: 'date' },
-            //     { Header: 'Items', accessor: 'items' },
-            //     { Header: 'Price', accessor: 'price' },
-            //     { Header: 'Paid', accessor: 'paid' },
-            //     { Header: 'Address', accessor: 'address' },
-            //     { Header: 'Status', accessor: 'status' },
-            //     { Header: 'Action', accessor: 'action', Cell: ({ row }) => <ActionMenu row={row} /> }
-            // ], []);

@@ -8,15 +8,13 @@
   "profilePicture": "https://example.com/profile_pictures/john_doe.jpg",
   "createdAccount": "2024-09-23T10:00:00Z",
   "lastLogin": "2024-09-23T12:00:00Z",
-  "userAddress": {
-    "billing": {
-      "addressLine1": "123 Main St",
-      "addressLine2": "Apt 4B",
-      "city": "Anytown",
-      "state": "CA",
-      "postalCode": "12345",
-      "country": "USA"
-    }
+  "billingAddress": {
+    "addressLine1": "123 Main St",
+    "addressLine2": "Apt 4B",
+    "city": "Anytown",
+    "state": "CA",
+    "postalCode": "12345",
+    "country": "USA"
   },
   "purchaseHistory": [
     {

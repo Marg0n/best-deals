@@ -1,42 +1,67 @@
-import Modal from 'react-modal';
-Modal.setAppElement('#root');
-import { useState } from "react";
-import Invoice from '../Invoice/Invoice';
+
+import { useForm } from 'react-hook-form';
+import PropTypes from 'prop-types';
 
 
-const CheckOutForm = () => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
+const CheckOutForm = ({ onSubmit, contactInfo }) => {
 
-    const handleCheckoutClick = (e) => {
-        e.preventDefault();
-        setIsModalOpen(true);
-    };
+    // react form
+    const {
+        register,
+        handleSubmit,
+        // watch,
+        formState: { errors },
+    } = useForm();
 
-    const closeModal = () => {
-        setIsModalOpen(false);
-    };
+
 
     return (
         <div>
-            <form >
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mt-2">
+
+                    {/* name */}
                     <div>
-                        <label className="text-gray-700 dark:text-gray-200 font-semibold">Your Name</label>
-                        <input name=""
-                            className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
+                        <label className="text-gray-700 dark:text-gray-200 font-semibold">Receiver Name</label>
+                        <input name="uname"
+                            className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                            type='text'
+                            {...register("uname", { required: true })}
+                        />
+                        <div className="mt-1 animate-pulse">
+                            {errors.uname && <span className="text-red-500">Please fill up Name field</span>}
+                        </div>
                     </div>
 
+                    {/* contacts */}
                     <div>
                         <label className="text-gray-700 dark:text-gray-200 font-semibold" >Contact Number</label>
-                        <input required name="" type="" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
+                        <input
+                            name="contact"
+                            type='number'
+                            className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                            {...register("contact", { required: true })}
+                        />
+                        <div className="mt-1 animate-pulse">
+                            {errors.contact && <span className="text-red-500">Please fill up contact field</span>}
+                        </div>
                     </div>
 
+                    {/* address */}
                     <div className="w-full">
                         <label className="text-gray-700 dark:text-gray-200 font-semibold">Billing Address</label>
-                        <textarea required name="feedback" type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring" />
+                        <textarea
+                            name="address"
+                            type="text" className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
+                            {...register("address", { required: true })}
+                        />
+                        <div className="mt-1 animate-pulse">
+                            {errors.address && <span className="text-red-500">Please fill up address field</span>}
+                        </div>
                     </div>
                 </div>
 
+                {/* payment method */}
                 <div className="dark:text-white ">
                     <h2 className="font-bold mt-4 ">Payment Method</h2>
                     <label className="flex items-center">
@@ -45,6 +70,7 @@ const CheckOutForm = () => {
                             name="paymentMethod"
                             value="Cash on delivery"
                             className="radio mt-1"
+                            {...register("paymentMethod", { required: true })}
                         />
                         <span className="ml-2">Cash On Delivery</span>
                     </label>
@@ -55,25 +81,33 @@ const CheckOutForm = () => {
                             value="Card"
                             className="radio mt-1"
                             defaultChecked
+                            {...register("paymentMethod", { required: true })}
                         />
                         <span className="ml-2 ">Debit card / Credit Card</span>
                     </label>
+
+                    <div className="mt-1 animate-pulse">
+                        {errors.paymentMethod && <span className="text-red-500">Please fill up Payment Method field</span>}
+                    </div>
                 </div>
 
+                {(contactInfo == null)
+                    && <button type="submit" className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
+                        Confirm
+                    </button>
+                }
 
-                <button onClick={handleCheckoutClick} type="submit" className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">Show Invoice</button>
+
+
+
             </form>
-            <Modal
-                isOpen={isModalOpen}
-                onRequestClose={closeModal}
-                contentLabel="Order Confirmation Modal"
-                className="p-6  bg-[#d9d9d9] rounded-md max-w-7xl w-2/4 mx-auto mt-20 h-[calc(100vh-8rem)] overflow-y-auto top-16 z-30"
-                overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
-            >
-             <Invoice closeModal={closeModal}></Invoice>
-            </Modal>
         </div>
     );
+};
+
+CheckOutForm.propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+    contactInfo: PropTypes.object,
 };
 
 export default CheckOutForm;

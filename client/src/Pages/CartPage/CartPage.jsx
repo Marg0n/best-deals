@@ -1,11 +1,16 @@
 import { Helmet } from "react-helmet-async";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CartCard from "../../Components/CartCard/CartCard";
 import CheckOutForm from "../../Components/CheckOutForm/CheckOutForm";
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import PaymentModal from "../../Components/Modals/PaymentModal";
 import NoData from "../../Components/NoData/NoData";
 import { ScrollRestoration } from "react-router-dom";
+import { useState } from "react";
+import { MdDeleteSweep } from "react-icons/md";
+import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
+import Swal from "sweetalert2";
+
 
 
 
@@ -13,6 +18,8 @@ const CartPage = () => {
 
     // cart data from redux store
     const cart = useSelector((state) => state.cart)
+
+    const dispacth = useDispatch()
 
 
     // Calculate total quantity and total amount
@@ -24,8 +31,47 @@ const CartPage = () => {
     const discount = 0.00 * totalAmount;
     const grandTotal = totalAmount - discount;
 
+    // state for contact information
+    const [contactInfo, setContactInfo] = useState(null)
+
+    // contact info
+    const onSubmit = async (data) => {
+
+        // fetch data from the form
+        const { address, contact, name, paymentMethod } = data;
+
+        setContactInfo(data);
+    }
+
+    // clear all products from cartList
+
+    const handleClearCartList = () => {
+
+        Swal.fire({
+            title: `Do you want to remove your Cart list?`,
+            text: ` It will remove ${cart.cartIteams.length} items from your cart `,
+            imageUrl: "https://i.ibb.co.com/rpHtZmy/oh-no-message-bubble-sticker-vector-removebg-preview.png",
+            imageWidth: 200,
+            imageHeight: 200,
+            imageAlt: "Custom image",
+            showCancelButton: true,
+            confirmButtonColor: "#1D2236",
+            cancelButtonColor: "#775050",
+            confirmButtonText: "Yes, Delete All!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "Deleted!",
+                    text: "Your Cart is now Empty!",
+                    icon: "success"
+                });
+                dispacth(removeAllFromCartlist())
+            }
+        });
+    }
+
     return (
-        <div className=" flex p-5 gap-5">
+        <div className=" flex p-5 gap-y-5 md:gap-5">
             <Helmet>
                 <title>Best Deal | Cart list</title>
             </Helmet>
@@ -43,13 +89,18 @@ const CartPage = () => {
                         cart.cartIteams.length === 0 ?
                             <div><NoData></NoData></div> :
                             <div>
-                                {
-                                    cart.cartIteams?.map(product =>
+                                <div>
+                                    {cart.cartIteams?.map(product => (
                                         <CartCard
                                             key={product._id}
                                             product={product}
-                                        ></CartCard>)
-                                }
+                                        />
+                                    ))}
+                                </div>
+                                <div onClick={handleClearCartList} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
+                                    <MdDeleteSweep />
+                                    <h1>Clear Cartlist</h1>
+                                </div>
                             </div>
                     }
                 </div>
@@ -88,12 +139,24 @@ const CartPage = () => {
                     </div>
 
                     <div>
-                        <CheckOutForm></CheckOutForm>
+
+
+                        <CheckOutForm
+                            onSubmit={onSubmit}
+                            contactInfo={contactInfo}
+                        ></CheckOutForm>
+
+
 
                         {/* payment method */}
-                        <PaymentModal
-                            CheckoutPrice={parseInt(grandTotal.toFixed(2))}
-                        />
+                        {
+                            contactInfo?.paymentMethod === "Card"
+                            && <PaymentModal
+                                CheckoutPrice={parseInt(grandTotal.toFixed(2))}
+                                contactInfo={contactInfo}
+                                handleClearCartList={handleClearCartList}
+                            />
+                        }
 
                     </div>
                 </div>

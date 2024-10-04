@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import toast from "react-hot-toast";
 
+
 const initialState = {
     cartIteams: [],
     cartTotalQuantity: 0,
@@ -14,7 +15,7 @@ const cartSlice = createSlice({
 
         // add products in cart list
         addToCart(state, action) {
-
+            
             // checking the product is already in the cart array?
             const iteamIndex = state.cartIteams.findIndex(
                 (item) => item._id === action.payload._id
@@ -65,10 +66,15 @@ const cartSlice = createSlice({
             toast.success('Item removed')
         },
 
+        // Remove all items from cartList
+        removeAllFromCartlist(state) {
+            state.cartIteams = [];
+        },
+
 
 
     }
 })
 
-export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart } = cartSlice.actions
+export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart , removeAllFromCartlist } = cartSlice.actions
 export default cartSlice.reducer

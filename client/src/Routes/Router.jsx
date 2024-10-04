@@ -12,6 +12,11 @@ import VendorDashboard from "../Components/Dashboards/VendorDashboard/VendorDash
 import VendorHome from "../Components/Dashboards/VendorDashboard/VendorHome/VendorHome";
 import VendorOrders from "../Components/Dashboards/VendorDashboard/VendorOrders/VendorOrders";
 import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
+import AdminDashboard from "../Components/Dashboards/AdminDashboard/AdminDashboard";
+import AdminHome from "../Components/Dashboards/AdminDashboard/AdminHome/AdminHome";
+import AdminAllUsers from "../Components/Dashboards/AdminDashboard/AdminAllUser/AdminAllUsers";
+import AdminAllVendors from "../Components/Dashboards/AdminDashboard/AdminAllVendor/AdminAllVendors";
+import AdminVendorRequest from "../Components/Dashboards/AdminDashboard/AdminVendorRequest/AdminVendorRequest";
 import PrivateRoute from "./PrivateRoute";
 import MyOrders from "../Pages/MyOrders/MyOrders";
 import MyWishList from "../Pages/MyWishList/MyWishList";
@@ -94,20 +99,42 @@ const Router = createBrowserRouter([
     path: "/vendorDashboard",
     element: <VendorDashboard />,
     children: [
-      {
-        path: "/vendorDashboard",
-        element: <VendorHome />,
-      },
-      {
-        path: "/vendorDashboard/orders",
-        element: <VendorOrders />,
-      },
-      {
-        path: "/vendorDashboard/products",
-        element: <VendorAddProduct />,
-      },
-    ],
+        {
+          path: '/vendorDashboard',
+          element: <VendorHome/>
+        },
+        {
+          path: '/vendorDashboard/orders',
+          element: <VendorOrders/>
+        },
+        {
+          path: '/vendorDashboard/products',
+          element: <VendorAddProduct/>
+        }
+    ]
   },
+  {
+    path: '/adminDashboard',
+    element: <AdminDashboard/>,
+    children: [
+      {
+        path: '/adminDashboard',
+        element: <AdminHome/>
+      }, 
+      {
+        path: '/adminDashboard/allUsers',
+        element: <AdminAllUsers/>
+      },
+      {
+        path: '/adminDashboard/allVendors',
+        element: <AdminAllVendors/>
+      },
+      {
+        path: '/adminDashboard/vendorRequest',
+        element: <AdminVendorRequest/>
+      }
+    ]
+  }
 ]);
 
 export default Router;

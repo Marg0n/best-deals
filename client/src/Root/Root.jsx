@@ -43,10 +43,10 @@ const Root = () => {
   }, []);
 
   return (
-    <div className=" dark:bg-[#2F4161]">
+    <div className="bg-gray-200 dark:bg-[#2F4161]">
       <Toaster />
       <Navbar toggleTheme={toggleTheme} theme={theme} />
-      <div className="max-w-[1440px] mx-auto">
+      <div className="mx-auto">
         <Outlet />
       </div>
       <Footer />

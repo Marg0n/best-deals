@@ -25,7 +25,7 @@ app.use(
       "http://localhost:5173",
       "https://best-deal-909.web.app",
       "https://magenta-peony-5d02de.netlify.app",
-      // server-side
+      
     ],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -145,9 +145,8 @@ async function run() {
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
-    const productCollection = client
-      .db("BestDeals")
-      .collection("ProductCollection");
+    const productCollection = client.db("BestDeals").collection("ProductCollection");
+    const orderCollection = client.db("BestDeals").collection("OrderManagement");
 
     // ==================================
     // Admin verify
@@ -172,9 +171,9 @@ async function run() {
 
     app.post("/create-payment-intent", verifyToken, async (req, res) => {
       const { price } = req.body;
-      // console.log(price)
+
       const amounts = parseFloat(price * 100);
-      // console.log(amounts)
+
 
       // return if...
       // if (amounts <= 0) return
@@ -193,7 +192,7 @@ async function run() {
         // },
       });
 
-      // console.log(paymentIntent)
+
 
       res.send({
         clientSecret: paymentIntent.client_secret,
@@ -210,7 +209,7 @@ async function run() {
     app.post("/users", async (req, res) => {
       try {
         const newUser = req.body;
-        // console.log(newUser);
+
 
         // Check if user already exists
         const query = await usersCollection.findOne({ email: newUser?.email });
@@ -235,7 +234,7 @@ async function run() {
     });
 
     // ==================================
-    // Users login
+    // Users login / profile data
     // ==================================
     app.get("/users/:email", async (req, res) => {
       const mail = req.params?.email;
@@ -244,17 +243,62 @@ async function run() {
     });
 
     // ==================================
-    // Users profile data
+    // Users profiles' Purchase History data
     // ==================================
-    app.get("/profile/:email", async (req, res) => {
+    app.post("/purchaseHistory/:email", async (req, res) => {
       const mail = req.params?.email;
-      const results = await usersCollection.find({ email: mail }).toArray();
+      const body = req?.body;
+      try {
+        const result = await usersCollection.updateOne(
+          { email: mail },
+          { $push: { purchaseHistory: body } },
+          { upsert: true }
+        );
+
+        res.send(result);
+      } catch (error) {
+        console.error('Error inserting purchase history:', error);
+        res.status(500).send({ error: 'Failed to insert purchase history' });
+      }
+    });
+
+    // ==================================
+    // all users data
+    // ==================================
+    app.get('/allUsers', async function (req, res) {
+      const vendor = req?.query?.role;
+      let query = {};
+      if (vendor) {
+        query = { role: { $eq: vendor } };
+      }
+      const results = await usersCollection.find(query).toArray();
       res.send(results);
+    })
+
+    // ==================================
+    // Users profiles' Billing Address data
+    // ==================================
+    app.post("/billingAddress/:email", async (req, res) => {
+      const mail = req.params?.email;
+      const body = req?.body;
+      try {
+        const result = await usersCollection.updateOne(
+          { email: mail },
+          { $push: { billingAddress: body } },
+          { upsert: true }
+        );
+
+        res.send(result);
+      } catch (error) {
+        console.error('Error inserting billing address:', error);
+        res.status(500).send({ error: 'Failed to insert billing address' });
+      }
     });
 
     // ==================================
     // All products API
     // ==================================
+
     app.get("/all-products", async (req, res) => {
       const search = req.query.search || "";
       const minPrice = parseFloat(req.query.minPrice) || 0;
@@ -285,6 +329,33 @@ async function run() {
     });
 
     // ==================================
+    // get all products
+    // ==================================
+
+    app.get('/allVendorProducts', async (req, res) => {
+      const results = await productCollection.find().toArray();
+      res.send(results);
+    })
+
+    // ==================================
+    // Get All orders
+    // ==================================
+    app.get("/all-orders", async (req, res) => {
+      const results = await orderCollection.find().toArray();
+      res.send(results);
+    })
+
+    // ==================================
+    // Post Products
+    // ==================================
+
+    app.post("/all-products", async (req, res) => {
+      const postProduct = req.body;
+      const results = await productCollection.insertOne(postProduct);
+      res.send(results);
+    })
+
+    // ==================================
     // Patch Users' last login
     // ==================================
     app.patch("/lastLogin/:email", async (req, res) => {
@@ -308,12 +379,65 @@ async function run() {
           .json({ message: "Internal server error from last login" });
       }
     });
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // fetch comments
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    app.get('/api/products/:id', async (req, res) => {
+      const productId = req.params.id;
+
+      try {
+        // Find product using string _id
+        const product = await productCollection.findOne({ _id: productId });
+
+        if (product) {
+          res.status(200).json(product);
+        } else {
+          res.status(404).json({ message: 'Product not found' });
+        }
+      } catch (error) {
+        console.error('Error fetching product:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // add comments
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    app.post('/api/products/:id/comments', async (req, res) => {
+      const productId = req.params.id;
+      const { comment, userRating, name, userPhoto } = req.body;
+
+      // Check if all required fields are provided
+      if (!comment || !userRating || !name || !userPhoto) {
+        return res.status(400).json({ message: 'Missing fields' });
+      }
+
+      const newComment = { name, userPhoto, comment, userRating: userRating };
+
+      try {
+        const result = await productCollection.updateOne(
+          { _id: productId },
+          { $push: { comments: newComment } }
+        );
+
+        if (result.modifiedCount === 1) {
+          res.status(200).json({ message: 'Comment added successfully' });
+        } else {
+          res.status(404).json({ message: 'Product not found' });
+        }
+      } catch (error) {
+        console.error('Error adding comment:', error);
+        res.status(500).json({ message: 'Server error' });
+      }
+    });
+
+
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => {});
+    app.use("/user", async (req, res) => { });
 
     await client.db("admin").command({ ping: 1 });
     console.log(

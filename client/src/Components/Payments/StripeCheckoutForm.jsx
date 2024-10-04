@@ -1,5 +1,5 @@
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
-import { PropTypes } from 'prop-types';
+import PropTypes from 'prop-types';
 import { useEffect, useState } from "react";
 import { ImSpinner9 } from "react-icons/im";
 import { useNavigate } from "react-router-dom";
@@ -7,16 +7,29 @@ import { toast } from "react-toastify";
 import useAuth from "../../hooks/useAuth";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import './StripeCheckoutForm.css';
+import Swal from "sweetalert2";
+import InvoiceModal from "../Invoice/InvoiceModal";
+import { useDispatch } from "react-redux";
+import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 
 
-const StripeCheckoutForm = ({ CheckoutPrice, closeModal, booking, handleInvoice }) => {
+const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, handleClearCartList,setChangeInvoice }) => {
+
+    const dispatch= useDispatch()
 
     // strip hooks
     const stripe = useStripe();
     const elements = useElements();
     const axiosSecure = useAxiosSecure();
     const { user } = useAuth();
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+
+    // invoice state
+    const [showInvoiceModal, setShowInvoiceModal] = useState(false);
+    const [paymentInfoForInvoice, setPaymentInfoForInvoice] = useState({});
+
+    // set invoice state
+    setChangeInvoice(showInvoiceModal)
 
     // error handling
     const [paymentError, setPaymentError] = useState('');
@@ -90,7 +103,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, closeModal, booking, handleInvoice 
 
         // payment error
         if (confirmError) {
-            // console.log('confirm payment error ===>', confirmError)
+            console.log('confirm payment error ===>', confirmError)
             setPaymentError(confirmError.message)
             setProcessing(false)
             return
@@ -100,29 +113,61 @@ const StripeCheckoutForm = ({ CheckoutPrice, closeModal, booking, handleInvoice 
         if (paymentIntent.status === 'succeeded') {
             // console.log('succeed payment ===>', paymentIntent)
             // 1. Create payment info object
+            const billingAddress = contactInfo;
             const paymentInfo = {
                 ...booking,
-                roomId: booking._id,
                 transactionId: paymentIntent.id,
-                date: new Date(),
-            }
+            };
+            setPaymentInfoForInvoice(paymentInfo);
             delete paymentInfo._id
             // console.log(paymentInfo)
             try {
                 // 2. save payment info in booking collection (db)
-                //   const { data } = await axiosSecure.post('/booking', paymentInfo)
-                //   console.log(data)
-
-                // 3. change room status to booked in db
-                //   await axiosSecure.patch(`/room/status/${bookingInfo?._id}`, {
-                //     status: true,
-                //   })
+                const { data: data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
+                const { data: data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, billingAddress)
+                console.log('from stripe checkout =>', data1, data2)
 
                 // update ui
-                refetch()
+                // refetch()
+                if (data1 && data2) {
+                    Swal.fire({
+                        title: `Successfully Payed!`,
+                        text: `Your Payment is successful! 🎉`,
+                        icon: 'success',
+                        confirmButtonText: 'Cool!'
+                    }).then((result) => {
+                        dispatch(removeAllFromCartlist())
+                        // toast.success('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "Do you want to Have your Invoice?",
+                                showDenyButton: true,
+                                showCancelButton: true,
+                                confirmButtonText: "Yes!",
+                                denyButtonText: `Nope`
+                            }).then((result) => {
+                                /* Read more about isConfirmed, isDenied below */
+                                if (result.isConfirmed) {
+                                    // Swal.fire("Saved!", "", "success");
+                                    setShowInvoiceModal(true);
+                                    navigate('/cartlist');
+                                }
+                                else if (result.isDenied) {
+                                    Swal.fire("We understand your choice!", "", "info");
+                                    setShowInvoiceModal(true);
+                                }
+                            });
+
+                        }
+                        // refetch()
+                    });
+                } else {
+                    toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
+                    // refetch()
+                }
+
                 closeModal()
-                toast.success('Room Booked Successfully', { autoClose: 2000, theme: "colored" })
-                navigate('/allTestPage')
+
             } catch (err) {
                 // console.log(err)
                 toast.error(`Something went Wrong! : ${err.message}`, { autoClose: 2000, theme: "colored" })
@@ -134,40 +179,59 @@ const StripeCheckoutForm = ({ CheckoutPrice, closeModal, booking, handleInvoice 
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <CardElement
-                options={{
-                    style: {
-                        base: {
-                            fontSize: '16px',
-                            color: '#424770',
-                            '::placeholder': {
-                                color: '#aab7c4',
+        <>
+            <form onSubmit={handleSubmit}>
+                {!showInvoiceModal && (
+                    <CardElement
+                        options={{
+                            style: {
+                                base: {
+                                    fontSize: '16px',
+                                    color: '#424770',
+                                    '::placeholder': {
+                                        color: '#aab7c4',
+                                    },
+                                },
+                                invalid: {
+                                    color: '#9e2146',
+                                },
                             },
-                        },
-                        invalid: {
-                            color: '#9e2146',
-                        },
-                    },
-                }}
-            />
-
-            {/* error message */}
-            {paymentError && <p className="text-red-500 my-2">{paymentError}</p>}
-
-            <button
-                type="submit"
-                className="btn btn-primary w-full"
-                onClick={handleInvoice}
-                disabled={!stripe || !clientSecret || processing}>
-                {processing ? (
-                    <ImSpinner9 className='animate-spin m-auto' size={24} />
-                ) : (
-                    `Pay ${CheckoutPrice}$`
+                        }}
+                    />
                 )}
-            </button>
 
-        </form>
+
+                {/* error message */}
+                {paymentError && <p className="text-red-500 my-2">{paymentError}</p>}
+
+                {!showInvoiceModal && (
+                    <button
+                        type="submit"
+                        className="btn btn-primary w-full"
+                        // onClick={handleInvoice}
+                        disabled={!stripe || !clientSecret || processing}>
+                        {processing ? (
+                            <ImSpinner9 className='animate-spin m-auto' size={24} />
+                        ) : (
+                            `Pay ${CheckoutPrice}$`
+                        )}
+                    </button>
+                )}
+
+
+            </form>
+
+            {/* invoice */}
+            {showInvoiceModal && (
+                <InvoiceModal
+                    handleClearCartList={handleClearCartList}
+                    CheckoutPrice={CheckoutPrice}
+                    contactInfo={contactInfo}
+                    paymentInfo={paymentInfoForInvoice}
+                    closeModal={closeModal}
+                />
+            )}
+        </>
     );
 };
 
@@ -176,7 +240,9 @@ StripeCheckoutForm.propTypes = {
     // refetch: PropTypes.func,
     closeModal: PropTypes.func,
     booking: PropTypes.object,
-    handleInvoice: PropTypes.func,
+    contactInfo: PropTypes.object,
+    handleClearCartList: PropTypes.func,
+    setChangeInvoice: PropTypes.func,
     // isOpen: PropTypes.bool,
 }
 

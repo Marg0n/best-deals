@@ -1,8 +1,9 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import VendorSideBar from './VendorHome/VendorSideBar.jsx/VendorSideBar';
+import VendorSideBar from './VendorSideBar.jsx/VendorSideBar';
 
 const VendorDashboard = () => {
+  
   return (
     <div className="flex">
       <VendorSideBar />
