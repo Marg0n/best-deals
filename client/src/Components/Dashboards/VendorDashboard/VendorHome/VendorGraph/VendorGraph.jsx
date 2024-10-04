@@ -18,7 +18,7 @@ const VendorGraph = () => {
         },
     });
 
-    const allVendorOrders = allOrders?.filter(product => product?.vendorEmail === vendorMail.profile[0]?.email) || [];
+    const allVendorOrders = allOrders?.filter(product => product?.vendorEmail === vendorMail.profile[0]?.email);
 
     let total = allVendorOrders?.reduce((previousValue, currentValue) => {
         return (previousValue + (currentValue.itemsCount * currentValue.totalAmount));

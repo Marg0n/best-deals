@@ -26,7 +26,7 @@ const VendorProducts = () => {
     const vendorProducts = useAxiosSecure();
 
     const { data: allOrders = [], isLoading } = useQuery({
-        queryKey: ["allOrders"],
+        queryKey: ["allOrdersForVendor"],
         queryFn: async () => {
             const res = await vendorProducts.get('/all-orders');
             console.log(res.data);
