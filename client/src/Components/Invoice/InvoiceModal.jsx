@@ -19,7 +19,7 @@ const InvoiceModal = ({ handleClearCartList, CheckoutPrice, contactInfo, payment
         closeStripeModal();
 
         // clear cart list
-        { cart.cartIteams.length < 1 && handleClearCartList(); }
+        // { cart.cartIteams.length < 1 && handleClearCartList(); }
 
     };
 
