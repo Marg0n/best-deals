@@ -17,7 +17,6 @@ const Navbar = ({ toggleTheme, theme }) => {
 
   // user profile data
   const { profile } = useUserProfile();
-  console.log(profile[0].role)
 
   // State to track whether the dropdown is open or closed
   const [dropdown, setDropdown] = useState(false);
@@ -32,7 +31,7 @@ const Navbar = ({ toggleTheme, theme }) => {
     <>
       {/* Admin dashboard */}
       {
-        profile[0].role === 'Admin'
+        profile[0]?.role === 'Admin'
         && <li>
           <Link to="adminDashboard" className="text-base-100 font-semibold">
             Admin Dashboard
@@ -41,7 +40,7 @@ const Navbar = ({ toggleTheme, theme }) => {
       }
       {/* Vendor dashboard */}
       {
-        profile[0].role === 'Vendor'
+        profile[0]?.role === 'Vendor'
         && <li>
           <Link to="vendorDashboard" className="text-base-100 font-semibold">
             Vendor Dashboard
@@ -50,9 +49,9 @@ const Navbar = ({ toggleTheme, theme }) => {
       }
       {/* User dashboard */}
       {
-        profile[0].role === 'User'
+        profile[0]?.role === 'User'
         && <li>
-          <Link to="adminDashboard" className="text-base-100 font-semibold">
+          <Link to="userDashboard" className="text-base-100 font-semibold">
             User Dashboard
           </Link>
         </li>
