@@ -28,6 +28,8 @@ import Feedback from "../Pages/Feedback/Feedback";
 import UserDashboard from "../Components/Dashboards/UserDashboard/UserDashboard";
 import UserRoute from "./UserRoute";
 import UserHome from "../Components/Dashboards/UserDashboard/UserHome/UserHome";
+import AdminRoutes from './AdminRoutes';
+import VendorRoute from './VendorRoute';
 
 const Router = createBrowserRouter([
   {
@@ -100,7 +102,7 @@ const Router = createBrowserRouter([
   },
   {
     path: "/vendorDashboard",
-    element: <VendorDashboard />,
+    element: <VendorRoute><VendorDashboard/></VendorRoute>,
     children: [
         {
           path: '/vendorDashboard',
@@ -118,7 +120,7 @@ const Router = createBrowserRouter([
   },
   {
     path: '/adminDashboard',
-    element: <AdminDashboard/>,
+    element: <AdminRoutes><AdminDashboard/></AdminRoutes>,
     children: [
       {
         path: '/adminDashboard',
