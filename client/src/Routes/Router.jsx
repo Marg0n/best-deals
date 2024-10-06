@@ -25,6 +25,9 @@ import FavoriteVendor from "../Pages/FavoriteVendor/FavoriteVendor";
 import AccountSettings from "../Pages/AccountSettings/AccountSettings";
 import AboutUs from "../Pages/AboutUs/AboutUs";
 import Feedback from "../Pages/Feedback/Feedback";
+import UserDashboard from "../Components/Dashboards/UserDashboard/UserDashboard";
+import UserRoute from "./UserRoute";
+import UserHome from "../Components/Dashboards/UserDashboard/UserHome/UserHome";
 
 const Router = createBrowserRouter([
   {
@@ -134,6 +137,16 @@ const Router = createBrowserRouter([
         element: <AdminVendorRequest/>
       }
     ]
+  },
+  {
+    path: '/userDashboard',
+    element: <UserRoute><UserDashboard/></UserRoute>,
+    children: [
+      {
+        index: true,
+        element: <UserHome/>,
+      },
+    ],
   }
 ]);
 
