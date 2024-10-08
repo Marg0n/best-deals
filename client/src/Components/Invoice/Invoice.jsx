@@ -168,7 +168,7 @@ const Invoice = ({ closeModal, CheckoutPrice, contactInfo, paymentInfo, handleCl
                         <hr className='border-b-2 border-white' />
                         <div className='flex items-center justify-between'>
                             <p className='text-[#191c21] text-xs font-medium'>Total</p>
-                            <p className='text-[#5e6470] text-xs font-medium'>{CheckoutPrice}</p>
+                            <p className='text-[#5e6470] text-xs font-medium'>{totalAmount}</p>
                         </div>
                         <hr className='border-b-2 border-white' />
                         <div className='flex items-center justify-between'>
