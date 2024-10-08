@@ -42,7 +42,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
     setClickedCategory("");
     setSelectedCategory("");
     setPriceRangeFilter([0, 1000]);
-    setPriceRange([0, 1000]);
+    setPriceRange([0, '']);
   };
 
   // Select category to filter product
@@ -58,18 +58,18 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
   };
 
   return (
-    <div className="sticky top-16 h-[calc(100vh-8rem)] z-30 overflow-y-auto dark:bg-[#34394C]">
+    <div className="sticky top-16 h-[calc(100vh-4rem)] z-30 overflow-y-auto bg-gray-200 dark:bg-[#34394C]">
       {/* Left Side menubar / categorybar */}
       <div className="lg:flex-1 hidden lg:block py-5">
         <form onSubmit={handleSearch}>
           {/* SearchBar */}
-          <div className="w-3/4 mx-auto">
-            <label className="input input-bordered flex items-center gap-2">
+          <div className="w-3/4 mx-auto ">
+            <label className="input input-bordered flex items-center bg-gray-200 gap-2 border-1 border-[#775050]">
               <input
                 onChange={(e) => setSearchText(e.target.value)}
                 value={searchText}
                 type="text"
-                className="w-full px-3 py-1"
+                className="w-full px-3 py-1 "
                 placeholder="Search"
               />
               <button>
@@ -163,12 +163,23 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
                   <Link to="/feedback">Feedback </Link>
                 </li>
                 <li>Complain Vendor</li>
+                <li>
+                  <Link to="/accountSettings">Account Settings</Link>
+                </li>
+                <li>
+                  <Link to="/aboutUs">About Us</Link>
+                </li>
+                <li>
+                  <Link to="/feedback">Feedback </Link>
+                </li>
+                <li>Complain Vendor</li>
               </ul>
             </div>
           </div>
         </form>
       </div>
     </div>
+
   );
 };
 

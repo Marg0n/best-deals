@@ -11,7 +11,7 @@ const ThemeController = ({ toggleTheme, theme }) => {
                     className="toggle theme-controller sr-only"
                 />
 
-                <div className="w-14 h-7 bg-base-content rounded-full"></div>
+                <div className="w-14 h-7 bg-gray-700 rounded-full"></div>
                 <div className={`absolute left-1 top-1 w-5 h-5 bg-white  rounded-full transition-transform transform ${theme === "dark" ? 'translate-x-7' : 'translate-x-0'}`}></div>
 
                 {/* Conditionally render SVG based on the theme */}

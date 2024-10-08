@@ -1,139 +1,151 @@
-import React, { useMemo, useState } from 'react';
-import { useTable, usePagination } from 'react-table';
+import React, { useState } from 'react';
 import {
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Menu, MenuItem, Button, Typography, TextField,
-
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
+    TextField,
+    Button,
+    Typography,
+    IconButton,
+    Menu,
+    MenuItem,
 } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DownloadIcon from '@mui/icons-material/Download';
-import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Link } from 'react-router-dom';
+import FlipCameraAndroidIcon from '@mui/icons-material/FlipCameraAndroid';
+import LocalShippingIcon from '@mui/icons-material/LocalShipping';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
+import useUserProfile from '../../../../hooks/useUserProfile';
+import { useQuery } from '@tanstack/react-query';
 
-const VendorOrders = () => {
-    const [searchTerm, setSearchTerm] = useState(''); 
-    
-    const handleSearchChange = (e) => {
-        setSearchTerm(e.target.value);
-    };
+const VendorProducts = () => {
+    const vendorMail = useUserProfile();
+    const vendorProducts = useAxiosSecure();
 
-    // Define columns (memoized to avoid re-rendering issues)
-    const columns = useMemo(() => [
-        { Header: '#', accessor: 'id' },
-        { Header: 'Order ID', accessor: 'orderID' },
-        { Header: 'Customer Name', accessor: 'customerName' }, 
-        { Header: 'Date', accessor: 'date' },
-        { Header: 'Items', accessor: 'items' },
-        { Header: 'Price', accessor: 'price' },
-        { Header: 'Paid', accessor: 'paid' },
-        { Header: 'Address', accessor: 'address' },
-        { Header: 'Status', accessor: 'status' },
-        { Header: 'Action', accessor: 'action', Cell: ({ row }) => <ActionMenu row={row} /> }
-    ], []);
+    const { data: allOrders = [], isLoading } = useQuery({
+        queryKey: ["allOrdersForVendor"],
+        queryFn: async () => {
+            const res = await vendorProducts.get('/all-orders');
+            console.log(res.data);
+            return res.data; // Ensure you handle the data correctly here
+        },
+    });
 
-    // Sample data
-    const data = useMemo(() => [
-        { id: 1, orderID: '675902', customerName: 'John Doe', date: '17 Jan, 2024', items: 10, price: '$376.00', paid: 'Yes', address: 'Beaverton, OR 97005', status: 'Complete' },
-        { id: 2, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 3, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 4, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 5, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 6, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 7, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 8, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 9, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 10, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 11, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 12, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 13, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-        { id: 14, orderID: '675909', customerName: 'Jane Smith', date: '1 Feb, 2024', items: 22, price: '$210.00', paid: 'No', address: 'Savannah, GA 31404', status: 'Pending' },
-    ], []);
+    const allVendorOrders = allOrders.filter(product => product?.vendorEmail === vendorMail.profile[0]?.email) || [];
 
-    const filteredData = useMemo(() => {
-        return data.filter((order) => order.customerName.toLowerCase().includes(searchTerm.toLowerCase()));
-    }, [searchTerm, data]);
+    const initialData = allVendorOrders.map(order => ({
+        id: order._id,
+        productId: order.productId,
+        name: order.productName,
+        customer: order.customerName || 'N/A', // Assuming you might want to add category
+        items: order.itemsCount || 'N/A', // Assuming you might want to add price
+        price: order.totalAmount,
+        payment: order.paymentStatus,
+        track: order.orderStatus
+    }));
 
+    const [searchTerm, setSearchTerm] = useState('');
+    const [currentPage, setCurrentPage] = useState(0);
+    const rowsPerPage = 5; // Set number of rows per page
 
-    const {
-        getTableProps,
-        getTableBodyProps,
-        headerGroups,
-        prepareRow,
-        page, 
-        nextPage,
-        previousPage,
-        canNextPage,
-        canPreviousPage,
-        pageOptions,
-        state: { pageIndex },
-    } = useTable(
-        { columns, data: filteredData, initialState: { pageIndex: 0 } },
-        usePagination
+    const filteredData = initialData.filter(item =>
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
+    const combinedData = [...filteredData];
+
+    const totalPages = Math.ceil(combinedData.length / rowsPerPage);
+    const currentRows = combinedData.slice(
+        currentPage * rowsPerPage,
+        currentPage * rowsPerPage + rowsPerPage
+    );
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages - 1) {
+            setCurrentPage(prevPage => prevPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 0) {
+            setCurrentPage(prevPage => prevPage - 1);
+        }
+    };
+
+    if (isLoading) {
+        return <Typography>Loading...</Typography>; // Show loading state
+    }
+
     return (
-        <div className="p-4 bg-gray-200">
-            <div className="flex justify-between items-center mb-4">
-                <Typography variant="h5" className="font-extrabold text-black">Order Management</Typography>
+        <div className="p-4 bg-white rounded-lg">
+            <h1 className="text-3xl mb-4 text-black">All Products</h1>
 
-                <Button variant="contained" color="primary" startIcon={<AddIcon />} component={Link} to={'/vendorDashboard/products'}>
-                    New Product
-                </Button>
-            </div>
-
-            {/* Search Input */}
-            <div className="mb-4 bg-white w-1/3 rounded-lg">
+            <div className='w-1/3 mb-4'>
                 <TextField
-                    label="Search by Customer Name"
-                    value={searchTerm}
-                    onChange={handleSearchChange}
-                    fullWidth
+                    label="Search by Product Name"
                     variant="outlined"
+                    className='bg-gray-200'
+                    fullWidth
+                    margin="normal"
+                    onChange={(e) => {
+                        setSearchTerm(e.target.value);
+                        setCurrentPage(0); // Reset to first page on search
+                    }}
                 />
             </div>
 
-            {/* Table */}
-            <TableContainer component={Paper}>
-                <Table {...getTableProps()} className="min-w-full">
+            <div className='border-2'><TableContainer component={Paper}>
+                <Table>
                     <TableHead>
-                        {headerGroups.map((headerGroup) => (
-                            <TableRow {...headerGroup.getHeaderGroupProps()}>
-                                {headerGroup.headers.map((column) => (
-                                    <TableCell {...column.getHeaderProps()}>{column.render('Header')}</TableCell>
-                                ))}
+                        <TableRow>
+                            <TableCell>Order ID</TableCell>
+                            <TableCell>Product ID</TableCell>
+                            <TableCell>Product Name</TableCell>
+                            <TableCell>Customer</TableCell>
+                            <TableCell>Items</TableCell>
+                            <TableCell>Price</TableCell>
+                            <TableCell>Payment</TableCell>
+                            <TableCell>Track</TableCell>
+                            <TableCell>Action</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {currentRows.map((row, rowIndex) => (
+                            <TableRow key={rowIndex}>
+                                <TableCell>{row.id}</TableCell>
+                                <TableCell>{row.productId}</TableCell>
+                                <TableCell>{row.name}</TableCell>
+                                <TableCell>{row.customer}</TableCell>
+                                <TableCell>{row.items}</TableCell>
+                                <TableCell>{row.price}</TableCell>
+                                <TableCell>{row.payment}</TableCell>
+                                <TableCell>{row.track}</TableCell>
+                                <TableCell>
+                                    <ActionMenu row={row} />
+                                </TableCell>
                             </TableRow>
                         ))}
-                    </TableHead>
-
-                    <TableBody {...getTableBodyProps()}>
-                        {page.map((row) => {
-                            prepareRow(row);
-                            return (
-                                <TableRow {...row.getRowProps()}>
-                                    {row.cells.map((cell) => (
-                                        <TableCell {...cell.getCellProps()}>{cell.render('Cell')}</TableCell>
-                                    ))}
-                                </TableRow>
-                            );
-                        })}
                     </TableBody>
                 </Table>
-            </TableContainer>
+            </TableContainer></div>
 
-            {/* Pagination */}
             <div className="flex justify-between items-center my-4">
                 <Button
-                    onClick={previousPage}
-                    disabled={!canPreviousPage}
+                    onClick={handlePreviousPage}
+                    disabled={currentPage === 0}
                     variant="outlined"
                 >
                     Previous
                 </Button>
-                <Typography>Page {pageIndex + 1} of {pageOptions.length}</Typography>
+                <Typography>
+                    Page {currentPage + 1} of {totalPages}
+                </Typography>
                 <Button
-                    onClick={nextPage}
-                    disabled={!canNextPage}
+                    onClick={handleNextPage}
+                    disabled={currentPage === totalPages - 1}
                     variant="outlined"
                 >
                     Next
@@ -155,9 +167,40 @@ const ActionMenu = ({ row }) => {
         setAnchorEl(null);
     };
 
+    const handleEdit = () => {
+        console.log('Edit Product:', row);
+        handleClose(); // Close menu after action
+        // Add your edit logic here (e.g., open a modal with the product data)
+    };
+
+    const handleDelete = () => {
+        console.log('Delete Product:', row);
+        handleClose(); // Close menu after action
+        // Add your delete logic here (e.g., confirm and delete the product)
+    };
+
     return (
         <div>
             <IconButton onClick={handleClick}>
+                <MoreVertIcon />
+            </IconButton>
+            <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+                <MenuItem onClick={handleClose}>
+                    <FlipCameraAndroidIcon fontSize="small" className='text-green-500'/> <span className='ml-1'>Refund</span>
+                </MenuItem>
+                <MenuItem onClick={handleClose}>
+                    <LocalShippingIcon fontSize="small" className='text-orange-500'/> <span className='ml-1'>Send to Shipment</span> 
+                </MenuItem>
+            </Menu>
+        </div>
+    );
+};
+
+export default VendorProducts;
+
+
+
+{/* <IconButton onClick={handleClick}>
                 <MoreVertIcon />
             </IconButton>
             <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
@@ -170,9 +213,17 @@ const ActionMenu = ({ row }) => {
                 <MenuItem onClick={handleClose}>
                     <DeleteIcon fontSize="small" /> Delete
                 </MenuItem>
-            </Menu>
-        </div>
-    );
-};
+            </Menu> */}
 
-export default VendorOrders;
+            // const columns = useMemo(() => [
+            //     { Header: '#', accessor: 'id' },
+            //     { Header: 'Order ID', accessor: 'orderID' },
+            //     { Header: 'Customer Name', accessor: 'customerName' }, 
+            //     { Header: 'Date', accessor: 'date' },
+            //     { Header: 'Items', accessor: 'items' },
+            //     { Header: 'Price', accessor: 'price' },
+            //     { Header: 'Paid', accessor: 'paid' },
+            //     { Header: 'Address', accessor: 'address' },
+            //     { Header: 'Status', accessor: 'status' },
+            //     { Header: 'Action', accessor: 'action', Cell: ({ row }) => <ActionMenu row={row} /> }
+            // ], []);

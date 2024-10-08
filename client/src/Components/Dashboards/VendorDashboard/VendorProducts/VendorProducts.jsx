@@ -18,22 +18,24 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
-import useUserProfile from '../../../../hooks/useUserProfile';
 import { useQuery } from '@tanstack/react-query';
+import useAuth from '../../../../hooks/useAuth';
 
 const VendorProducts = () => {
-    const vendorMail = useUserProfile();
-    const vendorProducts = useAxiosSecure();
 
-    const { data: products = [], isLoading } = useQuery({
-        queryKey: ["products"],
+    const vendorProducts = useAxiosSecure();
+    const {user} = useAuth();
+
+    const { data: vendorAllProducts = [], isLoading } = useQuery({
+        queryKey: ["productsForVendor"],
         queryFn: async () => {
-            const res = await vendorProducts.get('/all-products');
+            const res = await vendorProducts.get('/allVendorProducts');
             return res.data; // Ensure you handle the data correctly here
         },
     });
-
-    const allVendorProducts = products.filter(product => product?.email === vendorMail.profile[0]?.email) || [];
+//
+    const allVendorProducts = vendorAllProducts?.filter(product => product?.email === user?.email);
+    console.log(allVendorProducts);
 
     const initialData = allVendorProducts.map(product => ({
         id: product._id,

@@ -327,7 +327,7 @@ const Registration = () => {
 
             {/* photo */}
             <div className='mt-4'>
-              <label htmlFor='image' className='block mb-2 text-sm  font-medium '>
+              <label htmlFor='image' className='block mb-2 text-sm  font-medium text-gray-600'>
                 Upload Avatar:
               </label>
 
