@@ -29,7 +29,7 @@ const UserHome = () => {
     return (
         <div className="p-8 min-h-screen space-y-4">
             {/* stat section */}
-            <div className='flex gap-2 shadow-lg rounded-md'>
+            <div className='flex gap-2 shadow-lg rounded-md items-center justify-center'>
                 <StatCard
                     title={'Total Times Buy'}
                     value={profile[0]?.purchaseHistory.length}
