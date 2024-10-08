@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 
 const Navbar = ({ toggleTheme, theme }) => {
   const { user, loggedOut } = useAuth();
-
+  
   // cart data from redux store
   const cart = useSelector((state) => state.cart);
 
@@ -106,7 +106,7 @@ const Navbar = ({ toggleTheme, theme }) => {
           </button> */}
 
           {/* nav bar search */}
-          <fieldset className="w-full space-y-1 dark:text-gray-800 lg:hidden flex">
+          {/* <fieldset className="w-full space-y-1 dark:text-gray-800 lg:hidden flex">
             <label htmlFor="Search" className="hidden">
               Search
             </label>
@@ -133,7 +133,7 @@ const Navbar = ({ toggleTheme, theme }) => {
                 className="w-32 py-2 pl-10 text-sm rounded-md sm:w-auto focus:outline-none dark:bg-gray-100 dark:text-gray-800 focus:dark:bg-gray-50 focus:dark:border-violet-600"
               />
             </div>
-          </fieldset>
+          </fieldset> */}
 
           {/* cart */}
           <div className="dropdown dropdown-end lg:flex hidden">

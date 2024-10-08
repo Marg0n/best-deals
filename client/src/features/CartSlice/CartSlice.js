@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import toast from "react-hot-toast";
+
 
 
 const initialState = {
@@ -28,6 +30,7 @@ const cartSlice = createSlice({
             }
             else {
                 const tempProducts = { ...action.payload, cartQuantity: action.payload.cartQuantity };
+                axios.post(`${import.meta.env.VITE_SERVER}/cartList` , tempProducts)
                 toast.success('Added to the cart')
                 state.cartIteams.push(tempProducts)
             }
@@ -70,6 +73,8 @@ const cartSlice = createSlice({
         removeAllFromCartlist(state) {
             state.cartIteams = [];
         },
+
+        
 
 
 

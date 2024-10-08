@@ -25,7 +25,7 @@ app.use(
       "http://localhost:5173",
       "https://best-deal-909.web.app",
       "https://magenta-peony-5d02de.netlify.app",
-      
+
     ],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -147,6 +147,7 @@ async function run() {
     const usersCollection = client.db("BestDeals").collection("UserCollection");
     const productCollection = client.db("BestDeals").collection("ProductCollection");
     const orderCollection = client.db("BestDeals").collection("OrderManagement");
+    const cartList = client.db("BestDeals").collection("CartList");
 
     // ==================================
     // Admin verify
@@ -209,7 +210,6 @@ async function run() {
     app.post("/users", async (req, res) => {
       try {
         const newUser = req.body;
-
 
         // Check if user already exists
         const query = await usersCollection.findOne({ email: newUser?.email });
@@ -437,6 +437,32 @@ async function run() {
         res.status(500).json({ message: 'Server error' });
       }
     });
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // cartList collection
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    app.post('/cartList', async (req, res) => {
+      try {
+        const cartItem = req.body; // The cart item data sent from the frontend
+        console.log('Received cart item:', cartItem);
+
+        // Insert the cart item into the collection
+        const result = await cartList.insertOne(cartItem);
+        console.log(result);
+        
+        // Send a success response back to the frontend
+        res.status(201).json({ message: 'Item added to cart successfully' });
+    } catch (error) {
+        console.error('Error adding item to cart:', error);
+        res.status(500).json({ message: 'Failed to add item to cart', error });
+    }
+    });
+
+
+
+
 
 
 

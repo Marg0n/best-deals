@@ -20,8 +20,8 @@ const ProductsCard = ({ product }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="w-full ">
-      <div className="relative">
+    <div className="w-full max-w-96 mx-auto">
+      <div className="relative ">
         <Link to={`/details/${_id}`}>
           <div
             onMouseEnter={() => setIsHovered(true)}
