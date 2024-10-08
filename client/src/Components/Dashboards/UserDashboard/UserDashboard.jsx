@@ -1,7 +1,7 @@
+import PropTypes from 'prop-types';
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import UserSideBar from './UserSideBar';
-import PropTypes from 'prop-types';
 
 // mui components
 import Box from '@mui/material/Box';
@@ -94,7 +94,7 @@ const UserDashboard = (props) => {
 
                 {/* outlet */}
                 <div
-                    className='w-full'
+                    className='w-full bg-[#0cc0df]/90'
                     component="main"
                 >
                     <Outlet />

@@ -113,11 +113,11 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
         if (paymentIntent.status === 'succeeded') {
             // console.log('succeed payment ===>', paymentIntent)
             // 1. Create payment info object
-            const billingAddress = contactInfo;
             const paymentInfo = {
                 ...booking,
                 transactionId: paymentIntent.id,
             };
+            const billingAddress = {...contactInfo, transactionId: paymentIntent.id,};
             setPaymentInfoForInvoice(paymentInfo);
             delete paymentInfo._id
             // console.log(paymentInfo)
