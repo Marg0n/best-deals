@@ -29,16 +29,33 @@ const Navbar = ({ toggleTheme, theme }) => {
   // user lists
   const list = (
     <>
-      <li>
-        <Link to="vendorDashboard" className="text-base-100 font-semibold">
-         Vendor Dashboard
-        </Link>
-      </li>
-      <li>
-        <Link to="adminDashboard" className="text-base-100 font-semibold">
-         Admin Dashboard
-        </Link>
-      </li>
+      {/* Admin dashboard */}
+      {
+        profile[0]?.role === 'Admin'
+        && <li>
+          <Link to="adminDashboard" className="text-base-100 font-semibold">
+            Admin Dashboard
+          </Link>
+        </li>
+      }
+      {/* Vendor dashboard */}
+      {
+        profile[0]?.role === 'Vendor'
+        && <li>
+          <Link to="vendorDashboard" className="text-base-100 font-semibold">
+            Vendor Dashboard
+          </Link>
+        </li>
+      }
+      {/* User dashboard */}
+      {
+        profile[0]?.role === 'User'
+        && <li>
+          <Link to="userDashboard" className="text-base-100 font-semibold">
+            User Dashboard
+          </Link>
+        </li>
+      }
       <li>
         <Link to="" className="text-base-100 font-semibold">
           Settings
@@ -66,9 +83,8 @@ const Navbar = ({ toggleTheme, theme }) => {
 
   return (
     <div
-      className={`supports-backdrop-blur:bg-[#775050]/90 sticky top-0 z-40 w-full backdrop-blur-lg ${
-        theme === "light" ? "bg-[#775050]/40" : "bg-[#ACBCDF]/40"
-      }`}
+      className={`supports-backdrop-blur:bg-[#775050]/90 sticky top-0 z-40 w-full backdrop-blur-lg ${theme === "light" ? "bg-[#775050]/40" : "bg-[#ACBCDF]/40"
+        }`}
     >
       <div className="navbar  container mx-auto">
         {/* logo */}
@@ -90,7 +106,7 @@ const Navbar = ({ toggleTheme, theme }) => {
           </button> */}
 
           {/* nav bar search */}
-          <fieldset className="w-full space-y-1 dark:text-gray-800 lg:hidden flex">
+          {/* <fieldset className="w-full space-y-1 dark:text-gray-800 lg:hidden flex">
             <label htmlFor="Search" className="hidden">
               Search
             </label>
@@ -117,7 +133,7 @@ const Navbar = ({ toggleTheme, theme }) => {
                 className="w-32 py-2 pl-10 text-sm rounded-md sm:w-auto focus:outline-none dark:bg-gray-100 dark:text-gray-800 focus:dark:bg-gray-50 focus:dark:border-violet-600"
               />
             </div>
-          </fieldset>
+          </fieldset> */}
 
           {/* cart */}
           <div className="dropdown dropdown-end lg:flex hidden">
@@ -196,16 +212,15 @@ const Navbar = ({ toggleTheme, theme }) => {
                     <img
                       alt="profile"
                       data-tooltip-id="name-tooltip"
-                      data-tooltip-content={`${
-                        user?.displayName || profile[0]?.name
-                      }`}
+                      data-tooltip-content={`${user?.displayName || profile[0]?.name
+                        }`}
                       referrerPolicy="no-referrer"
                       src={
                         user?.photoURL
                           ? user?.photoURL
                           : profile[0]?.photo
-                          ? profile[0]?.photo
-                          : unknown
+                            ? profile[0]?.photo
+                            : unknown
                       }
                     />
                     <Tooltip id="name-tooltip" />
@@ -221,13 +236,12 @@ const Navbar = ({ toggleTheme, theme }) => {
                       <p className="flex justify-center items-center font-medium text-base-100">
                         Hi,
                         <span
-                          className={`${
-                            profile[0]?.role !== "Admin"
-                              ? profile[0]?.role === "User"
-                                ? "text-[#423f3f] font-mono badge badge-neutral badge-outline"
-                                : "text-base badge badge-neutral font-mono "
-                              : "text-base badge badge-primary font-mono "
-                          }`}
+                          className={`${profile[0]?.role !== "Admin"
+                            ? profile[0]?.role === "User"
+                              ? "text-[#423f3f] font-mono badge badge-neutral badge-outline"
+                              : "text-base badge badge-neutral font-mono "
+                            : "text-base badge badge-primary font-mono "
+                            }`}
                         >
                           {profile[0]?.role ? profile[0]?.role : ""}
                         </span>

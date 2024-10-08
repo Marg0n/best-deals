@@ -3,6 +3,9 @@ import { CiSearch } from "react-icons/ci";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
+import Drawer from "../Drawer/Drawer";
+import { AiOutlineClose } from "react-icons/ai";
+
 
 const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
   const [searchText, setSearchText] = useState("");
@@ -58,126 +61,151 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
   };
 
   return (
-    <div className="sticky top-16 h-[calc(100vh-4rem)] z-30 overflow-y-auto bg-gray-200 dark:bg-[#34394C]">
-      {/* Left Side menubar / categorybar */}
-      <div className="lg:flex-1 hidden lg:block py-5">
-        <form onSubmit={handleSearch}>
-          {/* SearchBar */}
-          <div className="w-3/4 mx-auto ">
-            <label className="input input-bordered flex items-center bg-gray-200 gap-2 border-1 border-[#775050]">
-              <input
-                onChange={(e) => setSearchText(e.target.value)}
-                value={searchText}
-                type="text"
-                className="w-full px-3 py-1 "
-                placeholder="Search"
-              />
-              <button>
-                <CiSearch className="h-10 w-10" />
-              </button>
-            </label>
-          </div>
+    <div className="sticky top-16 z-30 bg-gray-200 dark:bg-[#34394C]">
 
-          <div className="text-[#775050] dark:text-white">
-            <div className="flex justify-between mt-1 px-3">
-              <div className="flex">
-                <Link to="/" className="underline underline-offset-1">
-                  Home
-                </Link>
-                {clickeCategory.length > 0 ? ">" : ""}
-                <p>{clickeCategory}</p>
+      {/* drawer */}
+      <div className="drawer lg:drawer-open">
+        <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
+        <div className="drawer-content flex flex-col items-center justify-center">
+          {/* Page content here */}
+          <label htmlFor="my-drawer-2" className=" drawer-button lg:hidden">
+            <Drawer></Drawer>
+          </label>
+        </div>
+        <div className="drawer-side mt-16 lg:mt-0">
+          <label htmlFor="my-drawer-2" aria-label="close sidebar" className="drawer-overlay"></label>
+
+          <div className="lg:flex-1 lg:block py-5 bg-gray-200 dark:bg-[#2F4161]">
+
+            {/* Cross Button for small and medium devices */}
+            <div className="flex justify-end lg:hidden ">
+              <label htmlFor="my-drawer-2" className="cursor-pointer p-4">
+                <AiOutlineClose className="text-xl text-white" />
+              </label>
+            </div>
+            <form onSubmit={handleSearch}>
+              {/* SearchBar */}
+              <div className="px-5 mx-auto lg:mt-5">
+                <label className="input input-bordered flex items-center bg-gray-200 gap-2 border-1 border-[#775050]">
+                  <input
+                    onChange={(e) => setSearchText(e.target.value)}
+                    value={searchText}
+                    type="text"
+                    className="w-full px-3 py-1 "
+                    placeholder="Search"
+                  />
+                  <button>
+                    <CiSearch className="h-10 w-10" />
+                  </button>
+                </label>
               </div>
-              <button
-                className="underline underline-offset-1"
-                onClick={handleClearSearch}
-              >
-                View All
-              </button>
-            </div>
-            <div className="ml-5 mt-5">
-              <h1>Categories :</h1>
-              <ul className="ml-10">
-                {allCategories.map((category, index) => (
-                  <li key={index}>
-                    <button
-                      onClick={() => handleSelectCategory(category)}
-                      className=" mt-1"
-                    >
-                      {category}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
+
+              <div className="text-[#775050] dark:text-white">
+                <div className="flex justify-between mt-1 px-3">
+                  <div className="flex">
+                    <Link to="/" className="underline underline-offset-1">
+                      Home
+                    </Link>
+                    {clickeCategory.length > 0 ? ">" : ""}
+                    <p>{clickeCategory}</p>
+                  </div>
+                  <button
+                    className="underline underline-offset-1"
+                    onClick={handleClearSearch}
+                  >
+                    View All
+                  </button>
+                </div>
+                <div className="ml-5 mt-5">
+                  <h1>Categories :</h1>
+                  <ul className="ml-10">
+                    {allCategories.map((category, index) => (
+                      <li key={index}>
+                        <button
+                          onClick={() => handleSelectCategory(category)}
+                          className=" mt-1"
+                        >
+                          {category}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+              {/* Price Filter */}
+              <h2 className="font-semibold mt-2 px-2 text-[#775050] dark:text-white">
+                Price Range
+              </h2>
+              <div className="flex px-2 items-center gap-2 text-[#775050] dark:text-white">
+                <span>${priceRangeFilter[0]}</span>
+                <input
+                  type="range"
+                  min="0"
+                  max="1000"
+                  value={priceRangeFilter[1]}
+                  onChange={handlePriceChange}
+                  className="range range-info"
+                />
+                <span className="px-2">${priceRangeFilter[1]}</span>
+              </div>
+              <hr className="w-3/4 mx-auto my-5" />
+              <div>
+                <div className="ml-5 mt-5 text-[#775050] dark:text-white">
+                  <h1>My List :</h1>
+                  <ul className="ml-10">
+                    <li>
+                      <Link to="/myOrders">My Orders</Link>
+                    </li>
+                    <li>
+                      <Link to="/myWishList">My Wish list</Link>
+                    </li>
+                    <li>
+                      <Link to="/myToken">My token</Link>
+                    </li>
+                    <li>
+                      <Link to="/favoriteVendor">Favorite Vendor</Link>
+                    </li>
+                    <li>
+                      <Link to="/invoiceHistory">Invoice History</Link>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <hr className="w-3/4 mx-auto my-5" />
+              <div>
+                <div className="ml-5 mt-5 text-[#775050] dark:text-white">
+                  <ul className="ml-10">
+                    <li>
+                      <Link to="/accountSettings">Account Settings</Link>
+                    </li>
+                    <li>
+                      <Link to="/aboutUs">About Us</Link>
+                    </li>
+                    <li>
+                      <Link to="/feedback">Feedback </Link>
+                    </li>
+                    <li>Complain Vendor</li>
+                    <li>
+                      <Link to="/accountSettings">Account Settings</Link>
+                    </li>
+                    <li>
+                      <Link to="/aboutUs">About Us</Link>
+                    </li>
+                    <li>
+                      <Link to="/feedback">Feedback </Link>
+                    </li>
+                    <li>Complain Vendor</li>
+                  </ul>
+                </div>
+              </div>
+            </form>
           </div>
-          {/* Price Filter */}
-          <h2 className="font-semibold mt-2 px-2 text-[#775050] dark:text-white">
-            Price Range
-          </h2>
-          <div className="flex px-2 items-center gap-2 text-[#775050] dark:text-white">
-            <span>${priceRangeFilter[0]}</span>
-            <input
-              type="range"
-              min="0"
-              max="1000"
-              value={priceRangeFilter[1]}
-              onChange={handlePriceChange}
-              className="range range-info"
-            />
-            <span className="px-2">${priceRangeFilter[1]}</span>
-          </div>
-          <hr className="w-3/4 mx-auto my-5" />
-          <div>
-            <div className="ml-5 mt-5 text-[#775050] dark:text-white">
-              <h1>My List :</h1>
-              <ul className="ml-10">
-                <li>
-                  <Link to="/myOrders">My Orders</Link>
-                </li>
-                <li>
-                  <Link to="/myWishList">My Wish list</Link>
-                </li>
-                <li>
-                  <Link to="/myToken">My token</Link>
-                </li>
-                <li>
-                  <Link to="/favoriteVendor">Favorite Vendor</Link>
-                </li>
-                <li>
-                  <Link to="/invoiceHistory">Invoice History</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <hr className="w-3/4 mx-auto my-5" />
-          <div>
-            <div className="ml-5 mt-5 text-[#775050] dark:text-white">
-              <ul className="ml-10">
-                <li>
-                  <Link to="/accountSettings">Account Settings</Link>
-                </li>
-                <li>
-                  <Link to="/aboutUs">About Us</Link>
-                </li>
-                <li>
-                  <Link to="/feedback">Feedback </Link>
-                </li>
-                <li>Complain Vendor</li>
-                <li>
-                  <Link to="/accountSettings">Account Settings</Link>
-                </li>
-                <li>
-                  <Link to="/aboutUs">About Us</Link>
-                </li>
-                <li>
-                  <Link to="/feedback">Feedback </Link>
-                </li>
-                <li>Complain Vendor</li>
-              </ul>
-            </div>
-          </div>
-        </form>
+        </div>
       </div>
+      {/* darwer end */}
+
+      {/* Left Side menubar / categorybar */}
+
     </div>
 
   );

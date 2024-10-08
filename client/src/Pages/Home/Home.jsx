@@ -33,12 +33,10 @@ const Home = () => {
         maxPrice: priceRange?.[1] || "",
       };
 
-      console.log(params);
-      
+
       const res = await axiosCommon.get(`/all-products`, {
         params: params ? params : {},
       });
-      console.log(res.data);
 
       return res.data;
     },
@@ -85,8 +83,8 @@ const Home = () => {
               ))}
             </div> :
             <NoData></NoData>
-        )}
-        <FeaturedProducts />
+          )}
+          <FeaturedProducts />
       </div>
     </div>
   );
