@@ -304,29 +304,36 @@ async function run() {
       const minPrice = parseFloat(req.query.minPrice) || 0;
       const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_VALUE;
       const isFeatured = req.query.isFeatured === "true";
-      const category = req.query.selectedCategory
-        ? req.query.selectedCategory
-        : "";
-
-      // search by products name and filter by price
-      let query = {
-        productName: { $regex: search, $options: "i" },
-        price: { $gte: minPrice, $lte: maxPrice },
-      };
-
-      // If the client sets the category, then filter by category from MongoDB
-      if (category) {
-        query.category = category;
+      const category = req.query.selectedCategory ? req.query.selectedCategory : "";
+    
+      // Initialize the query object
+      let query = {};
+    
+      // If any search, price, or category parameters are provided, set up filtering conditions
+      if (search || minPrice || maxPrice < Number.MAX_VALUE || category) {
+        query = {
+          productName: { $regex: search, $options: "i" },
+          price: { $gte: minPrice, $lte: maxPrice },
+        };
+    
+        // If the category is specified, add it to the query
+        if (category) {
+          query.category = category;
+        }
       }
-
+    
       // If the `isFeatured` query param is passed and it's true, filter by `isFeatured`
       if (req.query.isFeatured) {
         query.isFeatured = isFeatured; // Filter for featured products
       }
-
+    
+      // Fetch data based on the query
       const results = await productCollection.find(query).toArray();
+    
+      // Send back the results
       res.send(results);
     });
+    
 
     // ==================================
     // get all products
@@ -387,7 +394,7 @@ async function run() {
 
       try {
         // Find product using string _id
-        const product = await productCollection.findOne({ _id: productId });
+        const product = await productCollection.findOne({ _id: new ObjectId(productId) });
 
         if (product) {
           res.status(200).json(product);
@@ -416,7 +423,7 @@ async function run() {
 
       try {
         const result = await productCollection.updateOne(
-          { _id: productId },
+          { _id: new ObjectId(productId)},
           { $push: { comments: newComment } }
         );
 
