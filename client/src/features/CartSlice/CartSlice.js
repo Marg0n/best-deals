@@ -70,6 +70,8 @@ const cartSlice = createSlice({
             state.cartIteams = [];
         },
 
+        
+
 
 
     }

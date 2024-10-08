@@ -11,7 +11,7 @@ import { useSelector } from "react-redux";
 
 const Navbar = ({ toggleTheme, theme }) => {
   const { user, loggedOut } = useAuth();
-
+  
   // cart data from redux store
   const cart = useSelector((state) => state.cart);
 
