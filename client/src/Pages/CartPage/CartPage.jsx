@@ -6,10 +6,13 @@ import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import PaymentModal from "../../Components/Modals/PaymentModal";
 import NoData from "../../Components/NoData/NoData";
 import { ScrollRestoration } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { MdDeleteSweep } from "react-icons/md";
-import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
+import { removeAllFromCartlist, setCartData } from "../../features/CartSlice/CartSlice";
 import Swal from "sweetalert2";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useQuery } from "@tanstack/react-query";
+import useAuth from "../../hooks/useAuth";
 
 
 
@@ -19,13 +22,36 @@ const CartPage = () => {
     // cart data from redux store
     const cart = useSelector((state) => state.cart)
 
+    const { user } = useAuth()
+
     const dispacth = useDispatch()
+
+    // This fetch is for collect all data from mongoDB
+    const axiosCommon = useAxiosCommon();
+    const { data: cartDB, isLoading, refetch } = useQuery({
+        queryKey: ["carList"],
+        queryFn: async () => {
+            const res = await axiosCommon.get(`/cartList/${user?.email}`);
+            return res.data;
+        },
+    });
+    const cartArray = [cartDB]
+    // localStorage.setItem('CartDB', cartArray)
+    // Dispatch the fetched cart data to Redux store
+    useEffect(() => {
+        if (cartDB?.tempProducts) {
+            dispacth(setCartData(cartDB.tempProducts)); // Update Redux store with cart data
+        }
+        refetch()
+    }, [cartDB, cart]);
+
+
 
 
     // Calculate total quantity and total amount
-    const totalQuantity = cart.cartIteams.reduce((total, item) => total + item.cartQuantity, 0);
+    const totalQuantity = cartDB?.tempProducts.reduce((total, item) => parseFloat(total) + parseFloat(item.cartQuantity), 0);
 
-    const totalAmount = cart.cartIteams.reduce((total, item) => total + (item.cartQuantity * item.price), 0);
+    const totalAmount = cartDB?.tempProducts.reduce((total, item) => parseFloat(total) + parseFloat(item.cartQuantity * item.price), 0);
 
     // Apply discount 
     const discount = 0.00 * totalAmount;
@@ -86,11 +112,11 @@ const CartPage = () => {
             <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] ">
                     {
-                        cart.cartIteams.length === 0 ?
+                        cartDB?.tempProducts?.length === 0 ?
                             <div><NoData></NoData></div> :
                             <div>
                                 <div>
-                                    {cart.cartIteams?.map(product => (
+                                    {cartDB?.tempProducts?.map(product => (
                                         <CartCard
                                             key={product._id}
                                             product={product}
@@ -121,7 +147,7 @@ const CartPage = () => {
                                     {/* Quantity & Total Amounts */}
                                     <tr>
                                         <td>{totalQuantity}</td>
-                                        <td>$ {totalAmount.toFixed(2)}</td>
+                                        <td>$ {totalAmount?.toFixed(2)}</td>
                                     </tr>
                                     {/* Discount */}
                                     <tr>

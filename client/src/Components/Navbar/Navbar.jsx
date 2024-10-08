@@ -14,6 +14,12 @@ const Navbar = ({ toggleTheme, theme }) => {
   
   // cart data from redux store
   const cart = useSelector((state) => state.cart);
+  console.log(cart);
+  
+  const cartDB = localStorage.getItem('CartDB')
+  console.log(cartDB);
+  
+  
 
   // user profile data
   const { profile } = useUserProfile();

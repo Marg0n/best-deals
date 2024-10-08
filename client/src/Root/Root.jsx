@@ -5,9 +5,16 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Footer from "../Components/Footer/Footer";
 import { Toaster } from "react-hot-toast";
+import useAuth from "../hooks/useAuth";
 
 
 const Root = () => {
+
+  const {user}= useAuth()
+  const userEmail = user?.email
+  console.log(userEmail);
+  localStorage.setItem('userEmail' , userEmail)
+  
 
   // Dark mode light mode control
   const [theme, setTheme] = useState(() => {
