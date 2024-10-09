@@ -16,17 +16,20 @@ const Root = () => {
   const { user } = useAuth()
   const userEmail = user?.email
   // console.log(userEmail);
-  localStorage.setItem('userEmail', userEmail)
+  // localStorage.setItem('userEmail', userEmail)
 
   const dispatch = useDispatch()
 
   const userCartListFromDB = useCartList()
   console.log(userCartListFromDB);
 
-  const cartlistFromDB = userCartListFromDB?.cartProducts
-  // if (cartlistFromDB) {
-  //   dispatch(setCartData(cartlistFromDB))
-  // }
+  const cartlistFromDB = userCartListFromDB?.cartProducts[0]
+  console.log(cartlistFromDB);
+
+  if (user && cartlistFromDB && cartlistFromDB.length > 0) {
+    dispatch(setCartData(cartlistFromDB))
+  }
+
 
   // Dark mode light mode control
   const [theme, setTheme] = useState(() => {

@@ -457,19 +457,19 @@ async function run() {
             { userEmail: userEmail },
             { $set: { cartProducts: [cartProducts] } }  // Replace the array
           );
-          console.log('Cart products replaced for existing cart:', result);
+          // console.log('Cart products replaced for existing cart:', result);
 
           res.status(200).json({ message: 'Cart products replaced successfully' });
         } else {
           // If the user doesn't have a cart, create a new cart for the user
           const newCart = { userEmail: userEmail, cartProducts: [cartProducts] };
           const result = await cartList.insertOne(newCart);
-          console.log('New cart created:', result);
+          // console.log('New cart created:', result);
 
           res.status(201).json({ message: 'Cart created and product added successfully' });
         }
       } catch (error) {
-        console.error('Error adding item to cart:', error);
+        // console.error('Error adding item to cart:', error);
         res.status(500).json({ message: 'Failed to add item to cart', error });
       }
     });

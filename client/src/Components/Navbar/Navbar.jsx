@@ -53,6 +53,7 @@ const Navbar = ({ toggleTheme, theme }) => {
           dispacth(removeAllFromCartlist())
           loggedOut()
           toast.success('Logged Out');
+          localStorage.clear()
         }
       })
       .catch((error) => {

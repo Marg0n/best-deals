@@ -14,9 +14,17 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import logo from '/rmv_bg_logo1.png';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useDispatch } from "react-redux";
+import useCartList from "../../hooks/useCartList";
 
 
 const Login = () => {
+    const dispatch = useDispatch()
+    const userCartListFromDB = useCartList()
+    const cartlistFromDB = userCartListFromDB?.cartProducts[0]
+
+
+
 
     const { signInUser, googleLogin, user, loading } = useAuth();
 
@@ -69,6 +77,9 @@ const Login = () => {
                 if (result.user) {
                     setCustomLoader(false);
                     navigate(whereTo, { replace: true });
+                    if (user && cartlistFromDB && cartlistFromDB.length > 0) {
+                        dispatch(setCartData(cartlistFromDB))
+                    }
                 }
 
             })
@@ -115,11 +126,11 @@ const Login = () => {
                             setCustomLoader(false);
                             toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
                         })
-                        setTimeout(() => {
-                            navigate(whereTo, { replace: true })
-                        }, 1000);
+                    setTimeout(() => {
+                        navigate(whereTo, { replace: true })
+                    }, 1000);
 
-                    
+
                 }
             })
             .catch(error => {

@@ -66,20 +66,20 @@ const cartSlice = createSlice({
             toast.success('Item removed')
         },
 
-        // Remove all items from cartList
-        removeAllFromCartlist(state) {
-            state.cartIteams = [];
-        },
+
 
         // set cart data from db
         setCartData: (state, action) => {
             state.cartIteams = action.payload; // Update cart items with fetched data
         },
-
+        // Remove all items from cartList
+        removeAllFromCartlist(state) {
+            state.cartIteams = [];
+        },
 
 
     }
 })
 
-export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCartlist , setCartData } = cartSlice.actions
+export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCartlist, setCartData } = cartSlice.actions
 export default cartSlice.reducer
