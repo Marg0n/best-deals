@@ -446,34 +446,26 @@ async function run() {
     // insert products into cartList
     app.post('/cartList', async (req, res) => {
       try {
-        const { userEmail, tempProducts } = req.body;
-    
+        const { userEmail, cartProducts } = req.body;
+
         // Check if the user already has a cart
         const userCart = await cartList.findOne({ userEmail: userEmail });
-    
+
         if (userCart) {
-          // If user already has a cart, update it by pushing the new product
-          const productExists = userCart.tempProducts.some(
-            (item) => item._id === tempProducts._id
-          );
-          
-          if (productExists) {
-            return res.status(400).json({ message: 'Product already in the cart' });
-          }
-    
+          // Replace the existing cartProducts array with the new one
           const result = await cartList.updateOne(
             { userEmail: userEmail },
-            { $push: { tempProducts: tempProducts } }
+            { $set: { cartProducts: [cartProducts] } }  // Replace the array
           );
-          console.log('Product added to the existing cart:', result);
-    
-          res.status(200).json({ message: 'Product added to the cart successfully' });
+          console.log('Cart products replaced for existing cart:', result);
+
+          res.status(200).json({ message: 'Cart products replaced successfully' });
         } else {
           // If the user doesn't have a cart, create a new cart for the user
-          const newCart = { userEmail: userEmail, tempProducts: [tempProducts] };
+          const newCart = { userEmail: userEmail, cartProducts: [cartProducts] };
           const result = await cartList.insertOne(newCart);
           console.log('New cart created:', result);
-    
+
           res.status(201).json({ message: 'Cart created and product added successfully' });
         }
       } catch (error) {
@@ -481,7 +473,8 @@ async function run() {
         res.status(500).json({ message: 'Failed to add item to cart', error });
       }
     });
-    
+
+
 
     // get products from cartList filtered by userEmail
     app.get('/cartList/:email', async (req, res) => {

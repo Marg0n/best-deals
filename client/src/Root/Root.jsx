@@ -6,15 +6,27 @@ import 'aos/dist/aos.css';
 import Footer from "../Components/Footer/Footer";
 import { Toaster } from "react-hot-toast";
 import useAuth from "../hooks/useAuth";
+import useCartList from "../hooks/useCartList";
+import { useDispatch } from "react-redux";
+import { setCartData } from "../features/CartSlice/CartSlice";
 
 
 const Root = () => {
 
-  const {user}= useAuth()
+  const { user } = useAuth()
   const userEmail = user?.email
-  console.log(userEmail);
-  localStorage.setItem('userEmail' , userEmail)
-  
+  // console.log(userEmail);
+  localStorage.setItem('userEmail', userEmail)
+
+  const dispatch = useDispatch()
+
+  const userCartListFromDB = useCartList()
+  console.log(userCartListFromDB);
+
+  const cartlistFromDB = userCartListFromDB?.cartProducts
+  // if (cartlistFromDB) {
+  //   dispatch(setCartData(cartlistFromDB))
+  // }
 
   // Dark mode light mode control
   const [theme, setTheme] = useState(() => {

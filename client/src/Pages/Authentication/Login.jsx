@@ -53,7 +53,6 @@ const Login = () => {
 
         signInUser(email, password)
             .then(result => {
-
                 setCustomLoader(true);
                 // console.log(result.user)
                 const loggedUser = { email };

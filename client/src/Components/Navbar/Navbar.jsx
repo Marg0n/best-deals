@@ -7,19 +7,26 @@ import useAuth from "../../hooks/useAuth";
 import { Tooltip } from "react-tooltip";
 import useUserProfile from "./../../hooks/useUserProfile";
 import ThemeController from "../ThemeController/ThemeController";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import toast from "react-hot-toast";
+import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 
 const Navbar = ({ toggleTheme, theme }) => {
   const { user, loggedOut } = useAuth();
-  
+  const userEmail = user?.email
+  const axiosCommon = useAxiosCommon()
+
+  const dispacth = useDispatch()
+
+
   // cart data from redux store
   const cart = useSelector((state) => state.cart);
-  console.log(cart);
-  
-  const cartDB = localStorage.getItem('CartDB')
-  console.log(cartDB);
-  
-  
+  // console.log(cart);
+
+  const cartProducts = cart.cartIteams
+
+
 
   // user profile data
   const { profile } = useUserProfile();
@@ -31,6 +38,31 @@ const Navbar = ({ toggleTheme, theme }) => {
   const toggleDropdown = () => {
     setDropdown(!dropdown);
   };
+
+  const cartItem = {userEmail , cartProducts}
+  // console.log(cartItem);
+  
+
+
+  // logout
+  const handleLogout = () => {
+    const res = axiosCommon.post(`/cartList`, cartItem)
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.message) {
+          dispacth(removeAllFromCartlist())
+          loggedOut()
+          toast.success('Logged Out');
+        }
+      })
+      .catch((error) => {
+        // If the error response exists, display the message from the server
+        if (error.response) {
+          const errorMessage = error.response.data.message;
+          toast.error(errorMessage); // Show the server's error message in a toast
+        }
+      });
+  }
 
   // user lists
   const list = (
@@ -79,7 +111,7 @@ const Navbar = ({ toggleTheme, theme }) => {
           anything!
         </Link>
       </li>
-      <li className="rounded-xl p-2 m-2 text-right" onClick={loggedOut}>
+      <li className="rounded-xl p-2 m-2 text-right" onClick={handleLogout}>
         <button className="bg-base-300 hover:bg-[#737373] hover:text-white block text-center text-base font-semibold">
           Logout
         </button>
@@ -151,7 +183,7 @@ const Navbar = ({ toggleTheme, theme }) => {
               <div className="indicator">
                 <FiShoppingCart className="text-gray-700" size={30} />
                 <span className="badge badge-sm indicator-item">
-                  {cart.cartIteams.length}
+                  {cart?.cartIteams?.length}
                 </span>
               </div>
             </div>
@@ -163,18 +195,18 @@ const Navbar = ({ toggleTheme, theme }) => {
                 <p className="text-lg font-bold">
                   {/* items count of wishlists */}
                   <span className=" text-red-600 mr-2">
-                    {cart.cartIteams.length}
+                    {cart?.cartIteams?.length}
                   </span>
                   Items
                 </p>
                 {/* simple wishlists */}
                 <div className="text-sm font-semibold p-4">
-                  {cart.cartIteams.length === 0 ? (
+                  {cart?.cartIteams?.length === 0 ? (
                     "Noting Here!😥"
                   ) : (
                     <ul className="list-decimal">
-                      {cart.cartIteams?.map((product) => (
-                        <li key={product._id}>{product.productName}</li>
+                      {cart?.cartIteams?.map((product) => (
+                        <li key={product?._id}>{product?.productName}</li>
                       ))}
                     </ul>
                   )}
@@ -182,7 +214,7 @@ const Navbar = ({ toggleTheme, theme }) => {
                 <Link to="/cartlist">
                   <p
                     className={
-                      cart.cartIteams.length === 0
+                      cart?.cartIteams?.length === 0
                         ? ``
                         : `font-semibold text-red-500 animate-pulse hover:animate-none`
                     }
