@@ -6,6 +6,7 @@ const useCartList = () => {
 
     const axiosCommon = useAxiosCommon()
     const {user} = useAuth()
+    localStorage.setItem('userEmail' , user?.email)
 
     const { data: userCartListFromDB, isLoading } = useQuery({
         queryKey: ["cartproducts"],
