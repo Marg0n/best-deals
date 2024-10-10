@@ -451,7 +451,7 @@ async function run() {
         // Check if the user already has a cart
         const userCart = await cartList.findOne({ userEmail: userEmail });
         // console.log(userCart);
-        
+
 
         if (userCart) {
           // Replace the existing cartProducts array with the new one
@@ -477,7 +477,6 @@ async function run() {
     });
 
 
-
     // get products from cartList filtered by userEmail
     app.get('/cartList/:email', async (req, res) => {
       try {
@@ -487,7 +486,7 @@ async function run() {
         // Find the cart for the user using their email
         const userCart = await cartList.findOne({ userEmail: email });
         // console.log(userCart);
-        
+
 
         if (userCart) {
           // Send back the user's cart data if found
@@ -501,6 +500,34 @@ async function run() {
         res.status(500).json({ message: 'Failed to retrieve cart data', error });
       }
     });
+
+
+
+    // Clear all products from cartList filtered by userEmail
+    app.delete('/cartList/:email', async (req, res) => {
+      try {
+        const email = req.params.email;
+
+        // Find the user's cart by email and clear the cartProducts array
+        const result = await cartList.updateOne(
+          { userEmail: email },
+          { $set: { cartProducts: [] } }  // Empty the cartProducts array
+        );
+
+        if (result.modifiedCount > 0) {
+          res.status(200).json({ message: 'Cart cleared successfully' });
+        } else {
+          res.status(404).json({ message: 'No cart found for this user.' });
+        }
+      } catch (error) {
+        console.error('Error clearing cart:', error);
+        res.status(500).json({ message: 'Failed to clear cart', error });
+      }
+    });
+
+
+
+
 
 
 

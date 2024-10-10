@@ -36,7 +36,7 @@ const cartSlice = createSlice({
                 const tempProducts = { ...action.payload, cartQuantity: action.payload.cartQuantity };
                 state.cartIteams.push(tempProducts)
                 const cartItem = { userEmail, cartProducts: state.cartIteams };
-                 axios.post(`http://localhost:4000/cartList`, cartItem)
+                 axios.post(`${import.meta.env.VITE_SERVER}/cartList`, cartItem)
                     .then((res) => {
                         console.log(res.data);
                         if (res.data.message) {
