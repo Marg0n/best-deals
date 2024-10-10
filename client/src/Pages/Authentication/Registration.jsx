@@ -147,6 +147,8 @@ const Registration = () => {
 
         if (result?.user) {
 
+          const userInfo = { lastLogin };
+
           const userData = {
             email: result?.user?.email,
             name: result?.user?.displayName,
