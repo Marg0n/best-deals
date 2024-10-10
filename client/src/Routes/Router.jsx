@@ -31,6 +31,7 @@ import UserHome from "../Components/Dashboards/UserDashboard/UserHome/UserHome";
 import AdminRoutes from './AdminRoutes';
 import VendorRoute from './VendorRoute';
 import UserWishlist from "../Components/Dashboards/UserDashboard/UserWishlist/UserWishlist";
+import OrderManagement from "../Components/Dashboards/UserDashboard/OrderManagement/OrderManagement";
 
 const Router = createBrowserRouter([
   {
@@ -152,6 +153,10 @@ const Router = createBrowserRouter([
       {
         path: '/userDashboard/userWishlist',
         element: <UserWishlist/>,
+      },
+      {
+        path: '/userDashboard/orderManagement',
+        element: <OrderManagement/>,
       },
     ],
   }
