@@ -450,6 +450,8 @@ async function run() {
 
         // Check if the user already has a cart
         const userCart = await cartList.findOne({ userEmail: userEmail });
+        // console.log(userCart);
+        
 
         if (userCart) {
           // Replace the existing cartProducts array with the new one
@@ -484,6 +486,8 @@ async function run() {
 
         // Find the cart for the user using their email
         const userCart = await cartList.findOne({ userEmail: email });
+        // console.log(userCart);
+        
 
         if (userCart) {
           // Send back the user's cart data if found

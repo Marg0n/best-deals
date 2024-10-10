@@ -7,14 +7,14 @@ import { TbFidgetSpinner } from "react-icons/tb";
 import { TfiEye } from "react-icons/tfi";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { ClimbingBoxLoader } from "react-spinners";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import 'react-toastify/dist/ReactToastify.css';
 import bgImg from '../../assets/login.png';
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import logo from '/rmv_bg_logo1.png';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useCartList from "../../hooks/useCartList";
 
 
@@ -22,6 +22,8 @@ const Login = () => {
     const dispatch = useDispatch()
     const userCartListFromDB = useCartList()
     const cartlistFromDB = userCartListFromDB?.cartProducts[0]
+    const cart = useSelector((state) => state.cart);
+
 
 
 
@@ -70,16 +72,13 @@ const Login = () => {
                 // })
 
                 // last login timestamp
-                axiosCommon.patch(`/lastLogin/${email}`, userInfo)
+               axiosCommon.patch(`/lastLogin/${email}`, userInfo)
 
                 toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
 
-                if (result.user) {
+              if (result.user) {
                     setCustomLoader(false);
                     navigate(whereTo, { replace: true });
-                    if (user && cartlistFromDB && cartlistFromDB.length > 0) {
-                        dispatch(setCartData(cartlistFromDB))
-                    }
                 }
 
             })
