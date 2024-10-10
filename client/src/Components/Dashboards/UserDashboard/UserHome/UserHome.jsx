@@ -4,6 +4,7 @@ import ProfileInfo from '../../Shared/ProfileInfo';
 import useUserProfile from '../../../../hooks/useUserProfile';
 import PropTypes from 'prop-types';
 import BarChart from '../../Shared/BarChart';
+import { Helmet } from "react-helmet-async";
 
 const UserHome = () => {
 
@@ -62,6 +63,11 @@ const UserHome = () => {
 
     return (
         <div className="p-8 min-h-screen space-y-4">
+
+            <Helmet>
+                <title>Best Deal | User Dashboard</title>
+            </Helmet>
+
             {/* stat section */}
             <div className='flex gap-2 items-center justify-center'>
                 <StatCard

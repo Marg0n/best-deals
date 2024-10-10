@@ -30,6 +30,7 @@ import UserRoute from "./UserRoute";
 import UserHome from "../Components/Dashboards/UserDashboard/UserHome/UserHome";
 import AdminRoutes from './AdminRoutes';
 import VendorRoute from './VendorRoute';
+import UserWishlist from "../Components/Dashboards/UserDashboard/UserWishlist/UserWishlist";
 
 const Router = createBrowserRouter([
   {
@@ -147,6 +148,10 @@ const Router = createBrowserRouter([
       {
         index: true,
         element: <UserHome/>,
+      },
+      {
+        path: '/userDashboard/userWishlist',
+        element: <UserWishlist/>,
       },
     ],
   }
