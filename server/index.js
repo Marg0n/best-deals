@@ -502,7 +502,6 @@ async function run() {
     });
 
 
-
     // Clear all products from cartList filtered by userEmail
     app.delete('/cartList/:email', async (req, res) => {
       try {
@@ -526,11 +525,6 @@ async function run() {
         res.status(500).json({ message: 'Failed to clear cart', error });
       }
     });
-
-
-
-
-
 
 
 
