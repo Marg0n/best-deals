@@ -3,18 +3,18 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { RxEyeClosed } from "react-icons/rx";
+import { TbFidgetSpinner } from "react-icons/tb";
 import { TfiEye } from "react-icons/tfi";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { ClimbingBoxLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import bgImg from '../../assets/register.png';
 import useAuth from "../../hooks/useAuth";
-import { ClimbingBoxLoader } from "react-spinners";
-import logo from '/rmv_bg_logo1.png';
 import useAxiosCommon from "../../hooks/useAxiosCommon";
-import { imageUpload } from "../../utils/imageUpload";
-import { TbFidgetSpinner } from "react-icons/tb";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { imageUpload } from "../../utils/imageUpload";
+import logo from '/rmv_bg_logo1.png';
 
 
 const Registration = () => {
@@ -35,6 +35,9 @@ const Registration = () => {
   // Navigation
   const navigate = useNavigate();
   const whereTo = '/login';
+
+  // last login date
+  const lastLogin = new Date().toUTCString();
 
   // react form
   const {
@@ -152,7 +155,7 @@ const Registration = () => {
             name: result?.user?.displayName,
             photo: result?.user?.photoURL,
             createdTime: result?.user?.metadata.creationTime,
-            lastLogin: result?.user?.metadata?.lastSignInTime,
+            lastLogin: lastLogin,
             role: "User"
           }
 

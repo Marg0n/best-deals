@@ -10,22 +10,32 @@ import { useState } from "react";
 import { MdDeleteSweep } from "react-icons/md";
 import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 import Swal from "sweetalert2";
-
+import { IoSaveOutline } from "react-icons/io5";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAuth from "../../hooks/useAuth";
+import toast from "react-hot-toast";
 
 
 
 const CartPage = () => {
 
+    const axiosCommon = useAxiosCommon()
+    const { user} = useAuth();
+    const userEmail = user?.email
+
+
     // cart data from redux store
     const cart = useSelector((state) => state.cart)
+
+    const cartProducts = cart.cartIteams
 
     const dispacth = useDispatch()
 
 
     // Calculate total quantity and total amount
-    const totalQuantity = cart.cartIteams.reduce((total, item) => total + item.cartQuantity, 0);
+    const totalQuantity = cart?.cartIteams?.reduce((total, item) => total + item?.cartQuantity, 0);
 
-    const totalAmount = cart.cartIteams.reduce((total, item) => total + (item.cartQuantity * item.price), 0);
+    const totalAmount = cart?.cartIteams?.reduce((total, item) => total + (item?.cartQuantity * item?.price), 0);
 
     // Apply discount 
     const discount = 0.00 * totalAmount;
@@ -43,13 +53,13 @@ const CartPage = () => {
         setContactInfo(data);
     }
 
-    // clear all products from cartList
 
+    // clear all products from cartList
     const handleClearCartList = () => {
 
         Swal.fire({
             title: `Do you want to remove your Cart list?`,
-            text: ` It will remove ${cart.cartIteams.length} items from your cart `,
+            text: ` It will remove ${cart?.cartIteams?.length} items from your cart `,
             imageUrl: "https://i.ibb.co.com/rpHtZmy/oh-no-message-bubble-sticker-vector-removebg-preview.png",
             imageWidth: 200,
             imageHeight: 200,
@@ -70,6 +80,31 @@ const CartPage = () => {
         });
     }
 
+
+    const cartItem = { userEmail, cartProducts }
+
+    // save and update cart
+    const handleSaveCart = () => {
+
+        const res = axiosCommon.post(`/cartList`, cartItem)
+            .then((res) => {
+                console.log(res.data);
+                if (res.data.message) {
+                    // loggedOut()
+                    toast.success('Cart Saved');
+                    // localStorage.clear()
+                }
+            })
+            .catch((error) => {
+                // If the error response exists, display the message from the server
+                if (error.response) {
+                    const errorMessage = error.response.data.message;
+                    toast.error(errorMessage); // Show the server's error message in a toast
+                }
+            });
+
+    }
+
     return (
         <div className=" flex p-5 gap-y-5 md:gap-5">
             <Helmet>
@@ -86,20 +121,29 @@ const CartPage = () => {
             <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] ">
                     {
-                        cart.cartIteams.length === 0 ?
+                        cart?.cartIteams?.length === 0 ?
                             <div><NoData></NoData></div> :
                             <div>
                                 <div>
-                                    {cart.cartIteams?.map(product => (
+                                    {cart?.cartIteams?.map(product => (
                                         <CartCard
-                                            key={product._id}
+                                            key={product?._id}
                                             product={product}
                                         />
                                     ))}
                                 </div>
-                                <div onClick={handleClearCartList} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
-                                    <MdDeleteSweep />
-                                    <h1>Clear Cartlist</h1>
+
+                                <div className="flex gap-4">
+
+                                    <div onClick={handleSaveCart} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
+                                        <IoSaveOutline />
+                                        <h1>Save Cart</h1>
+                                    </div>
+
+                                    <div onClick={handleClearCartList} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
+                                        <MdDeleteSweep />
+                                        <h1>Clear Cartlist</h1>
+                                    </div>
                                 </div>
                             </div>
                     }
@@ -121,7 +165,7 @@ const CartPage = () => {
                                     {/* Quantity & Total Amounts */}
                                     <tr>
                                         <td>{totalQuantity}</td>
-                                        <td>$ {totalAmount.toFixed(2)}</td>
+                                        <td>$ {totalAmount?.toFixed(2)}</td>
                                     </tr>
                                     {/* Discount */}
                                     <tr>
@@ -131,7 +175,7 @@ const CartPage = () => {
                                     {/* Grand Total */}
                                     <tr>
                                         <td>Grand Total</td>
-                                        <td>$ {grandTotal.toFixed(2)}</td>
+                                        <td>$ {grandTotal?.toFixed(2)}</td>
                                     </tr>
                                 </tbody>
                             </table>

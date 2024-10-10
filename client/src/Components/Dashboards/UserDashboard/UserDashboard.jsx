@@ -93,7 +93,7 @@ const UserDashboard = (props) => {
 
                 {/* outlet */}
                 <div
-                    className='w-full bg-[#0cc0df]/90'
+                    className='w-full bg-[#0cc0df]/90 min-h-screen'
                     component="main"
                 >
                     <Outlet />

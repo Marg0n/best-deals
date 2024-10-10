@@ -34,6 +34,7 @@ By utilizing the MERN (MongoDB, Express, React, Node.js) stack, the platform wil
 - [Redux](https://redux-toolkit.js.org/introduction/getting-started)
 - [Stripe](https://github.com/stripe/react-stripe-js)
 - [HeadlessUI](https://headlessui.com)
+- [TanStack Table](https://headlessui.com)
 
 ### Backend:
 

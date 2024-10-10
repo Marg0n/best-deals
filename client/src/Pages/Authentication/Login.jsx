@@ -2,21 +2,27 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { RxEyeClosed } from "react-icons/rx";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { TfiEye } from "react-icons/tfi";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { ClimbingBoxLoader } from "react-spinners";
-import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import bgImg from '../../assets/login.png';
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
-import logo from '/rmv_bg_logo1.png';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useCartList from "../../hooks/useCartList";
+import logo from '/rmv_bg_logo1.png';
 
 
 const Login = () => {
+    const dispatch = useDispatch()
+    const userCartListFromDB = useCartList()
+    const cartlistFromDB = userCartListFromDB?.cartProducts[0]
+    const cart = useSelector((state) => state.cart);
 
     const { signInUser, googleLogin, user, loading } = useAuth();
 
@@ -30,7 +36,7 @@ const Login = () => {
     const axiosCommon = useAxiosCommon();
     const axiosSecoure = useAxiosSecure();
 
-    // creation date
+    // creation date and last login date
     const lastLogin = new Date().toUTCString();
 
     // Navigation
@@ -53,7 +59,6 @@ const Login = () => {
 
         signInUser(email, password)
             .then(result => {
-
                 setCustomLoader(true);
                 // console.log(result.user)
                 const loggedUser = { email };
@@ -101,7 +106,7 @@ const Login = () => {
                         name: result?.user?.displayName,
                         photo: result?.user?.photoURL,
                         createdTime: result?.user?.metadata.creationTime,
-                        lastLogin: result?.user?.metadata?.lastSignInTime,
+                        lastLogin: lastLogin,
                         role: "User"
                     }
 
@@ -116,22 +121,22 @@ const Login = () => {
                             setCustomLoader(false);
                             toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
                         })
-                        setTimeout(() => {
-                            navigate(whereTo, { replace: true })
-                        }, 1000);
+                    setTimeout(() => {
+                        navigate(whereTo, { replace: true })
+                    }, 1000);
 
-                    
+
                 }
             })
             .catch(error => {
                 const errorCode = error.code;
                 // Remove 'auth/' prefix and '-' characters
-                const cleanedErrorCode = errorCode.replace(/^auth\/|-/g, ' ');
-                const words = cleanedErrorCode.split('-');
-                const capitalizedWords = words.map(word => word.charAt(1).toUpperCase() + word.slice(2));
-                const message = capitalizedWords.join(' ');
+                // const cleanedErrorCode = errorCode.replace(/^auth\/|-/g, ' ');
+                // const words = cleanedErrorCode.split('-');
+                // const capitalizedWords = words.map(word => word.charAt(1).toUpperCase() + word.slice(2));
+                // const message = capitalizedWords.join(' ');
 
-                toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
+                // toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
                 navigate('/login')
             })
     }
