@@ -50,7 +50,6 @@ const Navbar = ({ toggleTheme, theme }) => {
       .then((res) => {
         console.log(res.data);
         if (res.data.message) {
-          dispacth(removeAllFromCartlist())
           loggedOut()
           toast.success('Logged Out');
           localStorage.clear()
