@@ -36,6 +36,9 @@ const Registration = () => {
   const navigate = useNavigate();
   const whereTo = '/login';
 
+  // last login date
+  const lastLogin = new Date().toUTCString();
+
   // react form
   const {
     register,
@@ -147,21 +150,17 @@ const Registration = () => {
 
         if (result?.user) {
 
-          const userInfo = { lastLogin };
-
           const userData = {
             email: result?.user?.email,
             name: result?.user?.displayName,
             photo: result?.user?.photoURL,
             createdTime: result?.user?.metadata.creationTime,
-            lastLogin: result?.user?.metadata?.lastSignInTime,
+            lastLogin: lastLogin,
             role: "User"
           }
 
           // Send user data to your server
           await axiosCommon.post('/users', userData)
-          // last login timestamp
-          axiosCommon.patch(`/lastLogin/${email}`, userInfo)
           // jwt token
           axiosSecure.post(`/jwt`, {
             email: result?.user?.email,

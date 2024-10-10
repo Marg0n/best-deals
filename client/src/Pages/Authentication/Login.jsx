@@ -36,7 +36,7 @@ const Login = () => {
     const axiosCommon = useAxiosCommon();
     const axiosSecoure = useAxiosSecure();
 
-    // creation date
+    // creation date and last login date
     const lastLogin = new Date().toUTCString();
 
     // Navigation
@@ -101,19 +101,14 @@ const Login = () => {
 
                     setCustomLoader(true);
 
-                    const userInfo = { lastLogin };
-
                     const userData = {
                         email: result?.user?.email,
                         name: result?.user?.displayName,
                         photo: result?.user?.photoURL,
                         createdTime: result?.user?.metadata.creationTime,
-                        lastLogin: result?.user?.metadata?.lastSignInTime,
+                        lastLogin: lastLogin,
                         role: "User"
                     }
-
-                    // last login timestamp
-                    axiosCommon.patch(`/lastLogin/${email}`, userInfo)
 
                     // Send user data to your server
                     axiosCommon.post('/users', userData)
