@@ -15,7 +15,7 @@ const cartSlice = createSlice({
 
         // add products in cart list
         addToCart(state, action) {
-            
+
             // checking the product is already in the cart array?
             const iteamIndex = state.cartIteams.findIndex(
                 (item) => item._id === action.payload._id
@@ -50,10 +50,10 @@ const cartSlice = createSlice({
             );
             if (state.cartIteams[itemIndex].cartQuantity > 1) {
                 state.cartIteams[itemIndex].cartQuantity--;
-                console.log(state.cartIteams[itemIndex].cartQuantity);   
+                console.log(state.cartIteams[itemIndex].cartQuantity);
             }
-            else{
-                
+            else {
+
             }
         },
 
@@ -66,15 +66,20 @@ const cartSlice = createSlice({
             toast.success('Item removed')
         },
 
+
+
+        // set cart data from db
+        setCartData: (state, action) => {
+            state.cartIteams = action.payload; // Update cart items with fetched data
+        },
         // Remove all items from cartList
         removeAllFromCartlist(state) {
             state.cartIteams = [];
         },
 
 
-
     }
 })
 
-export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart , removeAllFromCartlist } = cartSlice.actions
+export const { addToCart, decrementQuantity, incrementQuantity, removeFromCart, removeAllFromCartlist, setCartData } = cartSlice.actions
 export default cartSlice.reducer

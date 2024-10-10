@@ -34,10 +34,10 @@ const VendorAddProduct = () => {
             productName: data.productName,
             description: data.productDescription,
             category: data.category,
-            price: data.price,
-            stockQuantity: data.stock,
+            price: parseFloat(data.price),
+            stockQuantity: parseInt(data.stock),
             rating: 0.0,
-            discount: data.discount,
+            discount: parseFloat(data.discount),
             isFeatured: false,
             productImage: imageUrl || '',
             attributes: [

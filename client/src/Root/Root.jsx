@@ -4,9 +4,40 @@ import { useEffect, useState } from "react";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Footer from "../Components/Footer/Footer";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import useAuth from "../hooks/useAuth";
+import useCartList from "../hooks/useCartList";
+import { useDispatch } from "react-redux";
+import { setCartData } from "../features/CartSlice/CartSlice";
+
 
 const Root = () => {
+
+  const { user } = useAuth()
+
+  // dispatch to redux
+  const dispatch = useDispatch()
+
+  // fetch user cartlist data from custom hooks
+  const userCartListFromDB = useCartList()
+  // console.log(userCartListFromDB);
+
+  const cartlistFromDB = userCartListFromDB?.cartProducts[0]
+  // console.log(cartlistFromDB);
+
+  // if user is login and user has cartlist it will set on redux
+  if (user && cartlistFromDB && cartlistFromDB.length > 0) {
+    dispatch(setCartData(cartlistFromDB))
+  }
+  else if(user && !cartlistFromDB){
+    dispatch(setCartData([]))
+  }
+  // if no user it will save a empty array on redux store
+  else {
+    dispatch(setCartData([]))
+  }
+
+
   // Dark mode light mode control
   const [theme, setTheme] = useState(() => {
     // Get the saved theme from localStorage or default to the system preference
@@ -14,12 +45,14 @@ const Root = () => {
     if (savedTheme) {
       return savedTheme;
     }
-    
+
     // Get the system theme preference
     const userPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     return userPrefersDark ? 'dark' : 'light';
   });
 
+
+  // theme control effect
   useEffect(() => {
     // Apply the theme to the document
     if (theme === 'dark') {
@@ -27,7 +60,6 @@ const Root = () => {
     } else {
       document.documentElement.classList.remove('dark');
     }
-
     // Save the theme to localStorage
     localStorage.setItem('theme', theme);
   }, [theme]);
@@ -36,11 +68,14 @@ const Root = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
+  // animation use effect
   useEffect(() => {
     AOS.init({
       duration: 500
     });
   }, []);
+
+
 
   return (
     <div className="bg-gray-200 dark:bg-[#2F4161]">

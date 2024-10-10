@@ -21,9 +21,9 @@ const Details = () => {
 
     // finding same category products but not the same product
     const productsInSameCategory = products?.filter(item => item.category === product.category && item._id !== product._id);
-    
 
-    const {user} = useAuth()   
+
+    const { user } = useAuth()
 
 
     // set quality from details
@@ -73,7 +73,9 @@ const Details = () => {
                         {/* Use the modal component */}
                         <CommentModal open={open} handleClose={handleClose} userName={user?.displayName} photo={user?.photoURL} productId={_id} />
                     </div>
-                    <div>
+
+                    {/* products image display */}
+                    <div className=''>
                         <Carousel showArrows={true} showThumbs={true}>
                             <div>
                                 <img src={product.productImage} />
@@ -94,6 +96,8 @@ const Details = () => {
                         </Carousel>
                     </div>
 
+                    {/* products counter to add to cart quantity */}
+
                     <div className='flex justify-center gap-6'>
 
                         <ProductsCounter
@@ -109,7 +113,7 @@ const Details = () => {
                     <div className='text-center mt-4'>
 
                         <Link
-                            to={`/cartlist`} 
+                            to={`/cartlist`}
                             // to={`/single-checkout/${_id}`} 
                             // onClick={() => handleBuyNow(product)}
                             onClick={() => handleAddToCart(product)}
@@ -127,24 +131,27 @@ const Details = () => {
                 </div>
             </div>
 
-            {
-                productsInSameCategory.length > 0 ?
-                    <div className='lg:w-4/12 h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
-                        <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
+            {/* suggestion  */}
+            <div>
+                {
+                    productsInSameCategory.length > 0 ?
+                        <div className='lg:w-4/12 h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
+                            <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
 
-                        {
-                            productsInSameCategory.map(item =>
-                                <MoreSuggetionCard
-                                    key={item._id}
-                                    product={item}
-                                ></MoreSuggetionCard>)
-                        }
+                            {
+                                productsInSameCategory.map(item =>
+                                    <MoreSuggetionCard
+                                        key={item._id}
+                                        product={item}
+                                    ></MoreSuggetionCard>)
+                            }
 
 
-                    </div>
-                    : ''
+                        </div>
+                        : ''
 
-            }
+                }
+            </div>
 
         </div>
     );

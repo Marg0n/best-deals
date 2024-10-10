@@ -25,7 +25,7 @@ app.use(
       "http://localhost:5173",
       "https://best-deal-909.web.app",
       "https://magenta-peony-5d02de.netlify.app",
-      
+
     ],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -147,6 +147,7 @@ async function run() {
     const usersCollection = client.db("BestDeals").collection("UserCollection");
     const productCollection = client.db("BestDeals").collection("ProductCollection");
     const orderCollection = client.db("BestDeals").collection("OrderManagement");
+    const cartList = client.db("BestDeals").collection("CartList");
 
     // ==================================
     // Admin verify
@@ -209,7 +210,6 @@ async function run() {
     app.post("/users", async (req, res) => {
       try {
         const newUser = req.body;
-
 
         // Check if user already exists
         const query = await usersCollection.findOne({ email: newUser?.email });
@@ -304,19 +304,22 @@ async function run() {
       const minPrice = parseFloat(req.query.minPrice) || 0;
       const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_VALUE;
       const isFeatured = req.query.isFeatured === "true";
-      const category = req.query.selectedCategory
-        ? req.query.selectedCategory
-        : "";
+      const category = req.query.selectedCategory ? req.query.selectedCategory : "";
 
-      // search by products name and filter by price
-      let query = {
-        productName: { $regex: search, $options: "i" },
-        price: { $gte: minPrice, $lte: maxPrice },
-      };
+      // Initialize the query object
+      let query = {};
 
-      // If the client sets the category, then filter by category from MongoDB
-      if (category) {
-        query.category = category;
+      // If any search, price, or category parameters are provided, set up filtering conditions
+      if (search || minPrice || maxPrice < Number.MAX_VALUE || category) {
+        query = {
+          productName: { $regex: search, $options: "i" },
+          price: { $gte: minPrice, $lte: maxPrice },
+        };
+
+        // If the category is specified, add it to the query
+        if (category) {
+          query.category = category;
+        }
       }
 
       // If the `isFeatured` query param is passed and it's true, filter by `isFeatured`
@@ -324,9 +327,13 @@ async function run() {
         query.isFeatured = isFeatured; // Filter for featured products
       }
 
+      // Fetch data based on the query
       const results = await productCollection.find(query).toArray();
+
+      // Send back the results
       res.send(results);
     });
+
 
     // ==================================
     // get all products
@@ -387,7 +394,7 @@ async function run() {
 
       try {
         // Find product using string _id
-        const product = await productCollection.findOne({ _id: productId });
+        const product = await productCollection.findOne({ _id: new ObjectId(productId) });
 
         if (product) {
           res.status(200).json(product);
@@ -416,7 +423,7 @@ async function run() {
 
       try {
         const result = await productCollection.updateOne(
-          { _id: productId },
+          { _id: new ObjectId(productId) },
           { $push: { comments: newComment } }
         );
 
@@ -430,6 +437,78 @@ async function run() {
         res.status(500).json({ message: 'Server error' });
       }
     });
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // cartList collection
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // insert products into cartList
+    app.post('/cartList', async (req, res) => {
+      try {
+        const { userEmail, cartProducts } = req.body;
+
+        // Check if the user already has a cart
+        const userCart = await cartList.findOne({ userEmail: userEmail });
+        // console.log(userCart);
+        
+
+        if (userCart) {
+          // Replace the existing cartProducts array with the new one
+          const result = await cartList.updateOne(
+            { userEmail: userEmail },
+            { $set: { cartProducts: [cartProducts] } }  // Replace the array
+          );
+          // console.log('Cart products replaced for existing cart:', result);
+
+          res.status(200).json({ message: 'Cart products replaced successfully' });
+        } else {
+          // If the user doesn't have a cart, create a new cart for the user
+          const newCart = { userEmail: userEmail, cartProducts: [cartProducts] };
+          const result = await cartList.insertOne(newCart);
+          // console.log('New cart created:', result);
+
+          res.status(201).json({ message: 'Cart created and product added successfully' });
+        }
+      } catch (error) {
+        // console.error('Error adding item to cart:', error);
+        res.status(500).json({ message: 'Failed to add item to cart', error });
+      }
+    });
+
+
+
+    // get products from cartList filtered by userEmail
+    app.get('/cartList/:email', async (req, res) => {
+      try {
+        const email = req.params.email;
+        console.log('Fetching cart for user:', email);
+
+        // Find the cart for the user using their email
+        const userCart = await cartList.findOne({ userEmail: email });
+        // console.log(userCart);
+        
+
+        if (userCart) {
+          // Send back the user's cart data if found
+          res.status(200).json(userCart);
+        } else {
+          // If no cart found for the user, return an empty cart or an appropriate message
+          res.status(404).json({ message: 'No cart found for this user.' });
+        }
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+        res.status(500).json({ message: 'Failed to retrieve cart data', error });
+      }
+    });
+
+
+
+
+
+
+
+
 
 
 

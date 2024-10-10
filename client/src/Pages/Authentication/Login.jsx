@@ -7,16 +7,26 @@ import { TbFidgetSpinner } from "react-icons/tb";
 import { TfiEye } from "react-icons/tfi";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { ClimbingBoxLoader } from "react-spinners";
-import { toast } from "react-toastify";
+import { toast } from "react-hot-toast";
 import 'react-toastify/dist/ReactToastify.css';
 import bgImg from '../../assets/login.png';
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import logo from '/rmv_bg_logo1.png';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useDispatch, useSelector } from "react-redux";
+import useCartList from "../../hooks/useCartList";
 
 
 const Login = () => {
+    const dispatch = useDispatch()
+    const userCartListFromDB = useCartList()
+    const cartlistFromDB = userCartListFromDB?.cartProducts[0]
+    const cart = useSelector((state) => state.cart);
+
+
+
+
 
     const { signInUser, googleLogin, user, loading } = useAuth();
 
@@ -53,7 +63,6 @@ const Login = () => {
 
         signInUser(email, password)
             .then(result => {
-
                 setCustomLoader(true);
                 // console.log(result.user)
                 const loggedUser = { email };
@@ -63,11 +72,11 @@ const Login = () => {
                 // })
 
                 // last login timestamp
-                axiosCommon.patch(`/lastLogin/${email}`, userInfo)
+               axiosCommon.patch(`/lastLogin/${email}`, userInfo)
 
                 toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
 
-                if (result.user) {
+              if (result.user) {
                     setCustomLoader(false);
                     navigate(whereTo, { replace: true });
                 }
@@ -116,11 +125,11 @@ const Login = () => {
                             setCustomLoader(false);
                             toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
                         })
-                        setTimeout(() => {
-                            navigate(whereTo, { replace: true })
-                        }, 1000);
+                    setTimeout(() => {
+                        navigate(whereTo, { replace: true })
+                    }, 1000);
 
-                    
+
                 }
             })
             .catch(error => {
