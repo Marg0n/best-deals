@@ -2,20 +2,20 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { RxEyeClosed } from "react-icons/rx";
 import { TbFidgetSpinner } from "react-icons/tb";
 import { TfiEye } from "react-icons/tfi";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { ClimbingBoxLoader } from "react-spinners";
-import { toast } from "react-hot-toast";
 import 'react-toastify/dist/ReactToastify.css';
 import bgImg from '../../assets/login.png';
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
-import logo from '/rmv_bg_logo1.png';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
-import { useDispatch, useSelector } from "react-redux";
 import useCartList from "../../hooks/useCartList";
+import logo from '/rmv_bg_logo1.png';
 
 
 const Login = () => {
@@ -23,10 +23,6 @@ const Login = () => {
     const userCartListFromDB = useCartList()
     const cartlistFromDB = userCartListFromDB?.cartProducts[0]
     const cart = useSelector((state) => state.cart);
-
-
-
-
 
     const { signInUser, googleLogin, user, loading } = useAuth();
 
@@ -72,11 +68,11 @@ const Login = () => {
                 // })
 
                 // last login timestamp
-               axiosCommon.patch(`/lastLogin/${email}`, userInfo)
+                axiosCommon.patch(`/lastLogin/${email}`, userInfo)
 
                 toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
 
-              if (result.user) {
+                if (result.user) {
                     setCustomLoader(false);
                     navigate(whereTo, { replace: true });
                 }
@@ -113,6 +109,9 @@ const Login = () => {
                         lastLogin: result?.user?.metadata?.lastSignInTime,
                         role: "User"
                     }
+
+                    // last login timestamp
+                    axiosCommon.patch(`/lastLogin/${email}`, userInfo)
 
                     // Send user data to your server
                     axiosCommon.post('/users', userData)

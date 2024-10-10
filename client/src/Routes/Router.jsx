@@ -1,37 +1,39 @@
 import React from "react";
 import { createBrowserRouter } from "react-router-dom";
-import Root from "../Root/Root";
-import Home from "../Pages/Home/Home";
-import Details from "../Pages/details/Details";
-import Login from "../Pages/Authentication/Login";
-import Registration from "../Pages/Authentication/Registration";
-import CartPage from "../Pages/CartPage/CartPage";
-import InvoiceHistory from "../Pages/invoiceHistory/InvoiceHistory";
-import SingleProductCheckoutPage from "../Pages/SingleProductCheckoutPage/SingleProductCheckoutPage";
+import AdminAllUsers from "../Components/Dashboards/AdminDashboard/AdminAllUser/AdminAllUsers";
+import AdminAllVendors from "../Components/Dashboards/AdminDashboard/AdminAllVendor/AdminAllVendors";
+import AdminDashboard from "../Components/Dashboards/AdminDashboard/AdminDashboard";
+import AdminHome from "../Components/Dashboards/AdminDashboard/AdminHome/AdminHome";
+import AdminVendorRequest from "../Components/Dashboards/AdminDashboard/AdminVendorRequest/AdminVendorRequest";
+import CustomerSupport from "../Components/Dashboards/UserDashboard/CustomerSuport/CustomerSupport";
+import UserAlert from "../Components/Dashboards/UserDashboard/Notification/UserAlert";
+import OrderManagement from "../Components/Dashboards/UserDashboard/OrderManagement/OrderManagement";
+import UserDashboard from "../Components/Dashboards/UserDashboard/UserDashboard";
+import UserHome from "../Components/Dashboards/UserDashboard/UserHome/UserHome";
+import UserWishlist from "../Components/Dashboards/UserDashboard/UserWishlist/UserWishlist";
+import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
 import VendorDashboard from "../Components/Dashboards/VendorDashboard/VendorDashboard";
 import VendorHome from "../Components/Dashboards/VendorDashboard/VendorHome/VendorHome";
 import VendorOrders from "../Components/Dashboards/VendorDashboard/VendorOrders/VendorOrders";
-import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
-import AdminDashboard from "../Components/Dashboards/AdminDashboard/AdminDashboard";
-import AdminHome from "../Components/Dashboards/AdminDashboard/AdminHome/AdminHome";
-import AdminAllUsers from "../Components/Dashboards/AdminDashboard/AdminAllUser/AdminAllUsers";
-import AdminAllVendors from "../Components/Dashboards/AdminDashboard/AdminAllVendor/AdminAllVendors";
-import AdminVendorRequest from "../Components/Dashboards/AdminDashboard/AdminVendorRequest/AdminVendorRequest";
-import PrivateRoute from "./PrivateRoute";
-import MyOrders from "../Pages/MyOrders/MyOrders";
-import MyWishList from "../Pages/MyWishList/MyWishList";
-import MyToken from "../Pages/MyToken/MyToken";
-import FavoriteVendor from "../Pages/FavoriteVendor/FavoriteVendor";
-import AccountSettings from "../Pages/AccountSettings/AccountSettings";
 import AboutUs from "../Pages/AboutUs/AboutUs";
+import AccountSettings from "../Pages/AccountSettings/AccountSettings";
+import Login from "../Pages/Authentication/Login";
+import Registration from "../Pages/Authentication/Registration";
+import CartPage from "../Pages/CartPage/CartPage";
+import Details from "../Pages/details/Details";
+import FavoriteVendor from "../Pages/FavoriteVendor/FavoriteVendor";
 import Feedback from "../Pages/Feedback/Feedback";
-import UserDashboard from "../Components/Dashboards/UserDashboard/UserDashboard";
-import UserRoute from "./UserRoute";
-import UserHome from "../Components/Dashboards/UserDashboard/UserHome/UserHome";
+import Home from "../Pages/Home/Home";
+import InvoiceHistory from "../Pages/invoiceHistory/InvoiceHistory";
+import MyOrders from "../Pages/MyOrders/MyOrders";
+import MyToken from "../Pages/MyToken/MyToken";
+import MyWishList from "../Pages/MyWishList/MyWishList";
+import SingleProductCheckoutPage from "../Pages/SingleProductCheckoutPage/SingleProductCheckoutPage";
+import Root from "../Root/Root";
 import AdminRoutes from './AdminRoutes';
+import PrivateRoute from "./PrivateRoute";
+import UserRoute from "./UserRoute";
 import VendorRoute from './VendorRoute';
-import UserWishlist from "../Components/Dashboards/UserDashboard/UserWishlist/UserWishlist";
-import OrderManagement from "../Components/Dashboards/UserDashboard/OrderManagement/OrderManagement";
 
 const Router = createBrowserRouter([
   {
@@ -104,59 +106,67 @@ const Router = createBrowserRouter([
   },
   {
     path: "/vendorDashboard",
-    element: <VendorRoute><VendorDashboard/></VendorRoute>,
+    element: <VendorRoute><VendorDashboard /></VendorRoute>,
     children: [
-        {
-          path: '/vendorDashboard',
-          element: <VendorHome/>
-        },
-        {
-          path: '/vendorDashboard/orders',
-          element: <VendorOrders/>
-        },
-        {
-          path: '/vendorDashboard/products',
-          element: <VendorAddProduct/>
-        }
+      {
+        path: '/vendorDashboard',
+        element: <VendorHome />
+      },
+      {
+        path: '/vendorDashboard/orders',
+        element: <VendorOrders />
+      },
+      {
+        path: '/vendorDashboard/products',
+        element: <VendorAddProduct />
+      }
     ]
   },
   {
     path: '/adminDashboard',
-    element: <AdminRoutes><AdminDashboard/></AdminRoutes>,
+    element: <AdminRoutes><AdminDashboard /></AdminRoutes>,
     children: [
       {
         path: '/adminDashboard',
-        element: <AdminHome/>
-      }, 
+        element: <AdminHome />
+      },
       {
         path: '/adminDashboard/allUsers',
-        element: <AdminAllUsers/>
+        element: <AdminAllUsers />
       },
       {
         path: '/adminDashboard/allVendors',
-        element: <AdminAllVendors/>
+        element: <AdminAllVendors />
       },
       {
         path: '/adminDashboard/vendorRequest',
-        element: <AdminVendorRequest/>
+        element: <AdminVendorRequest />
       }
     ]
   },
   {
     path: '/userDashboard',
-    element: <UserRoute><UserDashboard/></UserRoute>,
+    element: <UserRoute><UserDashboard /></UserRoute>,
     children: [
       {
         index: true,
-        element: <UserHome/>,
+        element: <UserHome />,
       },
       {
         path: '/userDashboard/userWishlist',
-        element: <UserWishlist/>,
+        element: <UserWishlist />,
       },
       {
         path: '/userDashboard/orderManagement',
-        element: <OrderManagement/>,
+        element: <OrderManagement />,
+      },
+      {
+        path: '/userDashboard/notifications',
+        element: <UserAlert />,
+      },
+      {
+        path: '/userDashboard/customerSupport',
+        element: <CustomerSupport />,
       },
     ],
   }
