@@ -113,7 +113,7 @@ const CartPage = () => {
             <ScrollRestoration></ScrollRestoration>
 
             {/*Left Side menubar / categorybar  */}
-            <div className="flex-1">
+            <div className="">
                 <LeftMenubar></LeftMenubar>
             </div>
 
