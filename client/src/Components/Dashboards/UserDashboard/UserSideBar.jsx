@@ -49,7 +49,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(3)} button component={Link} to="/userDashboard/">
+                <ListItem onClick={() => setSelected(3)} button component={Link} to="/userDashboard/userWishlist">
                     {
                         selected === 3 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <BookmarksIcon className='text-black text-4xl' />
