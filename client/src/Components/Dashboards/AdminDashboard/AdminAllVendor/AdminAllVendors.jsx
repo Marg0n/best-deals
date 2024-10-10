@@ -306,7 +306,5 @@ export default VendorProducts;
 // <MenuItem onClick={handleClose}>
 //     <BlockIcon fontSize="small" className='text-zinc-800'/> Ban
 // </MenuItem>
-// <MenuItem onClick={handleClose}>
-//     <DeleteIcon fontSize="small" className='text-red-500'/> Remove
-// </MenuItem>
+
 // </Menu>
