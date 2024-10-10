@@ -481,7 +481,7 @@ async function run() {
     app.get('/cartList/:email', async (req, res) => {
       try {
         const email = req.params.email;
-        console.log('Fetching cart for user:', email);
+        // console.log('Fetching cart for user:', email);
 
         // Find the cart for the user using their email
         const userCart = await cartList.findOne({ userEmail: email });
@@ -507,6 +507,8 @@ async function run() {
     app.delete('/cartList/:email', async (req, res) => {
       try {
         const email = req.params.email;
+        console.log(email);
+        
 
         // Find the user's cart by email and clear the cartProducts array
         const result = await cartList.updateOne(
