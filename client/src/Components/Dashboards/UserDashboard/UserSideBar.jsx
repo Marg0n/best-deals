@@ -37,7 +37,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(2)} button component={Link} to="/userDashboard/">
+                <ListItem onClick={() => setSelected(2)} button component={Link} to="/userDashboard/orderManagement">
                     {
                         selected === 2 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <ListAltIcon className='text-black text-4xl' />
