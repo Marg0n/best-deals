@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import axios from "axios";
 import toast from "react-hot-toast";
 
 
@@ -7,6 +8,10 @@ const initialState = {
     cartTotalQuantity: 0,
     cartTotalAmmount: 0
 }
+
+const userEmail = localStorage.getItem('userEmail')
+console.log(userEmail);
+
 
 const cartSlice = createSlice({
     name: 'Cart',
@@ -27,9 +32,27 @@ const cartSlice = createSlice({
                 });
             }
             else {
+
                 const tempProducts = { ...action.payload, cartQuantity: action.payload.cartQuantity };
-                toast.success('Added to the cart')
                 state.cartIteams.push(tempProducts)
+                const cartItem = { userEmail, cartProducts: state.cartIteams };
+                 axios.post(`http://localhost:4000/cartList`, cartItem)
+                    .then((res) => {
+                        console.log(res.data);
+                        if (res.data.message) {
+                            // dispacth(removeAllFromCartlist())
+                            // loggedOut()
+                            toast.success('Added to the cart')
+                            // localStorage.clear()
+                        }
+                    })
+                    .catch((error) => {
+                        // If the error response exists, display the message from the server
+                        if (error.response) {
+                            const errorMessage = error.response.data;
+                            toast.error(errorMessage); // Show the server's error message in a toast
+                        }
+                    });
             }
         },
 
