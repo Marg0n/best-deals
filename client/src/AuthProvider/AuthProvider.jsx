@@ -59,12 +59,14 @@ const AuthProvider = ({ children }) => {
     // setUser(null);
     // return signOut(auth);
     try {
+
       setLoading(true);
       const response = await axios.get(
         `${import.meta.env.VITE_SERVER}/logout`,
         {
           withCredentials: true,
         }
+
       );
 
       if (response.data.success) {

@@ -37,7 +37,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(2)} button component={Link} to="/userDashboard/">
+                <ListItem onClick={() => setSelected(2)} button component={Link} to="/userDashboard/orderManagement">
                     {
                         selected === 2 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <ListAltIcon className='text-black text-4xl' />
@@ -49,7 +49,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(3)} button component={Link} to="/userDashboard/">
+                <ListItem onClick={() => setSelected(3)} button component={Link} to="/userDashboard/userWishlist">
                     {
                         selected === 3 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <BookmarksIcon className='text-black text-4xl' />
@@ -61,7 +61,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(4)} button component={Link} to="/userDashboard/">
+                <ListItem onClick={() => setSelected(4)} button component={Link} to="/userDashboard/notifications">
                     {
                         selected === 4 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <NotificationsIcon className='text-black text-4xl' />
@@ -73,7 +73,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(5)} button component={Link} to="/userDashboard/">
+                <ListItem onClick={() => setSelected(5)} button component={Link} to="/userDashboard/customerSupport">
                     {
                         selected === 5 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <SupportAgentIcon className='text-black text-4xl' />

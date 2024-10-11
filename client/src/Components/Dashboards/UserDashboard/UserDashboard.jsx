@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 
 // icons
-import { RiMenuUnfoldFill } from "react-icons/ri";
+import { FaCaretRight } from 'react-icons/fa6';
 
 
 const drawerWidth = 240;
@@ -51,9 +51,9 @@ const UserDashboard = (props) => {
                     aria-label="open drawer"
                     edge="start"
                     onClick={handleDrawerToggle}
-                    className='btn btn-ghost absolute left-1 top-1 md:hidden'
+                    className='absolute left-0 top-10 md:hidden py-6 px-0 bg-gray-700 rounded-r-xl'
                 >
-                    <RiMenuUnfoldFill size={25} color='red' />
+                    <FaCaretRight className="md:text-xl"></FaCaretRight>
                 </button>
 
 
@@ -63,7 +63,6 @@ const UserDashboard = (props) => {
                     sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
                     aria-label="mailbox folders"
                 >
-                    {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
                     <Drawer
                         container={container}
                         variant="temporary"
@@ -94,7 +93,7 @@ const UserDashboard = (props) => {
 
                 {/* outlet */}
                 <div
-                    className='w-full bg-[#0cc0df]/90'
+                    className='w-full bg-[#0cc0df]/90 min-h-screen'
                     component="main"
                 >
                     <Outlet />
@@ -106,10 +105,6 @@ const UserDashboard = (props) => {
 };
 
 UserDashboard.propTypes = {
-    /**
-     * Injected by the documentation to work in an iframe.
-     * Remove this when copying and pasting into your project.
-     */
     window: PropTypes.func,
 };
 

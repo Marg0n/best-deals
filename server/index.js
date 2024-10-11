@@ -25,7 +25,7 @@ app.use(
       "http://localhost:5173",
       "https://best-deal-909.web.app",
       "https://magenta-peony-5d02de.netlify.app",
-      
+
     ],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -147,6 +147,7 @@ async function run() {
     const usersCollection = client.db("BestDeals").collection("UserCollection");
     const productCollection = client.db("BestDeals").collection("ProductCollection");
     const orderCollection = client.db("BestDeals").collection("OrderManagement");
+    const cartList = client.db("BestDeals").collection("CartList");
 
     // ==================================
     // Admin verify
@@ -209,7 +210,6 @@ async function run() {
     app.post("/users", async (req, res) => {
       try {
         const newUser = req.body;
-
 
         // Check if user already exists
         const query = await usersCollection.findOne({ email: newUser?.email });
@@ -304,19 +304,22 @@ async function run() {
       const minPrice = parseFloat(req.query.minPrice) || 0;
       const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_VALUE;
       const isFeatured = req.query.isFeatured === "true";
-      const category = req.query.selectedCategory
-        ? req.query.selectedCategory
-        : "";
+      const category = req.query.selectedCategory ? req.query.selectedCategory : "";
 
-      // search by products name and filter by price
-      let query = {
-        productName: { $regex: search, $options: "i" },
-        price: { $gte: minPrice, $lte: maxPrice },
-      };
+      // Initialize the query object
+      let query = {};
 
-      // If the client sets the category, then filter by category from MongoDB
-      if (category) {
-        query.category = category;
+      // If any search, price, or category parameters are provided, set up filtering conditions
+      if (search || minPrice || maxPrice < Number.MAX_VALUE || category) {
+        query = {
+          productName: { $regex: search, $options: "i" },
+          price: { $gte: minPrice, $lte: maxPrice },
+        };
+
+        // If the category is specified, add it to the query
+        if (category) {
+          query.category = category;
+        }
       }
 
       // If the `isFeatured` query param is passed and it's true, filter by `isFeatured`
@@ -324,9 +327,13 @@ async function run() {
         query.isFeatured = isFeatured; // Filter for featured products
       }
 
+      // Fetch data based on the query
       const results = await productCollection.find(query).toArray();
+
+      // Send back the results
       res.send(results);
     });
+
 
     // ==================================
     // get all products
@@ -379,6 +386,208 @@ async function run() {
           .json({ message: "Internal server error from last login" });
       }
     });
+//.......................
+app.put('/vendors/:id/warning', async (req, res) => {
+  const { id } = req.params;
+  const { isWarning } = req.body;
+
+  // console.log('Received vendor ID:', id);
+  // console.log('Received isWarning value:', isWarning);
+
+  // Ensure ID is valid
+  if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid vendor ID format' });
+  }
+
+  // Ensure isWarning is a boolean
+  if (typeof isWarning !== 'boolean') {
+      return res.status(400).json({ message: 'Invalid isWarning value' });
+  }
+
+  // Perform the update
+  try {
+      const result = await usersCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { isWarning: isWarning } }
+      );
+
+      if (result.modifiedCount > 0) {
+          return res.status(200).json({ message: 'Warning status updated successfully' });
+      } else {
+          return res.status(404).json({ message: 'Vendor not found' });
+      }
+  } catch (error) {
+      console.error('Error updating warning status:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.put('/vendorss/:id/ban', async (req, res) => {
+  const { id } = req.params;
+  const { isBanned } = req.body;
+
+  // Validate vendor ID and isBanned value
+  if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid vendor ID format' });
+  }
+  if (typeof isBanned !== 'boolean') {
+      return res.status(400).json({ message: 'Invalid isBanned value' });
+  }
+
+  try {
+      const result = await usersCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { isBanned: isBanned } }
+      );
+
+      if (result.modifiedCount > 0) {
+          return res.status(200).json({ message: 'Ban status updated successfully' });
+      } else {
+          return res.status(404).json({ message: 'Vendor not found' });
+      }
+  } catch (error) {
+      console.error('Error updating ban status:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.put('/Users/:id/warning', async (req, res) => {
+  const { id } = req.params;
+  const { isWarning } = req.body;
+
+  // console.log('Received vendor ID:', id);
+  // console.log('Received isWarning value:', isWarning);
+
+  // Ensure ID is valid
+  if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid vendor ID format' });
+  }
+
+  // Ensure isWarning is a boolean
+  if (typeof isWarning !== 'boolean') {
+      return res.status(400).json({ message: 'Invalid isWarning value' });
+  }
+
+  // Perform the update
+  try {
+      const result = await usersCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { isWarning: isWarning } }
+      );
+
+      if (result.modifiedCount > 0) {
+          return res.status(200).json({ message: 'Warning status updated successfully' });
+      } else {
+          return res.status(404).json({ message: 'Vendor not found' });
+      }
+  } catch (error) {
+      console.error('Error updating warning status:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.put('/Userss/:id/ban', async (req, res) => {
+  const { id } = req.params;
+  const { isBanned } = req.body;
+
+  // Validate user ID and isBanned value
+  if (!ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid vendor ID format' });
+  }
+  if (typeof isBanned !== 'boolean') {
+      return res.status(400).json({ message: 'Invalid isBanned value' });
+  }
+
+  try {
+      const result = await usersCollection.updateOne(
+          { _id: new ObjectId(id) },
+          { $set: { isBanned: isBanned } }
+      );
+
+      if (result.modifiedCount > 0) {
+          return res.status(200).json({ message: 'Ban status updated successfully' });
+      } else {
+          return res.status(404).json({ message: 'Vendor not found' });
+      }
+  } catch (error) {
+      console.error('Error updating ban status:', error);
+      return res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.delete('/usersDelete/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+      const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
+
+      if (result.deletedCount > 0) {
+          res.status(200).json({ message: 'User deleted successfully' });
+      } else {
+          res.status(404).json({ message: 'User not found' });
+      }
+  } catch (error) {
+      console.error('Error deleting user:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.delete('/vendorsDelete/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+      const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
+
+      if (result.deletedCount > 0) {
+          res.status(200).json({ message: 'User deleted successfully' });
+      } else {
+          res.status(404).json({ message: 'User not found' });
+      }
+  } catch (error) {
+      console.error('Error deleting user:', error);
+      res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+app.get('/totalUsers', async (req, res) => {
+  try {
+      const totalUsers = await usersCollection.countDocuments({ role: 'User' }); // Adjust query if needed (e.g., filtering by role)
+      res.json({ totalUsers });
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching total users', error });
+  }
+});
+
+app.get('/totalVendors', async (req, res) => {
+  try {
+      const totalVendors = await usersCollection.countDocuments({ role: 'Vendor' }); // Adjust query if needed
+      res.json({ totalVendors });
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching total vendors', error });
+  }
+});
+app.get('/totalTransactionss', async (req, res) => {
+  try {
+      const totalTransactions = await orderCollection.countDocuments({});
+      
+      const totalAmountResult = await orderCollection.aggregate([
+          {
+              $group: {
+                  _id: null,
+                  totalAmount: { $sum: "$totalAmount" }
+              }
+          }
+      ]).toArray();
+
+      const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
+      res.json({ totalTransactions, totalAmount });
+  } catch (error) {
+      res.status(500).json({ message: 'Error fetching total transactions or amount', error });
+  }
+});
+
+
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // fetch comments
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -387,7 +596,7 @@ async function run() {
 
       try {
         // Find product using string _id
-        const product = await productCollection.findOne({ _id: productId });
+        const product = await productCollection.findOne({ _id: new ObjectId(productId) });
 
         if (product) {
           res.status(200).json(product);
@@ -416,7 +625,7 @@ async function run() {
 
       try {
         const result = await productCollection.updateOne(
-          { _id: productId },
+          { _id: new ObjectId(productId) },
           { $push: { comments: newComment } }
         );
 
@@ -430,6 +639,101 @@ async function run() {
         res.status(500).json({ message: 'Server error' });
       }
     });
+
+
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // cartList collection
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // insert products into cartList
+    app.post('/cartList', async (req, res) => {
+      try {
+        const { userEmail, cartProducts } = req.body;
+
+        // Check if the user already has a cart
+        const userCart = await cartList.findOne({ userEmail: userEmail });
+        // console.log(userCart);
+
+
+        if (userCart) {
+          // Replace the existing cartProducts array with the new one
+          const result = await cartList.updateOne(
+            { userEmail: userEmail },
+            { $set: { cartProducts: [cartProducts] } }  // Replace the array
+          );
+          // console.log('Cart products replaced for existing cart:', result);
+
+          res.status(200).json({ message: 'Cart products replaced successfully' });
+        } else {
+          // If the user doesn't have a cart, create a new cart for the user
+          const newCart = { userEmail: userEmail, cartProducts: [cartProducts] };
+          const result = await cartList.insertOne(newCart);
+          // console.log('New cart created:', result);
+
+          res.status(201).json({ message: 'Cart created and product added successfully' });
+        }
+      } catch (error) {
+        // console.error('Error adding item to cart:', error);
+        res.status(500).json({ message: 'Failed to add item to cart', error });
+      }
+    });
+
+
+    // get products from cartList filtered by userEmail
+    app.get('/cartList/:email', async (req, res) => {
+      try {
+        const email = req.params.email;
+        // console.log('Fetching cart for user:', email);
+
+        // Find the cart for the user using their email
+        const userCart = await cartList.findOne({ userEmail: email });
+        // console.log(userCart);
+
+
+        if (userCart) {
+          // Send back the user's cart data if found
+          res.status(200).json(userCart);
+        } else {
+          // If no cart found for the user, return an empty cart or an appropriate message
+          res.status(404).json({ message: 'No cart found for this user.' });
+        }
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+        res.status(500).json({ message: 'Failed to retrieve cart data', error });
+      }
+    });
+
+
+    // Clear all products from cartList filtered by userEmail
+    app.delete('/cartList/:email', async (req, res) => {
+      try {
+        const email = req.params.email;
+        console.log(email);
+        
+
+        // Find the user's cart by email and clear the cartProducts array
+        const result = await cartList.updateOne(
+          { userEmail: email },
+          { $set: { cartProducts: [] } }  // Empty the cartProducts array
+        );
+
+        if (result.modifiedCount > 0) {
+          res.status(200).json({ message: 'Cart cleared successfully' });
+        } else {
+          res.status(404).json({ message: 'No cart found for this user.' });
+        }
+      } catch (error) {
+        console.error('Error clearing cart:', error);
+        res.status(500).json({ message: 'Failed to clear cart', error });
+      }
+    });
+
+
+
+
+
+
+
 
 
 
