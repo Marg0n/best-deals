@@ -376,6 +376,7 @@ async function run() {
           },
         };
         const results = await usersCollection.updateOne(query, updateDoc);
+        console.log(results,updateBody);
         res.send(results);
       } catch {
         // If an error occurs during execution, catch it here
@@ -482,7 +483,7 @@ async function run() {
     app.get('/cartList/:email', async (req, res) => {
       try {
         const email = req.params.email;
-        console.log('Fetching cart for user:', email);
+        // console.log('Fetching cart for user:', email);
 
         // Find the cart for the user using their email
         const userCart = await cartList.findOne({ userEmail: email });

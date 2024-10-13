@@ -155,7 +155,7 @@ const Registration = () => {
             name: result?.user?.displayName,
             photo: result?.user?.photoURL,
             createdTime: result?.user?.metadata.creationTime,
-            lastLogin: lastLogin,
+            lastLogin: result?.user?.metadata.lastSignInTime,
             role: "User"
           }
 

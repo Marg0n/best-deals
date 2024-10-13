@@ -5,6 +5,7 @@ import useUserProfile from '../../../../hooks/useUserProfile';
 import PropTypes from 'prop-types';
 import BarChart from '../../Shared/BarChart';
 import { Helmet } from "react-helmet-async";
+import AOS from 'aos';
 
 const UserHome = () => {
 
@@ -60,6 +61,13 @@ const UserHome = () => {
 
     const monthlyTotals = getMonthlyTotals(purchaseHistory);
 
+    // aos animation use effect
+    useEffect(() => {
+        AOS.init({
+            duration: 500
+        });
+    }, []);
+
 
     return (
         <div className="p-8 min-h-screen space-y-4">
@@ -69,7 +77,7 @@ const UserHome = () => {
             </Helmet>
 
             {/* stat section */}
-            <div className='flex gap-2 items-center justify-center'>
+            <div className='flex gap-2 items-center justify-center' data-aos="fade-up">
                 <StatCard
                     title={'Total Times Buy'}
                     value={profile[0]?.purchaseHistory.length}
@@ -92,7 +100,7 @@ const UserHome = () => {
             {/* Account settings */}
 
             {/* Chart section */}
-            <div className="bg-white rounded-lg shadow-md flex flex-col items-center justify-center text-base-300">
+            <div className="bg-white rounded-lg shadow-md flex flex-col items-center justify-center text-base-300" data-aos="fade-up" data-aos-duration="1500">
                 <h1 className='font-semibold my-4'>Monthly Purchase Totals</h1>
                 <BarChart data={monthlyTotals} />
             </div>

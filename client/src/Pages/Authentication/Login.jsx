@@ -106,12 +106,14 @@ const Login = () => {
                         name: result?.user?.displayName,
                         photo: result?.user?.photoURL,
                         createdTime: result?.user?.metadata.creationTime,
-                        lastLogin: lastLogin,
+                        lastLogin: result?.user?.metadata.lastSignInTime,
                         role: "User"
                     }
 
                     // Send user data to your server
                     axiosCommon.post('/users', userData)
+                    // last login timestamp
+                    axiosCommon.patch(`/lastLogin/${result?.user.email}`, lastLogin)
 
                     // jwt token
                     axiosSecoure.post(`/jwt`, {
