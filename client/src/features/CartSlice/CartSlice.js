@@ -73,19 +73,21 @@ const cartSlice = createSlice({
             );
             if (state.cartIteams[itemIndex].cartQuantity > 1) {
                 state.cartIteams[itemIndex].cartQuantity--;
-                console.log(state.cartIteams[itemIndex].cartQuantity);
+                // console.log(state.cartIteams[itemIndex].cartQuantity);
             }
             else {
 
             }
         },
 
-        // Remove item from cart
+        // single product Remove from cart
         removeFromCart(state, action) {
             const nextCartItems = state.cartIteams.filter(
-                (item) => item._id !== action.payload
+                (item) => item._id !== action.payload 
             );
             state.cartIteams = nextCartItems;
+            const cartItem = { userEmail, cartProducts: state.cartIteams };
+            axios.post(`${import.meta.env.VITE_SERVER}/cartList`, cartItem)
             toast.success('Item removed')
         },
 
@@ -95,6 +97,7 @@ const cartSlice = createSlice({
         setCartData: (state, action) => {
             state.cartIteams = action.payload; // Update cart items with fetched data
         },
+
         // Remove all items from cartList
         removeAllFromCartlist(state) {
             state.cartIteams = [];

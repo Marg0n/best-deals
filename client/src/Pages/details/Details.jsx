@@ -49,111 +49,123 @@ const Details = () => {
 
 
     return (
-        <div className='flex-1 lg:flex items-start '>
-            <Helmet>
-                <title>Best Deal | {product?.productName}</title>
-            </Helmet>
-            <ScrollRestoration></ScrollRestoration>
-            <div className='lg:w-8/12 flex-1 lg:flex '>
-                <div className='lg:w-1/2 p-3'>
-                    {/* path indication */}
-                    <p className='text-[#775050] dark:text-white  text-lg font-normal'>
-                        <Link to='/'>Home</Link> {'>'} <Link>{product.category}</Link> {'>'} <Link>{product.productName}</Link>
-                    </p>
 
-                    {/* View comments */}
-                    <div className='flex items-center gap-3 justify-end'>
-                        <Link onClick={handleOpen} className='text-[#775050] dark:text-white  text-lg font-normal underline' to="">
-                            view comments
-                        </Link>
-                        <span className="block text-xs font-medium tracking-widest uppercase dark:text-white text-[#775050]">
-                            Ratings :{product.rating}<Rating name="read-only" size="small" value={product.rating} precision={0.1} readOnly />
+        <div>
+            <div className='flex-1 lg:flex items-start '>
+                <Helmet>
+                    <title>Best Deal | {product?.productName}</title>
+                </Helmet>
+                <ScrollRestoration></ScrollRestoration>
+                <div className='lg:w-8/12 flex-1 lg:flex '>
+                    <div className='lg:w-1/2 p-3'>
+                        {/* path indication */}
+                        <p className='text-[#775050] dark:text-white  text-lg font-normal'>
+                            <Link to='/'>Home</Link> {'>'} <Link>{product.category}</Link> {'>'} <Link>{product.productName}</Link>
+                        </p>
 
-                        </span>
-                        {/* Use the modal component */}
-                        <CommentModal open={open} handleClose={handleClose} userName={user?.displayName} photo={user?.photoURL} productId={_id} />
-                    </div>
+                        {/* View comments */}
+                        <div className='flex items-center gap-3 justify-end'>
+                            <Link onClick={handleOpen} className='text-[#775050] dark:text-white  text-lg font-normal underline' to="">
+                                view comments
+                            </Link>
+                            <span className="block text-xs font-medium tracking-widest uppercase dark:text-white text-[#775050]">
+                                Ratings :{product.rating}<Rating name="read-only" size="small" value={product.rating} precision={0.1} readOnly />
 
-                    {/* products image display */}
-                    <div className=''>
-                        <Carousel showArrows={true} showThumbs={true}>
-                            <div>
-                                <img src={product.productImage} />
-
-                            </div>
-                            <div>
-                                <img src={product.productImage} />
-
-                            </div>
-                            <div>
-                                <img src={product.productImage} />
-
-                            </div>
-                            <div>
-                                <img src={product.productImage} />
-
-                            </div>
-                        </Carousel>
-                    </div>
-
-                    {/* products counter to add to cart quantity */}
-
-                    <div className='flex justify-center gap-6'>
-
-                        <ProductsCounter
-                            key={product._id}
-                            product={product}
-                            setQuality={setQuality}
-                            quality={quantity}
-                        ></ProductsCounter>
-
-                        <button onClick={() => handleAddToCart(product)} className='bg-[#d9cfaf] rounded-[86px] text-black text-sm font-bold px-4 py-2'>Add To Cart </button>
-                        {/* <button className='bg-black rounded-[86px] text-white text-sm font-bold px-4 py-2'>Add To Wish List </button> */}
-                    </div>
-                    <div className='text-center mt-4'>
-
-                        <Link
-                            to={`/cartlist`}
-                            // to={`/single-checkout/${_id}`} 
-                            // onClick={() => handleBuyNow(product)}
-                            onClick={() => handleAddToCart(product)}
-                            className='bg-[#ff6b1c] rounded-[86px] text-white text-sm font-bold px-8 py-2'>
-                            Buy Now
-                        </Link>
-                    </div>
-                </div>
-                <div className='p-3 lg:w-1/2'>
-                    <h3 className='text-[#775050] dark:text-white  text-2xl font-normal'>{product.productName}</h3>
-                    <h3 className='text-[#ff6b1c] dark:text-white  text-3xl font-bold py-4'>${product.price}</h3>
-                    <hr className='border-2 border-[#1d2236] w-full' />
-                    <p className='text-[#775050] dark:text-white  text-lg font-normal pt-2'>Brand: {product.brandName}</p>
-                    <p className='text-[#775050] dark:text-white  text-lg font-normal'>Description: {product.description}</p>
-                </div>
-            </div>
-
-            {/* suggestion  */}
-            <div>
-                {
-                    productsInSameCategory.length > 0 ?
-                        <div className=' h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
-                            <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
-
-                            {
-                                productsInSameCategory.map(item =>
-                                    <MoreSuggetionCard
-                                        key={item._id}
-                                        product={item}
-                                    ></MoreSuggetionCard>)
-                            }
-
-
+                            </span>
+                            {/* Use the modal component */}
+                            <CommentModal open={open} handleClose={handleClose} userName={user?.displayName} photo={user?.photoURL} productId={_id} />
                         </div>
-                        : ''
 
-                }
+                        {/* products image display */}
+                        <div className=''>
+                            <Carousel showArrows={true} showThumbs={true}>
+                                {/* Main product image */}
+                                <div>
+                                    <img src={product?.productImage} alt="Product Image" />
+                                </div>
+
+                                {/* Gallery images */}
+                                {
+                                    product?.galleryImages?.length > 0
+                                        ? product?.galleryImages.map((img, index) => (
+                                            <div key={index}>
+                                                <img src={img} alt={`Gallery Image ${index + 1}`} />
+                                            </div>
+                                        ))
+                                        : <div>
+                                            <img src={product?.productImage} alt="Product Image" />
+                                        </div>
+                                }
+                            </Carousel>
+                        </div>
+
+                        {/* products counter to add to cart quantity */}
+
+                        <div className='flex justify-center gap-6'>
+
+                            <ProductsCounter
+                                key={product._id}
+                                product={product}
+                                setQuality={setQuality}
+                                quality={quantity}
+                            ></ProductsCounter>
+
+                            <button onClick={() => handleAddToCart(product)} className='bg-[#d9cfaf] rounded-[86px] text-black text-sm font-bold px-4 py-2'>Add To Cart </button>
+                            {/* <button className='bg-black rounded-[86px] text-white text-sm font-bold px-4 py-2'>Add To Wish List </button> */}
+                        </div>
+                        <div className='text-center mt-4'>
+
+                            <Link
+                                to={`/cartlist`}
+                                // to={`/single-checkout/${_id}`} 
+                                // onClick={() => handleBuyNow(product)}
+                                onClick={() => handleAddToCart(product)}
+                                className='bg-[#ff6b1c] rounded-[86px] text-white text-sm font-bold px-8 py-2'>
+                                Buy Now
+                            </Link>
+                        </div>
+                    </div>
+                    <div className='p-3 lg:w-1/2'>
+                        <h3 className='text-[#775050] dark:text-white  text-2xl font-normal'>{product.productName}</h3>
+                        <h3 className='text-[#ff6b1c] dark:text-white  text-3xl font-bold py-4'>${product.price}</h3>
+                        <hr className='border-2 border-[#1d2236] w-full' />
+                        <p className='text-[#775050] dark:text-white  text-lg font-normal pt-2'>Brand: {product.brandName}</p>
+                        <p className='text-[#775050] dark:text-white  text-lg font-normal'>Details: {product?.productShortDescription}</p>
+                    </div>
+
+                </div>
+
+                {/* suggestion  */}
+                <div>
+                    {
+                        productsInSameCategory.length > 0 ?
+                            <div className=' h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
+                                <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
+
+                                {
+                                    productsInSameCategory.map(item =>
+                                        <MoreSuggetionCard
+                                            key={item._id}
+                                            product={item}
+                                        ></MoreSuggetionCard>)
+                                }
+
+
+                            </div>
+                            : ''
+
+                    }
+                </div>
             </div>
 
+
+            {/* vendor Info */}
+            <div>
+                <h1>Vendor details</h1>
+            </div>
         </div>
+
+
     );
 };
 
