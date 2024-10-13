@@ -7,7 +7,7 @@ export const imageUpload = async (image) => {
 
     const formData = new FormData();
     formData.append('image', image)
-    // console.log(formData);
+    console.log(formData);
 
     // upload image and get image url
     const { data: pic } = await axios.post(

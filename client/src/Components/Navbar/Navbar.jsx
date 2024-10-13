@@ -39,9 +39,9 @@ const Navbar = ({ toggleTheme, theme }) => {
     setDropdown(!dropdown);
   };
 
-  const cartItem = {userEmail , cartProducts}
+  const cartItem = { userEmail, cartProducts }
   // console.log(cartItem);
-  
+
 
 
   // logout
@@ -126,13 +126,15 @@ const Navbar = ({ toggleTheme, theme }) => {
     >
       <div className="navbar  container mx-auto">
         {/* logo */}
-        <Link to='/' className="flex-1">
-          <img
-            className="h-10 lg:h-16"
-            src="https://i.ibb.co.com/rtTfZsH/Bestdeal-white-text-log.png"
-            alt="BestDeal"
-          />
-        </Link>
+        <div className="flex-1">
+          <Link  to='/'>
+            <img
+              className="h-10 lg:h-16"
+              src="https://i.ibb.co.com/rtTfZsH/Bestdeal-white-text-log.png"
+              alt="BestDeal"
+            />
+          </Link>
+        </div>
 
         <div className="flex-none lg:space-x-4 space-x-2">
           {/* Dark mode light mode buttone */}
