@@ -6,7 +6,7 @@ import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import useUserProfile from '../../../hooks/useUserProfile';
 import useAuth from '../../../hooks/useAuth';
 
@@ -25,7 +25,7 @@ const UserSideBar = () => {
             <div className="p-4 text-lg font-bold"><span className='text-red-500'>{user?.displayName}</span>'s Dashboard</div>
             
             <List>
-                <ListItem onClick={() => setSelected(1)} button component={Link} to="/userDashboard">
+                <ListItem onClick={() => setSelected(1)} button component={NavLink} to="/userDashboard">
                     {
                         selected === 1 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <DashboardIcon className='text-black text-4xl' />
@@ -37,7 +37,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(2)} button component={Link} to="/userDashboard/orderManagement">
+                <ListItem onClick={() => setSelected(2)} button component={NavLink} to="/userDashboard/orderManagement">
                     {
                         selected === 2 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <ListAltIcon className='text-black text-4xl' />
@@ -49,7 +49,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(3)} button component={Link} to="/userDashboard/userWishlist">
+                <ListItem onClick={() => setSelected(3)} button component={NavLink} to="/userDashboard/userWishlist">
                     {
                         selected === 3 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <BookmarksIcon className='text-black text-4xl' />
@@ -61,7 +61,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(4)} button component={Link} to="/userDashboard/notifications">
+                <ListItem onClick={() => setSelected(4)} button component={NavLink} to="/userDashboard/notifications">
                     {
                         selected === 4 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <NotificationsIcon className='text-black text-4xl' />
@@ -73,7 +73,7 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(5)} button component={Link} to="/userDashboard/customerSupport">
+                <ListItem onClick={() => setSelected(5)} button component={NavLink} to="/userDashboard/customerSupport">
                     {
                         selected === 5 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <SupportAgentIcon className='text-black text-4xl' />
