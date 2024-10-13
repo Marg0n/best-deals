@@ -79,22 +79,23 @@ const Details = () => {
                         {/* products image display */}
                         <div className=''>
                             <Carousel showArrows={true} showThumbs={true}>
+                                {/* Main product image */}
                                 <div>
-                                    <img src={product.productImage} />
-
+                                    <img src={product?.productImage} alt="Product Image" />
                                 </div>
-                                <div>
-                                    <img src={product.productImage} />
 
-                                </div>
-                                <div>
-                                    <img src={product.productImage} />
-
-                                </div>
-                                <div>
-                                    <img src={product.productImage} />
-
-                                </div>
+                                {/* Gallery images */}
+                                {
+                                    product?.galleryImages?.length > 0
+                                        ? product?.galleryImages.map((img, index) => (
+                                            <div key={index}>
+                                                <img src={img} alt={`Gallery Image ${index + 1}`} />
+                                            </div>
+                                        ))
+                                        : <div>
+                                            <img src={product?.productImage} alt="Product Image" />
+                                        </div>
+                                }
                             </Carousel>
                         </div>
 
@@ -129,7 +130,7 @@ const Details = () => {
                         <h3 className='text-[#ff6b1c] dark:text-white  text-3xl font-bold py-4'>${product.price}</h3>
                         <hr className='border-2 border-[#1d2236] w-full' />
                         <p className='text-[#775050] dark:text-white  text-lg font-normal pt-2'>Brand: {product.brandName}</p>
-                        <p className='text-[#775050] dark:text-white  text-lg font-normal'>Description: {product.description}</p>
+                        <p className='text-[#775050] dark:text-white  text-lg font-normal'>Details: {product?.productShortDescription}</p>
                     </div>
 
                 </div>
