@@ -20,9 +20,9 @@ const UserSideBar = () => {
 
 
     return (
-        <div className="w-64 h-screen bg-gray-800 text-white fixed top-0 left-0">
+        <div className="w-64 min-h-screen bg-gray-800 text-white fixed top-0 left-0">
             {/* display user name */}
-            <div className="p-4 text-lg font-bold"><span className='text-red-500'>{user?.displayName} </span>Dashboard</div>
+            <div className="p-4 text-lg font-bold"><span className='text-red-500'>{user?.displayName}</span>'s Dashboard</div>
             
             <List>
                 <ListItem onClick={() => setSelected(1)} button component={Link} to="/userDashboard">

@@ -376,6 +376,7 @@ async function run() {
           },
         };
         const results = await usersCollection.updateOne(query, updateDoc);
+        console.log(results,updateBody);
         res.send(results);
       } catch {
         // If an error occurs during execution, catch it here

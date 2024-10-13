@@ -40,28 +40,32 @@ const PurchaseHistoryTable = ({ data }) => {
   });
 
   return (
-    <table>
-      <thead>
-        {table.getHeaderGroups().map(headerGroup => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map(header => (
-              <th key={header.id}>
-                {header.column.columnDef.header}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {table.getRowModel().rows.map(row => (
-          <tr key={row.id}>
-            {row.getVisibleCells().map(cell => (
-              <td key={cell.id}>{cell.column.columnDef.accessorKey ? row.original[cell.column.columnDef.accessorKey] : null}</td>
-            ))}
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <div className="table-container">
+      <table>
+        <thead>
+          {table.getHeaderGroups().map(headerGroup => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map(header => (
+                <th key={header.id}>
+                  {header.column.columnDef.header}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody>
+          {table.getRowModel().rows.map(row => (
+            <tr key={row.id}>
+              {row.getVisibleCells().map(cell => (
+                <td key={cell.id} data-label={cell.column.columnDef.header}>
+                  {cell.column.columnDef.accessorKey ? row.original[cell.column.columnDef.accessorKey] : null}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

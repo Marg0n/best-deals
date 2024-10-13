@@ -8,7 +8,7 @@ const CustomerSupport = () => {
                 <title>Best Deal | Customer Support</title>
             </Helmet>
 
-            <div className="bg-white rounded-lg shadow-md flex flex-col items-center justify-center text-base-300">
+            <div className="bg-white rounded-lg shadow-md flex flex-col items-center justify-center text-base-300 min-h-[90vh]">
                 Customer Support
             </div>
 

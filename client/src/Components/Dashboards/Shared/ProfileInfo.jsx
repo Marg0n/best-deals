@@ -11,10 +11,11 @@ const ProfileInfo = () => {
     // user info
     const { user } = useAuth();
     const { profile } = useUserProfile();
+    const formattedDate = localDate (user?.metadata.lastSignInTime)
 
     // date time converting to BD time
     const creationDate = localDate(profile[0]?.createdTime)
-    const lasttimeLogin = localDate(profile[0]?.lastLogin)
+    const lastTimeLogin = localDate(profile[0]?.lastLogin)
 
     // avatar config
     const StyledBadge = styled(Badge)(({ theme }) => ({
@@ -46,9 +47,8 @@ const ProfileInfo = () => {
         },
     }));
 
-
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md flex lg:flex-row flex-col gap-4 items-center justify-center text-base-300">
+        <div className="bg-white p-6 rounded-lg shadow-md flex lg:flex-row flex-col gap-4 items-center justify-center text-base-300" data-aos="fade-up" data-aos-duration="1000">
             <div className='lg:w-1/3 text-center'>
                 <StyledBadge
                     overlap="circular"
@@ -75,7 +75,7 @@ const ProfileInfo = () => {
                     <h3>{user?.displayName}</h3>
                     <p>{user?.email}</p>
                     <p>{creationDate}</p>
-                    <p>{lasttimeLogin}</p>
+                    <p>{formattedDate ? formattedDate : lastTimeLogin}</p>
                     <p
                         className={`${profile[0]?.role === 'Admin'
                             ? 'text-fuchsia-700'
