@@ -14,6 +14,7 @@ import { IoSaveOutline } from "react-icons/io5";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
+import NothingInCart from "../../Components/NothingInCart/NothingInCart";
 
 
 
@@ -106,23 +107,23 @@ const CartPage = () => {
     }
 
     return (
-        <div className=" flex p-5 gap-y-5 md:gap-5">
+        <div className=" mx-auto p-5 gap-y-5 md:gap-5">
             <Helmet>
                 <title>Best Deal | Cart list</title>
             </Helmet>
             <ScrollRestoration></ScrollRestoration>
 
             {/*Left Side menubar / categorybar  */}
-            <div className="">
+            {/* <div className="">
                 <LeftMenubar></LeftMenubar>
-            </div>
+            </div> */}
 
             {/* cart list */}
-            <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
+            <div className="w-full  mx-auto lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] ">
                     {
                         cart?.cartIteams?.length === 0 ?
-                            <div><NoData></NoData></div> :
+                            <div><NothingInCart/></div> :
                             <div>
                                 <div>
                                     {cart?.cartIteams?.map(product => (
@@ -161,14 +162,14 @@ const CartPage = () => {
                                         <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Amounts</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className="text-black dark:text-white">
                                     {/* Quantity & Total Amounts */}
                                     <tr>
-                                        <td>{totalQuantity}</td>
+                                        <td>Item {totalQuantity} pcs</td>
                                         <td>$ {totalAmount?.toFixed(2)}</td>
                                     </tr>
                                     {/* Discount */}
-                                    <tr>
+                                    <tr className="dark:bg-[#34394C]">
                                         <td>Discount</td>
                                         <td>0%</td>
                                     </tr>
