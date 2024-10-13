@@ -14,7 +14,7 @@ const VendorAddProduct = () => {
     const [imageText, setImageText] = useState('');
     const { user } = useAuth();
     const axiosCommon = useAxiosCommon();
-   
+
     const categories = [
         { value: 'Men', label: 'Men' },
         { value: 'healthcare', label: 'healthcare' },
@@ -22,6 +22,26 @@ const VendorAddProduct = () => {
         { value: 'Woman', label: 'Woman' },
 
     ];
+
+    // Initial size options
+    const [sizeOptions, setSizeOptions] = useState([
+        { value: 'Small', label: 'Small' },
+        { value: 'Medium', label: 'Medium' },
+        { value: 'Large', label: 'Large' },
+        { value: 'add_more', label: 'Add more' },
+    ]);
+
+    const [showCustomSizeInput, setShowCustomSizeInput] = useState(false);
+    const [customSize, setCustomSize] = useState('');
+
+    const handleAddCustomSize = () => {
+        if (customSize) {
+            const newSize = { value: customSize, label: customSize };
+            setSizeOptions(prevOptions => [...prevOptions.filter(opt => opt.value !== 'add_more'), newSize, { value: 'add_more', label: 'Add more' }]);
+            setShowCustomSizeInput(false); // Hide the input field after adding
+            setCustomSize(''); // Clear the input field
+        }
+    };
 
     const onSubmit = async (data, e) => {
 
@@ -32,6 +52,7 @@ const VendorAddProduct = () => {
             email: user?.email,
             companyName: data.companyName || '',
             productName: data.productName,
+            productShortDescription: data.productShortDescription,
             description: data.productDescription,
             category: data.category,
             price: parseFloat(data.price),
@@ -40,30 +61,30 @@ const VendorAddProduct = () => {
             discount: parseFloat(data.discount),
             isFeatured: false,
             productImage: imageUrl || '',
-            attributes: [
-                {
-                    color: '',
-                    size: data.size,
-                    gender: data.gender || '',
-                }
-            ]
+            veriation:
+            {
+                color: [],
+                size: [] || data.size,
+            }
+
+
         }
-    
+
         const res = await axiosCommon.post('/all-products', addProduct);
 
-        if(res.data.insertedId){
+        if (res.data.insertedId) {
             Swal.fire({
                 position: "center",
                 icon: "success",
                 title: `Your Product Has Been Added`,
                 showConfirmButton: true,
-                
+
             });
             reset();
         }
         // console.log(addProduct);
 
-        
+
     };
 
 
@@ -85,7 +106,23 @@ const VendorAddProduct = () => {
                                     label="Product Name"
                                     required
                                     {...register('productName')}
- 
+
+                                />
+                            </div>
+
+                            {/* Product Short Description  */}
+                            <div className="mb-4">
+                                <TextField
+                                    required
+                                    fullWidth
+                                    multiline
+                                    rows={4}
+                                    label="Short Description"
+                                    placeholder="Enter a brief summary of the product..."
+                                    inputProps={{ maxLength: 250 }}
+                                    {...register('productShortDescription')}
+                                    className="mb-4"
+                                    helperText="Maximum 250 characters."
                                 />
                             </div>
 
@@ -102,23 +139,68 @@ const VendorAddProduct = () => {
                                 />
                             </div>
 
-                            {/* Size and Gender Section */}
+
+
                             {/* Size */}
-                            <div className="w-1/2 mb-4">
-                                <div className="flex gap-2">
-                                    <TextField fullWidth label="Product Size" {...register('size')} />
+                            <div className='bg-white shadow-md p-6 rounded-md'>
+                                <div className='mb-2'>
+                                    <Typography variant="h6" className="mb-4 font-semibold">Select Size</Typography>
                                 </div>
+                                <div className='p-2 mb-2'>
+                                    <Controller
+                                        control={control}
+                                        defaultValue={[]}
+                                        {...register('size')}
+                                        render={({ field: { onChange, value, ref } }) => (
+                                            <Select
+                                                inputRef={ref}
+                                                value={sizeOptions.filter(c => value && value.includes(c.value))}
+                                                onChange={val => {
+                                                    const selectedValues = val.map(c => c.value);
+                                                    onChange(selectedValues);
+
+                                                    // Check if "Add more" is selected
+                                                    if (selectedValues.includes('add_more')) {
+                                                        setShowCustomSizeInput(true);
+                                                    }
+                                                }}
+                                                options={sizeOptions}
+                                                isMulti
+                                            />
+                                        )}
+                                    />
+                                </div>
+
+                                {/* Display input for custom size when "Add more" is selected */}
+                                {showCustomSizeInput && (
+                                    <div className='mt-4'>
+                                        <input
+                                            type='text'
+                                            value={customSize}
+                                            onChange={(e) => setCustomSize(e.target.value)}
+                                            placeholder="Enter custom size"
+                                            className="p-2 border rounded-md w-full"
+                                        />
+                                        <button
+                                            type="button"
+                                            onClick={handleAddCustomSize}
+                                            className="mt-2 p-2 bg-blue-500 text-white rounded-md"
+                                        >
+                                            Add Size
+                                        </button>
+                                    </div>
+                                )}
                             </div>
 
                             {/* Gender */}
-                            <div className="w-1/2">
+                            {/* <div className="w-1/2">
                                 <Typography variant="body1" className="mb-2">Gender</Typography>
                                 <RadioGroup row {...register('gender')}>
                                     <FormControlLabel value="Men" control={<Radio />} label="Men" />
                                     <FormControlLabel value="Women" control={<Radio />} label="Women" />
                                     <FormControlLabel value="Unisex" control={<Radio />} label="Unisex" />
                                 </RadioGroup>
-                            </div>
+                            </div> */}
 
                         </div>
 
@@ -135,7 +217,7 @@ const VendorAddProduct = () => {
 
                     {/* Right Section */}
 
-                
+
                     <div className="space-y-6">
                         {/* Upload Image Section */}
                         <div className="bg-white shadow-md p-6 rounded-md">
@@ -143,21 +225,21 @@ const VendorAddProduct = () => {
                                 <Typography variant="h6" className="mb-4 font-semibold">Upload Image</Typography>
                             </div>
                             <input
-                             type="file" 
-                             name='photo'
-                             id='photo'
-                             accept='image/*'
-                             required
-                             multiple
-                             onChange={(e)=>{
-                                handleImage(e);
-                             }}
-                             className="file-input file-input-bordered w-full max-w-xs" 
-                             {...register('photo')}
-                             />
-                             <div>
+                                type="file"
+                                name='photo'
+                                id='photo'
+                                accept='image/*'
+                                required
+                                multiple
+                                onChange={(e) => {
+                                    handleImage(e);
+                                }}
+                                className="file-input file-input-bordered w-full max-w-xs"
+                                {...register('photo')}
+                            />
+                            <div>
                                 {imageText}
-                             </div>
+                            </div>
                         </div>
 
                         {/* Category Section with Datalist */}
