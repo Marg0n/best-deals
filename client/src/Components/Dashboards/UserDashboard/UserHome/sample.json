@@ -1,0 +1,766 @@
+{
+  "_id": { "$oid": "66f457611bf87be58b2b4e3e" },
+  "email": "helloshatak@gmail.com",
+  "name": "Shafiul Islam",
+  "photo": "https://lh3.googleusercontent.com/a/ACg8ocIcDJv255QSvFoUcJsOH9gprIDIAFbEaebjoxlJw6AxNu2dTz0=s96-c",
+  "createdTime": "Mon, 23 Sep 2024 19:04:17 GMT",
+  "lastLogin": "Wed, 25 Sep 2024 18:33:02 GMT",
+  "role": "Admin",
+  "purchaseHistory": [
+    {
+      "orderDate": "Thu, 03 Oct 2024 19:52:31 GMT",
+      "items": [
+        [
+          {
+            "_id": "P1036",
+            "email": "vendor2@example.com",
+            "companyName": "HomeAppliance Inc.",
+            "productName": "Smart Refrigerator",
+            "description": "A state-of-the-art smart refrigerator with touchscreen interface and Wi-Fi connectivity.",
+            "category": "Home Appliances",
+            "price": { "$numberDouble": "249.99" },
+            "stockQuantity": { "$numberInt": "30" },
+            "rating": { "$numberDouble": "4.8" },
+            "comments": [
+              {
+                "name": "Linda Carter",
+                "userPhoto": "https://example.com/images/linda_carter.jpg",
+                "comment": "Absolutely love this fridge! The smart features are fantastic.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "George Martin",
+                "userPhoto": "https://example.com/images/george_martin.jpg",
+                "comment": "A bit pricey but worth every penny.",
+                "userRating": { "$numberDouble": "4.5" }
+              },
+              {
+                "name": "Rachel Adams",
+                "userPhoto": "https://example.com/images/rachel_adams.jpg",
+                "comment": "The touchscreen is easy to use.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Steven Wilson",
+                "userPhoto": "https://example.com/images/steven_wilson.jpg",
+                "comment": "Keeps food fresh longer than my old fridge.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Natalie Thompson",
+                "userPhoto": "https://example.com/images/natalie_thompson.jpg",
+                "comment": "Wish it had more storage space.",
+                "userRating": { "$numberDouble": "3.5" }
+              },
+              {
+                "name": "Toufique Eamam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocLiYZ-hR0HdbRdBshEoLYLZtu3T5ShSqIsEDyYYkgmfg_r7vW0=s96-c",
+                "comment": "nice product",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Toufique Eamam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocLiYZ-hR0HdbRdBshEoLYLZtu3T5ShSqIsEDyYYkgmfg_r7vW0=s96-c",
+                "comment": "nice products",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Toufique Eamam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocLiYZ-hR0HdbRdBshEoLYLZtu3T5ShSqIsEDyYYkgmfg_r7vW0=s96-c",
+                "comment": "baler product",
+                "userRating": { "$numberInt": "5" }
+              }
+            ],
+            "images": [
+              "https://example.com/images/fridge_front.jpg",
+              "https://example.com/images/fridge_interior.jpg"
+            ],
+            "attributes": {
+              "color": "Stainless Steel",
+              "capacity": "25 cu ft",
+              "features": ["Ice Maker", "Water Dispenser"]
+            },
+            "isFeatured": true,
+            "productImage": "https://www.cnet.com/a/img/resize/1be4ceb5058ce3c094ddedc21edc48fbdd37f841/hub/2016/07/15/bda3c418-740a-4183-93fc-3b95d5a1cc58/samsung-family-hub-refrigerator-promo.jpg?auto=webp&fit=crop&height=1200&width=1200",
+            "cartQuantity": { "$numberInt": "1" }
+          }
+        ]
+      ],
+      "totalAmount": { "$numberDouble": "249.99" },
+      "status": "Payed",
+      "paymentMethod": "Card",
+      "shippingAddress": "সিঁড়ির নিচে বিড়ির দোকান ",
+      "transactionId": "pi_3Q5v4aP8QtS5FBxr0JtEvL2V"
+    },
+    {
+      "orderDate": "Thu, 03 Oct 2024 19:59:34 GMT",
+      "items": [
+        [
+          {
+            "_id": "P1036",
+            "email": "vendor2@example.com",
+            "companyName": "HomeAppliance Inc.",
+            "productName": "Smart Refrigerator",
+            "description": "A state-of-the-art smart refrigerator with touchscreen interface and Wi-Fi connectivity.",
+            "category": "Home Appliances",
+            "price": { "$numberDouble": "249.99" },
+            "stockQuantity": { "$numberInt": "30" },
+            "rating": { "$numberDouble": "4.8" },
+            "comments": [
+              {
+                "name": "Linda Carter",
+                "userPhoto": "https://example.com/images/linda_carter.jpg",
+                "comment": "Absolutely love this fridge! The smart features are fantastic.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "George Martin",
+                "userPhoto": "https://example.com/images/george_martin.jpg",
+                "comment": "A bit pricey but worth every penny.",
+                "userRating": { "$numberDouble": "4.5" }
+              },
+              {
+                "name": "Rachel Adams",
+                "userPhoto": "https://example.com/images/rachel_adams.jpg",
+                "comment": "The touchscreen is easy to use.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Steven Wilson",
+                "userPhoto": "https://example.com/images/steven_wilson.jpg",
+                "comment": "Keeps food fresh longer than my old fridge.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Natalie Thompson",
+                "userPhoto": "https://example.com/images/natalie_thompson.jpg",
+                "comment": "Wish it had more storage space.",
+                "userRating": { "$numberDouble": "3.5" }
+              },
+              {
+                "name": "Toufique Eamam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocLiYZ-hR0HdbRdBshEoLYLZtu3T5ShSqIsEDyYYkgmfg_r7vW0=s96-c",
+                "comment": "nice product",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Toufique Eamam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocLiYZ-hR0HdbRdBshEoLYLZtu3T5ShSqIsEDyYYkgmfg_r7vW0=s96-c",
+                "comment": "nice products",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Toufique Eamam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocLiYZ-hR0HdbRdBshEoLYLZtu3T5ShSqIsEDyYYkgmfg_r7vW0=s96-c",
+                "comment": "baler product",
+                "userRating": { "$numberInt": "5" }
+              }
+            ],
+            "images": [
+              "https://example.com/images/fridge_front.jpg",
+              "https://example.com/images/fridge_interior.jpg"
+            ],
+            "attributes": {
+              "color": "Stainless Steel",
+              "capacity": "25 cu ft",
+              "features": ["Ice Maker", "Water Dispenser"]
+            },
+            "isFeatured": true,
+            "productImage": "https://www.cnet.com/a/img/resize/1be4ceb5058ce3c094ddedc21edc48fbdd37f841/hub/2016/07/15/bda3c418-740a-4183-93fc-3b95d5a1cc58/samsung-family-hub-refrigerator-promo.jpg?auto=webp&fit=crop&height=1200&width=1200",
+            "cartQuantity": { "$numberInt": "1" }
+          }
+        ]
+      ],
+      "totalAmount": { "$numberDouble": "249.99" },
+      "status": "Payed",
+      "paymentMethod": "Card",
+      "shippingAddress": "sdfasgsagas",
+      "transactionId": "pi_3Q5vBRP8QtS5FBxr01QQJsik"
+    },
+    {
+      "orderDate": "Thu, 03 Oct 2024 20:01:09 GMT",
+      "items": [
+        [
+          {
+            "_id": "P1036",
+            "email": "vendor2@example.com",
+            "companyName": "HomeAppliance Inc.",
+            "productName": "Smart Refrigerator",
+            "description": "A state-of-the-art smart refrigerator with touchscreen interface and Wi-Fi connectivity.",
+            "category": "Home Appliances",
+            "price": { "$numberDouble": "249.99" },
+            "stockQuantity": { "$numberInt": "30" },
+            "rating": { "$numberDouble": "4.8" },
+            "comments": [
+              {
+                "name": "Linda Carter",
+                "userPhoto": "https://example.com/images/linda_carter.jpg",
+                "comment": "Absolutely love this fridge! The smart features are fantastic.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "George Martin",
+                "userPhoto": "https://example.com/images/george_martin.jpg",
+                "comment": "A bit pricey but worth every penny.",
+                "userRating": { "$numberDouble": "4.5" }
+              },
+              {
+                "name": "Rachel Adams",
+                "userPhoto": "https://example.com/images/rachel_adams.jpg",
+                "comment": "The touchscreen is easy to use.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Steven Wilson",
+                "userPhoto": "https://example.com/images/steven_wilson.jpg",
+                "comment": "Keeps food fresh longer than my old fridge.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Natalie Thompson",
+                "userPhoto": "https://example.com/images/natalie_thompson.jpg",
+                "comment": "Wish it had more storage space.",
+                "userRating": { "$numberDouble": "3.5" }
+              },
+              {
+                "name": "Toufique Eamam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocLiYZ-hR0HdbRdBshEoLYLZtu3T5ShSqIsEDyYYkgmfg_r7vW0=s96-c",
+                "comment": "nice product",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Toufique Eamam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocLiYZ-hR0HdbRdBshEoLYLZtu3T5ShSqIsEDyYYkgmfg_r7vW0=s96-c",
+                "comment": "nice products",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Toufique Eamam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocLiYZ-hR0HdbRdBshEoLYLZtu3T5ShSqIsEDyYYkgmfg_r7vW0=s96-c",
+                "comment": "baler product",
+                "userRating": { "$numberInt": "5" }
+              }
+            ],
+            "images": [
+              "https://example.com/images/fridge_front.jpg",
+              "https://example.com/images/fridge_interior.jpg"
+            ],
+            "attributes": {
+              "color": "Stainless Steel",
+              "capacity": "25 cu ft",
+              "features": ["Ice Maker", "Water Dispenser"]
+            },
+            "isFeatured": true,
+            "productImage": "https://www.cnet.com/a/img/resize/1be4ceb5058ce3c094ddedc21edc48fbdd37f841/hub/2016/07/15/bda3c418-740a-4183-93fc-3b95d5a1cc58/samsung-family-hub-refrigerator-promo.jpg?auto=webp&fit=crop&height=1200&width=1200",
+            "cartQuantity": { "$numberInt": "1" }
+          }
+        ]
+      ],
+      "totalAmount": { "$numberDouble": "249.99" },
+      "status": "Payed",
+      "paymentMethod": "Card",
+      "shippingAddress": "asfdasfagawg",
+      "transactionId": "pi_3Q5vCzP8QtS5FBxr09T8P9EP"
+    },
+    {
+      "orderDate": "Thu, 03 Oct 2024 20:15:01 GMT",
+      "items": [
+        [
+          {
+            "_id": "P1035",
+            "email": "vendor1@example.com",
+            "companyName": "GadgetZone",
+            "productName": "Bluetooth Wireless Headphones",
+            "description": "High-quality Bluetooth headphones with noise-canceling technology and comfortable ear cushions.",
+            "category": "Audio",
+            "price": { "$numberDouble": "149.99" },
+            "stockQuantity": { "$numberInt": "100" },
+            "rating": { "$numberDouble": "4.7" },
+            "comments": [
+              {
+                "name": "Tom Green",
+                "userPhoto": "https://example.com/images/tom_green.jpg",
+                "comment": "The sound quality is incredible!",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Samantha Lee",
+                "userPhoto": "https://example.com/images/samantha_lee.jpg",
+                "comment": "Very comfortable for long listening sessions.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Chris Evans",
+                "userPhoto": "https://example.com/images/chris_evans.jpg",
+                "comment": "Battery life is excellent, lasts for days!",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Anna Johnson",
+                "userPhoto": "https://example.com/images/anna_johnson.jpg",
+                "comment": "Great value for money.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Michael Brown",
+                "userPhoto": "https://example.com/images/michael_brown.jpg",
+                "comment": "A bit bulky, but overall a solid choice.",
+                "userRating": { "$numberDouble": "3.5" }
+              },
+              {
+                "name": "Best Deals",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocL5m1BoWSOZ5EXAvzH0M-vCGqBklKB0KFq3fVxf3Vx7kcjI-A=s96-c",
+                "comment": "good",
+                "userRating": { "$numberInt": "4" }
+              }
+            ],
+            "images": [
+              "https://images.unsplash.com/photo-1505740106531-4243f3831c78?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              "https://example.com/images/headphones_side.jpg"
+            ],
+            "attributes": {
+              "color": "Black",
+              "batteryLife": "30 hours",
+              "wireless": true
+            },
+            "isFeatured": true,
+            "productImage": "https://images.unsplash.com/photo-1505751171710-1f6d0ace5a85?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "cartQuantity": { "$numberInt": "3" }
+          }
+        ]
+      ],
+      "totalAmount": { "$numberDouble": "449.97" },
+      "status": "Payed",
+      "paymentMethod": "Card",
+      "shippingAddress": "Dhaka",
+      "transactionId": "pi_3Q5vQOP8QtS5FBxr0rLwlxEF"
+    },
+    {
+      "orderDate": "Thu, 03 Oct 2024 20:19:15 GMT",
+      "items": [
+        [
+          {
+            "_id": "P1035",
+            "email": "vendor1@example.com",
+            "companyName": "GadgetZone",
+            "productName": "Bluetooth Wireless Headphones",
+            "description": "High-quality Bluetooth headphones with noise-canceling technology and comfortable ear cushions.",
+            "category": "Audio",
+            "price": { "$numberDouble": "149.99" },
+            "stockQuantity": { "$numberInt": "100" },
+            "rating": { "$numberDouble": "4.7" },
+            "comments": [
+              {
+                "name": "Tom Green",
+                "userPhoto": "https://example.com/images/tom_green.jpg",
+                "comment": "The sound quality is incredible!",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Samantha Lee",
+                "userPhoto": "https://example.com/images/samantha_lee.jpg",
+                "comment": "Very comfortable for long listening sessions.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Chris Evans",
+                "userPhoto": "https://example.com/images/chris_evans.jpg",
+                "comment": "Battery life is excellent, lasts for days!",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Anna Johnson",
+                "userPhoto": "https://example.com/images/anna_johnson.jpg",
+                "comment": "Great value for money.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Michael Brown",
+                "userPhoto": "https://example.com/images/michael_brown.jpg",
+                "comment": "A bit bulky, but overall a solid choice.",
+                "userRating": { "$numberDouble": "3.5" }
+              },
+              {
+                "name": "Best Deals",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocL5m1BoWSOZ5EXAvzH0M-vCGqBklKB0KFq3fVxf3Vx7kcjI-A=s96-c",
+                "comment": "good",
+                "userRating": { "$numberInt": "4" }
+              }
+            ],
+            "images": [
+              "https://images.unsplash.com/photo-1505740106531-4243f3831c78?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+              "https://example.com/images/headphones_side.jpg"
+            ],
+            "attributes": {
+              "color": "Black",
+              "batteryLife": "30 hours",
+              "wireless": true
+            },
+            "isFeatured": true,
+            "productImage": "https://images.unsplash.com/photo-1505751171710-1f6d0ace5a85?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+            "cartQuantity": { "$numberInt": "1" }
+          }
+        ]
+      ],
+      "totalAmount": { "$numberDouble": "149.99" },
+      "status": "Payed",
+      "paymentMethod": "Card",
+      "shippingAddress": "ssssssssssssssss",
+      "transactionId": "pi_3Q5vUSP8QtS5FBxr0iccOd5m"
+    },
+    {
+      "orderDate": "Fri, 04 Oct 2024 08:56:49 GMT",
+      "items": [
+        [
+          {
+            "_id": "66feffaa11593955d092caac",
+            "email": "vendor4@example.com",
+            "companyName": "Gourmet Kitchen",
+            "productName": "Electric Pressure Cooker",
+            "description": "A versatile electric pressure cooker that makes cooking faster and easier with multiple preset functions.",
+            "category": "Kitchen Appliances",
+            "price": { "$numberDouble": "89.99" },
+            "stockQuantity": { "$numberInt": "150" },
+            "rating": { "$numberDouble": "4.6" },
+            "comments": [
+              {
+                "name": "Sophia Brown",
+                "userPhoto": "https://example.com/images/sophia_brown.jpg",
+                "comment": "Cooks rice perfectly every time.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Jake Lee",
+                "userPhoto": "https://example.com/images/jake_lee.jpg",
+                "comment": "Very easy to clean and use.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Isabella Garcia",
+                "userPhoto": "https://example.com/images/isabella_garcia.jpg",
+                "comment": "I love the slow cooking feature.",
+                "userRating": { "$numberDouble": "4.5" }
+              },
+              {
+                "name": "Ethan Davis",
+                "userPhoto": "https://example.com/images/ethan_davis.jpg",
+                "comment": "A bit bulky, but works great.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Ava Wilson",
+                "userPhoto": "https://example.com/images/ava_wilson.jpg",
+                "comment": "Excellent for making stews and soups.",
+                "userRating": { "$numberInt": "5" }
+              }
+            ],
+            "images": [
+              "https://example.com/images/pressure_cooker_front.jpg",
+              "https://example.com/images/pressure_cooker_interior.jpg"
+            ],
+            "attributes": {
+              "color": "Silver",
+              "capacity": "6 quarts",
+              "features": ["Pressure Cooking", "Slow Cooking", "Sauté"]
+            },
+            "isFeatured": true,
+            "productImage": "https://www.sencor.com/getmedia/3ba5c4c4-cf57-4c2c-83ab-db91df0ef04b/42002980.jpg.aspx",
+            "cartQuantity": { "$numberInt": "3" }
+          }
+        ]
+      ],
+      "totalAmount": { "$numberDouble": "269.96999999999997" },
+      "status": "Payed",
+      "paymentMethod": "Card",
+      "shippingAddress": "dhaka",
+      "transactionId": "pi_3Q67JcP8QtS5FBxr0Lrj8Vwp"
+    },
+    {
+      "orderDate": "Fri, 04 Oct 2024 09:46:55 GMT",
+      "items": [
+        [
+          {
+            "_id": "66feffaa11593955d092caac",
+            "email": "vendor4@example.com",
+            "companyName": "Gourmet Kitchen",
+            "productName": "Electric Pressure Cooker",
+            "description": "A versatile electric pressure cooker that makes cooking faster and easier with multiple preset functions.",
+            "category": "Kitchen Appliances",
+            "price": { "$numberDouble": "89.99" },
+            "stockQuantity": { "$numberInt": "150" },
+            "rating": { "$numberDouble": "4.6" },
+            "comments": [
+              {
+                "name": "Sophia Brown",
+                "userPhoto": "https://example.com/images/sophia_brown.jpg",
+                "comment": "Cooks rice perfectly every time.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Jake Lee",
+                "userPhoto": "https://example.com/images/jake_lee.jpg",
+                "comment": "Very easy to clean and use.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Isabella Garcia",
+                "userPhoto": "https://example.com/images/isabella_garcia.jpg",
+                "comment": "I love the slow cooking feature.",
+                "userRating": { "$numberDouble": "4.5" }
+              },
+              {
+                "name": "Ethan Davis",
+                "userPhoto": "https://example.com/images/ethan_davis.jpg",
+                "comment": "A bit bulky, but works great.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Ava Wilson",
+                "userPhoto": "https://example.com/images/ava_wilson.jpg",
+                "comment": "Excellent for making stews and soups.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Shafiul Islam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocIcDJv255QSvFoUcJsOH9gprIDIAFbEaebjoxlJw6AxNu2dTz0=s96-c",
+                "comment": "nice",
+                "userRating": { "$numberInt": "5" }
+              }
+            ],
+            "images": [
+              "https://example.com/images/pressure_cooker_front.jpg",
+              "https://example.com/images/pressure_cooker_interior.jpg"
+            ],
+            "attributes": {
+              "color": "Silver",
+              "capacity": "6 quarts",
+              "features": ["Pressure Cooking", "Slow Cooking", "Sauté"]
+            },
+            "isFeatured": true,
+            "productImage": "https://www.sencor.com/getmedia/3ba5c4c4-cf57-4c2c-83ab-db91df0ef04b/42002980.jpg.aspx",
+            "cartQuantity": { "$numberInt": "4" }
+          },
+          {
+            "_id": "66ff0f9d8dee29c3aa27d8eb",
+            "email": "gg@gg.com",
+            "companyName": "",
+            "productName": "Hair Dryer",
+            "description": "High Quality Bideshi Hair Dryer",
+            "category": "Woman",
+            "price": { "$numberInt": "23" },
+            "stockQuantity": { "$numberInt": "3" },
+            "rating": { "$numberInt": "0" },
+            "discount": { "$numberInt": "1" },
+            "isFeatured": false,
+            "productImage": "https://i.ibb.co.com/3mX2kJn/Revlon-1875-W-Compact-Hair-Dryer-Black-9b619d96-02a9-470c-8c84-8ec2fda3cf6c-5afe0804f72f7d268cdb573c.webp",
+            "attributes": [{ "color": "", "size": "Compact", "gender": "" }],
+            "comments": [
+              {
+                "name": "Shafiul Islam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocIcDJv255QSvFoUcJsOH9gprIDIAFbEaebjoxlJw6AxNu2dTz0=s96-c",
+                "comment": "nosto",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Shafiul Islam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocIcDJv255QSvFoUcJsOH9gprIDIAFbEaebjoxlJw6AxNu2dTz0=s96-c",
+                "comment": "nosto",
+                "userRating": { "$numberInt": "5" }
+              }
+            ],
+            "cartQuantity": { "$numberInt": "1" }
+          }
+        ]
+      ],
+      "totalAmount": { "$numberDouble": "382.96" },
+      "status": "Payed",
+      "paymentMethod": "Card",
+      "shippingAddress": "dhaka",
+      "transactionId": "pi_3Q6866P8QtS5FBxr0Ho3Huf1"
+    },
+    {
+      "orderDate": "Fri, 04 Oct 2024 10:26:11 GMT",
+      "items": [
+        [
+          {
+            "_id": "66ff87c70792cfa42fe60aa0",
+            "email": "vendor3@example.com",
+            "companyName": "HomeAppliances Inc.",
+            "productName": "Automatic Coffee Machine",
+            "description": "Automatic espresso machine with customizable brewing settings and milk frother.",
+            "category": "Home Appliances",
+            "price": { "$numberDouble": "349.99" },
+            "stockQuantity": { "$numberInt": "150" },
+            "rating": { "$numberDouble": "4.8" },
+            "comments": [
+              {
+                "name": "Lucy Adams",
+                "userPhoto": "https://example.com/images/lucy_adams.jpg",
+                "comment": "Makes perfect coffee every time!",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "James Bond",
+                "userPhoto": "https://example.com/images/james_bond.jpg",
+                "comment": "Love the automatic milk frother.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Shafiul Islam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocIcDJv255QSvFoUcJsOH9gprIDIAFbEaebjoxlJw6AxNu2dTz0=s96-c",
+                "comment": "nice and attractive",
+                "userRating": { "$numberInt": "4" }
+              }
+            ],
+            "images": [
+              "https://images.unsplash.com/photo-1517685352821-92cf88aee5a5?w=1740&q=80&fit=crop",
+              "https://example.com/images/coffee_machine_side.jpg"
+            ],
+            "attributes": {
+              "color": "Black",
+              "capacity": "1.5 liters",
+              "power": "1200W"
+            },
+            "isFeatured": false,
+            "productImage": "https://habibelectronicsbd.com/admin/public/featureImage/96246.jpg",
+            "cartQuantity": { "$numberInt": "4" }
+          },
+          {
+            "_id": "66ff7aa661175aa9f1c0219c",
+            "email": "helloshatak@gmail.com",
+            "companyName": "",
+            "productName": "Facewash",
+            "description": "very good",
+            "category": "Woman",
+            "price": { "$numberInt": "493" },
+            "stockQuantity": { "$numberInt": "7" },
+            "rating": { "$numberInt": "0" },
+            "discount": { "$numberInt": "0" },
+            "isFeatured": false,
+            "productImage": "https://i.ibb.co/XCRLGXx/426347851-1392246728265126-2671946756364139604-n.jpg",
+            "attributes": [{ "color": "", "size": "150ml", "gender": "" }],
+            "cartQuantity": { "$numberInt": "2" }
+          },
+          {
+            "_id": "66feffaa11593955d092caac",
+            "email": "vendor4@example.com",
+            "companyName": "Gourmet Kitchen",
+            "productName": "Electric Pressure Cooker",
+            "description": "A versatile electric pressure cooker that makes cooking faster and easier with multiple preset functions.",
+            "category": "Kitchen Appliances",
+            "price": { "$numberDouble": "89.99" },
+            "stockQuantity": { "$numberInt": "150" },
+            "rating": { "$numberDouble": "4.6" },
+            "comments": [
+              {
+                "name": "Sophia Brown",
+                "userPhoto": "https://example.com/images/sophia_brown.jpg",
+                "comment": "Cooks rice perfectly every time.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Jake Lee",
+                "userPhoto": "https://example.com/images/jake_lee.jpg",
+                "comment": "Very easy to clean and use.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Isabella Garcia",
+                "userPhoto": "https://example.com/images/isabella_garcia.jpg",
+                "comment": "I love the slow cooking feature.",
+                "userRating": { "$numberDouble": "4.5" }
+              },
+              {
+                "name": "Ethan Davis",
+                "userPhoto": "https://example.com/images/ethan_davis.jpg",
+                "comment": "A bit bulky, but works great.",
+                "userRating": { "$numberInt": "4" }
+              },
+              {
+                "name": "Ava Wilson",
+                "userPhoto": "https://example.com/images/ava_wilson.jpg",
+                "comment": "Excellent for making stews and soups.",
+                "userRating": { "$numberInt": "5" }
+              },
+              {
+                "name": "Shafiul Islam",
+                "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocIcDJv255QSvFoUcJsOH9gprIDIAFbEaebjoxlJw6AxNu2dTz0=s96-c",
+                "comment": "nice",
+                "userRating": { "$numberInt": "5" }
+              }
+            ],
+            "images": [
+              "https://example.com/images/pressure_cooker_front.jpg",
+              "https://example.com/images/pressure_cooker_interior.jpg"
+            ],
+            "attributes": {
+              "color": "Silver",
+              "capacity": "6 quarts",
+              "features": ["Pressure Cooking", "Slow Cooking", "Sauté"]
+            },
+            "isFeatured": true,
+            "productImage": "https://www.sencor.com/getmedia/3ba5c4c4-cf57-4c2c-83ab-db91df0ef04b/42002980.jpg.aspx",
+            "cartQuantity": { "$numberInt": "1" }
+          }
+        ]
+      ],
+      "totalAmount": { "$numberDouble": "2475.95" },
+      "status": "Payed",
+      "paymentMethod": "Card",
+      "shippingAddress": "dhaka",
+      "transactionId": "pi_3Q68i4P8QtS5FBxr1v1XVUnB"
+    }
+  ],
+  "billingAddress": [
+    {
+      "uname": "shatak",
+      "contact": "01712146853",
+      "address": "সিঁড়ির নিচে বিড়ির দোকান ",
+      "paymentMethod": "Card"
+    },
+    {
+      "uname": "shatak",
+      "contact": "1231111111",
+      "address": "sdfasgsagas",
+      "paymentMethod": "Card"
+    },
+    {
+      "uname": "shatak",
+      "contact": "1111111111111111111111111111111",
+      "address": "asfdasfagawg",
+      "paymentMethod": "Card"
+    },
+    {
+      "uname": "shatak",
+      "contact": "11111111",
+      "address": "Dhaka",
+      "paymentMethod": "Card"
+    },
+    {
+      "uname": "shatak",
+      "contact": "111111111111111",
+      "address": "ssssssssssssssss",
+      "paymentMethod": "Card"
+    },
+    {
+      "uname": "shatak",
+      "contact": "11111111111",
+      "address": "dhaka",
+      "paymentMethod": "Card"
+    },
+    {
+      "uname": "shatak",
+      "contact": "0171412313124",
+      "address": "dhaka",
+      "paymentMethod": "Card"
+    },
+    {
+      "uname": "shatak",
+      "contact": "01712146853",
+      "address": "dhaka",
+      "paymentMethod": "Card"
+    }
+  ],
+  "isWarning": false,
+  "isBanned": false
+}
