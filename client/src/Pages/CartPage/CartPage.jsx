@@ -10,12 +10,25 @@ import { useState } from "react";
 import { MdDeleteSweep } from "react-icons/md";
 import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 import Swal from "sweetalert2";
+import { IoSaveOutline } from "react-icons/io5";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAuth from "../../hooks/useAuth";
+import toast from "react-hot-toast";
+import NothingInCart from "../../Components/NothingInCart/NothingInCart";
+
 
 
 const CartPage = () => {
 
+    const axiosCommon = useAxiosCommon()
+    const { user} = useAuth();
+    const userEmail = user?.email
+
+
     // cart data from redux store
     const cart = useSelector((state) => state.cart)
+
+    const cartProducts = cart.cartIteams
 
     const dispacth = useDispatch()
 
@@ -41,8 +54,8 @@ const CartPage = () => {
         setContactInfo(data);
     }
 
-    // clear all products from cartList
 
+    // clear all products from cartList
     const handleClearCartList = () => {
 
         Swal.fire({
@@ -68,24 +81,49 @@ const CartPage = () => {
         });
     }
 
+
+    const cartItem = { userEmail, cartProducts }
+
+    // save and update cart
+    const handleSaveCart = () => {
+
+        const res = axiosCommon.post(`/cartList`, cartItem)
+            .then((res) => {
+                console.log(res.data);
+                if (res.data.message) {
+                    // loggedOut()
+                    toast.success('Cart Saved');
+                    // localStorage.clear()
+                }
+            })
+            .catch((error) => {
+                // If the error response exists, display the message from the server
+                if (error.response) {
+                    const errorMessage = error.response.data.message;
+                    toast.error(errorMessage); // Show the server's error message in a toast
+                }
+            });
+
+    }
+
     return (
-        <div className=" flex p-5 gap-y-5 md:gap-5">
+        <div className=" mx-auto p-5 gap-y-5 md:gap-5">
             <Helmet>
                 <title>Best Deal | Cart list</title>
             </Helmet>
             <ScrollRestoration></ScrollRestoration>
 
             {/*Left Side menubar / categorybar  */}
-            <div className="flex-1">
+            {/* <div className="">
                 <LeftMenubar></LeftMenubar>
-            </div>
+            </div> */}
 
             {/* cart list */}
-            <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
+            <div className="w-full  mx-auto lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] ">
                     {
                         cart?.cartIteams?.length === 0 ?
-                            <div><NoData></NoData></div> :
+                            <div><NothingInCart/></div> :
                             <div>
                                 <div>
                                     {cart?.cartIteams?.map(product => (
@@ -95,9 +133,18 @@ const CartPage = () => {
                                         />
                                     ))}
                                 </div>
-                                <div onClick={handleClearCartList} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
-                                    <MdDeleteSweep />
-                                    <h1>Clear Cartlist</h1>
+
+                                <div className="flex gap-4">
+
+                                    <div onClick={handleSaveCart} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
+                                        <IoSaveOutline />
+                                        <h1>Save Cart</h1>
+                                    </div>
+
+                                    <div onClick={handleClearCartList} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
+                                        <MdDeleteSweep />
+                                        <h1>Clear Cartlist</h1>
+                                    </div>
                                 </div>
                             </div>
                     }
@@ -115,14 +162,14 @@ const CartPage = () => {
                                         <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Amounts</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className="text-black dark:text-white">
                                     {/* Quantity & Total Amounts */}
                                     <tr>
-                                        <td>{totalQuantity}</td>
+                                        <td>Item {totalQuantity} pcs</td>
                                         <td>$ {totalAmount?.toFixed(2)}</td>
                                     </tr>
                                     {/* Discount */}
-                                    <tr>
+                                    <tr className="dark:bg-[#34394C]">
                                         <td>Discount</td>
                                         <td>0%</td>
                                     </tr>

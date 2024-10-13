@@ -135,7 +135,7 @@ const Details = () => {
             <div>
                 {
                     productsInSameCategory.length > 0 ?
-                        <div className='lg:w-4/12 h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
+                        <div className=' h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
                             <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
 
                             {

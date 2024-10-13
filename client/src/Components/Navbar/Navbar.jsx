@@ -50,7 +50,6 @@ const Navbar = ({ toggleTheme, theme }) => {
       .then((res) => {
         console.log(res.data);
         if (res.data.message) {
-          dispacth(removeAllFromCartlist())
           loggedOut()
           toast.success('Logged Out');
           localStorage.clear()
@@ -127,13 +126,13 @@ const Navbar = ({ toggleTheme, theme }) => {
     >
       <div className="navbar  container mx-auto">
         {/* logo */}
-        <div className="flex-1">
+        <Link to='/' className="flex-1">
           <img
             className="h-10 lg:h-16"
             src="https://i.ibb.co.com/rtTfZsH/Bestdeal-white-text-log.png"
             alt="BestDeal"
           />
-        </div>
+        </Link>
 
         <div className="flex-none lg:space-x-4 space-x-2">
           {/* Dark mode light mode buttone */}

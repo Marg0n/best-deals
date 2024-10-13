@@ -36,7 +36,7 @@ const cartSlice = createSlice({
                 const tempProducts = { ...action.payload, cartQuantity: action.payload.cartQuantity };
                 state.cartIteams.push(tempProducts)
                 const cartItem = { userEmail, cartProducts: state.cartIteams };
-                 axios.post(`http://localhost:4000/cartList`, cartItem)
+                axios.post(`${import.meta.env.VITE_SERVER}/cartList`, cartItem)
                     .then((res) => {
                         console.log(res.data);
                         if (res.data.message) {
@@ -98,6 +98,23 @@ const cartSlice = createSlice({
         // Remove all items from cartList
         removeAllFromCartlist(state) {
             state.cartIteams = [];
+            axios.delete(`${import.meta.env.VITE_SERVER}/cartList/${userEmail}`)
+                .then((res) => {
+                    console.log(res.data);
+                    if (res.data.message) {
+                        // dispacth(removeAllFromCartlist())
+                        // loggedOut()
+                        toast.success('Cart Cleared')
+                        // localStorage.clear()
+                    }
+                })
+                .catch((error) => {
+                    // If the error response exists, display the message from the server
+                    if (error.response) {
+                        const errorMessage = error.response.data;
+                        toast.error(errorMessage); // Show the server's error message in a toast
+                    }
+                });
         },
 
 

@@ -133,12 +133,12 @@ const Login = () => {
             .catch(error => {
                 const errorCode = error.code;
                 // Remove 'auth/' prefix and '-' characters
-                const cleanedErrorCode = errorCode.replace(/^auth\/|-/g, ' ');
-                const words = cleanedErrorCode.split('-');
-                const capitalizedWords = words.map(word => word.charAt(1).toUpperCase() + word.slice(2));
-                const message = capitalizedWords.join(' ');
+                // const cleanedErrorCode = errorCode.replace(/^auth\/|-/g, ' ');
+                // const words = cleanedErrorCode.split('-');
+                // const capitalizedWords = words.map(word => word.charAt(1).toUpperCase() + word.slice(2));
+                // const message = capitalizedWords.join(' ');
 
-                toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
+                // toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
                 navigate('/login')
             })
     }

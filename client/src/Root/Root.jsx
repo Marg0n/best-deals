@@ -81,7 +81,7 @@ const Root = () => {
     <div className="bg-gray-200 dark:bg-[#2F4161]">
       <Toaster />
       <Navbar toggleTheme={toggleTheme} theme={theme} />
-      <div className="mx-auto">
+      <div className="mx-auto max-w-[1440px]">
         <Outlet />
       </div>
       <Footer />

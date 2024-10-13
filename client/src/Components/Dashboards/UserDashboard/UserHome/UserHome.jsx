@@ -80,7 +80,7 @@ const UserHome = () => {
             <div className='flex gap-2 items-center justify-center' data-aos="fade-up">
                 <StatCard
                     title={'Total Times Buy'}
-                    value={profile[0]?.purchaseHistory.length}
+                    value={profile[0]?.purchaseHistory?.length}
                 // percentage={25}
                 // increase={true}
                 // description={'more'}

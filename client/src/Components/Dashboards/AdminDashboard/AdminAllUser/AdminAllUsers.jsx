@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
+
 import {
     Table,
     TableBody,
@@ -25,21 +27,25 @@ import { useQuery } from '@tanstack/react-query';
 const VendorProducts = () => {
 
     const vendorProducts = useAxiosSecure();
+    const user = 'User';
 
     const { data: allUserInAdmin = [], isLoading } = useQuery({
         queryKey: ["allUserInAdmin"],
         queryFn: async () => {
-            const res = await vendorProducts.get('/allUsers');
+            const res = await vendorProducts.get(`/allUsers?role=${user}`);
             return res.data; // Ensure you handle the data correctly here
         },
     });
 
+    const [users, setUsers] = useState(allUserInAdmin);
     const initialData = allUserInAdmin.map(user => ({
         id: user._id,
         name: user.name,
         email: user.email, // Assuming you might want to add category
         lastLogin: user.lastLogin,
-        joined: user.createdTime
+        joined: user.createdTime,
+        isWarning: user.isWarning || false,
+        isBanned: user.isBanned || false,
         // Assuming you might want to add price
     }));
 
@@ -148,6 +154,7 @@ const VendorProducts = () => {
 // ActionMenu Component
 const ActionMenu = ({ row }) => {
     const [anchorEl, setAnchorEl] = useState(null);
+    const allUsers = useAxiosSecure();
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -163,11 +170,83 @@ const ActionMenu = ({ row }) => {
         // Add your edit logic here (e.g., open a modal with the product data)
     };
 
-    const handleDelete = () => {
-        console.log('Delete Product:', row);
-        handleClose(); // Close menu after action
-        // Add your delete logic here (e.g., confirm and delete the product)
+   // Delete the user
+const handleDelete = async () => {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then(async (result) => {
+        if (result.isConfirmed) {
+            try {
+                await allUsers.delete(`/usersDelete/${row.id}`); // Send DELETE request
+
+                Swal.fire(
+                    'Deleted!',
+                    'The user has been deleted.',
+                    'success'
+                );
+
+                // Optionally: Trigger a state update to remove the deleted user from the UI
+            } catch (error) {
+                console.error('Error deleting user:', error);
+
+                Swal.fire(
+                    'Error!',
+                    'Failed to delete the user.',
+                    'error'
+                );
+            }
+        }
+        handleClose(); // Close the menu after the request
+    });
+};
+
+
+    // Toggle the warning status for the user
+    const toggleWarningStatus = async () => {
+        try {
+            //console.log('Vendor ID:', row.id);  // Log vendor ID
+            const updatedWarningStatus = !row.isWarning;
+            //console.log('Payload:', { isWarning: updatedWarningStatus }); // Log the payload
+
+            // Send PUT request to update warning status
+            await allUsers.put(`/Users/${row.id}/warning`, {
+                isWarning: updatedWarningStatus,
+            });
+
+            // Update the UI locally after the request succeeds
+            row.isWarning = updatedWarningStatus;
+        } catch (error) {
+            console.error('Error updating warning status:', error);
+        }
+        handleClose(); // Close the menu after the request
     };
+
+      // Toggle the ban status for the user
+      const toggleBanStatus = async () => {
+        try {
+            //console.log('Vendor ID:', row.id);  // Log vendor ID
+            const updatedBanStatus = !row.isBanned;
+            //console.log('Payload:', { isBanned: updatedBanStatus }); // Log the payload
+
+            // Send PUT request to update ban status
+            await allUsers.put(`/Userss/${row.id}/ban`, {
+                isBanned: updatedBanStatus,
+            });
+
+            // Update the UI locally after the request succeeds
+            row.isBanned = updatedBanStatus;
+        } catch (error) {
+            console.error('Error updating ban status:', error);
+        }
+        handleClose(); // Close the menu after the request
+    };
+
 
     return (
         <div>
@@ -178,14 +257,22 @@ const ActionMenu = ({ row }) => {
                 <MenuItem onClick={handleClose}>
                     <InfoIcon fontSize="small" className='text-green-600' /> Details
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <WarningIcon fontSize="small" className='text-yellow-500' /> Warning
+                <MenuItem onClick={() => toggleWarningStatus(row)}>
+                    <WarningIcon
+                        fontSize="small"
+                        className={row.isWarning ? 'text-red-500' : 'text-yellow-500'}
+                    />
+                    {row.isWarning ? 'Remove Warning' : 'Warning'}
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <BlockIcon fontSize="small" className='text-zinc-800' /> Ban
+                <MenuItem onClick={() => toggleBanStatus(row)}>
+                    <BlockIcon
+                        fontSize="small"
+                        className={row.isBanned ? 'text-red-500' : 'text-gray-500'}
+                    />
+                    {row.isBanned ? 'Unban' : 'Ban'}
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <DeleteIcon fontSize="small" className='text-red-500' /> Delete
+                <MenuItem onClick={handleDelete}>
+                    <DeleteIcon fontSize="small" className="text-red-500" /> Delete
                 </MenuItem>
             </Menu>
         </div>
