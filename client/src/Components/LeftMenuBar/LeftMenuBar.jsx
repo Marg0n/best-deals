@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import { CiSearch } from "react-icons/ci";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -12,6 +12,9 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
   const [clickeCategory, setClickedCategory] = useState("");
   const [priceRangeFilter, setPriceRangeFilter] = useState([0, 1000]);
 
+  // const navigation = useNavigation()
+  // console.log(navigation.state);
+  
   // This fetch is for get all categories from mongoDB
   const axiosCommon = useAxiosCommon();
   const { data: products } = useQuery({

@@ -10,7 +10,7 @@ const initialState = {
 }
 
 const userEmail = localStorage.getItem('userEmail')
-console.log(userEmail);
+// console.log(userEmail);
 
 
 const cartSlice = createSlice({
