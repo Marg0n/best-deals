@@ -21,7 +21,7 @@ import NothingInCart from "../../Components/NothingInCart/NothingInCart";
 const CartPage = () => {
 
     const axiosCommon = useAxiosCommon()
-    const { user} = useAuth();
+    const { user } = useAuth();
     const userEmail = user?.email
 
 
@@ -33,10 +33,16 @@ const CartPage = () => {
     const dispacth = useDispatch()
 
 
-    // Calculate total quantity and total amount
-    const totalQuantity = cart?.cartIteams?.reduce((total, item) => total + item?.cartQuantity, 0);
 
-    const totalAmount = cart?.cartIteams?.reduce((total, item) => total + (item?.cartQuantity * item?.price), 0);
+    // Calculate total quantity and total amount
+     const totalQuantity = cart?.cartIteams?.reduce((total, item) => total + item?.cartQuantity, 0);
+
+     const totalAmount = cart?.cartIteams?.reduce((total, item) => {
+        const price = item?.price;
+        const discount = item?.discount ? item.price * (item.discount / 100) : 0; // Calculate discount if available
+        const finalPrice = price - discount; 
+        return total + (item?.cartQuantity * finalPrice); 
+    }, 0);
 
     // Apply discount 
     const discount = 0.00 * totalAmount;
@@ -123,7 +129,7 @@ const CartPage = () => {
                 <div className="w-full lg:w-[65%] ">
                     {
                         cart?.cartIteams?.length === 0 ?
-                            <div><NothingInCart/></div> :
+                            <div><NothingInCart /></div> :
                             <div>
                                 <div>
                                     {cart?.cartIteams?.map(product => (
