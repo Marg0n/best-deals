@@ -36,7 +36,7 @@ const ProductsCounter = ({ product , quality , setQuality }) => {
 
 
     return (
-        <div className="flex justify-between gap-5 bg-[#775050] rounded-[3rem] p-1">
+        <div className="flex justify-between gap-5 bg-[#775050] rounded-[3rem] p-1 ">
             <div>
                 <button onClick={handleIncrement} className="btn btn-xs btn-circle mt-1  bg-white ">
                     <FiPlusCircle className="w-full h-full text-[#775050] " />

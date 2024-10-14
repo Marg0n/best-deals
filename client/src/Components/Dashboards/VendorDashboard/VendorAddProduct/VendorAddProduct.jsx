@@ -164,7 +164,7 @@ const VendorAddProduct = () => {
 
 
     return (
-        <div className="p-8">
+        <div className="p-8 text-black">
             {/* Form */}
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -245,13 +245,13 @@ const VendorAddProduct = () => {
 
                                 {/* Display input for custom size when "Add more" is selected */}
                                 {showCustomSizeInput && (
-                                    <div className='mt-4'>
+                                    <div className='mt-4  '>
                                         <input
                                             type='text'
                                             value={customSize}
                                             onChange={(e) => setCustomSize(e.target.value)}
                                             placeholder="Enter custom size"
-                                            className="p-2 border rounded-md w-full"
+                                            className="p-2 border rounded-md w-full bg-white"
                                         />
                                         <button
                                             type="button"
@@ -302,7 +302,7 @@ const VendorAddProduct = () => {
                                             value={customColor}
                                             onChange={(e) => setCustomColor(e.target.value)}
                                             placeholder="Enter custom Color"
-                                            className="p-2 border rounded-md w-full"
+                                            className="p-2 border rounded-md w-full bg-white"
                                         />
                                         <button
                                             type="button"
@@ -356,7 +356,7 @@ const VendorAddProduct = () => {
                                 required
                                 multiple
                                
-                                className="file-input file-input-bordered w-full max-w-xs"
+                                className="bg-white file-input file-input-bordered w-full max-w-xs"
                                 {...register('photo')}
                             />
                             <div>
@@ -378,7 +378,7 @@ const VendorAddProduct = () => {
                                 multiple // Allows multiple image selection
                                 // required
                                 onChange={(e) => handleImage(e)}
-                                className="file-input file-input-bordered w-full max-w-xs"
+                                className="file-input file-input-bordered w-full max-w-xs bg-white"
                             />
 
                             {/* Display selected images with remove button */}
@@ -443,7 +443,7 @@ const VendorAddProduct = () => {
                                         value={customCategory}
                                         onChange={(e) => setCustomCategory(e.target.value)}
                                         placeholder="Enter custom category"
-                                        className="p-2 border rounded-md w-full"
+                                        className="p-2 border rounded-md w-full bg-white"
                                     />
                                     <button
                                         type="button"
@@ -459,7 +459,7 @@ const VendorAddProduct = () => {
                 </div>
                 <div className='mt-8'>
                     <Button type='submit' variant="contained" startIcon={<AddCircleOutlineIcon />} className="capitalize" color="primary">
-                        Add Product
+                        Upload Product
                     </Button>
                 </div>
             </form>
