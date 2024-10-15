@@ -28,12 +28,15 @@ const CartCard = ({ product }) => {
             <div className='flex flex-col md:flex-row lg:flex-row justify-between items-center gap-2 bg-[#D9D9D9] p-3 rounded-[22px] mb-3'>
 
                 {/* prodcut image , name and price box */}
-                <div className="flex justify-between items-center">
+                <div className="flex  flex-col md:flex-row justify-between items-center gap-4 w-full">
+                    {/* image */}
                     <img className='w-24  h-20 rounded-[27px]' src={productImage} alt="image" />
-                    <div className=" flex flex-1">
-                        <p className='text-[#020202] ml-2 text-base font-normal pb-5'>{productName}</p>
 
-                        <div className='flex items-center justify-between w-full'>
+                    {/* name & price */}
+                    <div className=" flex flex-1 gap-4 w-full">
+                        <p className='text-[#020202] text-base font-bold w-1/2 '>{productName}</p>
+
+                        <div className='flex items-center justify-between w-1/2'>
                             <span className="text-xs font-medium tracking-widest uppercase text-[#1d2236] flex items-center gap-2">
                                 ${price}
                             </span>
