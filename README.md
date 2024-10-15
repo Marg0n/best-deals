@@ -8,7 +8,7 @@ By utilizing the MERN (MongoDB, Express, React, Node.js) stack, the platform wil
 
 ## Live site:
 
-- [Live Site](https://magenta-peony-5d02de.netlify.app/)
+- [Live Site](https://best-deal-909.web.app/)
 
 ## Resources:
 
