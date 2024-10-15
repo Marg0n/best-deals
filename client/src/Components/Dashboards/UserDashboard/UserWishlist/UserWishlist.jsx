@@ -63,14 +63,14 @@ const UserWishlist = () => {
                                             <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Amounts</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className="text-black dark:text-white">
                                         {/* Quantity & Total Amounts */}
                                         <tr>
-                                            <td>{totalQuantity}</td>
+                                            <td>Item {totalQuantity} pcs</td>
                                             <td>$ {totalAmount?.toFixed(2)}</td>
                                         </tr>
                                         {/* Discount */}
-                                        <tr>
+                                        <tr className="dark:bg-[#34394C]">
                                             <td>Discount</td>
                                             <td>0%</td>
                                         </tr>
@@ -83,6 +83,8 @@ const UserWishlist = () => {
                                 </table>
                             </div>
                         </div>
+
+                        {/* link back to cart list */}
                         <Link
                             className='btn btn-primary mt-2 w-full'
                             to='/cartlist'

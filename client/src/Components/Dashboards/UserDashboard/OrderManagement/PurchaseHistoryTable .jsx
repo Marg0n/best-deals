@@ -1,10 +1,14 @@
-import { getCoreRowModel, getPaginationRowModel, useReactTable, getSortedRowModel, flexRender } from '@tanstack/react-table';
-import React, { useState } from 'react';
-import './TableStyles.css'; // Make sure to import your CSS file
+import { flexRender, getCoreRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table';
+import AOS from 'aos';
+import React, { useEffect, useState } from 'react';
+import './TableStyles.css';
+import { TextField } from '@mui/material';
 
 const PurchaseHistoryTable = ({ data }) => {
   const [sorting, setSorting] = useState([]);
   const [expanded, setExpanded] = useState({});
+  const [search, setSearch] = useState('');
+  const [filteredData, setFilteredData] = useState(data);
 
   const columns = React.useMemo(
     () => [
@@ -37,8 +41,34 @@ const PurchaseHistoryTable = ({ data }) => {
     []
   );
 
+  // useEffect(() => {
+  //   setFilteredData(
+  //     data.filter(row =>
+  //       columns.some(column =>
+  //         row[column.accessorKey]?.toString().toLowerCase().includes(search.toLowerCase())
+  //       )
+  //     )
+  //   );
+  // }, [search, data, columns]);
+
+  // search items
+  useEffect(() => {
+    setFilteredData(
+      data.map(entry => ({
+        ...entry,
+        items: entry?.items.flat().filter(item =>
+          Object.values(item).some(value =>
+            value.toString().toLowerCase().includes(search.toLowerCase())
+          )
+        )
+      })).filter(entry => entry.items.length > 0)
+    );
+  }, [search, data]);
+  // console.log(filteredData)
+
   const table = useReactTable({
-    data: data || [], // Ensure data is an array
+    data: filteredData || [],
+    // data: data || [], // Ensure data is an array
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -46,18 +76,39 @@ const PurchaseHistoryTable = ({ data }) => {
     state: { sorting, expanded },
     onSortingChange: setSorting,
     onExpandedChange: setExpanded,
-    initialState: { pagination: { pageSize: 5 } }, // Set initial page size
+    initialState: { pagination: { pageSize: 7 } }, // Set initial page size
   });
 
   const handleRowClick = (rowId) => {
-    setExpanded((prev) => ({
-      ...prev,
-      [rowId]: !prev[rowId],
+    setExpanded((preview) => ({
+      ...preview,
+      [rowId]: !preview[rowId],
     }));
   };
 
+  // aos animation use effect
+  useEffect(() => {
+    AOS.init({
+      duration: 500
+    });
+  }, []);
+
   return (
     <div className="table-container">
+      {/* search input */}
+      <TextField
+        type="text"
+        placeholder="Search..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        label="Search by Product Name"
+        variant="outlined"
+        // fullWidth
+        margin="normal"
+        className="mb-4 p-2 border rounded"
+        data-aos='fade-up-left'
+        data-aos-duration="1000"
+      />
       {/* table */}
       <table>
         <thead>
@@ -79,7 +130,7 @@ const PurchaseHistoryTable = ({ data }) => {
             <React.Fragment key={row.id}>
               <tr onClick={() => handleRowClick(row.id)} style={{ cursor: 'pointer' }}>
                 {row.getVisibleCells().map(cell => (
-                  <td key={cell.id} data-label={cell.column.columnDef.header} className=' bg-green-300'>
+                  <td key={cell.id} data-label={cell.column.columnDef.header} className=' bg-green-300 text-xs'>
                     {/* {cell.column.columnDef.accessorKey ? row.original[cell.column.columnDef.accessorKey] : null} */}
                     {/* {cell.getValue()} */}
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -87,7 +138,7 @@ const PurchaseHistoryTable = ({ data }) => {
                 ))}
               </tr>
               {row.getIsExpanded() && (
-                <tr>
+                <tr data-aos='fade-up' data-aos-duration="500">
                   <td colSpan={columns.length} className='pl-2'>
                     <table className="nested-table">
                       <thead>
@@ -102,7 +153,7 @@ const PurchaseHistoryTable = ({ data }) => {
                       </thead>
                       <tbody>
                         {row.original.items.flat().map((item, index) => (
-                          <tr key={index}>
+                          <tr key={index} className='text-xs'>
                             <td data-label="Product Name">{item.productName}</td>
                             <td data-label="Price">${item.price}</td>
                             <td data-label="Price">{item.cartQuantity
