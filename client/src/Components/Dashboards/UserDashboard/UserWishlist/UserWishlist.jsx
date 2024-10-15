@@ -60,7 +60,7 @@ const UserWishlist = () => {
                                     <thead>
                                         <tr>
                                             <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Quantity</th>
-                                            <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Amounts</th>
+                                            <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Amounts</th>
                                         </tr>
                                     </thead>
                                     <tbody className="text-black dark:text-white">

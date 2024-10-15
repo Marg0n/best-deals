@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../Components/Navbar/Navbar";
 import { useEffect, useState } from "react";
 import AOS from 'aos';
-import 'aos/dist/aos.css';
 import Footer from "../Components/Footer/Footer";
 import toast, { Toaster } from "react-hot-toast";
 import useAuth from "../hooks/useAuth";
