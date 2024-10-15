@@ -6,10 +6,10 @@ import FeaturedProducts from "../../Components/FeaturedProducts/FeaturedProducts
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useState } from "react";
-import NoData from "../../Components/NoData/NoData";
 import SectionHeader from "../../Components/ReUsableComponent/SectionHeader";
 import { Helmet } from "react-helmet-async";
 import CardSkelaton from "../../Components/CardSkelaton/CardSkelaton";
+import NoData from "../../Components/Shared/NoData";
 
 const Home = () => {
 

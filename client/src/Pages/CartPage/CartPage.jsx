@@ -4,7 +4,6 @@ import CartCard from "../../Components/CartCard/CartCard";
 import CheckOutForm from "../../Components/CheckOutForm/CheckOutForm";
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import PaymentModal from "../../Components/Modals/PaymentModal";
-import NoData from "../../Components/NoData/NoData";
 import { ScrollRestoration } from "react-router-dom";
 import { useState } from "react";
 import { MdDeleteSweep } from "react-icons/md";
