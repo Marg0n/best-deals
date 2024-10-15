@@ -10,6 +10,7 @@ import { addToCart } from '../../features/CartSlice/CartSlice';
 import useAuth from '../../hooks/useAuth';
 import DetailsPageTabs from '../../Components/DetailsPageTabs/DetailsPageTabs';
 import ProductsCard from '../../Components/ProductsCard/ProductsCard';
+import toast from 'react-hot-toast';
 
 
 const Details = () => {
@@ -17,29 +18,22 @@ const Details = () => {
     const { _id } = useParams();
     const product = products?.find(product => product._id === _id);
 
-    const colors = product?.veriation?.color
-    const sizes = product?.veriation?.size
+    const veriations = product?.veriation
 
-
-
-    // State for selected color, size, and quantity for each combination
-    // const [selectedVariations, setSelectedVariations] = useState([]);
-    // Color and size selectors and quantity handlers
-    const [selectedColor, setSelectedColor] = useState('');
-    const [selectedSize, setSelectedSize] = useState('');
     const [quantity, setQuantity] = useState(1);
-    const [colorCount , setColorCount] = useState(0);
-    // const [sizeCount , setSizeCount] = useState(0);
-    // const selectedProducts = []
-    // const selectedIteam ={color : selectedColor , quantity : colorCount}
 
-    const handelColorCount  =(color)=>{
-        setSelectedColor(color)
-        setColorCount(colorCount+1)
-        selectedProducts.push(...prev, selectedColor)
+    const [selectedVerient, setSelectedVerient] = useState('')
+
+    const handleVerient = (e) => {
+        setSelectedVerient(e.target.value);
     }
-    // console.log(selectedProducts);
-    
+
+    console.log(selectedVerient);
+
+
+
+
+
 
     // finding same category products but not the same product
     const productsInSameCategory = products?.filter(item => {
@@ -69,31 +63,20 @@ const Details = () => {
     const vendorInfo = { vendorEmail: product.vendorEmail, companyName: product.companyName }
 
 
-    // Define a color map to handle the dynamic Tailwind classes
-    const colorClasses = {
-        white: 'bg-white',
-        black: 'bg-black',
-        blue: 'bg-blue-500',
-        red: 'bg-red-500',
-        green: 'bg-green-500',
-        purple: 'bg-purple-500',
-        orange: 'bg-orange-500',
-        pink: 'bg-pink-500',
-        // Add more colors as needed
-    };
-
     // dispatch products to redux
     const dispatch = useDispatch()
 
     // add product to redux store
     const handleAddToCart = (product) => {
-        const addingToCart = { ...product, cartQuantity: quantity , selectedColor: selectedColor , selectedSize: selectedSize  }
-        dispatch(addToCart(addingToCart));
+        if (veriations && !selectedVerient) {
+            toast.error('Select verient')
+        }
+        else {
+            const addingToCart = { ...product, cartQuantity: quantity, veriation: selectedVerient }
+            dispatch(addToCart(addingToCart));
+
+        }
     };
-
-
-    console.log(selectedColor);
-    console.log(selectedSize);
 
 
 
@@ -143,52 +126,30 @@ const Details = () => {
                         {/* products counter to add to cart quantity for tab and mobile*/}
 
                         <div className='lg:hidden'>
-
-
-                            {/* size and color choose option */}
-                            {/* color choose options */}
+                            {/* Choose Veriation */}
                             <div className='mb-5'>
-                                {/* Color choose options */}
-                                {colors?.length > 0 && (
+                                {veriations?.length > 0 && (
                                     <>
-                                        <h1 className='mb-1 dark:text-white'>Choose Color</h1>
-                                        {
-                                            colors.map((color, index) => {
-                                                return (
-                                                    <button
-                                                        className={`btn text-white border-none mr-2 ${colorClasses[color] || ''}`}
-                                                        key={index}
-                                                        onClick={() => handelColorCount(color)}
-                                                    >
-                                                        {color}<span>{colorCount}</span>
-                                                    </button>
-                                                );
-                                            })
-                                        }
+                                        <h1 className='mb-1 dark:text-white'>Please Select</h1>
+                                        <select
+                                            onChange={(e) => handleVerient(e)}
+                                            className="select select-bordered w-full max-w-xs"
+                                        >
+                                            {/* Placeholder option */}
+                                            <option value="" disabled selected>
+                                                Select a variation
+                                            </option>
+
+                                            {/* Map through veriation options */}
+                                            {veriations.map((veriation, index) => (
+                                                <option key={index} value={`${veriation?.color}-${veriation?.size}`}>
+                                                    {veriation?.color} {veriation?.size && `- ${veriation?.size}`}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </>
                                 )}
                             </div>
-
-                            {/* Size choose options */}
-                            <div className='mb-5'>
-                                {sizes?.length > 0 && (
-                                    <>
-                                        <h1 className='mb-1 dark:text-white'>Choose Size</h1>
-                                        {
-                                            sizes.map((size, index) => (
-                                                <button
-                                                    className='btn btn-outline dark:text-white mr-2'
-                                                    key={index}
-                                                    onClick={() => setSelectedSize(size)}
-                                                >
-                                                    {size}
-                                                </button>
-                                            ))
-                                        }
-                                    </>
-                                )}
-                            </div>
-
 
                             <div className='flex justify-center gap-6'>
 
@@ -244,52 +205,30 @@ const Details = () => {
                             <p className='text-[#775050] dark:text-white  text-lg font-normal'>Details:<br /> {product?.productShortDescription ? product.productShortDescription : product?.description}</p>
                         </div>
 
-                        {/* size and color choose option */}
-                        {/* color choose options */}
+                        {/* Choose Veriation */}
                         <div className='mb-5'>
-                            {/* Color choose options */}
-                            {colors?.length > 0 && (
+                            {veriations?.length > 0 && (
                                 <>
-                                    <h1 className='mb-1 dark:text-white'>Choose Color</h1>
-                                    {
-                                        colors.map((color, index) => {
-                                            return (
-                                                <button
-                                                    className={`btn text-white border-none mr-2 ${colorClasses[color] || ''}`}
-                                                    key={index}
-                                                    onClick={() => handelColorCount(color)}
-                                                >
-                                                    {color}<span>{colorCount}</span>
-                                                </button>
-                                            );
-                                        })
-                                    }
+                                    <h1 className='mb-1 dark:text-white'>Please Select</h1>
+                                    <select
+                                        onChange={(e) => handleVerient(e)}
+                                        className="select select-bordered w-full max-w-xs"
+                                    >
+                                        {/* Placeholder option */}
+                                        <option value="" disabled selected>
+                                            Select a variation
+                                        </option>
+
+                                        {/* Map through veriation options */}
+                                        {veriations.map((veriation, index) => (
+                                            <option key={index} value={`${veriation?.color}-${veriation?.size}`}>
+                                                {veriation?.color} {veriation?.size && `- ${veriation?.size}`}
+                                            </option>
+                                        ))}
+                                    </select>
                                 </>
                             )}
                         </div>
-
-                        {/* Size choose options */}
-                        <div className='mb-5'>
-                            {sizes?.length > 0 && (
-                                <>
-                                    <h1 className='mb-1 dark:text-white'>Choose Size</h1>
-                                    {
-                                        sizes.map((size, index) => (
-                                            <button
-                                                className='btn btn-outline dark:text-white mr-2'
-                                                key={index}
-                                                onClick={() => setSelectedSize(size)}
-                                            >
-                                                {size}
-                                            </button>
-                                        ))
-                                    }
-                                </>
-                            )}
-                        </div>
-
-
-
 
 
                         <div className=' w-fit lg:mt-10 px-2'>

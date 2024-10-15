@@ -1,4 +1,3 @@
-import { Rating } from "@mui/material";
 import { TiDeleteOutline } from "react-icons/ti";
 import { useDispatch, useSelector } from "react-redux";
 import { removeFromCart } from "../../features/CartSlice/CartSlice.js";
@@ -15,7 +14,10 @@ const CartCard = ({ product }) => {
         category,
         ratings,
         cartQuantity,
-        creationDateTime, _id } = product
+        creationDateTime, _id, veriation } = product
+
+    console.log(product);
+
 
 
     // Delete item from cart
@@ -32,34 +34,30 @@ const CartCard = ({ product }) => {
                     {/* image */}
                     <img className='w-24  h-20 rounded-[27px]' src={productImage} alt="image" />
 
-                    {/* name & price */}
-                    <div className=" flex flex-1 gap-4 w-full">
-                        <p className='text-[#020202] text-base font-bold w-1/2 '>{productName}</p>
-
-                        <div className='flex items-center justify-between w-1/2'>
-                            <span className="text-xs font-medium tracking-widest uppercase text-[#1d2236] flex items-center gap-2">
-                                ${price}
-                            </span>
-                        </div>
+                    <div className='flex items-center justify-between w-full'>
+                        <h1 className='text-[#020202] ml-2 text-base font-normal pb-5'>{product?.veriation}</h1>
+                        <span className="text-xs font-medium tracking-widest uppercase text-[#1d2236] flex items-center gap-2">
+                            ${price}
+                        </span>
                     </div>
-                </div>
-
-                {/* quantity and delete button box */}
-                <div className="flex justify-between items-center">
-                    <div className="flex flex-col lg:flex-row justify-between gap-5 bg-[#775050] rounded-[3rem] p-1">
-                        <div>
-                            <ProductsCounter
-                                key={product._id}
-                                product={product}
-                            ></ProductsCounter>
-                        </div>
-                    </div>
-                    {/* remove from cart button */}
-                    <button><TiDeleteOutline onClick={() => handleDelete(product._id)} className="w-8 h-8 text-[#775050]" /></button>
                 </div>
             </div>
 
+            {/* quantity and delete button box */}
+            <div className="flex justify-between items-center">
+                <div className="flex flex-col lg:flex-row justify-between gap-5 bg-[#775050] rounded-[3rem] p-1">
+                    <div>
+                        <ProductsCounter
+                            key={product._id}
+                            product={product}
+                        ></ProductsCounter>
+                    </div>
+                </div>
+                {/* remove from cart button */}
+                <button><TiDeleteOutline onClick={() => handleDelete(product._id)} className="w-8 h-8 text-[#775050]" /></button>
+            </div>
         </div>
+
     );
 };
 
