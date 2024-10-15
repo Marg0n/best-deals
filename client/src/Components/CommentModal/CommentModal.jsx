@@ -3,12 +3,15 @@ import Rating from '@mui/material/Rating';
 import Modal from '@mui/material/Modal';
 import { AuthContext } from '../../AuthProvider/AuthProvider';
 
-const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
+const CommentModal = ({ commnetDetails }) => {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
     const [newRating, setNewRating] = useState(0);
     const [loading, setLoading] = useState(false);
-    const { user } = useContext(AuthContext)
+    // const { user } = useContext(AuthContext)
+
+    const {userName ,photo, productId} = commnetDetails
+
 
     // Fetch comments when the modal opens
     useEffect(() => {
@@ -16,7 +19,7 @@ const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
             const fetchComments = async () => {
                 setLoading(true);
                 try {
-                    const response = await fetch(`http://localhost:4000/api/products/${productId}`); // Include the full URL
+                    const response = await fetch(`${import.meta.env.VITE_SERVER}/api/products/${productId}`); // Include the full URL
 
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
@@ -38,7 +41,7 @@ const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
 
             fetchComments();
         }
-    }, [open, productId]);
+    }, [ productId]);
 
 
 
@@ -50,9 +53,11 @@ const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
             name: userName, // Replace with actual user's name from auth
             userPhoto: photo // Replace with actual user's photo URL
         };
+        console.log(newReview);
+        
 
         try {
-            const response = await fetch(`http://localhost:4000/api/products/${productId}/comments`, {
+            const response = await fetch(`${import.meta.env.VITE_SERVER}/api/products/${productId}/comments`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -75,8 +80,8 @@ const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
     };
 
     return (
-        <Modal open={open} onClose={handleClose}>
-            <div className="bg-white p-6 rounded shadow-lg w-1/2 mx-auto mt-20">
+       
+            <div className="bg-white dark:bg-slate-400 p-6 rounded shadow-lg  text-black">
                 <h2 className="text-lg font-semibold mb-4">Product Reviews</h2>
 
                 {/* Show a loading spinner or message while fetching */}
@@ -86,16 +91,16 @@ const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
                     <>
                         {/* Display existing comments */}
                         <div className="max-h-60 overflow-y-auto">
-                            {comments.length > 0 ? (
-                                comments.map((review, index) => (
+                            {comments?.length > 0 ? (
+                                comments?.map((review, index) => (
                                     <div key={index} className="mb-4">
                                         <div className="flex items-center">
-                                            <img src={review.userPhoto} alt={review.name} className="w-8 h-8 rounded-full mr-2" />
-                                            <h3 className="font-bold mr-2">{review.name}</h3>
-                                            <Rating name="read-only" value={review.userRating} readOnly />
+                                            <img src={review?.userPhoto} alt={review?.name} className="w-8 h-8 rounded-full mr-2" />
+                                            <h3 className="font-bold mr-2">{review?.name}</h3>
+                                            <Rating name="read-only" value={review?.userRating} readOnly />
 
                                         </div>
-                                        <p>{review.comment}</p>
+                                        <p>{review?.comment}</p>
                                     </div>
                                 ))
                             ) : (
@@ -107,7 +112,7 @@ const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
                         {/* Comment and Rating Form */}
                         <div className="mt-4">
                             <textarea
-                                className="w-full p-2 border border-gray-300 rounded"
+                                className="w-full p-2 border border-gray-300 rounded dark:bg-gray-500 bg-white"
                                 placeholder="Write your comment..."
                                 value={newComment}
                                 onChange={(e) => setNewComment(e.target.value)}
@@ -129,7 +134,7 @@ const CommentModal = ({ open, handleClose, productId, userName, photo }) => {
                     </>
                 )}
             </div>
-        </Modal>
+       
     );
 };
 
