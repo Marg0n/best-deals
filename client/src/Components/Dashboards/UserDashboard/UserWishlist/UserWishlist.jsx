@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
-import NoData from '../../../NoData/NoData';
+import NoData from '../../../Shared/NoData';
 import UserCard from './UserCard';
 import { Link } from 'react-router-dom';
 
