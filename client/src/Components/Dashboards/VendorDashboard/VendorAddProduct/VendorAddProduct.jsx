@@ -104,15 +104,41 @@ const VendorAddProduct = () => {
     const onSubmit = async (data, e) => {
         try {
             // Upload main product image
-            const productImage = data.photo[0]; 
+            const productImage = data.photo[0];
             const imageUrl = await imageUpload(productImage);
-    
+
             // Upload gallery images one by one and store their URLs
             const productsGallarysUrl = await Promise.all(selectedImages.map(async (image) => {
                 const galleryImageUrl = await imageUpload(image);
                 return galleryImageUrl;
             }));
-    
+
+
+            // Generate unique variations based on selected colors and sizes
+            let variations = [];
+            // Check for color and size and generate variations accordingly
+            if (data.color && data.size) {
+                // If both color and size are present, combine them
+                variations = data.color.flatMap(color =>
+                    data.size.map(size => ({
+                        color,
+                        size
+                    }))
+                );
+            } else if (data.color) {
+                // If only color is present, create variations with color only
+                variations = data.color.map(color => ({
+                    color,
+                    size: null  // No size
+                }));
+            } else if (data.size) {
+                // If only size is present, create variations with size only
+                variations = data.size.map(size => ({
+                    color: null,  // No color
+                    size
+                }));
+            }
+
             // Add product details
             const addProduct = {
                 vendorEmail: user?.email,
@@ -127,15 +153,12 @@ const VendorAddProduct = () => {
                 discount: parseFloat(data.discount),
                 isFeatured: false,
                 productImage: imageUrl || '',
-                veriation: {
-                    color: data.color,
-                    size: data.size,
-                },
-                galleryImages: productsGallarysUrl  || []
+                veriation: variations,
+                galleryImages: productsGallarysUrl || []
             };
-    
+
             console.log(addProduct);
-    
+
             // Send data to Database
             const res = await axiosCommon.post('/all-products', addProduct);
             if (res.data.insertedId) {
@@ -147,7 +170,7 @@ const VendorAddProduct = () => {
                 });
                 reset();
             }
-    
+
         } catch (error) {
             console.error('Error uploading images:', error);
         }
@@ -159,7 +182,7 @@ const VendorAddProduct = () => {
     // console.log(sizeOptions);
     // console.log(categoryOptions);
     // console.log(selectedImages);
-    
+
 
 
 
@@ -332,9 +355,9 @@ const VendorAddProduct = () => {
                             <div className='mb-3'>
                                 <Typography variant="h6" className="mb-4 font-semibold">Pricing And Stock</Typography></div>
                             <div className="grid grid-cols-2 gap-4">
-                                <TextField type='number' required fullWidth label="Base Pricing" {...register('price')} inputProps={{ min: 0 }}  />
-                                <TextField type='number' required fullWidth label="Stock" {...register('stock')} inputProps={{ min: 0 }}  />
-                                <TextField type='number' fullWidth label="Discount on parcentage" {...register('discount')} inputProps={{ min: 0 }}  />
+                                <TextField type='number' required fullWidth label="Base Pricing" {...register('price')} inputProps={{ min: 0 }} />
+                                <TextField type='number' required fullWidth label="Stock" {...register('stock')} inputProps={{ min: 0 }} />
+                                <TextField type='number' fullWidth label="Discount on parcentage" {...register('discount')} inputProps={{ min: 0 }} />
                             </div>
                         </div>
                     </div>
@@ -355,7 +378,7 @@ const VendorAddProduct = () => {
                                 accept='image/*'
                                 required
                                 multiple
-                               
+
                                 className="bg-white file-input file-input-bordered w-full max-w-xs"
                                 {...register('photo')}
                             />
