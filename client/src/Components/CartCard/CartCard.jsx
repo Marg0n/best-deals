@@ -15,7 +15,10 @@ const CartCard = ({ product }) => {
         category,
         ratings,
         cartQuantity,
-        creationDateTime, _id } = product
+        creationDateTime, _id, veriation } = product
+
+    console.log(product);
+
 
 
     // Delete item from cart
@@ -34,6 +37,7 @@ const CartCard = ({ product }) => {
                         <p className='text-[#020202] ml-2 text-base font-normal pb-5'>{productName}</p>
 
                         <div className='flex items-center justify-between w-full'>
+                            <h1 className='text-[#020202] ml-2 text-base font-normal pb-5'>{product?.veriation}</h1>
                             <span className="text-xs font-medium tracking-widest uppercase text-[#1d2236] flex items-center gap-2">
                                 ${price}
                             </span>
