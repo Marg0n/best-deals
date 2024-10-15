@@ -14,7 +14,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
 
   // const navigation = useNavigation()
   // console.log(navigation.state);
-  
+
   // This fetch is for get all categories from mongoDB
   const axiosCommon = useAxiosCommon();
   const { data: products } = useQuery({
@@ -27,9 +27,13 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
     },
   });
 
-  // Extracting all unique categories from the products array
+  // Extracting all unique categories, handling both strings and arrays
   const allCategories = products
-    ? [...new Set(products.map((product) => product.category))]
+    ? [...new Set(
+      products.flatMap((product) =>
+        Array.isArray(product.category) ? product.category : [product.category]
+      )
+    )]
     : [];
 
   // console.log(allCategories);

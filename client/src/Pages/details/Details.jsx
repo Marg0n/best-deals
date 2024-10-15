@@ -10,6 +10,7 @@ import { addToCart } from '../../features/CartSlice/CartSlice';
 import MoreSuggetionCard from '../../Components/MoreSuggetionCard/MoreSuggetionCard';
 import useAuth from '../../hooks/useAuth';
 import DetailsPageTabs from '../../Components/DetailsPageTabs/DetailsPageTabs';
+import ProductsCard from '../../Components/ProductsCard/ProductsCard';
 
 
 const Details = () => {
@@ -21,11 +22,30 @@ const Details = () => {
     const sizes = product?.veriation?.size
 
 
+    console.log(product);
+    console.log(products);
 
 
     // finding same category products but not the same product
-    const productsInSameCategory = products?.filter(item => item.category === product.category && item._id !== product._id);
+    const productsInSameCategory = products?.filter(item => {
+        // If the product category is an array, we check for intersection
+        if (Array.isArray(item.category) && Array.isArray(product.category)) {
+            return item.category.some(cat => product.category.includes(cat)) && item._id !== product._id;
+        }
 
+        // If the item's category is an array and the product's category is a string
+        if (Array.isArray(item.category)) {
+            return item.category.includes(product.category) && item._id !== product._id;
+        }
+
+        // If the item's category is a string and the product's category is an array
+        if (Array.isArray(product.category)) {
+            return product.category.includes(item.category) && item._id !== product._id;
+        }
+
+        // If both categories are strings, compare directly
+        return item.category === product.category && item._id !== product._id;
+    });
 
     const { user } = useAuth()
 
@@ -37,12 +57,18 @@ const Details = () => {
     const [quantity, setQuality] = useState(1)
     // console.log(quantity);
 
-
-    // const [open, setOpen] = useState(false);
-
-
-    // const handleOpen = () => setOpen(true);
-    // const handleClose = () => setOpen(false);
+    // Define a color map to handle the dynamic Tailwind classes
+    const colorClasses = {
+        white: 'bg-white',
+        black: 'bg-black',
+        blue: 'bg-blue-500',
+        red: 'bg-red-500',
+        green: 'bg-green-500',
+        purple: 'bg-purple-500',
+        orange: 'bg-orange-500',
+        pink: 'bg-pink-500',
+        // Add more colors as needed
+    };
 
     // dispatch products to redux
     const dispatch = useDispatch()
@@ -66,7 +92,7 @@ const Details = () => {
                 <div className='lg:w-8/12 flex-1 lg:flex '>
                     <div className='lg:w-1/2 p-3'>
                         {/* path indication */}
-                        <p className='text-[#775050] dark:text-white  text-lg font-normal'>
+                        <p className='text-[#775050]  dark:text-white  text-lg font-normal'>
                             <Link to='/'>Home</Link> {'>'} <Link>{product.category}</Link> {'>'} <Link>{product.productName}</Link>
                         </p>
 
@@ -101,6 +127,51 @@ const Details = () => {
                         {/* products counter to add to cart quantity for tab and mobile*/}
 
                         <div className='lg:hidden'>
+
+
+                            {/* size and color choose option */}
+                            {/* color choose options */}
+                            <div className='mb-5'>
+                                {/* Color choose options */}
+                                {colors?.length > 0 && (
+                                    <>
+                                        <h1 className='mb-1 dark:text-white'>Choose Color</h1>
+                                        {
+                                            colors.map((color, index) => {
+                                                return (
+                                                    <button
+                                                        className={`btn text-white border-none mr-2 ${colorClasses[color] || ''}`}
+                                                        key={index}
+                                                    >
+                                                        {color}
+                                                    </button>
+                                                );
+                                            })
+                                        }
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Size choose options */}
+                            <div className='mb-5'>
+                                {sizes?.length > 0 && (
+                                    <>
+                                        <h1 className='mb-1 dark:text-white'>Choose Size</h1>
+                                        {
+                                            sizes.map((size, index) => (
+                                                <button
+                                                    className='btn btn-outline dark:text-white mr-2'
+                                                    key={index}
+                                                >
+                                                    {size}
+                                                </button>
+                                            ))
+                                        }
+                                    </>
+                                )}
+                            </div>
+
+
                             <div className='flex justify-center gap-6'>
 
                                 <ProductsCounter
@@ -117,8 +188,6 @@ const Details = () => {
 
                                 <Link
                                     to={`/cartlist`}
-                                    // to={`/single-checkout/${_id}`} 
-                                    // onClick={() => handleBuyNow(product)}
                                     onClick={() => handleAddToCart(product)}
                                     className='bg-[#ff6b1c] rounded-[86px] text-white text-sm font-bold px-8 py-2'>
                                     Buy Now
@@ -131,14 +200,27 @@ const Details = () => {
                     </div>
 
                     {/*description and products counter to add to cart quantity for large device */}
-                    <div className='lg:mt-16'>
+
+                    {/* display name and price */}
+                    <div className='lg:mt-16 hidden lg:block'>
                         <div className='p-3'>
                             <h3 className='text-[#775050] font-bold dark:text-white  text-2xl '>{product.productName}</h3>
-                            <h3 className={`text-[#ff6b1c] dark:text-white ${product?.discount ? 'line-through text-red-500 dark:text-red-500' : ''}  text-xl font-bold py-4`}>Price : ${product?.price}</h3>
-                            {
-                                product?.discount &&
-                                <h3 className='text-[#ff6b1c] dark:text-white  text-xl font-bold py-4'>On sale : ${(product?.price) - (product?.price * product?.discount / 100)}</h3>
-                            }
+                            <h3 className="dark:text-white text-xl font-bold py-4">
+                                Price :
+                                <span className={`text-orange-500 ${product?.discount ? 'line-through text-orange-500 dark:text-orange-500' : ''} mr-4`}>
+                                    ${product?.price}
+                                </span>
+
+                                {product?.discount && (
+                                    <span className="text-orange-500 dark:text-white text-xl font-bold">
+                                        ${(product?.price - (product?.price * product?.discount / 100)).toFixed(2)}
+                                    </span>
+                                )}
+                            </h3>
+
+
+                            {/* display brandname and details */}
+
                             <hr className='border-2 border-[#1d2236] w-full' />
                             <p className='text-[#775050] dark:text-white  text-lg font-normal pt-2'>Brand: {product.brandName}</p>
                             <p className='text-[#775050] dark:text-white  text-lg font-normal'>Details:<br /> {product?.productShortDescription ? product.productShortDescription : product?.description}</p>
@@ -146,38 +228,46 @@ const Details = () => {
 
                         {/* size and color choose option */}
                         {/* color choose options */}
-                        <div>
-                            {
-                                colors?.length > 0 ? (
-                                    colors.map((color, index) => {
-                                        return (
-                                            <button
-                                                className='btn btn-outline mr-2 '
-                                                key={index}
-                                            >
-                                                {color}
-                                            </button>
-                                        );
-                                    })
-                                ) : ''
-                            }
+                        <div className='mb-5'>
+                            {/* Color choose options */}
+                            {colors?.length > 0 && (
+                                <>
+                                    <h1 className='mb-1 dark:text-white'>Choose Color</h1>
+                                    {
+                                        colors.map((color, index) => {
+                                            return (
+                                                <button
+                                                    className={`btn text-white border-none mr-2 ${colorClasses[color] || ''}`}
+                                                    key={index}
+                                                >
+                                                    {color}
+                                                </button>
+                                            );
+                                        })
+                                    }
+                                </>
+                            )}
                         </div>
 
-                        {/* size choose options */}
-                        <div>
-                            {
-                                sizes?.length > 0 ? (
-                                    sizes.map((size, index) => (
-                                        <button
-                                            className='btn btn-outline mr-2'
-                                            key={index}
-                                        >
-                                            {size}
-                                        </button>
-                                    ))
-                                ) : ''
-                            }
+                        {/* Size choose options */}
+                        <div className='mb-5'>
+                            {sizes?.length > 0 && (
+                                <>
+                                    <h1 className='mb-1 dark:text-white'>Choose Size</h1>
+                                    {
+                                        sizes.map((size, index) => (
+                                            <button
+                                                className='btn btn-outline dark:text-white mr-2'
+                                                key={index}
+                                            >
+                                                {size}
+                                            </button>
+                                        ))
+                                    }
+                                </>
+                            )}
                         </div>
+
 
 
 
@@ -211,38 +301,38 @@ const Details = () => {
                     </div>
 
                 </div>
-
-                {/* suggestion  */}
-                <div>
-                    {
-                        productsInSameCategory.length > 0 ?
-                            <div className=' h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
-                                <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
-
-                                {
-                                    productsInSameCategory.map(item =>
-                                        <MoreSuggetionCard
-                                            key={item._id}
-                                            product={item}
-                                        ></MoreSuggetionCard>)
-                                }
-
-
-                            </div>
-                            : ''
-
-                    }
-                </div>
             </div>
 
 
-            {/* vendor Info */}
+            {/* description, vendor, review tabs */}
             <div>
                 <DetailsPageTabs
                     vendorInfo={vendorInfo}
                     description={product?.description}
                     commnetDetails={commnetDetails}
                 ></DetailsPageTabs>
+            </div>
+            {/* suggestion  */}
+            <div>
+                {
+                    productsInSameCategory.length > 0 ?
+                        <div className=' h-full mt-10  rounded-xl bg-[#d9d9d9] p-2 dark:bg-[#34394C]'>
+                            <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
+                            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-y-5 md:gap-5'>
+                                {
+                                    productsInSameCategory.map(item =>
+                                        <ProductsCard
+                                            key={item._id}
+                                            product={item}
+                                        ></ProductsCard>)
+                                }
+                            </div>
+
+
+                        </div>
+                        : ''
+
+                }
             </div>
         </div>
 

@@ -46,10 +46,10 @@ const VendorAddProduct = () => {
 
     // Initial color options
     const [colorOptions, setColorOptions] = useState([
-        { value: 'Red', label: 'Red' },
-        { value: 'Black', label: 'Black' },
-        { value: 'White', label: 'White' },
-        { value: 'Blue', label: 'Blue' },
+        { value: 'red', label: 'Red' },
+        { value: 'black', label: 'Black' },
+        { value: 'white', label: 'White' },
+        { value: 'blue', label: 'Blue' },
         { value: 'add_more_color', label: 'Add more Color' },
     ]);
 
