@@ -7,7 +7,6 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import { Link, ScrollRestoration, useLoaderData, useParams } from 'react-router-dom';
 import ProductsCounter from '../../Components/ProductCounter/ProductsCounter';
 import { addToCart } from '../../features/CartSlice/CartSlice';
-import MoreSuggetionCard from '../../Components/MoreSuggetionCard/MoreSuggetionCard';
 import useAuth from '../../hooks/useAuth';
 import DetailsPageTabs from '../../Components/DetailsPageTabs/DetailsPageTabs';
 import ProductsCard from '../../Components/ProductsCard/ProductsCard';
@@ -22,9 +21,25 @@ const Details = () => {
     const sizes = product?.veriation?.size
 
 
-    console.log(product);
-    console.log(products);
 
+    // State for selected color, size, and quantity for each combination
+    // const [selectedVariations, setSelectedVariations] = useState([]);
+    // Color and size selectors and quantity handlers
+    const [selectedColor, setSelectedColor] = useState('');
+    const [selectedSize, setSelectedSize] = useState('');
+    const [quantity, setQuantity] = useState(1);
+    const [colorCount , setColorCount] = useState(0);
+    // const [sizeCount , setSizeCount] = useState(0);
+    // const selectedProducts = []
+    // const selectedIteam ={color : selectedColor , quantity : colorCount}
+
+    const handelColorCount  =(color)=>{
+        setSelectedColor(color)
+        setColorCount(colorCount+1)
+        selectedProducts.push(...prev, selectedColor)
+    }
+    // console.log(selectedProducts);
+    
 
     // finding same category products but not the same product
     const productsInSameCategory = products?.filter(item => {
@@ -53,9 +68,6 @@ const Details = () => {
 
     const vendorInfo = { vendorEmail: product.vendorEmail, companyName: product.companyName }
 
-    // set quality from details
-    const [quantity, setQuality] = useState(1)
-    // console.log(quantity);
 
     // Define a color map to handle the dynamic Tailwind classes
     const colorClasses = {
@@ -75,9 +87,13 @@ const Details = () => {
 
     // add product to redux store
     const handleAddToCart = (product) => {
-        const addingToCart = { ...product, cartQuantity: quantity }
+        const addingToCart = { ...product, cartQuantity: quantity , selectedColor: selectedColor , selectedSize: selectedSize  }
         dispatch(addToCart(addingToCart));
     };
+
+
+    console.log(selectedColor);
+    console.log(selectedSize);
 
 
 
@@ -142,8 +158,9 @@ const Details = () => {
                                                     <button
                                                         className={`btn text-white border-none mr-2 ${colorClasses[color] || ''}`}
                                                         key={index}
+                                                        onClick={() => handelColorCount(color)}
                                                     >
-                                                        {color}
+                                                        {color}<span>{colorCount}</span>
                                                     </button>
                                                 );
                                             })
@@ -162,6 +179,7 @@ const Details = () => {
                                                 <button
                                                     className='btn btn-outline dark:text-white mr-2'
                                                     key={index}
+                                                    onClick={() => setSelectedSize(size)}
                                                 >
                                                     {size}
                                                 </button>
@@ -177,7 +195,7 @@ const Details = () => {
                                 <ProductsCounter
                                     key={product._id}
                                     product={product}
-                                    setQuality={setQuality}
+                                    setQuality={setQuantity}
                                     quality={quantity}
                                 ></ProductsCounter>
 
@@ -239,8 +257,9 @@ const Details = () => {
                                                 <button
                                                     className={`btn text-white border-none mr-2 ${colorClasses[color] || ''}`}
                                                     key={index}
+                                                    onClick={() => handelColorCount(color)}
                                                 >
-                                                    {color}
+                                                    {color}<span>{colorCount}</span>
                                                 </button>
                                             );
                                         })
@@ -259,6 +278,7 @@ const Details = () => {
                                             <button
                                                 className='btn btn-outline dark:text-white mr-2'
                                                 key={index}
+                                                onClick={() => setSelectedSize(size)}
                                             >
                                                 {size}
                                             </button>
@@ -278,7 +298,7 @@ const Details = () => {
                                 <ProductsCounter
                                     key={product._id}
                                     product={product}
-                                    setQuality={setQuality}
+                                    setQuality={setQuantity}
                                     quality={quantity}
                                 ></ProductsCounter>
 
