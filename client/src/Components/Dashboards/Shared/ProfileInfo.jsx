@@ -5,13 +5,14 @@ import React from 'react';
 import useAuth from '../../../hooks/useAuth';
 import useUserProfile from '../../../hooks/useUserProfile';
 import { localDate } from '../../../utils/useBDdateTime';
+import { RxGear } from "react-icons/rx";
 
 const ProfileInfo = () => {
 
     // user info
     const { user } = useAuth();
     const { profile } = useUserProfile();
-    const formattedDate = localDate (user?.metadata.lastSignInTime)
+    const formattedDate = localDate(user?.metadata.lastSignInTime)
 
     // date time converting to BD time
     const creationDate = localDate(profile[0]?.createdTime)
@@ -48,7 +49,9 @@ const ProfileInfo = () => {
     }));
 
     return (
-        <div className="bg-white p-6 rounded-lg shadow-md flex lg:flex-row flex-col gap-4 items-center justify-center text-base-300" data-aos="fade-up" data-aos-duration="1000">
+        <div className="bg-white p-6 rounded-lg shadow-md flex lg:flex-row flex-col gap-4 items-center justify-center text-base-300 relative" data-aos="fade-up" data-aos-duration="1000">
+
+            {/* photo */}
             <div className='lg:w-1/3 text-center'>
                 <StyledBadge
                     overlap="circular"
@@ -63,6 +66,8 @@ const ProfileInfo = () => {
                     />
                 </StyledBadge>
             </div>
+
+            {/* information */}
             <div className='lg:w-2/3 flex gap-4 items-center'>
                 <div>
                     <h3>Name: </h3>
@@ -88,6 +93,11 @@ const ProfileInfo = () => {
                 </div>
 
             </div>
+
+            <RxGear
+                size={35}
+                className='absolute top-6 left-6 cursor-pointer text-violet-600'
+            />
         </div>
     );
 };
