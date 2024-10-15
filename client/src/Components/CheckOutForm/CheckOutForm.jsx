@@ -23,13 +23,13 @@ const CheckOutForm = ({ onSubmit, contactInfo }) => {
                     {/* name */}
                     <div>
                         <label className="text-gray-700 dark:text-gray-200 font-semibold">Receiver Name</label>
-                        <input name="uname"
+                        <input name="name"
                             className="block w-full px-4 py-2 mt-2 text-gray-700 bg-white border border-gray-200 rounded-md dark:bg-gray-800 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 focus:ring-blue-300 focus:ring-opacity-40 dark:focus:border-blue-300 focus:outline-none focus:ring"
                             type='text'
-                            {...register("uname", { required: true })}
+                            {...register("name", { required: true })}
                         />
                         <div className="mt-1 animate-pulse">
-                            {errors.uname && <span className="text-red-500">Please fill up Name field</span>}
+                            {errors.name && <span className="text-red-500">Please fill up Name field</span>}
                         </div>
                     </div>
 
@@ -70,6 +70,7 @@ const CheckOutForm = ({ onSubmit, contactInfo }) => {
                             name="paymentMethod"
                             value="Cash on delivery"
                             className="radio mt-1"
+                            disabled={contactInfo !==null && contactInfo?.paymentMethod ==="Card"}
                             {...register("paymentMethod", { required: true })}
                         />
                         <span className="ml-2">Cash On Delivery</span>
@@ -80,6 +81,7 @@ const CheckOutForm = ({ onSubmit, contactInfo }) => {
                             name="paymentMethod"
                             value="Card"
                             className="radio mt-1"
+                            disabled={contactInfo !==null && contactInfo?.paymentMethod ==="Cash on delivery"}
                             defaultChecked
                             {...register("paymentMethod", { required: true })}
                         />

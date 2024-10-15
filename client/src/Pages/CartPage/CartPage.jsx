@@ -15,6 +15,7 @@ import useAxiosCommon from "../../hooks/useAxiosCommon";
 import useAuth from "../../hooks/useAuth";
 import toast from "react-hot-toast";
 import NothingInCart from "../../Components/NothingInCart/NothingInCart";
+import { localDate } from './../../utils/useBDdateTime';
 
 
 
@@ -56,9 +57,28 @@ const CartPage = () => {
 
         // fetch data from the form
         const { address, contact, name, paymentMethod } = data;
+        const transactionId = name+contact;
+        const data2 = { address, contact, name, paymentMethod, transactionId };
+        console.log(data, data2)
 
-        setContactInfo(data);
+        {
+            paymentMethod !== "Cash on delivery"
+            ? setContactInfo(data)
+            : setContactInfo(data2)
+        }        
     }
+    
+    // insert checkout data for "Cash on delivery"
+    const orderDate = localDate(new Date());
+    // const orderDate = new Date().toUTCString();
+    const items = [cart.cartIteams];
+    const status = 'Payed';
+    const paymentMethod = contactInfo?.paymentMethod || "Cash on delivery";
+    const shippingAddress = contactInfo?.address;
+
+    const booking = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
+
+    console.log(contactInfo, booking)
 
 
     // clear all products from cartList
@@ -207,6 +227,16 @@ const CartPage = () => {
                                 contactInfo={contactInfo}
                                 handleClearCartList={handleClearCartList}
                             />
+                        }
+                        {
+                            contactInfo?.paymentMethod === "Cash on delivery"
+                            && <button
+                            className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
+                            // onClick={() => setIsOpen(true)}
+                        >
+                            {/* {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? 'Checkout' : 'Invoice')} */}
+                            Proceed
+                        </button>
                         }
 
                     </div>
