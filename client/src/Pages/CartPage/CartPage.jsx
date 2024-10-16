@@ -130,6 +130,14 @@ const CartPage = () => {
 
     }
 
+    // post CoD status
+    const handleCoDStatus = () => {
+
+
+
+        const CoDStatus = axiosCommon.post(`/coDStatus`,contactInfo)
+    }
+
     return (
         <div className=" mx-auto p-5 gap-y-5 md:gap-5">
             <Helmet>
@@ -231,7 +239,7 @@ const CartPage = () => {
                                     contactInfo?.paymentMethod === "Cash on delivery"
                                     && <button
                                         className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
-                                    // onClick={() => setIsOpen(true)}
+                                    // onClick={() => handleCoDStatus()}
                                     >
                                         {/* {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? 'Checkout' : 'Invoice')} */}
                                         Proceed
