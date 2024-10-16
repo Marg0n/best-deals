@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Link, ScrollRestoration, useLoaderData, useParams } from 'react-router-dom';
+import { Link, ScrollRestoration, useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import ProductsCounter from '../../Components/ProductCounter/ProductsCounter';
 import { addToCart } from '../../features/CartSlice/CartSlice';
 import useAuth from '../../hooks/useAuth';
@@ -16,6 +16,7 @@ import toast from 'react-hot-toast';
 const Details = () => {
     const products = useLoaderData();
     const { _id } = useParams();
+    const { user } = useAuth()
     const product = products?.find(product => product._id === _id);
 
     const veriations = product?.veriation
@@ -30,7 +31,7 @@ const Details = () => {
 
     console.log(selectedVerient);
 
-
+    const navigate = useNavigate()
 
 
 
@@ -56,7 +57,6 @@ const Details = () => {
         return item.category === product.category && item._id !== product._id;
     });
 
-    const { user } = useAuth()
 
     const commnetDetails = { userName: user?.displayName, photo: user?.photoURL, productId: product?._id }
 
@@ -68,14 +68,20 @@ const Details = () => {
 
     // add product to redux store
     const handleAddToCart = (product) => {
-        if (veriations && !selectedVerient) {
-            toast.error('Select verient')
+        if (user) {
+            if (veriations && !selectedVerient) {
+                toast.error('Select verient')
+            }
+            else {
+                const addingToCart = { ...product, cartQuantity: quantity, veriation: selectedVerient }
+                dispatch(addToCart(addingToCart));
+
+            }
         }
         else {
-            const addingToCart = { ...product, cartQuantity: quantity, veriation: selectedVerient }
-            dispatch(addToCart(addingToCart));
-
+            navigate('/login')
         }
+
     };
 
 
