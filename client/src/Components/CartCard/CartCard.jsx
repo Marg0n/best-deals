@@ -16,7 +16,7 @@ const CartCard = ({ product }) => {
         cartQuantity,
         creationDateTime, _id, veriation } = product
 
-    console.log(product);
+    // console.log(product);
 
 
 

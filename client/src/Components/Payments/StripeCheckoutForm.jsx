@@ -13,9 +13,9 @@ import { useDispatch } from "react-redux";
 import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 
 
-const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, handleClearCartList,setChangeInvoice }) => {
+const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, handleClearCartList, setChangeInvoice }) => {
 
-    const dispatch= useDispatch()
+    const dispatch = useDispatch()
 
     // strip hooks
     const stripe = useStripe();
@@ -117,7 +117,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                 ...booking,
                 transactionId: paymentIntent.id,
             };
-            const billingAddress = {...contactInfo, transactionId: paymentIntent.id,};
+            const billingAddress = { ...contactInfo, transactionId: paymentIntent.id, };
             setPaymentInfoForInvoice(paymentInfo);
             delete paymentInfo._id
             // console.log(paymentInfo)
@@ -125,7 +125,10 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                 // 2. save payment info in booking collection (db)
                 const { data: data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
                 const { data: data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, billingAddress)
-                console.log('from stripe checkout =>', data1, data2)
+                const vendorBooking = { ...paymentInfo, ...billingAddress };
+                // input shippingInformation for vendor
+                // await axiosSecure.post(`/ordersReq/${user?.email}`, vendorBooking)
+                // console.log('from stripe checkout =>', data1, data2)
 
                 // update ui
                 // refetch()

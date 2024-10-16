@@ -384,7 +384,7 @@ async function run() {
         const results = await usersCollection.updateOne(query, updateDoc);
         // console.log(results,updateBody);
         res.send(results);
-      } catch {
+      } catch(err) {
         // If an error occurs during execution, catch it here
         console.error("Error updating user status:", err);
         // Send an error response to the client
@@ -393,7 +393,32 @@ async function run() {
           .json({ message: "Internal server error from last login" });
       }
     });
-    //.......................
+
+    // ==================================
+    // vendor status against purchase of user
+    // ==================================
+    app.post('/ordersReq/:email', async (req, res) => {
+      try {
+        const mail = req.params?.email;
+        const body = req?.body;
+
+        const result = await orderCollection.updateOne(
+          { email: mail },
+          { $push: { shippingInformation: body } },
+          { upsert: true }
+        );
+
+        res.send(result);
+      } catch (err) {
+        console.error("Error updating user payment status:", err);
+        res.status(500).json({ message: "Internal server error from user payment status!" });
+      }
+    });
+    
+    
+    // ==================================
+    // warning vendor
+    // ==================================
     app.put('/vendors/:id/warning', async (req, res) => {
       const { id } = req.params;
       const { isWarning } = req.body;
@@ -429,6 +454,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // ban vendor
+    // ==================================
     app.put('/vendorss/:id/ban', async (req, res) => {
       const { id } = req.params;
       const { isBanned } = req.body;
@@ -458,6 +486,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // warning users
+    // ==================================
     app.put('/Users/:id/warning', async (req, res) => {
       const { id } = req.params;
       const { isWarning } = req.body;
@@ -493,6 +524,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // ban users
+    // ==================================
     app.put('/Userss/:id/ban', async (req, res) => {
       const { id } = req.params;
       const { isBanned } = req.body;
@@ -522,6 +556,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // delete users
+    // ==================================
     app.delete('/usersDelete/:id', async (req, res) => {
       const { id } = req.params;
 
@@ -539,6 +576,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // delete users
+    // ==================================
     app.delete('/vendorsDelete/:id', async (req, res) => {
       const { id } = req.params;
 
@@ -556,6 +596,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // total users
+    // ==================================
     app.get('/totalUsers', async (req, res) => {
       try {
         const totalUsers = await usersCollection.countDocuments({ role: 'User' }); // Adjust query if needed (e.g., filtering by role)
@@ -565,6 +608,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // total vendors
+    // ==================================
     app.get('/totalVendors', async (req, res) => {
       try {
         const totalVendors = await usersCollection.countDocuments({ role: 'Vendor' }); // Adjust query if needed
@@ -573,6 +619,10 @@ async function run() {
         res.status(500).json({ message: 'Error fetching total vendors', error });
       }
     });
+
+    // ==================================
+    // total transaction for ?
+    // ==================================
     app.get('/totalTransactionss', async (req, res) => {
       try {
         const totalTransactions = await orderCollection.countDocuments({});
@@ -595,9 +645,9 @@ async function run() {
 
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     // fetch comments
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     app.get('/api/products/:id', async (req, res) => {
       const productId = req.params.id;
 
@@ -616,9 +666,9 @@ async function run() {
       }
     });
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     // add comments
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     app.post('/api/products/:id/comments', async (req, res) => {
       const productId = req.params.id;
       const { comment, userRating, name, userPhoto } = req.body;
@@ -648,11 +698,13 @@ async function run() {
     });
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     // cartList collection
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
 
+    // ==================================
     // insert products into cartList
+    // ==================================
     app.post('/cartList', async (req, res) => {
       try {
         const { userEmail, cartProducts } = req.body;
@@ -682,8 +734,9 @@ async function run() {
       }
     });
 
-
+    // ==================================
     // get products from cartList filtered by userEmail
+    // ==================================
     app.get('/cartList/:email', async (req, res) => {
       try {
         const email = req.params.email;
@@ -707,8 +760,9 @@ async function run() {
       }
     });
 
-
+    // ==================================
     // Clear all products from cartList filtered by userEmail
+    // ==================================
     app.delete('/cartList/:email', async (req, res) => {
       try {
         const email = req.params.email;

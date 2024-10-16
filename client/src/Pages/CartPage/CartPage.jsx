@@ -14,12 +14,14 @@ import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { localDate } from './../../utils/useBDdateTime';
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 
 
 const CartPage = () => {
 
     const axiosCommon = useAxiosCommon()
+    const axiosSecure = useAxiosSecure()
     const { user } = useAuth();
     const userEmail = user?.email
 
@@ -55,9 +57,9 @@ const CartPage = () => {
 
         // fetch data from the form
         const { address, contact, name, paymentMethod } = data;
-        const transactionId = name + contact;
-        const data2 = { address, contact, name, paymentMethod, transactionId };
-        console.log(data, data2)
+        const trackingNumber = contact + Date.now()
+        const data2 = { address, contact, name, paymentMethod, trackingNumber };
+        // console.log(data, data2)
 
         {
             paymentMethod !== "Cash on delivery"
@@ -72,11 +74,11 @@ const CartPage = () => {
     const items = [cart.cartIteams];
     const status = 'Ordered';
     const paymentMethod = contactInfo?.paymentMethod || "CoD";
-    const shippingAddress = contactInfo?.address;
 
-    const booking = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
+    const booking = { orderDate, items, totalAmount, status, paymentMethod };
+    const codBooking = { ...booking, ...contactInfo };
 
-    console.log(contactInfo, booking)
+    console.log(contactInfo, booking, codBooking)
 
 
     // clear all products from cartList
@@ -131,11 +133,18 @@ const CartPage = () => {
     }
 
     // post CoD status
-    const handleCoDStatus = () => {
+    const handleCoDStatus = async () => {
 
+        try {
+            // input status to user
+            await axiosSecure.post(`/purchaseHistory/${user?.email}`, booking)
+            await axiosSecure.post(`/billingAddress/${user?.email}`, contactInfo)
+            // input shippingInformation for vendor
+            await axiosSecure.post(`/ordersReq/${user?.email}`, codBooking)
+        }
+        catch (err) {
 
-
-        const CoDStatus = axiosCommon.post(`/coDStatus`,contactInfo)
+        }
     }
 
     return (
