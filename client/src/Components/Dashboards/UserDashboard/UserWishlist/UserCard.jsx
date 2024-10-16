@@ -23,7 +23,7 @@ const UserCard = ({ product }) => {
                     {/* image */}
                     <img className='w-24 h-20 rounded-[27px]' src={productImage} alt="image" />
 
-                    {/* name & price */}
+                    {/* name, quantity & price */}
                     <div className=" flex flex-1 gap-4 w-full">
                         <p className='text-[#020202] text-base font-bold w-1/2 '>{productName}</p>
 

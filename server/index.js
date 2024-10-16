@@ -138,7 +138,7 @@ app.listen(port, () => {
 
 async function run() {
   try {
-    await client.connect();
+    // await client.connect();
 
     // ===================================
     // DB Connection
@@ -237,9 +237,15 @@ async function run() {
     // Users login / profile data
     // ==================================
     app.get("/users/:email", async (req, res) => {
-      const mail = req.params?.email;
-      const results = await usersCollection.find({ email: mail }).toArray();
-      res.send(results);
+      try {
+        const mail = req.params?.email;
+        const results = await usersCollection.find({ email: mail }).toArray();
+        res.send(results);
+      }
+      catch (error) {
+        console.error('Error in login:', error);
+        res.status(500).send({ error: 'Failed to login' });
+      }
     });
 
     // ==================================
@@ -376,6 +382,7 @@ async function run() {
           },
         };
         const results = await usersCollection.updateOne(query, updateDoc);
+        // console.log(results,updateBody);
         res.send(results);
       } catch {
         // If an error occurs during execution, catch it here
@@ -386,205 +393,205 @@ async function run() {
           .json({ message: "Internal server error from last login" });
       }
     });
-//.......................
-app.put('/vendors/:id/warning', async (req, res) => {
-  const { id } = req.params;
-  const { isWarning } = req.body;
+    //.......................
+    app.put('/vendors/:id/warning', async (req, res) => {
+      const { id } = req.params;
+      const { isWarning } = req.body;
 
-  // console.log('Received vendor ID:', id);
-  // console.log('Received isWarning value:', isWarning);
+      // console.log('Received vendor ID:', id);
+      // console.log('Received isWarning value:', isWarning);
 
-  // Ensure ID is valid
-  if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid vendor ID format' });
-  }
+      // Ensure ID is valid
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid vendor ID format' });
+      }
 
-  // Ensure isWarning is a boolean
-  if (typeof isWarning !== 'boolean') {
-      return res.status(400).json({ message: 'Invalid isWarning value' });
-  }
+      // Ensure isWarning is a boolean
+      if (typeof isWarning !== 'boolean') {
+        return res.status(400).json({ message: 'Invalid isWarning value' });
+      }
 
-  // Perform the update
-  try {
-      const result = await usersCollection.updateOne(
+      // Perform the update
+      try {
+        const result = await usersCollection.updateOne(
           { _id: new ObjectId(id) },
           { $set: { isWarning: isWarning } }
-      );
+        );
 
-      if (result.modifiedCount > 0) {
+        if (result.modifiedCount > 0) {
           return res.status(200).json({ message: 'Warning status updated successfully' });
-      } else {
+        } else {
           return res.status(404).json({ message: 'Vendor not found' });
+        }
+      } catch (error) {
+        console.error('Error updating warning status:', error);
+        return res.status(500).json({ message: 'Internal server error' });
       }
-  } catch (error) {
-      console.error('Error updating warning status:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-  }
-});
+    });
 
-app.put('/vendorss/:id/ban', async (req, res) => {
-  const { id } = req.params;
-  const { isBanned } = req.body;
+    app.put('/vendorss/:id/ban', async (req, res) => {
+      const { id } = req.params;
+      const { isBanned } = req.body;
 
-  // Validate vendor ID and isBanned value
-  if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid vendor ID format' });
-  }
-  if (typeof isBanned !== 'boolean') {
-      return res.status(400).json({ message: 'Invalid isBanned value' });
-  }
+      // Validate vendor ID and isBanned value
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid vendor ID format' });
+      }
+      if (typeof isBanned !== 'boolean') {
+        return res.status(400).json({ message: 'Invalid isBanned value' });
+      }
 
-  try {
-      const result = await usersCollection.updateOne(
+      try {
+        const result = await usersCollection.updateOne(
           { _id: new ObjectId(id) },
           { $set: { isBanned: isBanned } }
-      );
+        );
 
-      if (result.modifiedCount > 0) {
+        if (result.modifiedCount > 0) {
           return res.status(200).json({ message: 'Ban status updated successfully' });
-      } else {
+        } else {
           return res.status(404).json({ message: 'Vendor not found' });
+        }
+      } catch (error) {
+        console.error('Error updating ban status:', error);
+        return res.status(500).json({ message: 'Internal server error' });
       }
-  } catch (error) {
-      console.error('Error updating ban status:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-  }
-});
+    });
 
-app.put('/Users/:id/warning', async (req, res) => {
-  const { id } = req.params;
-  const { isWarning } = req.body;
+    app.put('/Users/:id/warning', async (req, res) => {
+      const { id } = req.params;
+      const { isWarning } = req.body;
 
-  // console.log('Received vendor ID:', id);
-  // console.log('Received isWarning value:', isWarning);
+      // console.log('Received vendor ID:', id);
+      // console.log('Received isWarning value:', isWarning);
 
-  // Ensure ID is valid
-  if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid vendor ID format' });
-  }
+      // Ensure ID is valid
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid vendor ID format' });
+      }
 
-  // Ensure isWarning is a boolean
-  if (typeof isWarning !== 'boolean') {
-      return res.status(400).json({ message: 'Invalid isWarning value' });
-  }
+      // Ensure isWarning is a boolean
+      if (typeof isWarning !== 'boolean') {
+        return res.status(400).json({ message: 'Invalid isWarning value' });
+      }
 
-  // Perform the update
-  try {
-      const result = await usersCollection.updateOne(
+      // Perform the update
+      try {
+        const result = await usersCollection.updateOne(
           { _id: new ObjectId(id) },
           { $set: { isWarning: isWarning } }
-      );
+        );
 
-      if (result.modifiedCount > 0) {
+        if (result.modifiedCount > 0) {
           return res.status(200).json({ message: 'Warning status updated successfully' });
-      } else {
+        } else {
           return res.status(404).json({ message: 'Vendor not found' });
+        }
+      } catch (error) {
+        console.error('Error updating warning status:', error);
+        return res.status(500).json({ message: 'Internal server error' });
       }
-  } catch (error) {
-      console.error('Error updating warning status:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-  }
-});
+    });
 
-app.put('/Userss/:id/ban', async (req, res) => {
-  const { id } = req.params;
-  const { isBanned } = req.body;
+    app.put('/Userss/:id/ban', async (req, res) => {
+      const { id } = req.params;
+      const { isBanned } = req.body;
 
-  // Validate user ID and isBanned value
-  if (!ObjectId.isValid(id)) {
-      return res.status(400).json({ message: 'Invalid vendor ID format' });
-  }
-  if (typeof isBanned !== 'boolean') {
-      return res.status(400).json({ message: 'Invalid isBanned value' });
-  }
+      // Validate user ID and isBanned value
+      if (!ObjectId.isValid(id)) {
+        return res.status(400).json({ message: 'Invalid vendor ID format' });
+      }
+      if (typeof isBanned !== 'boolean') {
+        return res.status(400).json({ message: 'Invalid isBanned value' });
+      }
 
-  try {
-      const result = await usersCollection.updateOne(
+      try {
+        const result = await usersCollection.updateOne(
           { _id: new ObjectId(id) },
           { $set: { isBanned: isBanned } }
-      );
+        );
 
-      if (result.modifiedCount > 0) {
+        if (result.modifiedCount > 0) {
           return res.status(200).json({ message: 'Ban status updated successfully' });
-      } else {
+        } else {
           return res.status(404).json({ message: 'Vendor not found' });
+        }
+      } catch (error) {
+        console.error('Error updating ban status:', error);
+        return res.status(500).json({ message: 'Internal server error' });
       }
-  } catch (error) {
-      console.error('Error updating ban status:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-  }
-});
+    });
 
-app.delete('/usersDelete/:id', async (req, res) => {
-  const { id } = req.params;
+    app.delete('/usersDelete/:id', async (req, res) => {
+      const { id } = req.params;
 
-  try {
-      const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
+      try {
+        const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
 
-      if (result.deletedCount > 0) {
+        if (result.deletedCount > 0) {
           res.status(200).json({ message: 'User deleted successfully' });
-      } else {
+        } else {
           res.status(404).json({ message: 'User not found' });
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ message: 'Internal server error' });
       }
-  } catch (error) {
-      console.error('Error deleting user:', error);
-      res.status(500).json({ message: 'Internal server error' });
-  }
-});
+    });
 
-app.delete('/vendorsDelete/:id', async (req, res) => {
-  const { id } = req.params;
+    app.delete('/vendorsDelete/:id', async (req, res) => {
+      const { id } = req.params;
 
-  try {
-      const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
+      try {
+        const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
 
-      if (result.deletedCount > 0) {
+        if (result.deletedCount > 0) {
           res.status(200).json({ message: 'User deleted successfully' });
-      } else {
+        } else {
           res.status(404).json({ message: 'User not found' });
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        res.status(500).json({ message: 'Internal server error' });
       }
-  } catch (error) {
-      console.error('Error deleting user:', error);
-      res.status(500).json({ message: 'Internal server error' });
-  }
-});
+    });
 
-app.get('/totalUsers', async (req, res) => {
-  try {
-      const totalUsers = await usersCollection.countDocuments({ role: 'User' }); // Adjust query if needed (e.g., filtering by role)
-      res.json({ totalUsers });
-  } catch (error) {
-      res.status(500).json({ message: 'Error fetching total users', error });
-  }
-});
+    app.get('/totalUsers', async (req, res) => {
+      try {
+        const totalUsers = await usersCollection.countDocuments({ role: 'User' }); // Adjust query if needed (e.g., filtering by role)
+        res.json({ totalUsers });
+      } catch (error) {
+        res.status(500).json({ message: 'Error fetching total users', error });
+      }
+    });
 
-app.get('/totalVendors', async (req, res) => {
-  try {
-      const totalVendors = await usersCollection.countDocuments({ role: 'Vendor' }); // Adjust query if needed
-      res.json({ totalVendors });
-  } catch (error) {
-      res.status(500).json({ message: 'Error fetching total vendors', error });
-  }
-});
-app.get('/totalTransactionss', async (req, res) => {
-  try {
-      const totalTransactions = await orderCollection.countDocuments({});
-      
-      const totalAmountResult = await orderCollection.aggregate([
+    app.get('/totalVendors', async (req, res) => {
+      try {
+        const totalVendors = await usersCollection.countDocuments({ role: 'Vendor' }); // Adjust query if needed
+        res.json({ totalVendors });
+      } catch (error) {
+        res.status(500).json({ message: 'Error fetching total vendors', error });
+      }
+    });
+    app.get('/totalTransactionss', async (req, res) => {
+      try {
+        const totalTransactions = await orderCollection.countDocuments({});
+
+        const totalAmountResult = await orderCollection.aggregate([
           {
-              $group: {
-                  _id: null,
-                  totalAmount: { $sum: "$totalAmount" }
-              }
+            $group: {
+              _id: null,
+              totalAmount: { $sum: "$totalAmount" }
+            }
           }
-      ]).toArray();
+        ]).toArray();
 
-      const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
-      res.json({ totalTransactions, totalAmount });
-  } catch (error) {
-      res.status(500).json({ message: 'Error fetching total transactions or amount', error });
-  }
-});
+        const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
+        res.json({ totalTransactions, totalAmount });
+      } catch (error) {
+        res.status(500).json({ message: 'Error fetching total transactions or amount', error });
+      }
+    });
 
 
 
@@ -661,19 +668,16 @@ app.get('/totalTransactionss', async (req, res) => {
             { userEmail: userEmail },
             { $set: { cartProducts: [cartProducts] } }  // Replace the array
           );
-          // console.log('Cart products replaced for existing cart:', result);
 
           res.status(200).json({ message: 'Cart products replaced successfully' });
         } else {
           // If the user doesn't have a cart, create a new cart for the user
           const newCart = { userEmail: userEmail, cartProducts: [cartProducts] };
           const result = await cartList.insertOne(newCart);
-          // console.log('New cart created:', result);
 
           res.status(201).json({ message: 'Cart created and product added successfully' });
         }
       } catch (error) {
-        // console.error('Error adding item to cart:', error);
         res.status(500).json({ message: 'Failed to add item to cart', error });
       }
     });
@@ -709,7 +713,7 @@ app.get('/totalTransactionss', async (req, res) => {
       try {
         const email = req.params.email;
         console.log(email);
-        
+
 
         // Find the user's cart by email and clear the cartProducts array
         const result = await cartList.updateOne(
@@ -743,7 +747,7 @@ app.get('/totalTransactionss', async (req, res) => {
 
     app.use("/user", async (req, res) => { });
 
-    await client.db("admin").command({ ping: 1 });
+    // await client.db("admin").command({ ping: 1 });
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );

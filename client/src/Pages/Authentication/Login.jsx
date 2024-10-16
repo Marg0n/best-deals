@@ -59,23 +59,27 @@ const Login = () => {
 
         signInUser(email, password)
             .then(result => {
-                setCustomLoader(true);
-                // console.log(result.user)
-                const loggedUser = { email };
-                axios.post(`${import.meta.env.VITE_SERVER}/jwt`, loggedUser, { withCredentials: true })
-                // .then(res => {
-                //     console.log(res.data)
-                // })
+                    setCustomLoader(true);
+                    // console.log(result.user)
+                    const loggedUser = { email };
+                    axios.post(`${import.meta.env.VITE_SERVER}/jwt`, loggedUser, { withCredentials: true })
+                    // .then(res => {
+                    //     console.log(res.data)
+                    // })
 
-                // last login timestamp
-                axiosCommon.patch(`/lastLogin/${email}`, userInfo)
+                    // last login timestamp
+                    axiosCommon.patch(`/lastLogin/${email}`, userInfo)
 
-                toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
+                    toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
 
-                if (result.user) {
-                    setCustomLoader(false);
-                    navigate(whereTo, { replace: true });
-                }
+                    if (result.user) {
+                        setCustomLoader(false);
+                        navigate(whereTo, { replace: true });
+                    }
+                    else{                        
+                        setCustomLoader(false);
+                        toast.error(`Something went wrong!`, { autoClose: 2000, theme: "colored" })
+                    }
 
             })
             .catch(error => {
@@ -106,12 +110,14 @@ const Login = () => {
                         name: result?.user?.displayName,
                         photo: result?.user?.photoURL,
                         createdTime: result?.user?.metadata.creationTime,
-                        lastLogin: lastLogin,
+                        lastLogin: result?.user?.metadata.lastSignInTime,
                         role: "User"
                     }
 
                     // Send user data to your server
                     axiosCommon.post('/users', userData)
+                    // last login timestamp
+                    axiosCommon.patch(`/lastLogin/${result?.user.email}`, lastLogin)
 
                     // jwt token
                     axiosSecoure.post(`/jwt`, {

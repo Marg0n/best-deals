@@ -36,10 +36,10 @@ const ProductsCounter = ({ product , quality , setQuality }) => {
 
 
     return (
-        <div className="flex justify-between gap-5 bg-[#775050] rounded-[3rem] p-1">
+        <div className="flex justify-between gap-5 bg-[#775050] rounded-[3rem] p-1 ">
             <div>
-                <button onClick={handleIncrement} className="btn btn-xs btn-circle mt-1 ">
-                    <FiPlusCircle className="w-full h-full text-[#775050]" />
+                <button onClick={handleIncrement} className="btn btn-xs btn-circle mt-1  bg-white ">
+                    <FiPlusCircle className="w-full h-full text-[#775050] " />
                 </button>
             </div>
             <div className="text-white font-semibold text-lg">
@@ -47,8 +47,8 @@ const ProductsCounter = ({ product , quality , setQuality }) => {
                 {cartQuantity ? cartQuantity : quality}
             </div>
             <div>
-                <button onClick={handleDecrement} className="btn btn-xs btn-circle mt-1">
-                    <FiMinusCircle className="w-full h-full text-[#775050]" />
+                <button onClick={handleDecrement} className="btn btn-xs btn-circle mt-1 bg-white">
+                    <FiMinusCircle className="w-full h-full text-[#775050] " />
                 </button>
             </div>
         </div>

@@ -6,10 +6,10 @@ import FeaturedProducts from "../../Components/FeaturedProducts/FeaturedProducts
 import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useState } from "react";
-import NoData from "../../Components/NoData/NoData";
 import SectionHeader from "../../Components/ReUsableComponent/SectionHeader";
 import { Helmet } from "react-helmet-async";
 import CardSkelaton from "../../Components/CardSkelaton/CardSkelaton";
+import NoData from "../../Components/Shared/NoData";
 
 const Home = () => {
 
@@ -75,7 +75,7 @@ const Home = () => {
           </div>
         ) : (
           products?.length > 0 ?
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-5 md:gap-5 text-black mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-y-5 md:gap-5 text-black mx-auto">
               {products?.map((product) => (
                 <ProductsCard
                   key={product._id}

@@ -2,7 +2,6 @@ import { Outlet } from "react-router-dom";
 import Navbar from "../Components/Navbar/Navbar";
 import { useEffect, useState } from "react";
 import AOS from 'aos';
-import 'aos/dist/aos.css';
 import Footer from "../Components/Footer/Footer";
 import toast, { Toaster } from "react-hot-toast";
 import useAuth from "../hooks/useAuth";
@@ -81,7 +80,7 @@ const Root = () => {
     <div className="bg-gray-200 dark:bg-[#2F4161]">
       <Toaster />
       <Navbar toggleTheme={toggleTheme} theme={theme} />
-      <div className="mx-auto">
+      <div className="mx-auto max-w-[1440px]">
         <Outlet />
       </div>
       <Footer />

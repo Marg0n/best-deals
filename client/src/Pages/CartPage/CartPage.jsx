@@ -1,26 +1,26 @@
+import { useState } from "react";
 import { Helmet } from "react-helmet-async";
+import toast from "react-hot-toast";
+import { IoSaveOutline } from "react-icons/io5";
+import { MdDeleteSweep } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
+import { ScrollRestoration } from "react-router-dom";
+import Swal from "sweetalert2";
 import CartCard from "../../Components/CartCard/CartCard";
 import CheckOutForm from "../../Components/CheckOutForm/CheckOutForm";
-import LeftMenubar from "../../Components/LeftMenuBar/LeftMenuBar";
 import PaymentModal from "../../Components/Modals/PaymentModal";
-import NoData from "../../Components/NoData/NoData";
-import { ScrollRestoration } from "react-router-dom";
-import { useState } from "react";
-import { MdDeleteSweep } from "react-icons/md";
+import NothingInCart from "../../Components/NothingInCart/NothingInCart";
 import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
-import Swal from "sweetalert2";
-import { IoSaveOutline } from "react-icons/io5";
-import useAxiosCommon from "../../hooks/useAxiosCommon";
 import useAuth from "../../hooks/useAuth";
-import toast from "react-hot-toast";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { localDate } from './../../utils/useBDdateTime';
 
 
 
 const CartPage = () => {
 
     const axiosCommon = useAxiosCommon()
-    const { user} = useAuth();
+    const { user } = useAuth();
     const userEmail = user?.email
 
 
@@ -32,10 +32,16 @@ const CartPage = () => {
     const dispacth = useDispatch()
 
 
+
     // Calculate total quantity and total amount
     const totalQuantity = cart?.cartIteams?.reduce((total, item) => total + item?.cartQuantity, 0);
 
-    const totalAmount = cart?.cartIteams?.reduce((total, item) => total + (item?.cartQuantity * item?.price), 0);
+    const totalAmount = cart?.cartIteams?.reduce((total, item) => {
+        const price = item?.price;
+        const discount = item?.discount ? item.price * (item.discount / 100) : 0; // Calculate discount if available
+        const finalPrice = price - discount;
+        return total + (item?.cartQuantity * finalPrice);
+    }, 0);
 
     // Apply discount 
     const discount = 0.00 * totalAmount;
@@ -49,9 +55,28 @@ const CartPage = () => {
 
         // fetch data from the form
         const { address, contact, name, paymentMethod } = data;
+        const transactionId = name + contact;
+        const data2 = { address, contact, name, paymentMethod, transactionId };
+        console.log(data, data2)
 
-        setContactInfo(data);
+        {
+            paymentMethod !== "Cash on delivery"
+                ? setContactInfo(data)
+                : setContactInfo(data2)
+        }
     }
+
+    // insert checkout data for "Cash on delivery"
+    const orderDate = localDate(new Date());
+    // const orderDate = new Date().toUTCString();
+    const items = [cart.cartIteams];
+    const status = 'Ordered';
+    const paymentMethod = contactInfo?.paymentMethod || "CoD";
+    const shippingAddress = contactInfo?.address;
+
+    const booking = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
+
+    console.log(contactInfo, booking)
 
 
     // clear all products from cartList
@@ -105,24 +130,32 @@ const CartPage = () => {
 
     }
 
+    // post CoD status
+    const handleCoDStatus = () => {
+
+
+
+        const CoDStatus = axiosCommon.post(`/coDStatus`,contactInfo)
+    }
+
     return (
-        <div className=" flex p-5 gap-y-5 md:gap-5">
+        <div className=" mx-auto p-5 gap-y-5 md:gap-5">
             <Helmet>
                 <title>Best Deal | Cart list</title>
             </Helmet>
             <ScrollRestoration></ScrollRestoration>
 
             {/*Left Side menubar / categorybar  */}
-            <div className="flex-1">
+            {/* <div className="">
                 <LeftMenubar></LeftMenubar>
-            </div>
+            </div> */}
 
             {/* cart list */}
-            <div className="w-full lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
+            <div className="w-full  mx-auto lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
                 <div className="w-full lg:w-[65%] ">
                     {
                         cart?.cartIteams?.length === 0 ?
-                            <div><NoData></NoData></div> :
+                            <div><NothingInCart /></div> :
                             <div>
                                 <div>
                                     {cart?.cartIteams?.map(product => (
@@ -161,14 +194,14 @@ const CartPage = () => {
                                         <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Amounts</th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody className="text-black dark:text-white">
                                     {/* Quantity & Total Amounts */}
                                     <tr>
-                                        <td>{totalQuantity}</td>
+                                        <td>Item {totalQuantity} pcs</td>
                                         <td>$ {totalAmount?.toFixed(2)}</td>
                                     </tr>
                                     {/* Discount */}
-                                    <tr>
+                                    <tr className="dark:bg-[#34394C]">
                                         <td>Discount</td>
                                         <td>0%</td>
                                     </tr>
@@ -182,27 +215,40 @@ const CartPage = () => {
                         </div>
                     </div>
 
-                    <div>
+                    {/* payment */}
+                    {
+                        cart?.cartIteams?.length === 0 ? ''
+                            : <div>
+                                {/* address form */}
+                                <CheckOutForm
+                                    onSubmit={onSubmit}
+                                    contactInfo={contactInfo}
+                                ></CheckOutForm>
 
 
-                        <CheckOutForm
-                            onSubmit={onSubmit}
-                            contactInfo={contactInfo}
-                        ></CheckOutForm>
+                                {/* payment method */}
+                                {
+                                    contactInfo?.paymentMethod === "Card"
+                                    && <PaymentModal
+                                        CheckoutPrice={parseInt(grandTotal.toFixed(2))}
+                                        contactInfo={contactInfo}
+                                        handleClearCartList={handleClearCartList}
+                                    />
+                                }
+                                {
+                                    contactInfo?.paymentMethod === "Cash on delivery"
+                                    && <button
+                                        className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
+                                    // onClick={() => handleCoDStatus()}
+                                    >
+                                        {/* {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? 'Checkout' : 'Invoice')} */}
+                                        Proceed
+                                    </button>
+                                }
 
+                            </div>
+                    }
 
-
-                        {/* payment method */}
-                        {
-                            contactInfo?.paymentMethod === "Card"
-                            && <PaymentModal
-                                CheckoutPrice={parseInt(grandTotal.toFixed(2))}
-                                contactInfo={contactInfo}
-                                handleClearCartList={handleClearCartList}
-                            />
-                        }
-
-                    </div>
                 </div>
 
             </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StatCard = ({ title, value, percentage, increase, description }) => {
+const StatCard = ({ title, value = 0, percentage, increase, description }) => {
   // const percentageClass = increase ? 'text-green-500' : 'text-red-500';
   return (
     <div className="bg-white p-6 rounded-lg shadow-md">

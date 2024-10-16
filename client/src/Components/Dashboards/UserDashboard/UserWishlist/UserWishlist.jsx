@@ -1,7 +1,7 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
-import NoData from '../../../NoData/NoData';
+import NoData from '../../../Shared/NoData';
 import UserCard from './UserCard';
 import { Link } from 'react-router-dom';
 
@@ -60,17 +60,17 @@ const UserWishlist = () => {
                                     <thead>
                                         <tr>
                                             <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Quantity</th>
-                                            <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Amounts</th>
+                                            <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Amounts</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody className="text-black dark:text-white">
                                         {/* Quantity & Total Amounts */}
                                         <tr>
-                                            <td>{totalQuantity}</td>
+                                            <td>Item {totalQuantity} pcs</td>
                                             <td>$ {totalAmount?.toFixed(2)}</td>
                                         </tr>
                                         {/* Discount */}
-                                        <tr>
+                                        <tr className="dark:bg-[#34394C]">
                                             <td>Discount</td>
                                             <td>0%</td>
                                         </tr>
@@ -83,6 +83,8 @@ const UserWishlist = () => {
                                 </table>
                             </div>
                         </div>
+
+                        {/* link back to cart list */}
                         <Link
                             className='btn btn-primary mt-2 w-full'
                             to='/cartlist'

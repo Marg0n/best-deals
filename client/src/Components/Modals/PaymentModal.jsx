@@ -39,9 +39,14 @@ const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList }) => {
     const cart = useSelector((state) => state.cart);
 
     // Calculate total quantity and total amount
-    const totalQuantity = cart.cartIteams.reduce((total, item) => total + item.cartQuantity, 0);
+    const totalQuantity = cart?.cartIteams?.reduce((total, item) => total + item?.cartQuantity, 0);
 
-    const totalAmount = cart.cartIteams.reduce((total, item) => total + (item.cartQuantity * item.price), 0);
+    const totalAmount = cart?.cartIteams?.reduce((total, item) => {
+        const price = item?.price;
+        const discount = item?.discount ? item.price * (item.discount / 100) : 0; // Calculate discount if available
+        const finalPrice = price - discount;
+        return total + (item?.cartQuantity * finalPrice);
+    }, 0);
 
     // insert checkout data into purchaseHistory
     // const orderId = Date.now();
@@ -135,7 +140,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList }) => {
                 className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
                 onClick={() => setIsOpen(true)}
             >
-                {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? 'Checkout': 'Invoice')}
+                {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? <span className="animate-pulse text-red-600">Checkout</span> : <span className="animate-pulse text-yellow-200">Invoice</span>)}
             </button>
 
         </div>
