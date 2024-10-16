@@ -54,9 +54,8 @@ const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList }) => {
     const items = [cart.cartIteams];
     const status = 'Payed';
     const paymentMethod = contactInfo.paymentMethod;
-    const shippingAddress = contactInfo.address;
 
-    const booking = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
+    const booking = { orderDate, items, totalAmount, status, paymentMethod };
 
     // const userAddress = contactInfo;
 
