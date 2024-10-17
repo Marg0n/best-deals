@@ -16,14 +16,12 @@ const Navbar = ({ toggleTheme, theme }) => {
   const { user, loggedOut } = useAuth();
   const userEmail = user?.email
   const axiosCommon = useAxiosCommon()
-  // console.log(user)
 
   const dispacth = useDispatch()
 
 
   // cart data from redux store
   const cart = useSelector((state) => state.cart);
-  // console.log(cart);
 
   const cartProducts = cart.cartIteams
 
@@ -49,7 +47,7 @@ const Navbar = ({ toggleTheme, theme }) => {
   const handleLogout = () => {
     const res = axiosCommon.post(`/cartList`, cartItem)
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.message) {
           loggedOut()
           toast.success('Logged Out');

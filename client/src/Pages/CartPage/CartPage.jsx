@@ -13,8 +13,8 @@ import NothingInCart from "../../Components/NothingInCart/NothingInCart";
 import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
-import { localDate } from './../../utils/useBDdateTime';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { localDate } from './../../utils/useBDdateTime';
 
 
 
@@ -25,6 +25,8 @@ const CartPage = () => {
     const { user } = useAuth();
     const userEmail = user?.email
 
+    // state of invoice button
+    const [showInvoiceModal, setShowInvoiceModal] = useState(false);
 
     // cart data from redux store
     const cart = useSelector((state) => state.cart)
@@ -75,10 +77,15 @@ const CartPage = () => {
     const status = 'Ordered';
     const paymentMethod = contactInfo?.paymentMethod || "CoD";
 
+    items.map(item => {
+        console.log(item?.vendorEmail)
+
+    })
+
     const booking = { orderDate, items, totalAmount, status, paymentMethod };
     const codBooking = { ...booking, ...contactInfo };
 
-    console.log(contactInfo, booking, codBooking)
+    // console.log(contactInfo, booking, codBooking)
 
 
     // clear all products from cartList
@@ -193,6 +200,7 @@ const CartPage = () => {
 
                 {/* Total bill Table */}
                 <div className="flex-grow" >
+                    {/* bill table */}
                     <div className=" bg-[rgb(217,217,217)] dark:bg-[#34394C] dark:text-white  h-fit">
                         <div className="overflow-x-auto">
                             <table className="table">
@@ -226,14 +234,17 @@ const CartPage = () => {
 
                     {/* payment */}
                     {
-                        // cart?.cartIteams?.length === 0 ? ''
-                        //     : 
-                            <div>
+                        (cart?.cartIteams?.length === 0 && !showInvoiceModal)
+                            ? ''
+                            : <div>
                                 {/* address form */}
-                                <CheckOutForm
-                                    onSubmit={onSubmit}
-                                    contactInfo={contactInfo}
-                                ></CheckOutForm>
+                                {
+                                    (!showInvoiceModal)
+                                    && <CheckOutForm
+                                        onSubmit={onSubmit}
+                                        contactInfo={contactInfo}
+                                    ></CheckOutForm>
+                                }
 
 
                                 {/* payment method */}
@@ -243,6 +254,8 @@ const CartPage = () => {
                                         CheckoutPrice={parseInt(grandTotal.toFixed(2))}
                                         contactInfo={contactInfo}
                                         handleClearCartList={handleClearCartList}
+                                        setShowInvoiceModal={setShowInvoiceModal}
+                                        showInvoiceModal={showInvoiceModal}
                                     />
                                 }
                                 {

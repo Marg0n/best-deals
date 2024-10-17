@@ -1,26 +1,22 @@
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import React, { useState } from 'react';
-import StripeCheckoutForm from '../Payments/StripeCheckoutForm';
-import { toast } from "react-toastify";
-import Swal from "sweetalert2";
 import PropTypes from "prop-types";
-import { useSelector } from "react-redux";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
-import useAuth from "../../hooks/useAuth";
+import React, { useState } from 'react';
 import { TbFidgetSpinner } from 'react-icons/tb';
+import { useSelector } from "react-redux";
+import useAuth from "../../hooks/useAuth";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import StripeCheckoutForm from '../Payments/StripeCheckoutForm';
 
 
 // Make sure to call `loadStripe` outside of a component’s render to avoid recreating the `Stripe` object on every render.
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_API_KEY_CLIENT);
 
-const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList }) => {
+const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList, showInvoiceModal, setShowInvoiceModal }) => {
 
     // user info from firebase
     const { user } = useAuth();
 
-    // state of invoice button
-    const [changeInvoice, setChangeInvoice] = useState(false);
 
     // modal close/open
     const [isOpen, setIsOpen] = useState(false);
@@ -57,48 +53,6 @@ const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList }) => {
 
     const booking = { orderDate, items, totalAmount, status, paymentMethod };
 
-    // const userAddress = contactInfo;
-
-
-    // const handleInvoice = async () => {
-
-    //     console.log('invoice related ==>', booking, contactInfo, user?.email);
-
-    //     try {
-    //         // loading
-    //         setLoading(true);
-
-    //         const { data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, booking)
-    //         const { data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, userAddress)
-
-    //         if (data1 && data2) {
-    //             Swal.fire({
-    //                 title: `Successfully Payed!`,
-    //                 text: `Your Payment is successful! 🎉`,
-    //                 icon: 'success',
-    //                 confirmButtonText: 'Cool!'
-    //             }).then(() => {
-    //                 // loader
-    //                 setLoading(false)
-    //                 toast('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
-    //                 // refetch()
-    //             });
-    //         } else {
-    //             toast.error('Something went Wrong!', { autoClose: 2000, theme: "colored" })
-    //             // loader
-    //             setLoading(false)
-    //             // refetch()
-    //         }
-
-    //     }
-    //     catch (err) {
-    //         // loader
-    //         setLoading(false);
-    //         toast.error(err.response.data, { autoClose: 5000, theme: "colored" });
-    //         // refetch()
-    //     }
-    // }
-
 
     return (
         <div>
@@ -106,7 +60,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList }) => {
 
                 <div className="modal-box">
                     {
-                        !changeInvoice ? <>
+                        !showInvoiceModal ? <>
                             <h3 className="font-bold text-lg text-center mb-4">Pay to Proceed!</h3>
                         </> : <>
                             <h3 className="font-bold text-lg text-center mb-4">Your Invoice!</h3>
@@ -121,7 +75,8 @@ const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList }) => {
                             closeModal={closeModal}
                             booking={booking}
                             handleClearCartList={handleClearCartList}
-                            setChangeInvoice={setChangeInvoice}
+                            setShowInvoiceModal={setShowInvoiceModal}
+                            showInvoiceModal={showInvoiceModal}
                         />
                     </Elements>
 
@@ -139,7 +94,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList }) => {
                 className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
                 onClick={() => setIsOpen(true)}
             >
-                {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? <span className="animate-pulse text-red-600">Checkout</span> : <span className="animate-pulse text-yellow-200">Invoice</span>)}
+                {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!showInvoiceModal ? <span className="animate-pulse text-red-600">Checkout</span> : <span className="animate-pulse text-yellow-200">Invoice</span>)}
             </button>
 
         </div>
@@ -150,6 +105,8 @@ PaymentModal.propTypes = {
     CheckoutPrice: PropTypes.number,
     contactInfo: PropTypes.object,
     handleClearCartList: PropTypes.func,
+    showInvoiceModal: PropTypes.bool,
+    setShowInvoiceModal: PropTypes.bool,
 }
 
 export default PaymentModal;

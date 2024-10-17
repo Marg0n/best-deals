@@ -6,7 +6,7 @@ import Invoice from './Invoice';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
-const InvoiceModal = ({ handleClearCartList, CheckoutPrice, contactInfo, paymentInfo, closeModal: closeStripeModal }) => {
+const InvoiceModal = ({ handleClearCartList, contactInfo, paymentInfo, closeModal: closeStripeModal }) => {
 
     // cart data from redux store
     const cart = useSelector((state) => state.cart)
@@ -39,7 +39,6 @@ const InvoiceModal = ({ handleClearCartList, CheckoutPrice, contactInfo, payment
             >
                 <Invoice
                     closeModal={closeModal}
-                    CheckoutPrice={CheckoutPrice}
                     contactInfo={contactInfo}
                     paymentInfo={paymentInfo}
                     handleClearCartList={handleClearCartList}
@@ -51,9 +50,9 @@ const InvoiceModal = ({ handleClearCartList, CheckoutPrice, contactInfo, payment
 
 InvoiceModal.propTypes = {
     handleClearCartList: PropTypes.func,
-    booking: PropTypes.object,
+    paymentInfo: PropTypes.object,
     contactInfo: PropTypes.object,
-    CheckoutPrice: PropTypes.number,
+    // CheckoutPrice: PropTypes.number,
     closeStripeModal: PropTypes.func,
 };
 
