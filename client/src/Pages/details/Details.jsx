@@ -286,7 +286,10 @@ const Details = () => {
                     <p>Loading vendor info...</p>
                 ) : (
                     <DetailsPageTabs
-                    vendorInfo={vendorInfo} description={product?.description} commnetDetails={commnetDetails} />
+                    product = {product}
+                    vendorInfo={vendorInfo} 
+                    description={product?.description} 
+                    commnetDetails={commnetDetails} />
                 )}
             </div>
             {/* suggestion  */}
