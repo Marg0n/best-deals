@@ -24,6 +24,10 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
     const { user } = useAuth();
     const navigate = useNavigate();
 
+    // con
+    const shippingAddress = contactInfo?.address;
+    const cardBooking={...booking, shippingAddress};
+
     // payment info state
     const [paymentInfoForInvoice, setPaymentInfoForInvoice] = useState();
     useEffect(() => {
@@ -113,7 +117,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
             // console.log('succeed payment ===>', paymentIntent)
             // 1. Create payment info object
             const paymentInfo = {
-                ...booking,
+                ...cardBooking,
                 transactionId: paymentIntent.id,
             };
             const billingAddress = { ...contactInfo, transactionId: paymentIntent.id, };
@@ -127,8 +131,12 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                 const { data: data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
                 const { data: data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, billingAddress)
                 const vendorBooking = { ...paymentInfo, ...billingAddress };
-                // input shippingInformation for vendor
-                // await axiosSecure.post(`/ordersReq/${user?.email}`, vendorBooking)
+                // input shippingInformation for vendor.
+                paymentInfo?.items[0]?.map(item => {
+                    console.log(item?.vendorEmail)
+    
+                    axiosSecure.post(`/ordersReq/${item?.vendorEmail}`, vendorBooking)
+                })
                 // console.log('from stripe checkout =>', data1, data2)
 
                 // update ui
