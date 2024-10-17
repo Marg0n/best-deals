@@ -20,12 +20,19 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../../hooks/useAuth";
+import axios from "axios";
+import useAxiosCommon from "./../../../../hooks/useAxiosCommon";
 
 const VendorProducts = () => {
   const vendorProducts = useAxiosSecure();
   const { user } = useAuth();
+  const axiosCommon = useAxiosCommon();
 
-  const { data: vendorAllProducts = [], isLoading } = useQuery({
+  const {
+    refetch,
+    data: vendorAllProducts = [],
+    isLoading,
+  } = useQuery({
     queryKey: ["productsForVendor"],
     queryFn: async () => {
       const res = await vendorProducts.get("/allVendorProducts");
@@ -36,7 +43,7 @@ const VendorProducts = () => {
   const allVendorProducts = vendorAllProducts?.filter(
     (product) => product?.vendorEmail === user?.email
   );
-  console.log(allVendorProducts);
+  // console.log(allVendorProducts);
 
   const initialData = allVendorProducts.map((product) => ({
     id: product._id,
@@ -47,6 +54,7 @@ const VendorProducts = () => {
 
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null);
   const rowsPerPage = 5; // Set number of rows per page
 
   const filteredData = initialData.filter((item) =>
@@ -71,6 +79,33 @@ const VendorProducts = () => {
     if (currentPage > 0) {
       setCurrentPage((prevPage) => prevPage - 1);
     }
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleEdit = () => {
+    console.log("Edit Product:");
+    handleClose(); // Close menu after action
+    // Add your edit logic here (e.g., open a modal with the product data)
+  };
+
+  const handleDelete = async (id) => {
+    console.log(id);
+    try {
+      const resp = await axiosCommon.delete(`/vendorProductDelete/${id}`);
+      refetch();
+    } catch (error) {
+      console.log(error);
+    }
+    // handleClose();
+    // Close menu after action
+    // Add your delete logic here (e.g., confirm and delete the product)
   };
 
   if (isLoading) {
@@ -115,7 +150,27 @@ const VendorProducts = () => {
                   <TableCell>{row.category}</TableCell>
                   <TableCell>{row.price}</TableCell>
                   <TableCell>
-                    <ActionMenu row={row} />
+                    <div>
+                      <IconButton onClick={handleClick}>
+                        <MoreVertIcon />
+                      </IconButton>
+                      <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={handleClose}
+                      >
+                        <MenuItem onClick={handleEdit}>
+                          <EditIcon fontSize="small" /> Edit Product
+                        </MenuItem>
+                        <MenuItem onClick={() => handleDelete(row.id)}>
+                          <DeleteIcon
+                            fontSize="small"
+                            className="text-red-500"
+                          />
+                          Delete
+                        </MenuItem>
+                      </Menu>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -148,44 +203,44 @@ const VendorProducts = () => {
 };
 
 // ActionMenu Component
-const ActionMenu = ({ row }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
+// const ActionMenu = ({ row }) => {
+//   const [anchorEl, setAnchorEl] = useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+//   const handleClick = (event) => {
+//     setAnchorEl(event.currentTarget);
+//   };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+//   const handleClose = () => {
+//     setAnchorEl(null);
+//   };
 
-  const handleEdit = () => {
-    console.log("Edit Product:", row);
-    handleClose(); // Close menu after action
-    // Add your edit logic here (e.g., open a modal with the product data)
-  };
+//   const handleEdit = () => {
+//     console.log("Edit Product:", row);
+//     handleClose(); // Close menu after action
+//     // Add your edit logic here (e.g., open a modal with the product data)
+//   };
 
-  const handleDelete = () => {
-    console.log("Delete Product:", row);
-    handleClose(); // Close menu after action
-    // Add your delete logic here (e.g., confirm and delete the product)
-  };
+//   const handleDelete = () => {
+//     console.log("Delete Product:", row);
+//     handleClose(); // Close menu after action
+//     // Add your delete logic here (e.g., confirm and delete the product)
+//   };
 
-  return (
-    <div>
-      <IconButton onClick={handleClick}>
-        <MoreVertIcon />
-      </IconButton>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={handleEdit}>
-          <EditIcon fontSize="small" /> Edit Product
-        </MenuItem>
-        <MenuItem onClick={handleDelete}>
-          <DeleteIcon fontSize="small" className="text-red-500" /> Delete
-        </MenuItem>
-      </Menu>
-    </div>
-  );
-};
+//   return (
+//     <div>
+//       <IconButton onClick={handleClick}>
+//         <MoreVertIcon />
+//       </IconButton>
+//       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+//         <MenuItem onClick={handleEdit}>
+//           <EditIcon fontSize="small" /> Edit Product
+//         </MenuItem>
+//         <MenuItem onClick={handleDelete}>
+//           <DeleteIcon fontSize="small" className="text-red-500" /> Delete
+//         </MenuItem>
+//       </Menu>
+//     </div>
+//   );
+// };
 
 export default VendorProducts;
