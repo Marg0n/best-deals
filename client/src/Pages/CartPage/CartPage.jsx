@@ -226,8 +226,9 @@ const CartPage = () => {
 
                     {/* payment */}
                     {
-                        cart?.cartIteams?.length === 0 ? ''
-                            : <div>
+                        // cart?.cartIteams?.length === 0 ? ''
+                        //     : 
+                            <div>
                                 {/* address form */}
                                 <CheckOutForm
                                     onSubmit={onSubmit}

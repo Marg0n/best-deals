@@ -16,7 +16,7 @@ const Navbar = ({ toggleTheme, theme }) => {
   const { user, loggedOut } = useAuth();
   const userEmail = user?.email
   const axiosCommon = useAxiosCommon()
-  console.log(user)
+  // console.log(user)
 
   const dispacth = useDispatch()
 

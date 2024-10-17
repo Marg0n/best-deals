@@ -44,6 +44,8 @@ const Login = () => {
     const location = useLocation();
     // console.log(location)
     const whereTo = location?.state || '/';
+    console.log(location);
+    
 
     // React hook form
     const {
