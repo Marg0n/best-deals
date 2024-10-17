@@ -26,6 +26,9 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
 
     // payment info state
     const [paymentInfoForInvoice, setPaymentInfoForInvoice] = useState();
+    useEffect(() => {
+        console.log(paymentInfoForInvoice);
+    }, [paymentInfoForInvoice]);
 
     // error handling
     const [paymentError, setPaymentError] = useState('');
@@ -143,7 +146,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                             Swal.fire({
                                 title: "Do you want to Have your Invoice?",
                                 showDenyButton: true,
-                                // showCancelButton: true,
+                                showCancelButton: true,
                                 confirmButtonText: "Yes!",
                                 denyButtonText: `Nope`
                             }).then((result) => {
