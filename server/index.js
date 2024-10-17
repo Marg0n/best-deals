@@ -25,7 +25,6 @@ app.use(
       "http://localhost:5173",
       "https://best-deal-909.web.app",
       "https://magenta-peony-5d02de.netlify.app",
-
     ],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -145,8 +144,12 @@ async function run() {
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
-    const productCollection = client.db("BestDeals").collection("ProductCollection");
-    const orderCollection = client.db("BestDeals").collection("OrderManagement");
+    const productCollection = client
+      .db("BestDeals")
+      .collection("ProductCollection");
+    const orderCollection = client
+      .db("BestDeals")
+      .collection("OrderManagement");
     const cartList = client.db("BestDeals").collection("CartList");
 
     // ==================================
@@ -175,7 +178,6 @@ async function run() {
 
       const amounts = parseFloat(price * 100);
 
-
       // return if...
       // if (amounts <= 0) return
 
@@ -192,8 +194,6 @@ async function run() {
         //   enabled: true,
         // },
       });
-
-
 
       res.send({
         clientSecret: paymentIntent.client_secret,
@@ -241,10 +241,9 @@ async function run() {
         const mail = req.params?.email;
         const results = await usersCollection.find({ email: mail }).toArray();
         res.send(results);
-      }
-      catch (error) {
-        console.error('Error in login:', error);
-        res.status(500).send({ error: 'Failed to login' });
+      } catch (error) {
+        console.error("Error in login:", error);
+        res.status(500).send({ error: "Failed to login" });
       }
     });
 
@@ -263,15 +262,15 @@ async function run() {
 
         res.send(result);
       } catch (error) {
-        console.error('Error inserting purchase history:', error);
-        res.status(500).send({ error: 'Failed to insert purchase history' });
+        console.error("Error inserting purchase history:", error);
+        res.status(500).send({ error: "Failed to insert purchase history" });
       }
     });
 
     // ==================================
     // all users data
     // ==================================
-    app.get('/allUsers', async function (req, res) {
+    app.get("/allUsers", async function (req, res) {
       const vendor = req?.query?.role;
       let query = {};
       if (vendor) {
@@ -279,7 +278,7 @@ async function run() {
       }
       const results = await usersCollection.find(query).toArray();
       res.send(results);
-    })
+    });
 
     // ==================================
     // Users profiles' Billing Address data
@@ -296,8 +295,8 @@ async function run() {
 
         res.send(result);
       } catch (error) {
-        console.error('Error inserting billing address:', error);
-        res.status(500).send({ error: 'Failed to insert billing address' });
+        console.error("Error inserting billing address:", error);
+        res.status(500).send({ error: "Failed to insert billing address" });
       }
     });
 
@@ -310,7 +309,9 @@ async function run() {
       const minPrice = parseFloat(req.query.minPrice) || 0;
       const maxPrice = parseFloat(req.query.maxPrice) || Number.MAX_VALUE;
       const isFeatured = req.query.isFeatured === "true";
-      const category = req.query.selectedCategory ? req.query.selectedCategory : "";
+      const category = req.query.selectedCategory
+        ? req.query.selectedCategory
+        : "";
 
       // Initialize the query object
       let query = {};
@@ -340,15 +341,14 @@ async function run() {
       res.send(results);
     });
 
-
     // ==================================
     // get all products
     // ==================================
 
-    app.get('/allVendorProducts', async (req, res) => {
+    app.get("/allVendorProducts", async (req, res) => {
       const results = await productCollection.find().toArray();
       res.send(results);
-    })
+    });
 
     // ==================================
     // Get All orders
@@ -356,7 +356,7 @@ async function run() {
     app.get("/all-orders", async (req, res) => {
       const results = await orderCollection.find().toArray();
       res.send(results);
-    })
+    });
 
     // ==================================
     // Post Products
@@ -366,7 +366,7 @@ async function run() {
       const postProduct = req.body;
       const results = await productCollection.insertOne(postProduct);
       res.send(results);
-    })
+    });
 
     // ==================================
     // Patch Users' last login
@@ -384,7 +384,7 @@ async function run() {
         const results = await usersCollection.updateOne(query, updateDoc);
         // console.log(results,updateBody);
         res.send(results);
-      } catch(err) {
+      } catch (err) {
         // If an error occurs during execution, catch it here
         console.error("Error updating user status:", err);
         // Send an error response to the client
@@ -397,7 +397,7 @@ async function run() {
     // ==================================
     // vendor status against purchase of user
     // ==================================
-    app.post('/ordersReq/:email', async (req, res) => {
+    app.post("/ordersReq/:email", async (req, res) => {
       try {
         const mail = req.params?.email;
         const body = req?.body;
@@ -411,15 +411,16 @@ async function run() {
         res.send(result);
       } catch (err) {
         console.error("Error updating user payment status:", err);
-        res.status(500).json({ message: "Internal server error from user payment status!" });
+        res
+          .status(500)
+          .json({ message: "Internal server error from user payment status!" });
       }
     });
-    
-    
+
     // ==================================
     // warning vendor
     // ==================================
-    app.put('/vendors/:id/warning', async (req, res) => {
+    app.put("/vendors/:id/warning", async (req, res) => {
       const { id } = req.params;
       const { isWarning } = req.body;
 
@@ -428,12 +429,12 @@ async function run() {
 
       // Ensure ID is valid
       if (!ObjectId.isValid(id)) {
-        return res.status(400).json({ message: 'Invalid vendor ID format' });
+        return res.status(400).json({ message: "Invalid vendor ID format" });
       }
 
       // Ensure isWarning is a boolean
-      if (typeof isWarning !== 'boolean') {
-        return res.status(400).json({ message: 'Invalid isWarning value' });
+      if (typeof isWarning !== "boolean") {
+        return res.status(400).json({ message: "Invalid isWarning value" });
       }
 
       // Perform the update
@@ -444,29 +445,31 @@ async function run() {
         );
 
         if (result.modifiedCount > 0) {
-          return res.status(200).json({ message: 'Warning status updated successfully' });
+          return res
+            .status(200)
+            .json({ message: "Warning status updated successfully" });
         } else {
-          return res.status(404).json({ message: 'Vendor not found' });
+          return res.status(404).json({ message: "Vendor not found" });
         }
       } catch (error) {
-        console.error('Error updating warning status:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        console.error("Error updating warning status:", error);
+        return res.status(500).json({ message: "Internal server error" });
       }
     });
 
     // ==================================
     // ban vendor
     // ==================================
-    app.put('/vendorss/:id/ban', async (req, res) => {
+    app.put("/vendorss/:id/ban", async (req, res) => {
       const { id } = req.params;
       const { isBanned } = req.body;
 
       // Validate vendor ID and isBanned value
       if (!ObjectId.isValid(id)) {
-        return res.status(400).json({ message: 'Invalid vendor ID format' });
+        return res.status(400).json({ message: "Invalid vendor ID format" });
       }
-      if (typeof isBanned !== 'boolean') {
-        return res.status(400).json({ message: 'Invalid isBanned value' });
+      if (typeof isBanned !== "boolean") {
+        return res.status(400).json({ message: "Invalid isBanned value" });
       }
 
       try {
@@ -476,20 +479,22 @@ async function run() {
         );
 
         if (result.modifiedCount > 0) {
-          return res.status(200).json({ message: 'Ban status updated successfully' });
+          return res
+            .status(200)
+            .json({ message: "Ban status updated successfully" });
         } else {
-          return res.status(404).json({ message: 'Vendor not found' });
+          return res.status(404).json({ message: "Vendor not found" });
         }
       } catch (error) {
-        console.error('Error updating ban status:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        console.error("Error updating ban status:", error);
+        return res.status(500).json({ message: "Internal server error" });
       }
     });
 
     // ==================================
     // warning users
     // ==================================
-    app.put('/Users/:id/warning', async (req, res) => {
+    app.put("/Users/:id/warning", async (req, res) => {
       const { id } = req.params;
       const { isWarning } = req.body;
 
@@ -498,12 +503,12 @@ async function run() {
 
       // Ensure ID is valid
       if (!ObjectId.isValid(id)) {
-        return res.status(400).json({ message: 'Invalid vendor ID format' });
+        return res.status(400).json({ message: "Invalid vendor ID format" });
       }
 
       // Ensure isWarning is a boolean
-      if (typeof isWarning !== 'boolean') {
-        return res.status(400).json({ message: 'Invalid isWarning value' });
+      if (typeof isWarning !== "boolean") {
+        return res.status(400).json({ message: "Invalid isWarning value" });
       }
 
       // Perform the update
@@ -514,29 +519,31 @@ async function run() {
         );
 
         if (result.modifiedCount > 0) {
-          return res.status(200).json({ message: 'Warning status updated successfully' });
+          return res
+            .status(200)
+            .json({ message: "Warning status updated successfully" });
         } else {
-          return res.status(404).json({ message: 'Vendor not found' });
+          return res.status(404).json({ message: "Vendor not found" });
         }
       } catch (error) {
-        console.error('Error updating warning status:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        console.error("Error updating warning status:", error);
+        return res.status(500).json({ message: "Internal server error" });
       }
     });
 
     // ==================================
     // ban users
     // ==================================
-    app.put('/Userss/:id/ban', async (req, res) => {
+    app.put("/Userss/:id/ban", async (req, res) => {
       const { id } = req.params;
       const { isBanned } = req.body;
 
       // Validate user ID and isBanned value
       if (!ObjectId.isValid(id)) {
-        return res.status(400).json({ message: 'Invalid vendor ID format' });
+        return res.status(400).json({ message: "Invalid vendor ID format" });
       }
-      if (typeof isBanned !== 'boolean') {
-        return res.status(400).json({ message: 'Invalid isBanned value' });
+      if (typeof isBanned !== "boolean") {
+        return res.status(400).json({ message: "Invalid isBanned value" });
       }
 
       try {
@@ -546,136 +553,154 @@ async function run() {
         );
 
         if (result.modifiedCount > 0) {
-          return res.status(200).json({ message: 'Ban status updated successfully' });
+          return res
+            .status(200)
+            .json({ message: "Ban status updated successfully" });
         } else {
-          return res.status(404).json({ message: 'Vendor not found' });
+          return res.status(404).json({ message: "Vendor not found" });
         }
       } catch (error) {
-        console.error('Error updating ban status:', error);
-        return res.status(500).json({ message: 'Internal server error' });
+        console.error("Error updating ban status:", error);
+        return res.status(500).json({ message: "Internal server error" });
       }
     });
 
     // ==================================
     // delete users
     // ==================================
-    app.delete('/usersDelete/:id', async (req, res) => {
+    app.delete("/usersDelete/:id", async (req, res) => {
       const { id } = req.params;
 
       try {
-        const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
+        const result = await usersCollection.deleteOne({
+          _id: new ObjectId(id),
+        });
 
         if (result.deletedCount > 0) {
-          res.status(200).json({ message: 'User deleted successfully' });
+          res.status(200).json({ message: "User deleted successfully" });
         } else {
-          res.status(404).json({ message: 'User not found' });
+          res.status(404).json({ message: "User not found" });
         }
       } catch (error) {
-        console.error('Error deleting user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "Internal server error" });
       }
     });
 
     // ==================================
     // delete users
     // ==================================
-    app.delete('/vendorsDelete/:id', async (req, res) => {
+    app.delete("/vendorsDelete/:id", async (req, res) => {
       const { id } = req.params;
 
       try {
-        const result = await usersCollection.deleteOne({ _id: new ObjectId(id) });
+        const result = await usersCollection.deleteOne({
+          _id: new ObjectId(id),
+        });
 
         if (result.deletedCount > 0) {
-          res.status(200).json({ message: 'User deleted successfully' });
+          res.status(200).json({ message: "User deleted successfully" });
         } else {
-          res.status(404).json({ message: 'User not found' });
+          res.status(404).json({ message: "User not found" });
         }
       } catch (error) {
-        console.error('Error deleting user:', error);
-        res.status(500).json({ message: 'Internal server error' });
+        console.error("Error deleting user:", error);
+        res.status(500).json({ message: "Internal server error" });
       }
     });
 
     // ==================================
     // total users
     // ==================================
-    app.get('/totalUsers', async (req, res) => {
+    app.get("/totalUsers", async (req, res) => {
       try {
-        const totalUsers = await usersCollection.countDocuments({ role: 'User' }); // Adjust query if needed (e.g., filtering by role)
+        const totalUsers = await usersCollection.countDocuments({
+          role: "User",
+        }); // Adjust query if needed (e.g., filtering by role)
         res.json({ totalUsers });
       } catch (error) {
-        res.status(500).json({ message: 'Error fetching total users', error });
+        res.status(500).json({ message: "Error fetching total users", error });
       }
     });
 
     // ==================================
     // total vendors
     // ==================================
-    app.get('/totalVendors', async (req, res) => {
+    app.get("/totalVendors", async (req, res) => {
       try {
-        const totalVendors = await usersCollection.countDocuments({ role: 'Vendor' }); // Adjust query if needed
+        const totalVendors = await usersCollection.countDocuments({
+          role: "Vendor",
+        }); // Adjust query if needed
         res.json({ totalVendors });
       } catch (error) {
-        res.status(500).json({ message: 'Error fetching total vendors', error });
+        res
+          .status(500)
+          .json({ message: "Error fetching total vendors", error });
       }
     });
 
     // ==================================
     // total transaction for ?
     // ==================================
-    app.get('/totalTransactionss', async (req, res) => {
+    app.get("/totalTransactionss", async (req, res) => {
       try {
         const totalTransactions = await orderCollection.countDocuments({});
 
-        const totalAmountResult = await orderCollection.aggregate([
-          {
-            $group: {
-              _id: null,
-              totalAmount: { $sum: "$totalAmount" }
-            }
-          }
-        ]).toArray();
+        const totalAmountResult = await orderCollection
+          .aggregate([
+            {
+              $group: {
+                _id: null,
+                totalAmount: { $sum: "$totalAmount" },
+              },
+            },
+          ])
+          .toArray();
 
-        const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
+        const totalAmount =
+          totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
         res.json({ totalTransactions, totalAmount });
       } catch (error) {
-        res.status(500).json({ message: 'Error fetching total transactions or amount', error });
+        res.status(500).json({
+          message: "Error fetching total transactions or amount",
+          error,
+        });
       }
     });
-
-
 
     // ==================================
     // fetch comments
     // ==================================
-    app.get('/api/products/:id', async (req, res) => {
+    app.get("/api/products/:id", async (req, res) => {
       const productId = req.params.id;
 
       try {
         // Find product using string _id
-        const product = await productCollection.findOne({ _id: new ObjectId(productId) });
+        const product = await productCollection.findOne({
+          _id: new ObjectId(productId),
+        });
 
         if (product) {
           res.status(200).json(product);
         } else {
-          res.status(404).json({ message: 'Product not found' });
+          res.status(404).json({ message: "Product not found" });
         }
       } catch (error) {
-        console.error('Error fetching product:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.error("Error fetching product:", error);
+        res.status(500).json({ message: "Server error" });
       }
     });
 
     // ==================================
     // add comments
     // ==================================
-    app.post('/api/products/:id/comments', async (req, res) => {
+    app.post("/api/products/:id/comments", async (req, res) => {
       const productId = req.params.id;
       const { comment, userRating, name, userPhoto } = req.body;
 
       // Check if all required fields are provided
       if (!comment || !userRating || !name || !userPhoto) {
-        return res.status(400).json({ message: 'Missing fields' });
+        return res.status(400).json({ message: "Missing fields" });
       }
 
       const newComment = { name, userPhoto, comment, userRating: userRating };
@@ -687,16 +712,15 @@ async function run() {
         );
 
         if (result.modifiedCount === 1) {
-          res.status(200).json({ message: 'Comment added successfully' });
+          res.status(200).json({ message: "Comment added successfully" });
         } else {
-          res.status(404).json({ message: 'Product not found' });
+          res.status(404).json({ message: "Product not found" });
         }
       } catch (error) {
-        console.error('Error adding comment:', error);
-        res.status(500).json({ message: 'Server error' });
+        console.error("Error adding comment:", error);
+        res.status(500).json({ message: "Server error" });
       }
     });
-
 
     // ==================================
     // cartList collection
@@ -705,7 +729,7 @@ async function run() {
     // ==================================
     // insert products into cartList
     // ==================================
-    app.post('/cartList', async (req, res) => {
+    app.post("/cartList", async (req, res) => {
       try {
         const { userEmail, cartProducts } = req.body;
 
@@ -713,31 +737,37 @@ async function run() {
         const userCart = await cartList.findOne({ userEmail: userEmail });
         // console.log(userCart);
 
-
         if (userCart) {
           // Replace the existing cartProducts array with the new one
           const result = await cartList.updateOne(
             { userEmail: userEmail },
-            { $set: { cartProducts: [cartProducts] } }  // Replace the array
+            { $set: { cartProducts: [cartProducts] } } // Replace the array
           );
 
-          res.status(200).json({ message: 'Cart products replaced successfully' });
+          res
+            .status(200)
+            .json({ message: "Cart products replaced successfully" });
         } else {
           // If the user doesn't have a cart, create a new cart for the user
-          const newCart = { userEmail: userEmail, cartProducts: [cartProducts] };
+          const newCart = {
+            userEmail: userEmail,
+            cartProducts: [cartProducts],
+          };
           const result = await cartList.insertOne(newCart);
 
-          res.status(201).json({ message: 'Cart created and product added successfully' });
+          res
+            .status(201)
+            .json({ message: "Cart created and product added successfully" });
         }
       } catch (error) {
-        res.status(500).json({ message: 'Failed to add item to cart', error });
+        res.status(500).json({ message: "Failed to add item to cart", error });
       }
     });
 
     // ==================================
     // get products from cartList filtered by userEmail
     // ==================================
-    app.get('/cartList/:email', async (req, res) => {
+    app.get("/cartList/:email", async (req, res) => {
       try {
         const email = req.params.email;
         // console.log('Fetching cart for user:', email);
@@ -746,60 +776,61 @@ async function run() {
         const userCart = await cartList.findOne({ userEmail: email });
         // console.log(userCart);
 
-
         if (userCart) {
           // Send back the user's cart data if found
           res.status(200).json(userCart);
         } else {
           // If no cart found for the user, return an empty cart or an appropriate message
-          res.status(404).json({ message: 'No cart found for this user.' });
+          res.status(404).json({ message: "No cart found for this user." });
         }
       } catch (error) {
-        console.error('Error fetching cart:', error);
-        res.status(500).json({ message: 'Failed to retrieve cart data', error });
+        console.error("Error fetching cart:", error);
+        res
+          .status(500)
+          .json({ message: "Failed to retrieve cart data", error });
       }
     });
 
     // ==================================
     // Clear all products from cartList filtered by userEmail
     // ==================================
-    app.delete('/cartList/:email', async (req, res) => {
+    app.delete("/cartList/:email", async (req, res) => {
       try {
         const email = req.params.email;
         console.log(email);
 
-
         // Find the user's cart by email and clear the cartProducts array
         const result = await cartList.updateOne(
           { userEmail: email },
-          { $set: { cartProducts: [] } }  // Empty the cartProducts array
+          { $set: { cartProducts: [] } } // Empty the cartProducts array
         );
 
         if (result.modifiedCount > 0) {
-          res.status(200).json({ message: 'Cart cleared successfully' });
+          res.status(200).json({ message: "Cart cleared successfully" });
         } else {
-          res.status(404).json({ message: 'No cart found for this user.' });
+          res.status(404).json({ message: "No cart found for this user." });
         }
       } catch (error) {
-        console.error('Error clearing cart:', error);
-        res.status(500).json({ message: 'Failed to clear cart', error });
+        console.error("Error clearing cart:", error);
+        res.status(500).json({ message: "Failed to clear cart", error });
       }
     });
-
-
-
-
-
-
-
-
-
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // vendor product delete oparation
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    app.delete("/vendorProductDelete/:id", async (req, res) => {
+      console.log(req.params.id);
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await productCollection.deleteOne(query);
+      res.send(result);
+    });
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => { });
+    app.use("/user", async (req, res) => {});
 
     // await client.db("admin").command({ ping: 1 });
     console.log(
