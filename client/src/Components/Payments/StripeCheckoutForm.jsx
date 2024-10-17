@@ -26,12 +26,12 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
 
     // con
     const shippingAddress = contactInfo?.address;
-    const cardBooking={...booking, shippingAddress};
+    const cardBooking = { ...booking, shippingAddress };
 
     // payment info state
     const [paymentInfoForInvoice, setPaymentInfoForInvoice] = useState();
     useEffect(() => {
-        console.log(paymentInfoForInvoice);
+        console.log('👌👌👌👌');
     }, [paymentInfoForInvoice]);
 
     // error handling
@@ -121,11 +121,11 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                 transactionId: paymentIntent.id,
             };
             const billingAddress = { ...contactInfo, transactionId: paymentIntent.id, };
-            console.log(paymentInfo);
-            setPaymentInfoForInvoice(paymentInfo);
             
+            setPaymentInfoForInvoice(paymentInfo);
+
             delete paymentInfo._id
-            console.log(paymentInfoForInvoice, paymentInfo)
+            // console.log(paymentInfoForInvoice, paymentInfo)
             try {
                 // 2. save payment info in booking collection (db)
                 const { data: data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
@@ -133,8 +133,8 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                 const vendorBooking = { ...paymentInfo, ...billingAddress };
                 // input shippingInformation for vendor.
                 paymentInfo?.items[0]?.map(item => {
-                    console.log(item?.vendorEmail)
-    
+                    // console.log(item?.vendorEmail)
+
                     axiosSecure.post(`/ordersReq/${item?.vendorEmail}`, vendorBooking)
                 })
                 // console.log('from stripe checkout =>', data1, data2)
@@ -148,7 +148,6 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                         icon: 'success',
                         confirmButtonText: 'Cool!'
                     }).then((result) => {
-                        dispatch(removeAllFromCartlist())
                         // toast.success('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
                         if (result.isConfirmed) {
                             Swal.fire({
@@ -163,10 +162,14 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                                     // Swal.fire("Saved!", "", "success");
                                     setShowInvoiceModal(true);
                                     navigate('/cartlist');
+
+                                    dispatch(removeAllFromCartlist())
                                 }
                                 else if (result.isDenied) {
                                     Swal.fire("We understand your choice!", "", "info");
                                     setShowInvoiceModal(true);
+
+                                    dispatch(removeAllFromCartlist())
                                 }
                             });
 
