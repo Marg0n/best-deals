@@ -36,7 +36,7 @@ const CartPage = () => {
     const dispacth = useDispatch()
 
 
-    
+
     // Calculate total quantity and total amount
     const totalQuantity = cart?.cartIteams?.reduce((total, item) => total + item?.cartQuantity, 0);
 
@@ -76,16 +76,16 @@ const CartPage = () => {
     const items = [cart.cartIteams];
     const status = 'Ordered';
     const paymentMethod = contactInfo?.paymentMethod || "CoD";
-
-    // items.map(item => {
-    //     console.log(item?.vendorEmail)
-
-    // })
+    const shippingAddress = contactInfo?.address;
+    const transactionId = contactInfo?.trackingNumber;
 
     const booking = { orderDate, items, totalAmount, status, paymentMethod };
+    const userBookingCoD = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress, transactionId };
     const codBooking = { ...booking, ...contactInfo };
 
-    // console.log(contactInfo, booking, codBooking)
+    // console.log('contactInfo=>', contactInfo)
+    // console.log('booking=>', booking)
+    // console.log('codBooking=>', codBooking)
 
 
     // clear all products from cartList
@@ -144,13 +144,21 @@ const CartPage = () => {
 
         try {
             // input status to user
-            await axiosSecure.post(`/purchaseHistory/${user?.email}`, booking)
+            await axiosSecure.post(`/purchaseHistory/${user?.email}`, userBookingCoD)
             await axiosSecure.post(`/billingAddress/${user?.email}`, contactInfo)
+
             // input shippingInformation for vendor
-            await axiosSecure.post(`/ordersReq/${user?.email}`, codBooking)
+            items[0]?.map(item => {
+                console.log(item?.vendorEmail)
+
+                axiosSecure.post(`/ordersReq/${item?.vendorEmail}`, codBooking)
+            })
+            setShowInvoiceModal(false);
+            dispacth(removeAllFromCartlist())
+            toast.success("Order successful!🎉", { autoClose: 2000, theme: "colored" })
         }
         catch (err) {
-
+            toast.error(`Something went wrong : ${err}`, { autoClose: 2000, theme: "colored" })
         }
     }
 
@@ -200,7 +208,7 @@ const CartPage = () => {
 
                 {/* Total bill Table */}
                 <div className="flex-grow" >
-                {/* bill table */}
+                    {/* bill table */}
                     <div className=" bg-[rgb(217,217,217)] dark:bg-[#34394C] dark:text-white  h-fit">
                         <div className="overflow-x-auto">
                             <table className="table">
@@ -262,7 +270,7 @@ const CartPage = () => {
                                     contactInfo?.paymentMethod === "Cash on delivery"
                                     && <button
                                         className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
-                                    // onClick={() => handleCoDStatus()}
+                                        onClick={() => handleCoDStatus()}
                                     >
                                         {/* {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? 'Checkout' : 'Invoice')} */}
                                         Proceed

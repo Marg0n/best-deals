@@ -403,7 +403,7 @@ async function run() {
         const body = req?.body;
 
         const result = await orderCollection.updateOne(
-          { email: mail },
+          { vendorEmail: mail },
           { $push: { shippingInformation: body } },
           { upsert: true }
         );
