@@ -15,7 +15,7 @@ const Invoice = ({ closeModal, contactInfo, paymentInfo, handleClearCartList }) 
     // Destructuring information
     const { orderDate, items, totalAmount, status, paymentMethod, transactionId } = paymentInfo;
     const { uname, contact, address } = contactInfo;
-    console.log(paymentInfo)
+    // console.log(paymentInfo)
 
     // Date information
     const dateObject = new Date(orderDate);
