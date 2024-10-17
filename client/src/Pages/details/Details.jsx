@@ -11,6 +11,8 @@ import useAuth from '../../hooks/useAuth';
 import DetailsPageTabs from '../../Components/DetailsPageTabs/DetailsPageTabs';
 import ProductsCard from '../../Components/ProductsCard/ProductsCard';
 import toast from 'react-hot-toast';
+import useAxiosCommon from '../../hooks/useAxiosCommon';
+import { useQuery } from '@tanstack/react-query';
 
 
 const Details = () => {
@@ -18,6 +20,15 @@ const Details = () => {
     const { _id } = useParams();
     const { user } = useAuth()
     const product = products?.find(product => product._id === _id);
+
+    const axiosCommon = useAxiosCommon()
+    const { data: vendorInfo, isLoading } = useQuery({
+        queryKey: ['verndorData', products],
+        queryFn: async () => {
+            const res = await axiosCommon.get(`/users/${product?.vendorEmail}`)
+            return res.data
+        }
+    })
 
     const veriations = product?.veriation
 
@@ -29,9 +40,9 @@ const Details = () => {
         setSelectedVerient(e.target.value);
     }
 
-    console.log(selectedVerient);
-
     const navigate = useNavigate()
+
+
 
 
 
@@ -60,7 +71,7 @@ const Details = () => {
 
     const commnetDetails = { userName: user?.displayName, photo: user?.photoURL, productId: product?._id }
 
-    const vendorInfo = { vendorEmail: product.vendorEmail, companyName: product.companyName }
+    // const vendorInfo = { vendorEmail: product.vendorEmail, companyName: product.companyName }
 
 
     // dispatch products to redux
@@ -269,13 +280,14 @@ const Details = () => {
             </div>
 
 
-            {/* description, vendor, review tabs */}
+            {/* Description, vendor, and review tabs */}
             <div>
-                <DetailsPageTabs
-                    vendorInfo={vendorInfo}
-                    description={product?.description}
-                    commnetDetails={commnetDetails}
-                ></DetailsPageTabs>
+                {isLoading ? (
+                    <p>Loading vendor info...</p>
+                ) : (
+                    <DetailsPageTabs
+                    vendorInfo={vendorInfo} description={product?.description} commnetDetails={commnetDetails} />
+                )}
             </div>
             {/* suggestion  */}
             <div>

@@ -118,7 +118,9 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                 transactionId: paymentIntent.id,
             };
             const billingAddress = { ...contactInfo, transactionId: paymentIntent.id, };
+            console.log(paymentInfo);
             setPaymentInfoForInvoice(paymentInfo);
+            
             delete paymentInfo._id
             // console.log(paymentInfo)
             try {
@@ -180,6 +182,8 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
         setProcessing(false)
 
     }
+
+
 
     return (
         <>
