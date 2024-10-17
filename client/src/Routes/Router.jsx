@@ -34,6 +34,7 @@ import AdminRoutes from './AdminRoutes';
 import PrivateRoute from "./PrivateRoute";
 import UserRoute from "./UserRoute";
 import VendorRoute from './VendorRoute';
+import Inbox from "../Components/Inbox/Inbox";
 
 const Router = createBrowserRouter([
   {
@@ -119,6 +120,10 @@ const Router = createBrowserRouter([
       {
         path: '/vendorDashboard/products',
         element: <VendorAddProduct />
+      },
+      {
+        path: '/vendorDashboard/inbox',
+        element: <Inbox />
       }
     ]
   },
