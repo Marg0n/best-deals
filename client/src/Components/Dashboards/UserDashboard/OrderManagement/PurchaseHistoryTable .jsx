@@ -35,7 +35,7 @@ const PurchaseHistoryTable = ({ data }) => {
       },
       {
         accessorKey: 'transactionId',
-        header: 'Transaction ID',
+        header: 'Transaction ID / Tracking Number',
       },
     ],
     []
