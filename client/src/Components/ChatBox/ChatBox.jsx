@@ -5,7 +5,7 @@ import { FaLocationArrow } from "react-icons/fa";
 
 
 
-const ChatBox = ({ setIsChatBoxOpen, vendorInfo }) => {
+const ChatBox = ({ setIsChatBoxOpen, vendorInfo , product }) => {
     const [messages, setMessages] = useState([
         { text: 'Hi, how can we assist you?', sender: 'bot' }
     ]);
@@ -25,8 +25,9 @@ const ChatBox = ({ setIsChatBoxOpen, vendorInfo }) => {
     }
 
     return (
-        <div className="flex flex-col  bg-white shadow-lg rounded-lg overflow-hidden">
-            {/* Header */}
+        <div className="flex flex-col max-h-[500px]  bg-white shadow-lg rounded-lg overflow-y-auto">
+
+            {/* chat Header */}
             <div className="bg-blue-500 text-white p-4 font-bold text-center flex justify-between">
                 <div className="avatar items-center gap-4">
                     <div className="w-12 rounded-full">
@@ -57,8 +58,8 @@ const ChatBox = ({ setIsChatBoxOpen, vendorInfo }) => {
                 ))}
             </div>
 
-            {/* Footer */}
-            <div className="flex items-center p-4 bg-gray-200">
+            {/* chat Footer */}
+            <div className="flex items-center p-4 bg-gray-200 text-black">
                 <input
                     type="text"
                     className="flex-grow p-2 border border-gray-300 rounded-lg focus:outline-none"

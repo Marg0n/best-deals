@@ -36,7 +36,7 @@ function a11yProps(index) {
     };
 }
 
-const DetailsPageTabs = ({ vendorInfo, description, commnetDetails }) => {
+const DetailsPageTabs = ({ vendorInfo, description, commnetDetails, product }) => {
     const { photo, createdTime, email, lastLogin, name } = vendorInfo[0];
     const [value, setValue] = React.useState(0);
     const [isChatBoxOpen, setIsChatBoxOpen] = React.useState(false); // ChatBox state
@@ -97,6 +97,7 @@ const DetailsPageTabs = ({ vendorInfo, description, commnetDetails }) => {
                     <div className='mt-10'>
                         {isChatBoxOpen &&
                             <ChatBox
+                                product={product}
                                 setIsChatBoxOpen={setIsChatBoxOpen}
                                 vendorInfo={vendorInfo} />}
                     </div>
