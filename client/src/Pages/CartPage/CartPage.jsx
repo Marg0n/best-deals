@@ -13,8 +13,8 @@ import NothingInCart from "../../Components/NothingInCart/NothingInCart";
 import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
-import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { localDate } from './../../utils/useBDdateTime';
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 
 
@@ -36,7 +36,7 @@ const CartPage = () => {
     const dispacth = useDispatch()
 
 
-
+    
     // Calculate total quantity and total amount
     const totalQuantity = cart?.cartIteams?.reduce((total, item) => total + item?.cartQuantity, 0);
 
@@ -77,10 +77,10 @@ const CartPage = () => {
     const status = 'Ordered';
     const paymentMethod = contactInfo?.paymentMethod || "CoD";
 
-    items.map(item => {
-        console.log(item?.vendorEmail)
+    // items.map(item => {
+    //     console.log(item?.vendorEmail)
 
-    })
+    // })
 
     const booking = { orderDate, items, totalAmount, status, paymentMethod };
     const codBooking = { ...booking, ...contactInfo };
@@ -200,7 +200,7 @@ const CartPage = () => {
 
                 {/* Total bill Table */}
                 <div className="flex-grow" >
-                    {/* bill table */}
+                {/* bill table */}
                     <div className=" bg-[rgb(217,217,217)] dark:bg-[#34394C] dark:text-white  h-fit">
                         <div className="overflow-x-auto">
                             <table className="table">
