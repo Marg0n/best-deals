@@ -24,7 +24,7 @@ import BlockIcon from '@mui/icons-material/Block';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 
-const VendorProducts = () => {
+const AdminAllUsers = () => {
 
     const vendorProducts = useAxiosSecure();
     const user = 'User';
@@ -279,4 +279,4 @@ const handleDelete = async () => {
     );
 };
 
-export default VendorProducts;
+export default AdminAllUsers;

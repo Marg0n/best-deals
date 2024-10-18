@@ -281,9 +281,26 @@ async function run() {
       res.send(results);
     })
 
+    app.patch('/allUsers/:id', async function (req, res) {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      options={upsert: true};
+      const update = { $set: req.body };
+      const result = await usersCollection.updateOne(query, update, options);
+      res.send(result);
+    })
+
+    app.delete('/allUsers/:id', async function (req, res) {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await usersCollection.deleteOne(query);
+      res.send(result);
+    })
+
     // ==================================
     // Users profiles' Billing Address data
     // ==================================
+    
     app.post("/billingAddress/:email", async (req, res) => {
       const mail = req.params?.email;
       const body = req?.body;
@@ -342,7 +359,7 @@ async function run() {
 
 
     // ==================================
-    // get all products
+    // get all products 
     // ==================================
 
     app.get('/allVendorProducts', async (req, res) => {

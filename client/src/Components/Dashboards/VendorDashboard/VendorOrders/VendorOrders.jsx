@@ -21,7 +21,7 @@ import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 import useUserProfile from '../../../../hooks/useUserProfile';
 import { useQuery } from '@tanstack/react-query';
 
-const VendorProducts = () => {
+const VendorOrders = () => {
     const vendorMail = useUserProfile();
     const vendorProducts = useAxiosSecure();
 
@@ -51,8 +51,8 @@ const VendorProducts = () => {
     const [currentPage, setCurrentPage] = useState(0);
     const rowsPerPage = 5; // Set number of rows per page
 
-    const filteredData = initialData.filter(item =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredData = initialData?.filter(item =>
+        item?.name?.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     const combinedData = [...filteredData];
@@ -196,7 +196,7 @@ const ActionMenu = ({ row }) => {
     );
 };
 
-export default VendorProducts;
+export default VendorOrders;
 
 
 

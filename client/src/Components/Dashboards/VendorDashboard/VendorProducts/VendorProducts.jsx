@@ -34,7 +34,7 @@ const VendorProducts = () => {
         },
     });
 //
-    const allVendorProducts = vendorAllProducts?.filter(product => product?.email === user?.email);
+    const allVendorProducts = vendorAllProducts?.filter(product => product?.vendorEmail === user?.email);
     console.log(allVendorProducts);
 
     const initialData = allVendorProducts.map(product => ({
