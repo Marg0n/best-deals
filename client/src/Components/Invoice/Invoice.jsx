@@ -6,16 +6,16 @@ import PropTypes from 'prop-types';
 import useUserProfile from '../../hooks/useUserProfile';
 import useAuth from '../../hooks/useAuth';
 
-const Invoice = ({ closeModal, CheckoutPrice, contactInfo, paymentInfo, handleClearCartList }) => {
+const Invoice = ({ closeModal, contactInfo, paymentInfo, handleClearCartList }) => {
 
     // profile information
     const { user } = useAuth()
     const { profile } = useUserProfile()
 
     // Destructuring information
-    const { orderDate, items, totalAmount, status, paymentMethod, shippingAddress, transactionId } = paymentInfo;
+    const { orderDate, items, totalAmount, status, paymentMethod, transactionId } = paymentInfo;
     const { uname, contact, address } = contactInfo;
-    console.log(paymentInfo)
+    // console.log(paymentInfo)
 
     // Date information
     const dateObject = new Date(orderDate);
@@ -221,10 +221,11 @@ const Invoice = ({ closeModal, CheckoutPrice, contactInfo, paymentInfo, handleCl
 };
 
 Invoice.propTypes = {
-    booking: PropTypes.object,
+    paymentInfo: PropTypes.object,
     contactInfo: PropTypes.object,
-    CheckoutPrice: PropTypes.number,
+    // CheckoutPrice: PropTypes.number,
     handleClearCartList: PropTypes.func,
+    closeModal: PropTypes.func,
 }
 
 export default Invoice;

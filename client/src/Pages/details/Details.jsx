@@ -4,19 +4,31 @@ import { Helmet } from 'react-helmet-async';
 import { useDispatch } from 'react-redux';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
-import { Link, ScrollRestoration, useLoaderData, useParams } from 'react-router-dom';
+import { Link, ScrollRestoration, useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import ProductsCounter from '../../Components/ProductCounter/ProductsCounter';
 import { addToCart } from '../../features/CartSlice/CartSlice';
 import useAuth from '../../hooks/useAuth';
 import DetailsPageTabs from '../../Components/DetailsPageTabs/DetailsPageTabs';
 import ProductsCard from '../../Components/ProductsCard/ProductsCard';
 import toast from 'react-hot-toast';
+import useAxiosCommon from '../../hooks/useAxiosCommon';
+import { useQuery } from '@tanstack/react-query';
 
 
 const Details = () => {
     const products = useLoaderData();
     const { _id } = useParams();
+    const { user } = useAuth()
     const product = products?.find(product => product._id === _id);
+
+    const axiosCommon = useAxiosCommon()
+    const { data: vendorInfo, isLoading } = useQuery({
+        queryKey: ['verndorData', products],
+        queryFn: async () => {
+            const res = await axiosCommon.get(`/users/${product?.vendorEmail}`)
+            return res.data
+        }
+    })
 
     const veriations = product?.veriation
 
@@ -28,7 +40,7 @@ const Details = () => {
         setSelectedVerient(e.target.value);
     }
 
-    console.log(selectedVerient);
+    const navigate = useNavigate()
 
 
 
@@ -56,11 +68,10 @@ const Details = () => {
         return item.category === product.category && item._id !== product._id;
     });
 
-    const { user } = useAuth()
 
     const commnetDetails = { userName: user?.displayName, photo: user?.photoURL, productId: product?._id }
 
-    const vendorInfo = { vendorEmail: product.vendorEmail, companyName: product.companyName }
+    // const vendorInfo = { vendorEmail: product.vendorEmail, companyName: product.companyName }
 
 
     // dispatch products to redux
@@ -68,14 +79,20 @@ const Details = () => {
 
     // add product to redux store
     const handleAddToCart = (product) => {
-        if (veriations && !selectedVerient) {
-            toast.error('Select verient')
+        if (user) {
+            if (veriations && !selectedVerient) {
+                toast.error('Select verient')
+            }
+            else {
+                const addingToCart = { ...product, cartQuantity: quantity, veriation: selectedVerient }
+                dispatch(addToCart(addingToCart));
+
+            }
         }
         else {
-            const addingToCart = { ...product, cartQuantity: quantity, veriation: selectedVerient }
-            dispatch(addToCart(addingToCart));
-
+            navigate('/login')
         }
+
     };
 
 
@@ -263,13 +280,17 @@ const Details = () => {
             </div>
 
 
-            {/* description, vendor, review tabs */}
+            {/* Description, vendor, and review tabs */}
             <div>
-                <DetailsPageTabs
-                    vendorInfo={vendorInfo}
-                    description={product?.description}
-                    commnetDetails={commnetDetails}
-                ></DetailsPageTabs>
+                {isLoading ? (
+                    <p>Loading vendor info...</p>
+                ) : (
+                    <DetailsPageTabs
+                    product = {product}
+                    vendorInfo={vendorInfo} 
+                    description={product?.description} 
+                    commnetDetails={commnetDetails} />
+                )}
             </div>
             {/* suggestion  */}
             <div>

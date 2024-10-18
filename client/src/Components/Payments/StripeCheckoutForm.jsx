@@ -13,9 +13,9 @@ import { useDispatch } from "react-redux";
 import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 
 
-const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, handleClearCartList,setChangeInvoice }) => {
+const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, handleClearCartList, setShowInvoiceModal, showInvoiceModal }) => {
 
-    const dispatch= useDispatch()
+    const dispatch = useDispatch()
 
     // strip hooks
     const stripe = useStripe();
@@ -24,12 +24,15 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    // invoice state
-    const [showInvoiceModal, setShowInvoiceModal] = useState(false);
-    const [paymentInfoForInvoice, setPaymentInfoForInvoice] = useState({});
+    // con
+    const shippingAddress = contactInfo?.address;
+    const cardBooking = { ...booking, shippingAddress };
 
-    // set invoice state
-    setChangeInvoice(showInvoiceModal)
+    // payment info state
+    const [paymentInfoForInvoice, setPaymentInfoForInvoice] = useState();
+    useEffect(() => {
+        console.log('👌👌👌👌');
+    }, [paymentInfoForInvoice]);
 
     // error handling
     const [paymentError, setPaymentError] = useState('');
@@ -114,18 +117,27 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
             // console.log('succeed payment ===>', paymentIntent)
             // 1. Create payment info object
             const paymentInfo = {
-                ...booking,
+                ...cardBooking,
                 transactionId: paymentIntent.id,
             };
-            const billingAddress = {...contactInfo, transactionId: paymentIntent.id,};
+            const billingAddress = { ...contactInfo, transactionId: paymentIntent.id, };
+            
             setPaymentInfoForInvoice(paymentInfo);
+
             delete paymentInfo._id
-            // console.log(paymentInfo)
+            // console.log(paymentInfoForInvoice, paymentInfo)
             try {
                 // 2. save payment info in booking collection (db)
                 const { data: data1 } = await axiosSecure.post(`/purchaseHistory/${user?.email}`, paymentInfo)
                 const { data: data2 } = await axiosSecure.post(`/billingAddress/${user?.email}`, billingAddress)
-                console.log('from stripe checkout =>', data1, data2)
+                const vendorBooking = { ...paymentInfo, ...billingAddress };
+                // input shippingInformation for vendor.
+                paymentInfo?.items[0]?.map(item => {
+                    // console.log(item?.vendorEmail)
+
+                    axiosSecure.post(`/ordersReq/${item?.vendorEmail}`, vendorBooking)
+                })
+                // console.log('from stripe checkout =>', data1, data2)
 
                 // update ui
                 // refetch()
@@ -136,7 +148,6 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                         icon: 'success',
                         confirmButtonText: 'Cool!'
                     }).then((result) => {
-                        dispatch(removeAllFromCartlist())
                         // toast.success('You might want to clear the wishlist!', { autoClose: 2000, theme: "colored" })
                         if (result.isConfirmed) {
                             Swal.fire({
@@ -151,10 +162,14 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                                     // Swal.fire("Saved!", "", "success");
                                     setShowInvoiceModal(true);
                                     navigate('/cartlist');
+
+                                    dispatch(removeAllFromCartlist())
                                 }
                                 else if (result.isDenied) {
                                     Swal.fire("We understand your choice!", "", "info");
                                     setShowInvoiceModal(true);
+
+                                    dispatch(removeAllFromCartlist())
                                 }
                             });
 
@@ -177,6 +192,8 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
         setProcessing(false)
 
     }
+
+
 
     return (
         <>
@@ -225,7 +242,6 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
             {showInvoiceModal && (
                 <InvoiceModal
                     handleClearCartList={handleClearCartList}
-                    CheckoutPrice={CheckoutPrice}
                     contactInfo={contactInfo}
                     paymentInfo={paymentInfoForInvoice}
                     closeModal={closeModal}
@@ -242,7 +258,8 @@ StripeCheckoutForm.propTypes = {
     booking: PropTypes.object,
     contactInfo: PropTypes.object,
     handleClearCartList: PropTypes.func,
-    setChangeInvoice: PropTypes.func,
+    showInvoiceModal: PropTypes.bool,
+    setShowInvoiceModal: PropTypes.bool,
     // isOpen: PropTypes.bool,
 }
 

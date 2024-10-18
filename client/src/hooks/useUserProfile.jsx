@@ -8,7 +8,7 @@ const useUserProfile = () => {
     const axiosCommon = useAxiosCommon();
     const { user } = useAuth();
 
-    const { data: profile = [], refetch: profileRefetch, isLoading: profileLoading } = useQuery({
+    const { data: profile=[], refetch: profileRefetch, isLoading: profileLoading } = useQuery({
         queryKey: ['profile', user],
         queryFn: async () => {
             const { data } = await axiosCommon(`/users/${user?.email}`)

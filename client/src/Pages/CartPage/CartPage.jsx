@@ -14,15 +14,19 @@ import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { localDate } from './../../utils/useBDdateTime';
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 
 
 const CartPage = () => {
 
     const axiosCommon = useAxiosCommon()
+    const axiosSecure = useAxiosSecure()
     const { user } = useAuth();
     const userEmail = user?.email
 
+    // state of invoice button
+    const [showInvoiceModal, setShowInvoiceModal] = useState(false);
 
     // cart data from redux store
     const cart = useSelector((state) => state.cart)
@@ -55,9 +59,9 @@ const CartPage = () => {
 
         // fetch data from the form
         const { address, contact, name, paymentMethod } = data;
-        const transactionId = name + contact;
-        const data2 = { address, contact, name, paymentMethod, transactionId };
-        console.log(data, data2)
+        const trackingNumber = contact + Date.now()
+        const data2 = { address, contact, name, paymentMethod, trackingNumber };
+        // console.log(data, data2)
 
         {
             paymentMethod !== "Cash on delivery"
@@ -73,10 +77,15 @@ const CartPage = () => {
     const status = 'Ordered';
     const paymentMethod = contactInfo?.paymentMethod || "CoD";
     const shippingAddress = contactInfo?.address;
+    const transactionId = contactInfo?.trackingNumber;
 
-    const booking = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress };
+    const booking = { orderDate, items, totalAmount, status, paymentMethod };
+    const userBookingCoD = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress, transactionId };
+    const codBooking = { ...booking, ...contactInfo };
 
-    console.log(contactInfo, booking)
+    // console.log('contactInfo=>', contactInfo)
+    // console.log('booking=>', booking)
+    // console.log('codBooking=>', codBooking)
 
 
     // clear all products from cartList
@@ -131,11 +140,26 @@ const CartPage = () => {
     }
 
     // post CoD status
-    const handleCoDStatus = () => {
+    const handleCoDStatus = async () => {
 
+        try {
+            // input status to user
+            await axiosSecure.post(`/purchaseHistory/${user?.email}`, userBookingCoD)
+            await axiosSecure.post(`/billingAddress/${user?.email}`, contactInfo)
 
+            // input shippingInformation for vendor
+            items[0]?.map(item => {
+                console.log(item?.vendorEmail)
 
-        const CoDStatus = axiosCommon.post(`/coDStatus`,contactInfo)
+                axiosSecure.post(`/ordersReq/${item?.vendorEmail}`, codBooking)
+            })
+            setShowInvoiceModal(false);
+            dispacth(removeAllFromCartlist())
+            toast.success("Order successful!🎉", { autoClose: 2000, theme: "colored" })
+        }
+        catch (err) {
+            toast.error(`Something went wrong : ${err}`, { autoClose: 2000, theme: "colored" })
+        }
     }
 
     return (
@@ -184,6 +208,7 @@ const CartPage = () => {
 
                 {/* Total bill Table */}
                 <div className="flex-grow" >
+                    {/* bill table */}
                     <div className=" bg-[rgb(217,217,217)] dark:bg-[#34394C] dark:text-white  h-fit">
                         <div className="overflow-x-auto">
                             <table className="table">
@@ -217,13 +242,17 @@ const CartPage = () => {
 
                     {/* payment */}
                     {
-                        cart?.cartIteams?.length === 0 ? ''
+                        (cart?.cartIteams?.length === 0 && !showInvoiceModal)
+                            ? ''
                             : <div>
                                 {/* address form */}
-                                <CheckOutForm
-                                    onSubmit={onSubmit}
-                                    contactInfo={contactInfo}
-                                ></CheckOutForm>
+                                {
+                                    (!showInvoiceModal)
+                                    && <CheckOutForm
+                                        onSubmit={onSubmit}
+                                        contactInfo={contactInfo}
+                                    ></CheckOutForm>
+                                }
 
 
                                 {/* payment method */}
@@ -233,13 +262,15 @@ const CartPage = () => {
                                         CheckoutPrice={parseInt(grandTotal.toFixed(2))}
                                         contactInfo={contactInfo}
                                         handleClearCartList={handleClearCartList}
+                                        setShowInvoiceModal={setShowInvoiceModal}
+                                        showInvoiceModal={showInvoiceModal}
                                     />
                                 }
                                 {
                                     contactInfo?.paymentMethod === "Cash on delivery"
                                     && <button
                                         className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
-                                    // onClick={() => handleCoDStatus()}
+                                        onClick={() => handleCoDStatus()}
                                     >
                                         {/* {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? 'Checkout' : 'Invoice')} */}
                                         Proceed

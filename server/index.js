@@ -25,7 +25,6 @@ app.use(
       "http://localhost:5173",
       "https://best-deal-909.web.app",
       "https://magenta-peony-5d02de.netlify.app",
-
     ],
     credentials: true,
     optionsSuccessStatus: 200,
@@ -148,6 +147,7 @@ async function run() {
     const productCollection = client.db("BestDeals").collection("ProductCollection");
     const orderCollection = client.db("BestDeals").collection("OrderManagement");
     const cartList = client.db("BestDeals").collection("CartList");
+    const inboxChatCollections = client.db("BestDeals").collection("inboxChatCollections");
 
     // ==================================
     // Admin verify
@@ -241,10 +241,9 @@ async function run() {
         const mail = req.params?.email;
         const results = await usersCollection.find({ email: mail }).toArray();
         res.send(results);
-      }
-      catch (error) {
-        console.error('Error in login:', error);
-        res.status(500).send({ error: 'Failed to login' });
+      } catch (error) {
+        console.error("Error in login:", error);
+        res.status(500).send({ error: "Failed to login" });
       }
     });
 
@@ -401,7 +400,7 @@ async function run() {
         const results = await usersCollection.updateOne(query, updateDoc);
         // console.log(results,updateBody);
         res.send(results);
-      } catch {
+      } catch (err) {
         // If an error occurs during execution, catch it here
         console.error("Error updating user status:", err);
         // Send an error response to the client
@@ -410,7 +409,32 @@ async function run() {
           .json({ message: "Internal server error from last login" });
       }
     });
-    //.......................
+
+    // ==================================
+    // vendor status against purchase of user
+    // ==================================
+    app.post('/ordersReq/:email', async (req, res) => {
+      try {
+        const mail = req.params?.email;
+        const body = req?.body;
+
+        const result = await orderCollection.updateOne(
+          { email: mail },
+          { $push: { shippingInformation: body } },
+          { upsert: true }
+        );
+
+        res.send(result);
+      } catch (err) {
+        console.error("Error updating user payment status:", err);
+        res.status(500).json({ message: "Internal server error from user payment status!" });
+      }
+    });
+
+
+    // ==================================
+    // warning vendor
+    // ==================================
     app.put('/vendors/:id/warning', async (req, res) => {
       const { id } = req.params;
       const { isWarning } = req.body;
@@ -446,6 +470,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // ban vendor
+    // ==================================
     app.put('/vendorss/:id/ban', async (req, res) => {
       const { id } = req.params;
       const { isBanned } = req.body;
@@ -475,6 +502,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // warning users
+    // ==================================
     app.put('/Users/:id/warning', async (req, res) => {
       const { id } = req.params;
       const { isWarning } = req.body;
@@ -510,6 +540,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // ban users
+    // ==================================
     app.put('/Userss/:id/ban', async (req, res) => {
       const { id } = req.params;
       const { isBanned } = req.body;
@@ -539,6 +572,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // delete users
+    // ==================================
     app.delete('/usersDelete/:id', async (req, res) => {
       const { id } = req.params;
 
@@ -556,6 +592,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // delete users
+    // ==================================
     app.delete('/vendorsDelete/:id', async (req, res) => {
       const { id } = req.params;
 
@@ -573,6 +612,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // total users
+    // ==================================
     app.get('/totalUsers', async (req, res) => {
       try {
         const totalUsers = await usersCollection.countDocuments({ role: 'User' }); // Adjust query if needed (e.g., filtering by role)
@@ -582,6 +624,9 @@ async function run() {
       }
     });
 
+    // ==================================
+    // total vendors
+    // ==================================
     app.get('/totalVendors', async (req, res) => {
       try {
         const totalVendors = await usersCollection.countDocuments({ role: 'Vendor' }); // Adjust query if needed
@@ -590,6 +635,10 @@ async function run() {
         res.status(500).json({ message: 'Error fetching total vendors', error });
       }
     });
+
+    // ==================================
+    // total transaction for ?
+    // ==================================
     app.get('/totalTransactionss', async (req, res) => {
       try {
         const totalTransactions = await orderCollection.countDocuments({});
@@ -612,9 +661,9 @@ async function run() {
 
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     // fetch comments
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     app.get('/api/products/:id', async (req, res) => {
       const productId = req.params.id;
 
@@ -633,9 +682,9 @@ async function run() {
       }
     });
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     // add comments
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     app.post('/api/products/:id/comments', async (req, res) => {
       const productId = req.params.id;
       const { comment, userRating, name, userPhoto } = req.body;
@@ -665,11 +714,13 @@ async function run() {
     });
 
 
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
     // cartList collection
-    // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // ==================================
 
+    // ==================================
     // insert products into cartList
+    // ==================================
     app.post('/cartList', async (req, res) => {
       try {
         const { userEmail, cartProducts } = req.body;
@@ -699,8 +750,9 @@ async function run() {
       }
     });
 
-
+    // ==================================
     // get products from cartList filtered by userEmail
+    // ==================================
     app.get('/cartList/:email', async (req, res) => {
       try {
         const email = req.params.email;
@@ -724,8 +776,9 @@ async function run() {
       }
     });
 
-
+    // ==================================
     // Clear all products from cartList filtered by userEmail
+    // ==================================
     app.delete('/cartList/:email', async (req, res) => {
       try {
         const email = req.params.email;
@@ -751,9 +804,44 @@ async function run() {
 
 
 
+    // ==================================
+    // Inbox message collection
+    // ==================================
+    app.post('/inbox', async (req, res) => {
+      try {
+        const messageData = req.body;
+        const { text, messageTo, messageFrom ,sender , receiver } = messageData;
 
+        console.log('Incoming message data:', messageData); // For debugging
 
+        // Check if the conversation between messageTo and messageFrom already exists
+        const conversation = await inboxChatCollections.findOne({ messageTo, messageFrom });
 
+        if (conversation) {
+          // If the conversation exists, push the new message text to the messages array
+          await inboxChatCollections.updateOne(
+            { messageTo, messageFrom },
+            { $push: { messages: { text, sender: messageFrom } } } 
+          );
+          res.status(200).json({ message: 'Message added to existing conversation.' });
+        } else {
+          // If the conversation doesn't exist, create a new document
+          const newConversation = {
+            messageTo,
+            messageFrom,
+            sender,
+            receiver,
+            messages: [{ text, sender: messageFrom }] // Initialize with the first message
+          };
+
+          await inboxChatCollections.insertOne(newConversation); // Insert the new conversation
+          res.status(201).json({ message: 'New conversation created and message added.' });
+        }
+      } catch (error) {
+        console.error('Error adding message:', error); // Log the error for debugging
+        res.status(500).json({ message: 'Failed to send message', error });
+      }
+    });
 
 
 
