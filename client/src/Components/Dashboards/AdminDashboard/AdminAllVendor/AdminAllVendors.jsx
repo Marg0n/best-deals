@@ -40,7 +40,6 @@ const AdminAllVendors = () => {
         email: user.email,
         lastLogin: user.lastLogin,
         joined: user.createdTime,
-        isWarning: user?.isWarning,
         banStatus: user?.banStatus 
     }));
 
