@@ -31,7 +31,7 @@ const VendorHome = () => {
 
     const allVendorOrders = allOrders?.filter(product => product?.vendorEmail === user?.email);
 
-    const allVendorProducts = products?.filter(product => product?.email === user?.email);
+    const allVendorProducts = products?.filter(product => product?.vendorEmail === user?.email);
 
     
     let total = allVendorOrders?.reduce((previousValue, currentValue) => {
@@ -41,7 +41,7 @@ const VendorHome = () => {
   const stats = {
     totalProducts: allVendorProducts.length,
     totalOrders: allVendorOrders.length,
-    totalEarnings: Math.round(total),
+    totalEarnings: Math.round(total) || 0,
   };
 
     return (
