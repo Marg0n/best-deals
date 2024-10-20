@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Paper, Divider, Button } from '@mui/material';
 import MessageIcon from '@mui/icons-material/Message';
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useQuery } from '@tanstack/react-query';
+import useAuth from "../../hooks/useAuth";
+
 
 const messages = [
     {
@@ -26,8 +30,25 @@ const messages = [
     },
 ];
 
+
+
+
 const Inbox = () => {
     const [selectedMessage, setSelectedMessage] = useState(null);
+
+    const { user } = useAuth();
+
+    const axiosCommon = useAxiosCommon();
+    const { data: chatList, isLoading } = useQuery({
+        queryKey: ["chatlist"],
+        queryFn: async () => {
+            const res = await axiosCommon.get(`/inbox/${user?.email}`, {
+            });
+            return res.data;
+        },
+    });
+
+    console.log(chatList);
 
     const handleSelectMessage = (message) => {
         setSelectedMessage(message);
@@ -41,12 +62,12 @@ const Inbox = () => {
                     Inbox
                 </Typography>
                 <List>
-                    {messages.map((message) => (
+                    {chatList.map((chat) => (
                         <ListItem
                             button
-                            key={message.id}
-                            onClick={() => handleSelectMessage(message)}
-                            selected={selectedMessage?.id === message.id}
+                            key={chat.id}
+                            onClick={() => handleSelectMessage(chat)}
+                            selected={selectedMessage?.id === chat.id}
                         >
                             <ListItemAvatar>
                                 <Avatar>
@@ -54,8 +75,8 @@ const Inbox = () => {
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText
-                                primary={message.sender}
-                                secondary={`${message.subject} - ${message.time}`}
+                                primary={chat.sender}
+                                // secondary={`${chat.subject} - ${message.time}`}
                             />
                         </ListItem>
                     ))}
@@ -66,21 +87,12 @@ const Inbox = () => {
             <Paper elevation={3} sx={{ width: '70%', padding: '20px', display: 'flex', flexDirection: 'column' }}>
                 {selectedMessage ? (
                     <>
-                        <Typography variant="h6">{selectedMessage.subject}</Typography>
                         <Typography variant="subtitle2" color="textSecondary">
-                            From: {selectedMessage.sender} | {selectedMessage.time}
+                            From: {selectedMessage.sender} 
                         </Typography>
                         <Divider sx={{ marginY: 2 }} />
-                        <Typography variant="body1">{selectedMessage.content}</Typography>
+                        <Typography variant="body1">{}</Typography>
 
-                        <Box mt={4}>
-                            <Button variant="contained" color="primary" sx={{ marginRight: 1 }}>
-                                Reply
-                            </Button>
-                            <Button variant="outlined" color="secondary">
-                                Delete
-                            </Button>
-                        </Box>
                     </>
                 ) : (
                     <Typography variant="h6" color="textSecondary">
