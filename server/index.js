@@ -870,7 +870,7 @@ async function run() {
           // If the conversation exists, push the new message text to the messages array
           await inboxChatCollections.updateOne(
             { messageTo, messageFrom },
-            { $push: { messages: { text, sender: messageFrom } } }
+            { $push: { messages: { text} } }
           );
           res
             .status(200)
@@ -882,7 +882,7 @@ async function run() {
             messageFrom,
             sender,
             receiver,
-            messages: [{ text, sender: messageFrom }], // Initialize with the first message
+            messages: [{ text}], // Initialize with the first message
           };
 
           await inboxChatCollections.insertOne(newConversation); // Insert the new conversation
@@ -895,6 +895,24 @@ async function run() {
         res.status(500).json({ message: "Failed to send message", error });
       }
     });
+
+    // all msg list that vendor get
+    app.get('/inbox/:email', async (req, res) => {
+      const email = req.params.email;
+      try {
+          const chatList = await inboxChatCollections.find({
+              $or: [
+                  { messageTo: email },
+                  { messageFrom: email }
+              ]
+          }).toArray();
+  
+          res.status(200).json(chatList);
+      } catch (error) {
+          res.status(500).json({ error: 'Failed to fetch chat list' });
+      }
+  });
+  
 
     // ==================================
     //  Vendor Product Delete Start
@@ -915,7 +933,7 @@ async function run() {
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => {});
+    app.use("/user", async (req, res) => { });
 
     // await client.db("admin").command({ ping: 1 });
     console.log(

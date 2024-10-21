@@ -10,6 +10,7 @@ import SectionHeader from "../../Components/ReUsableComponent/SectionHeader";
 import { Helmet } from "react-helmet-async";
 import CardSkelaton from "../../Components/CardSkelaton/CardSkelaton";
 import NoData from "../../Components/Shared/NoData";
+import Banner from "../../Components/Banner/Banner";
 
 const Home = () => {
 

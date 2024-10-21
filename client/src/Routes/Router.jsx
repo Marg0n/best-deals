@@ -35,6 +35,7 @@ import PrivateRoute from "./PrivateRoute";
 import UserRoute from "./UserRoute";
 import VendorRoute from './VendorRoute';
 import Inbox from "../Components/Inbox/Inbox";
+import NewHomepage from "../Pages/NewHomePage/NewHomepage";
 import VendorRegistration from "../Components/VendorRegistration/VendorRegistration";
 
 const Router = createBrowserRouter([
@@ -45,6 +46,10 @@ const Router = createBrowserRouter([
       {
         path: "/",
         element: <Home />,
+      },
+      {
+        path: "/home2",
+        element: <NewHomepage />,
       },
       {
         path: "/details/:_id",
