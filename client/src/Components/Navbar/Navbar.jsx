@@ -86,7 +86,7 @@ const Navbar = ({ toggleTheme, theme }) => {
       }
       {/* User dashboard */}
       {
-        profile[0]?.role === 'User'
+        (profile[0]?.role === 'User' || null)
         && <li>
           <Link to="userDashboard" className="text-base-100 font-semibold">
             User Dashboard
@@ -282,7 +282,7 @@ const Navbar = ({ toggleTheme, theme }) => {
                             : "text-base badge badge-primary font-mono "
                             }`}
                         >
-                          {profile[0]?.role ? profile[0]?.role : ""}
+                          {profile[0]?.role ? profile[0]?.role : "User"}
                         </span>
                         <span className=" text-[#333333] font-serif font-bold">
                           {user?.displayName || profile[0]?.name}

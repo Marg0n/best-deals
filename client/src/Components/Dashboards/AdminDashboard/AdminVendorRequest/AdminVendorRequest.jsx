@@ -94,7 +94,7 @@ const AdminVendorRequest = () => {
                 const role = 'Vendor'
                 const res = await vendorRequests.patch(`/allUser/${mail}`, vendStatus, role)
                 console.log(res)
-                if (res.data.modifiedCount > 0) {
+                if (res.data.matchedCount > 0) {
                     Swal.fire(
                         'Approved!',
                         'The vendor has been added.',
@@ -194,8 +194,18 @@ const AdminVendorRequest = () => {
                                     <TableCell>{row.vendorStatus.status}</TableCell>
                                     <TableCell>
                                         <div className="text-center">
+                                        {
+                                        (row?.vendorStatus?.status ==='Approved' || "Declined")
+                                        ? (
+                                            row?.vendorStatus?.status ==='Approved'
+                                            ? <button onClick={() => handleDecline(row.email)} className="bg-red-600 text-white p-2 rounded-lg hover:bg-gray-700">Revert to User</button>
+                                            : <button onClick={() => handleApprove(row.email)} className="bg-green-600 text-white p-2 rounded-lg mr-2 hover:bg-gray-700">Approve</button>
+                                        ) 
+                                        :<>
                                             <button onClick={() => handleApprove(row.email)} className="bg-green-600 text-white p-2 rounded-lg mr-2 hover:bg-gray-700">Approve</button>
                                             <button onClick={() => handleDecline(row.email)} className="bg-red-600 text-white p-2 rounded-lg hover:bg-gray-700">Decline</button>
+                                            </>
+                                        }
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -228,45 +238,6 @@ const AdminVendorRequest = () => {
     );
 };
 
-// ActionMenu Component
-// const ActionMenu = ({ row }) => {
-//   const [anchorEl, setAnchorEl] = useState(null);
 
-//   const handleClick = (event) => {
-//     setAnchorEl(event.currentTarget);
-//   };
-
-//   const handleClose = () => {
-//     setAnchorEl(null);
-//   };
-
-//   const handleEdit = () => {
-//     console.log("Edit Product:", row);
-//     handleClose(); // Close menu after action
-//     // Add your edit logic here (e.g., open a modal with the product data)
-//   };
-
-//   const handleDelete = () => {
-//     console.log("Delete Product:", row);
-//     handleClose(); // Close menu after action
-//     // Add your delete logic here (e.g., confirm and delete the product)
-//   };
-
-//   return (
-//     <div>
-//       <IconButton onClick={handleClick}>
-//         <MoreVertIcon />
-//       </IconButton>
-//       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-//         <MenuItem onClick={handleEdit}>
-//           <EditIcon fontSize="small" /> Edit Product
-//         </MenuItem>
-//         <MenuItem onClick={handleDelete}>
-//           <DeleteIcon fontSize="small" className="text-red-500" /> Delete
-//         </MenuItem>
-//       </Menu>
-//     </div>
-//   );
-// };
 
 export default AdminVendorRequest;
