@@ -812,7 +812,7 @@ async function run() {
         const messageData = req.body;
         const { text, messageTo, messageFrom ,sender , receiver } = messageData;
 
-        console.log('Incoming message data:', messageData); // For debugging
+        // console.log('Incoming message data:', messageData); // For debugging
 
         // Check if the conversation between messageTo and messageFrom already exists
         const conversation = await inboxChatCollections.findOne({ messageTo, messageFrom });
@@ -821,7 +821,7 @@ async function run() {
           // If the conversation exists, push the new message text to the messages array
           await inboxChatCollections.updateOne(
             { messageTo, messageFrom },
-            { $push: { messages: { text, sender: messageFrom } } } 
+            { $push: { messages: { text} } } 
           );
           res.status(200).json({ message: 'Message added to existing conversation.' });
         } else {
@@ -831,7 +831,7 @@ async function run() {
             messageFrom,
             sender,
             receiver,
-            messages: [{ text, sender: messageFrom }] // Initialize with the first message
+            messages: [{ text}] // Initialize with the first message
           };
 
           await inboxChatCollections.insertOne(newConversation); // Insert the new conversation
