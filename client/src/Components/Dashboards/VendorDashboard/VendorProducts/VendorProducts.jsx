@@ -20,7 +20,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../../hooks/useAuth";
-import axios from "axios";
 import useAxiosCommon from "./../../../../hooks/useAxiosCommon";
 import Swal from "sweetalert2";
 const VendorProducts = () => {

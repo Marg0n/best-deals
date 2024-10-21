@@ -286,8 +286,22 @@ async function run() {
     app.patch("/allUsers/:id", async function (req, res) {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
-      options = { upsert: true };
+      const options = { upsert: true };
       const update = { $set: req.body };
+      const result = await usersCollection.updateOne(query, update, options);
+      res.send(result);
+    });
+
+    app.patch("/allUser/:email", async function (req, res) {
+      const email = req.params.email;
+      const {status, reason, role} = req.body;
+      const query = { email };
+      const options = {upsert: true };
+      // console.log(status,reason, role, query);
+      const update = { $set: { "vendorDocument.vendorStatus.status": status,
+                                "vendorDocument.vendorStatus.reason": reason,
+                                 "role": role
+       } };
       const result = await usersCollection.updateOne(query, update, options);
       res.send(result);
     });
@@ -884,15 +898,21 @@ async function run() {
 
     // all msg list that vendor get
     app.get('/inbox/:email', async (req, res) => {
-      const email = req.params.email
+      const email = req.params.email;
       try {
-        const chatList = await inboxChatCollections.find({ messageTo: email }).toArray()
-        res.status(200).json(chatList)
+          const chatList = await inboxChatCollections.find({
+              $or: [
+                  { messageTo: email },
+                  { messageFrom: email }
+              ]
+          }).toArray();
+  
+          res.status(200).json(chatList);
+      } catch (error) {
+          res.status(500).json({ error: 'Failed to fetch chat list' });
       }
-      catch(error){
-        res.status(500).json({error : 'Faild to fetch chatlist'})
-      }
-    })
+  });
+  
 
     // ==================================
     //  Vendor Product Delete Start

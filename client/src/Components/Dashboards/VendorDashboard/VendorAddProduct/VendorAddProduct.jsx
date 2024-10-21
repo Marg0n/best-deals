@@ -16,10 +16,9 @@ const VendorAddProduct = () => {
     const { register, handleSubmit, reset, control } = useForm();
     const { user } = useAuth();
     const axiosCommon = useAxiosCommon();
-    const [remainingTime, setRemainingTime] = useState(0);
-
-
+    
     //countdown function
+    const [remainingTime, setRemainingTime] = useState(0);
     const [allUsers] = useAllUsers();
     const onlyVendor = allUsers?.filter(vend => vend?.email == user?.email)
     const getBanEndTime = onlyVendor[0]?.banTime;
@@ -43,6 +42,12 @@ const VendorAddProduct = () => {
         fetchAndSetBanEndTime();
     }, [remainingTime]);
 
+    console.log(remainingTime);
+    
+    // console.log(timer);
+    // useEffect(()=>{
+        
+    // },[])
 
     //countdown
     const renderer = ({ days, hours, minutes, seconds }) => {

@@ -100,7 +100,7 @@ const Navbar = ({ toggleTheme, theme }) => {
       </li>
       {profile[0]?.role === "User" && (
         <li>
-          <Link to="" className="text-base-100 font-semibold">
+          <Link to="/VendorRegistration" className="text-base-100 font-semibold">
             Be a Vendor
           </Link>
         </li>
