@@ -113,9 +113,9 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
                     <Link to="/" className="underline underline-offset-1">
                       Home
                     </Link>
-                    <Link to="/home2" className="underline underline-offset-1">
+                    {/* <Link to="/home2" className="underline underline-offset-1">
                       Home 2
-                    </Link>
+                    </Link> */}
                     {clickeCategory.length > 0 ? ">" : ""}
                     <p>{clickeCategory}</p>
                   </div>
