@@ -35,6 +35,12 @@ By utilizing the MERN (MongoDB, Express, React, Node.js) stack, the platform wil
 - [Stripe](https://github.com/stripe/react-stripe-js)
 - [HeadlessUI](https://headlessui.com)
 - [TanStack Table](https://headlessui.com)
+- [React <Countdown />](https://www.npmjs.com/package/react-countdown)
+- [jspdf](https://www.npmjs.com/package/jspdf)
+- [html2canvas](https://www.npmjs.com/package/html2canvas)
+- [html2pdf.js](https://www.npmjs.com/package/html2pdf.js)
+- [recharts](https://www.npmjs.com/package/recharts)
+- [styled-components](https://www.npmjs.com/package/styled-components)
 
 ### Backend:
 

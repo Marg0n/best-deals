@@ -22,7 +22,7 @@ import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../../hooks/useAuth";
 import axios from "axios";
 import useAxiosCommon from "./../../../../hooks/useAxiosCommon";
-
+import Swal from "sweetalert2";
 const VendorProducts = () => {
   const vendorProducts = useAxiosSecure();
   const { user } = useAuth();
@@ -109,8 +109,15 @@ const VendorProducts = () => {
   const handleDelete = async (id) => {
     console.log(id);
     try {
-      // const resp = await axiosCommon.delete(`/vendorProductDelete/${id}`);
-      // refetch();
+      const resp = await axiosCommon.delete(`/vendorProductDelete/${id}`);
+      refetch();
+      Swal.fire({
+        position: "top-center",
+        icon: "success",
+        title: "Your work has been Deleted",
+        showConfirmButton: false,
+        timer: 1500,
+      });
     } catch (error) {
       // console.log(error);
     }
