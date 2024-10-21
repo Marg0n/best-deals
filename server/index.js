@@ -300,7 +300,7 @@ async function run() {
       // console.log(status,reason, role, query);
       const update = { $set: { "vendorDocument.vendorStatus.status": status,
                                 "vendorDocument.vendorStatus.reason": reason,
-                                 "role": role
+                                 "role": role || "User"
        } };
       const result = await usersCollection.updateOne(query, update, options);
       res.send(result);
