@@ -16,8 +16,8 @@ const Banner = () => {
 
         <div className=''>
 
-            <div className="mx-auto max-w-[1920px] ">
-                <Swiper className=' mx-auto z-10 '
+            <div className="mx-auto">
+                <Swiper className=' mx-auto z-10'
                     modules={[Navigation, Pagination, Scrollbar, Autoplay]}
                     spaceBetween={50}
                     slidesPerView={1}

@@ -9,7 +9,6 @@ const NewHomepage = () => {
                 {/* banner */}
                 <Banner />
             </div>
-
             {/* Our categories */}
             <div>
                 <OurCategories/>

@@ -52,6 +52,9 @@ const VendorProducts = () => {
     price: product.price || "N/A", // Assuming you might want to add price
   }));
 
+  console.log(initialData);
+
+
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -62,12 +65,19 @@ const VendorProducts = () => {
   );
 
   const combinedData = [...filteredData];
+  console.log(combinedData);
+  console.log(filteredData);
+
+
 
   const totalPages = Math.ceil(combinedData.length / rowsPerPage);
   const currentRows = combinedData.slice(
     currentPage * rowsPerPage,
     currentPage * rowsPerPage + rowsPerPage
   );
+
+  console.log(currentRows);
+
 
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
@@ -83,25 +93,26 @@ const VendorProducts = () => {
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+
   };
 
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const handleEdit = () => {
-    console.log("Edit Product:");
-    handleClose(); // Close menu after action
+  const handleEdit = (id, name, idx) => {
+    console.log("Edit Product: ", id, name, idx);
+    // handleClose(); // Close menu after action
     // Add your edit logic here (e.g., open a modal with the product data)
   };
 
   const handleDelete = async (id) => {
     console.log(id);
     try {
-      const resp = await axiosCommon.delete(`/vendorProductDelete/${id}`);
-      refetch();
+      // const resp = await axiosCommon.delete(`/vendorProductDelete/${id}`);
+      // refetch();
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
     // handleClose();
     // Close menu after action
@@ -150,27 +161,14 @@ const VendorProducts = () => {
                   <TableCell>{row.category}</TableCell>
                   <TableCell>{row.price}</TableCell>
                   <TableCell>
-                    <div>
-                      <IconButton onClick={handleClick}>
-                        <MoreVertIcon />
-                      </IconButton>
-                      <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={handleClose}
-                      >
-                        <MenuItem onClick={handleEdit}>
-                          <EditIcon fontSize="small" /> Edit Product
-                        </MenuItem>
-                        <MenuItem onClick={() => handleDelete(row.id)}>
-                          <DeleteIcon
-                            fontSize="small"
-                            className="text-red-500"
-                          />
-                          Delete
-                        </MenuItem>
-                      </Menu>
-                    </div>
+
+                    <button onClick={() => handleEdit(row.id, row.name, rowIndex)}>
+                       Edit Product
+                    </button>
+                    <button onClick={() => handleDelete(row.id)}>
+                      delete
+                    </button>
+
                   </TableCell>
                 </TableRow>
               ))}

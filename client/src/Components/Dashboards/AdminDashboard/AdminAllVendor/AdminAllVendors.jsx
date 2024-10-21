@@ -44,6 +44,8 @@ const AdminAllVendors = () => {
     }));
 
     const openModal = (id) => {
+        console.log(id);
+        
         const vendorDetails = allVendorInAdmin.find(vendor => vendor._id === id);
         setVendorDet(vendorDetails);
         setIsModalOpen(true);   // Open the details modal
