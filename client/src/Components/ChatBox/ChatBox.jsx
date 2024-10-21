@@ -24,9 +24,9 @@ const ChatBox = ({ setIsChatBoxOpen, vendorInfo, product }) => {
 
             try {
                 const res = await axiosCommon.post('/inbox', messageData);
-                console.log(res.data);  // Log the response to ensure the request is successful
+                console.log(res.data); 
             } catch (error) {
-                console.error('Failed to send message:', error);  // Log the error for debugging
+                console.error('Failed to send message:', error);  
             }
 
             setInputText('');
