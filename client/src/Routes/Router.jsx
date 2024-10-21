@@ -35,6 +35,7 @@ import PrivateRoute from "./PrivateRoute";
 import UserRoute from "./UserRoute";
 import VendorRoute from './VendorRoute';
 import Inbox from "../Components/Inbox/Inbox";
+import VendorRegistration from "../Components/VendorRegistration/VendorRegistration";
 
 const Router = createBrowserRouter([
   {
@@ -95,6 +96,10 @@ const Router = createBrowserRouter([
         element: <SingleProductCheckoutPage />,
         loader: () => fetch(`${import.meta.env.VITE_SERVER}/all-products`),
       },
+      {
+        path: "/VendorRegistration",
+        element: <VendorRegistration/>
+      }
     ],
   },
   {
