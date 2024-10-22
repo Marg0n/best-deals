@@ -9,6 +9,8 @@ import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import { Link, NavLink } from 'react-router-dom';
 import useUserProfile from '../../../hooks/useUserProfile';
 import useAuth from '../../../hooks/useAuth';
+import MessageIcon from '@mui/icons-material/Message';
+
 
 const UserSideBar = () => {
 
@@ -73,15 +75,15 @@ const UserSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(5)} button component={NavLink} to="/userDashboard/customerSupport">
+                <ListItem onClick={() => setSelected(5)} button component={NavLink} to="/userDashboard/inbox">
                     {
                         selected === 5 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
-                            <SupportAgentIcon className='text-black text-4xl' />
+                            <MessageIcon className='text-black text-4xl' />
                         </ListItemIcon>
-                            <ListItemText primary="Customer Support" /></div> : <div className='flex align-middle'><ListItemIcon>
-                                <SupportAgentIcon className="text-white" />
+                            <ListItemText primary="Inbox" /></div> : <div className='flex align-middle'><ListItemIcon>
+                                <MessageIcon className="text-white" />
                             </ListItemIcon>
-                            <ListItemText primary="Customer Support" className='text-2xl' /></div>
+                            <ListItemText primary="Inbox" className='text-2xl' /></div>
                     }
                 </ListItem>
 

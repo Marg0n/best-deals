@@ -183,6 +183,10 @@ const Router = createBrowserRouter([
         path: '/userDashboard/customerSupport',
         element: <CustomerSupport />,
       },
+      {
+        path: '/userDashboard/inbox',
+        element: <Inbox />,
+      },
     ],
   }
 ]);
