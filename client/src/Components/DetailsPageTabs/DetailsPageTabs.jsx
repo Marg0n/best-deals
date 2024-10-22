@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import CommentModal from '../CommentModal/CommentModal';
 import { Link } from 'react-router-dom';
 import ChatBox from '../ChatBox/ChatBox';
+import useUserProfile from '../../hooks/useUserProfile';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -40,6 +41,9 @@ const DetailsPageTabs = ({ vendorInfo, description, commnetDetails, product }) =
     const { photo, createdTime, email, lastLogin, name } = vendorInfo[0];
     const [value, setValue] = React.useState(0);
     const [isChatBoxOpen, setIsChatBoxOpen] = React.useState(false); // ChatBox state
+
+    const { profile } = useUserProfile();
+
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -81,17 +85,20 @@ const DetailsPageTabs = ({ vendorInfo, description, commnetDetails, product }) =
                         </div>
                     </div>
 
-                    <div className='flex flex-col md:flex-row gap-5'>
-                        <Link className="btn bg-[#775050] border-none text-white mt-3">
-                            Visit Vendor Store
-                        </Link>
-                        <button
-                            className="btn bg-[#775050] border-none text-white mt-3"
-                            onClick={handleSendMessageClick} // Open chatbox on click
-                        >
-                            Send Message
-                        </button>
-                    </div>
+                    {
+                        profile[0].role === 'User' &&
+                        <div className='flex flex-col md:flex-row gap-5'>
+                            <Link className="btn bg-[#775050] border-none text-white mt-3">
+                                Visit Vendor Store
+                            </Link>
+                            <button
+                                className="btn bg-[#775050] border-none text-white mt-3"
+                                onClick={handleSendMessageClick} // Open chatbox on click
+                            >
+                                Send Message
+                            </button>
+                        </div>
+                    }
 
                     {/* Conditionally render ChatBox when isChatBoxOpen is true */}
                     <div className='mt-10'>
