@@ -309,8 +309,8 @@ async function run() {
         $set: {
           "vendorDocument.vendorStatus.status": status,
           "vendorDocument.vendorStatus.reason": reason,
-          "role": role || "User"
-        }
+          role: role || "User",
+        },
       };
       const result = await usersCollection.updateOne(query, update, options);
       res.send(result);
@@ -319,7 +319,7 @@ async function run() {
     // ==================================
     // profile information update by email
     // ==================================
-    app.put('/update/:email', async (req, res) => {
+    app.put("/update/:email", async (req, res) => {
       // console.log(req.params?.email);
       const mail = req.params?.email;
       const request = req.body;
@@ -328,8 +328,8 @@ async function run() {
       const data = {
         $set: {
           ...request,
-        }
-      }
+        },
+      };
       const result = await usersCollection.updateOne(query, data, options);
       // console.log(result);
       res.send(result);
@@ -880,8 +880,17 @@ async function run() {
     app.post("/inbox", async (req, res) => {
       try {
         const messageData = req.body;
-        const email = req.params.email
-        const { text, messageTo, messageFrom, sender, receiver, chatId , senderPic , receiverPic } = messageData;
+        const email = req.params.email;
+        const {
+          text,
+          messageTo,
+          messageFrom,
+          sender,
+          receiver,
+          chatId,
+          senderPic,
+          receiverPic,
+        } = messageData;
 
         console.log("Incoming message data:", messageData); // For debugging
 
@@ -889,7 +898,9 @@ async function run() {
 
         if (chatId) {
           // Check if the conversation exists by its chatId
-          conversation = await inboxChatCollections.findOne({ _id: new ObjectId(chatId) });
+          conversation = await inboxChatCollections.findOne({
+            _id: new ObjectId(chatId),
+          });
         }
 
         if (conversation) {
@@ -898,11 +909,13 @@ async function run() {
             { _id: new ObjectId(chatId) }, // Update by chatId
             {
               $push: {
-                messages: { text, sender: messageFrom ,  senderPic : senderPic} // Add the new message and sender
-              }
+                messages: { text, sender: messageFrom, senderPic: senderPic }, // Add the new message and sender
+              },
             }
           );
-          res.status(200).json({ message: "Message added to existing conversation." });
+          res
+            .status(200)
+            .json({ message: "Message added to existing conversation." });
         } else {
           // If the conversation doesn't exist, create a new document
           const newConversation = {
@@ -913,11 +926,13 @@ async function run() {
             senderPic,
             receiver,
             receiverPic,
-            messages: [{ text, sender: messageFrom, senderPic : senderPic}], // Initialize with the first message
+            messages: [{ text, sender: messageFrom, senderPic: senderPic }], // Initialize with the first message
           };
 
           const result = await inboxChatCollections.insertOne(newConversation); // Insert the new conversation
-          res.status(201).json({ message: "New conversation created and message added." });
+          res
+            .status(201)
+            .json({ message: "New conversation created and message added." });
         }
       } catch (error) {
         console.error("Error adding message:", error); // Log the error for debugging
@@ -928,19 +943,18 @@ async function run() {
     // ==================================
     // all msg list that vendor get
     // ==================================
-    app.get('/inbox/:email', async (req, res) => {
+    app.get("/inbox/:email", async (req, res) => {
       const email = req.params.email;
       try {
-        const chatList = await inboxChatCollections.find({
-          $or: [
-            { messageTo: email },
-            { messageFrom: email }
-          ]
-        }).toArray();
+        const chatList = await inboxChatCollections
+          .find({
+            $or: [{ messageTo: email }, { messageFrom: email }],
+          })
+          .toArray();
 
         res.status(200).json(chatList);
       } catch (error) {
-        res.status(500).json({ error: 'Failed to fetch chat list' });
+        res.status(500).json({ error: "Failed to fetch chat list" });
       }
     });
 
@@ -954,11 +968,30 @@ async function run() {
       res.send(result);
     });
 
+    // ==================================
+    //  Vendor Product Delete End
+    // ==================================
+
+    // ==================================
+    //  Vendor Product Edit Start
+    // ==================================
+
+    app.get("/vendorProductEdit/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await productCollection.findOne(query);
+      res.send(result);
+    });
+
+    // ==================================
+    //  Vendor Product Edit End
+    // ==================================
+
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => { });
+    app.use("/user", async (req, res) => {});
 
     // await client.db("admin").command({ ping: 1 });
     console.log(
