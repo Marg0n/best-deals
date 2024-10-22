@@ -9,6 +9,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const port = process.env.PORT || 4000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const { emit } = require("nodemon");
 const stripe = require("stripe")(process.env.STRIPE_API_KEY_SERVER);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Configuration End
@@ -294,14 +295,17 @@ async function run() {
 
     app.patch("/allUser/:email", async function (req, res) {
       const email = req.params.email;
-      const {status, reason, role} = req.body;
+      const { status, reason, role } = req.body;
       const query = { email };
-      const options = {upsert: true };
+      const options = { upsert: true };
       // console.log(status,reason, role, query);
-      const update = { $set: { "vendorDocument.vendorStatus.status": status,
-                                "vendorDocument.vendorStatus.reason": reason,
-                                 "role": role || "User"
-       } };
+      const update = {
+        $set: {
+          "vendorDocument.vendorStatus.status": status,
+          "vendorDocument.vendorStatus.reason": reason,
+          "role": role || "User"
+        }
+      };
       const result = await usersCollection.updateOne(query, update, options);
       res.send(result);
     });
@@ -856,25 +860,29 @@ async function run() {
     app.post("/inbox", async (req, res) => {
       try {
         const messageData = req.body;
-        const { text, messageTo, messageFrom, sender, receiver } = messageData;
+        const email = req.params.email
+        const { text, messageTo, messageFrom, sender, receiver, chatId , senderPic , receiverPic } = messageData;
 
         console.log("Incoming message data:", messageData); // For debugging
 
-        // Check if the conversation between messageTo and messageFrom already exists
-        const conversation = await inboxChatCollections.findOne({
-          messageTo,
-          messageFrom,
-        });
+        let conversation;
+
+        if (chatId) {
+          // Check if the conversation exists by its chatId
+          conversation = await inboxChatCollections.findOne({ _id: new ObjectId(chatId) });
+        }
 
         if (conversation) {
-          // If the conversation exists, push the new message text to the messages array
+          // If the conversation exists, push the new message to the messages array
           await inboxChatCollections.updateOne(
-            { messageTo, messageFrom },
-            { $push: { messages: { text} } }
+            { _id: new ObjectId(chatId) }, // Update by chatId
+            {
+              $push: {
+                messages: { text, sender: messageFrom ,  senderPic : senderPic} // Add the new message and sender
+              }
+            }
           );
-          res
-            .status(200)
-            .json({ message: "Message added to existing conversation." });
+          res.status(200).json({ message: "Message added to existing conversation." });
         } else {
           // If the conversation doesn't exist, create a new document
           const newConversation = {
@@ -882,13 +890,14 @@ async function run() {
             messageFrom,
             sender,
             receiver,
-            messages: [{ text}], // Initialize with the first message
+            senderPic,
+            receiver,
+            receiverPic,
+            messages: [{ text, sender: messageFrom, senderPic : senderPic}], // Initialize with the first message
           };
 
-          await inboxChatCollections.insertOne(newConversation); // Insert the new conversation
-          res
-            .status(201)
-            .json({ message: "New conversation created and message added." });
+          const result = await inboxChatCollections.insertOne(newConversation); // Insert the new conversation
+          res.status(201).json({ message: "New conversation created and message added." });
         }
       } catch (error) {
         console.error("Error adding message:", error); // Log the error for debugging
@@ -900,19 +909,19 @@ async function run() {
     app.get('/inbox/:email', async (req, res) => {
       const email = req.params.email;
       try {
-          const chatList = await inboxChatCollections.find({
-              $or: [
-                  { messageTo: email },
-                  { messageFrom: email }
-              ]
-          }).toArray();
-  
-          res.status(200).json(chatList);
+        const chatList = await inboxChatCollections.find({
+          $or: [
+            { messageTo: email },
+            { messageFrom: email }
+          ]
+        }).toArray();
+
+        res.status(200).json(chatList);
       } catch (error) {
-          res.status(500).json({ error: 'Failed to fetch chat list' });
+        res.status(500).json({ error: 'Failed to fetch chat list' });
       }
-  });
-  
+    });
+
 
     // ==================================
     //  Vendor Product Delete Start
