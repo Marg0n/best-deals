@@ -68,7 +68,7 @@ const UserSideBar = () => {
                         selected === 4 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <NotificationsIcon className='text-black text-4xl' />
                         </ListItemIcon>
-                            <ListItemText primary="Notifications and Alerts" /></div> : <div className='flex align-middle'><ListItemIcon>
+                            <ListItemText primary="Notifications and Alerts Status" /></div> : <div className='flex align-middle'><ListItemIcon>
                                 <NotificationsIcon className="text-white" />
                             </ListItemIcon>
                             <ListItemText primary="Notifications and Alerts" className='text-2xl' /></div>
