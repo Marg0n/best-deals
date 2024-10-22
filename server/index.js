@@ -284,6 +284,9 @@ async function run() {
       res.send(results);
     });
 
+    // ==================================
+    // all users data by id
+    // ==================================
     app.patch("/allUsers/:id", async function (req, res) {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -293,6 +296,9 @@ async function run() {
       res.send(result);
     });
 
+    // ==================================
+    // all users data by email
+    // ==================================
     app.patch("/allUser/:email", async function (req, res) {
       const email = req.params.email;
       const { status, reason, role } = req.body;
@@ -310,6 +316,28 @@ async function run() {
       res.send(result);
     });
 
+    // ==================================
+    // profile information update by email
+    // ==================================
+    app.put('/update/:email', async (req, res) => {
+      // console.log(req.params?.email);
+      const mail = req.params?.email;
+      const request = req.body;
+      const query = { email: mail };
+      const options = { upsert: true };
+      const data = {
+        $set: {
+          ...request,
+        }
+      }
+      const result = await usersCollection.updateOne(query, data, options);
+      // console.log(result);
+      res.send(result);
+    });
+
+    // ==================================
+    // delete users data by id
+    // ==================================
     app.delete("/allUsers/:id", async function (req, res) {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -320,7 +348,6 @@ async function run() {
     // ==================================
     // Users profiles' Billing Address data
     // ==================================
-
     app.post("/billingAddress/:email", async (req, res) => {
       const mail = req.params?.email;
       const body = req?.body;
@@ -341,7 +368,6 @@ async function run() {
     // ==================================
     // All products API
     // ==================================
-
     app.get("/all-products", async (req, res) => {
       const search = req.query.search || "";
       const minPrice = parseFloat(req.query.minPrice) || 0;
@@ -382,7 +408,6 @@ async function run() {
     // ==================================
     // get all products
     // ==================================
-
     app.get("/allVendorProducts", async (req, res) => {
       const results = await productCollection.find().toArray();
       res.send(results);
@@ -399,7 +424,6 @@ async function run() {
     // ==================================
     // Post Products
     // ==================================
-
     app.post("/all-products", async (req, res) => {
       const postProduct = req.body;
       const results = await productCollection.insertOne(postProduct);
@@ -761,10 +785,6 @@ async function run() {
     });
 
     // ==================================
-    // cartList collection
-    // ==================================
-
-    // ==================================
     // insert products into cartList
     // ==================================
     app.post("/cartList", async (req, res) => {
@@ -905,7 +925,9 @@ async function run() {
       }
     });
 
+    // ==================================
     // all msg list that vendor get
+    // ==================================
     app.get('/inbox/:email', async (req, res) => {
       const email = req.params.email;
       try {
@@ -922,21 +944,15 @@ async function run() {
       }
     });
 
-
     // ==================================
-    //  Vendor Product Delete Start
+    //  Vendor Product Delete
     // ==================================
-
     app.delete("/vendorProductDelete/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.deleteOne(query);
       res.send(result);
     });
-
-    // ==================================
-    //  Vendor Product Delete End
-    // ==================================
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
