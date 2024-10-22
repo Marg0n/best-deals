@@ -20,6 +20,7 @@ const Details = () => {
     const { _id } = useParams();
     const { user } = useAuth()
     const product = products?.find(product => product._id === _id);
+    
 
     const axiosCommon = useAxiosCommon()
     const { data: vendorInfo, isLoading } = useQuery({
