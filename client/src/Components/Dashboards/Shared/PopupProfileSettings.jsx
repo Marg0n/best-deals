@@ -1,14 +1,14 @@
+import { DialogPanel } from '@headlessui/react';
 import React, { useEffect, useState } from 'react';
-import useAuth from '../../../../hooks/useAuth';
-import useAxiosCommon from '../../../../hooks/useAxiosCommon';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import toast from 'react-hot-toast';
-import { Swal } from 'sweetalert2';
-import { ClimbingBoxLoader } from 'react-spinners';
 import { TiArrowBack } from "react-icons/ti";
-import { imageUpload } from './../../../../utils/imageUpload';
-import { DialogPanel } from '@headlessui/react';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { ClimbingBoxLoader } from 'react-spinners';
+import { Swal } from 'sweetalert2';
+import useAuth from '../../../hooks/useAuth';
+import useAxiosCommon from '../../../hooks/useAxiosCommon';
+import { imageUpload } from '../../../utils/imageUpload';
 
 const PopupProfileSettings = ({ setIsOpen }) => {
 

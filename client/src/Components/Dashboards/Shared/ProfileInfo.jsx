@@ -7,7 +7,7 @@ import { RxGear } from "react-icons/rx";
 import useAuth from '../../../hooks/useAuth';
 import useUserProfile from '../../../hooks/useUserProfile';
 import { localDate } from '../../../utils/useBDdateTime';
-import PopupProfileSettings from '../UserDashboard/UserHome/PopupProfileSettings';
+import PopupProfileSettings from './PopupProfileSettings';
 
 const ProfileInfo = () => {
 
@@ -106,7 +106,7 @@ const ProfileInfo = () => {
                 onClick={() => setIsOpen(true)}
             />
 
-            <Dialog open={isOpen} as='div' onClose={() => setIsOpen(false)} className="relative z-50 focus:outline-none">
+            <Dialog open={isOpen} as='div' onClose={() => setIsOpen(false)} className="relative z-50 focus:outline-none ">
                 <PopupProfileSettings setIsOpen={setIsOpen} />
             </Dialog>
         </div>
