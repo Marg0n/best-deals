@@ -4,7 +4,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { FiMessageSquare } from 'react-icons/fi';
 import { TbMessageCircleQuestion } from 'react-icons/tb';
 import MessageIcon from '@mui/icons-material/Message';
@@ -17,7 +17,7 @@ const VendorSideBar = () => {
             <div className="p-4 text-lg font-bold">Vendor Dashboard</div>
             <List>
                    
-            <ListItem onClick={() => setSelected(1)} button component={Link} to={`/vendorDashboard`}>
+            <ListItem onClick={() => setSelected(1)} button component={NavLink} to={`/vendorDashboard`}>
                     {
                         selected === 1 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <DashboardIcon className='text-black text-4xl' />
@@ -29,7 +29,7 @@ const VendorSideBar = () => {
                     }
             </ListItem>
             
-            <ListItem onClick={() => setSelected(2)} button component={Link} to="/vendorDashboard/orders">
+            <ListItem onClick={() => setSelected(2)} button component={NavLink} to="/vendorDashboard/orders">
                     {
                         selected === 2 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <ShoppingCartIcon className='text-black text-4xl' />
@@ -41,7 +41,7 @@ const VendorSideBar = () => {
                     }
                 </ListItem>
                 
-                <ListItem onClick={() => setSelected(3)} button component={Link} to="/vendorDashboard/products">
+                <ListItem onClick={() => setSelected(3)} button component={NavLink} to="/vendorDashboard/products">
                     {
                         selected === 3 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <AddShoppingCartIcon className='text-black text-4xl' />
@@ -53,7 +53,7 @@ const VendorSideBar = () => {
                     }
                 </ListItem>
 
-                <ListItem onClick={() => setSelected(4)} button component={Link} to="/vendorDashboard/inbox">
+                <ListItem onClick={() => setSelected(4)} button component={NavLink} to="/vendorDashboard/inbox">
                     {
                         selected === 4 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
                             <MessageIcon className='text-black text-4xl' />

@@ -1,37 +1,70 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Paper, Divider, Button } from '@mui/material';
 import MessageIcon from '@mui/icons-material/Message';
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import { useQuery } from '@tanstack/react-query';
+import useAuth from "../../hooks/useAuth";
+import { FaLocationArrow } from 'react-icons/fa';
 
-const messages = [
-    {
-        id: 1,
-        sender: 'John Doe',
-        subject: 'Meeting Reminder',
-        content: 'Just a reminder for our meeting tomorrow at 10 AM.',
-        time: '9:45 AM',
-    },
-    {
-        id: 2,
-        sender: 'Jane Smith',
-        subject: 'Project Update',
-        content: 'The project is on track, and we will meet the deadline.',
-        time: '8:15 AM',
-    },
-    {
-        id: 3,
-        sender: 'Mark Johnson',
-        subject: 'Vacation Request',
-        content: 'I would like to take a vacation from Sept 25th to Sept 30th.',
-        time: 'Yesterday',
-    },
-];
 
 const Inbox = () => {
     const [selectedMessage, setSelectedMessage] = useState(null);
+    const [inputText, setInputText] = useState('');
+    const [messages, setMessages] = useState([])
+
+    const { user } = useAuth();
+
+
+    const axiosCommon = useAxiosCommon();
+    const { data: chatList, isLoading, refetch } = useQuery({
+        queryKey: ["chatlist"],
+        queryFn: async () => {
+            const res = await axiosCommon.get(`/inbox/${user?.email}`, {
+            });
+            return res.data;
+        },
+    });
+
+    // Effect to update selectedMessage when chatList changes
+    useEffect(() => {
+        if (chatList && selectedMessage) {
+            const updatedChat = chatList.find(chat => chat._id === selectedMessage._id);
+            if (updatedChat) {
+                setSelectedMessage(updatedChat); // Update the selectedMessage with the latest data
+            }
+        }
+    }, [chatList, selectedMessage]);
+
 
     const handleSelectMessage = (message) => {
         setSelectedMessage(message);
+        console.log(selectedMessage);
+        console.log(messages);
     };
+
+    console.log(inputText);
+
+
+    const handleSend = async () => {
+        if (inputText !== '') {
+            setMessages([...messages, { text: inputText, sender: 'Vendor' }]);
+            const messageData = { text: inputText, chatId: selectedMessage?._id, messageFrom: user?.email, senderPic: user?.photoURL };
+
+            try {
+                const res = await axiosCommon.post('/inbox', messageData);
+                console.log(res.data);
+                refetch()
+            } catch (error) {
+                console.error('Failed to send message:', error);
+            }
+            setInputText('');
+            refetch()
+
+        }
+    };
+
+    console.log(selectedMessage);
+
 
     return (
         <Box display="flex" p={2} bgcolor="#f5f5f5" height="100vh">
@@ -41,21 +74,24 @@ const Inbox = () => {
                     Inbox
                 </Typography>
                 <List>
-                    {messages.map((message) => (
+                    {chatList?.map((chat) => (
                         <ListItem
                             button
-                            key={message.id}
-                            onClick={() => handleSelectMessage(message)}
-                            selected={selectedMessage?.id === message.id}
+                            key={chat.id}
+                            onClick={() => handleSelectMessage(chat)}
+                            selected={selectedMessage?.id === chat.id}
                         >
                             <ListItemAvatar>
                                 <Avatar>
-                                    <MessageIcon />
+                                    {
+                                        chat?.messageTo === user?.email ?
+                                            <img src={chat?.senderPic} alt="" /> :
+                                            <img src={chat?.receiverPic} alt="" />
+                                    }
                                 </Avatar>
                             </ListItemAvatar>
                             <ListItemText
-                                primary={message.sender}
-                                secondary={`${message.subject} - ${message.time}`}
+                                primary={chat?.messageTo === user?.email ? chat.sender : chat.receiver}
                             />
                         </ListItem>
                     ))}
@@ -65,23 +101,76 @@ const Inbox = () => {
             {/* Message Details */}
             <Paper elevation={3} sx={{ width: '70%', padding: '20px', display: 'flex', flexDirection: 'column' }}>
                 {selectedMessage ? (
-                    <>
-                        <Typography variant="h6">{selectedMessage.subject}</Typography>
+                    <div className='flex flex-col max-h-screen bg-white shadow-lg rounded-lg overflow-y-auto '>
                         <Typography variant="subtitle2" color="textSecondary">
-                            From: {selectedMessage.sender} | {selectedMessage.time}
+                            <div className='flex items-end'>
+
+                                {
+                                    selectedMessage?.messageTo === user?.email ?
+                                        <img  src={selectedMessage?.senderPic} className='rounded-full w-16 h-16 ' alt="" srcset="" /> :
+                                        <img src={selectedMessage?.receiverPic} className='rounded-full w-16 h-16 ' alt="" srcset="" />
+                                }
+
+                                {
+                                    selectedMessage?.messageTo === user?.email ?
+                                        <h1 className='font-bold'>{selectedMessage?.sender}</h1> :
+                                        <h1 className='font-bold'>{selectedMessage?.receiver}</h1>
+                                }
+                            </div>
+
+
                         </Typography>
                         <Divider sx={{ marginY: 2 }} />
-                        <Typography variant="body1">{selectedMessage.content}</Typography>
+                        {/* Chat Body */}
+                        <div className="flex flex-col flex-grow p-4 space-y-4 overflow-y-auto bg-gray-100">
+                            {selectedMessage?.messages.map((message, index) => (
+                                <div
+                                    key={index}
+                                    className={`flex ${message.sender === user?.email ? 'justify-end' : 'justify-start'}`}
+                                >
+                                    {/* Display user or vendor photo based on sender */}
+                                    {message.sender === user?.email ? (
+                                        <div className="flex items-start gap-2">
+                                            <div className=" avatar items-center gap-1 ">
+                                                <h1 className='bg-blue-500 text-white p-2 rounded-lg'>{message.text}</h1>
+                                                <div className="w-8 rounded-full">
+                                                    <img className='felx justify-end' src={user?.photoURL} alt="Vendor" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-start gap-2">
+                                            <div className=" avatar items-center gap-1 ">
+                                                <div className="w-8 rounded-full">
+                                                    <img src={message.senderPic} alt="Vendor" />
+                                                </div>
+                                                <h1 className='bg-blue-500 text-white p-2 rounded-lg'>{message.text}</h1>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
 
-                        <Box mt={4}>
-                            <Button variant="contained" color="primary" sx={{ marginRight: 1 }}>
-                                Reply
-                            </Button>
-                            <Button variant="outlined" color="secondary">
-                                Delete
-                            </Button>
-                        </Box>
-                    </>
+                        {/* Chat Footer */}
+                        <div className="flex items-center p-4 bg-gray-200 text-black">
+                            <input
+                                type="text"
+                                className="flex-grow p-2 bg-white dark:bg-white  border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none"
+                                placeholder="Type a message..."
+                                value={inputText}
+                                onChange={(e) => setInputText(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                            />
+                            <button
+                                onClick={handleSend}
+                                className="bg-blue-500 text-white p-2 ml-2 rounded-full hover:bg-blue-800 focus:outline-none"
+                            >
+                                <FaLocationArrow />
+                            </button>
+                        </div>
+                    </div>
+
                 ) : (
                     <Typography variant="h6" color="textSecondary">
                         Select a message to view details

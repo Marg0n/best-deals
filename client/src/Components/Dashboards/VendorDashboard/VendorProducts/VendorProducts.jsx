@@ -22,7 +22,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import useAuth from "../../../../hooks/useAuth";
-import axios from "axios";
 import useAxiosCommon from "./../../../../hooks/useAxiosCommon";
 import Swal from "sweetalert2";
 import { Controller, useForm } from "react-hook-form";
@@ -188,6 +187,8 @@ const VendorProducts = () => {
     price: product.price || "N/A", // Assuming you might want to add price
   }));
 
+  console.log(initialData);
+
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -198,12 +199,16 @@ const VendorProducts = () => {
   );
 
   const combinedData = [...filteredData];
+  console.log(combinedData);
+  console.log(filteredData);
 
   const totalPages = Math.ceil(combinedData.length / rowsPerPage);
   const currentRows = combinedData.slice(
     currentPage * rowsPerPage,
     currentPage * rowsPerPage + rowsPerPage
   );
+
+  console.log(currentRows);
 
   const handleNextPage = () => {
     if (currentPage < totalPages - 1) {
@@ -286,7 +291,7 @@ const VendorProducts = () => {
         timer: 1500,
       });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
     // handleClose();
     // Close menu after action

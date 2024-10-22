@@ -44,6 +44,8 @@ const AdminAllVendors = () => {
     }));
 
     const openModal = (id) => {
+        console.log(id);
+        
         const vendorDetails = allVendorInAdmin.find(vendor => vendor._id === id);
         setVendorDet(vendorDetails);
         setIsModalOpen(true);   // Open the details modal
@@ -147,6 +149,7 @@ const AdminAllVendors = () => {
         return <Typography>Loading...</Typography>; // Show loading state
     }
 
+    console.log(vendorDet);
     return (
         <div className="relative p-4 bg-white rounded-lg">
             <h1 className="text-3xl mb-4 text-black">All Vendors</h1>
@@ -223,14 +226,14 @@ const AdminAllVendors = () => {
                 <div className="modal-box absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
                     {vendorDet && (
                         <>
-                            <h3 className="font-bold text-lg">Vendor Details</h3>
+                            <h3 className="font-bold text-lg mb-3">Vendor Details</h3>
                             <div className="flex gap-5">
-                                <img src={vendorDet.profilePicture} alt="Vendor" />
+                                <img className='h-24 w-24 rounded-md' src={vendorDet?.photo} alt="Vendor" />
                                 <div>
-                                    <p><strong>Name:</strong> {vendorDet.name}</p>
-                                    <p><strong>Email:</strong> {vendorDet.email}</p>
-                                    <p><strong>Joined:</strong> {vendorDet.joined}</p>
-                                    <p><strong>Last Login:</strong> {vendorDet.lastLogin}</p>
+                                    <p><strong>Name:</strong> {vendorDet?.name}</p>
+                                    <p><strong>Email:</strong> {vendorDet?.email}</p>
+                                    <p><strong>Joined:</strong> {vendorDet?.joined}</p>
+                                    <p><strong>Last Login:</strong> {vendorDet?.lastLogin}</p>
                                 </div>
                             </div>
                             <div className="modal-action">
