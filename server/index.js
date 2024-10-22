@@ -283,6 +283,9 @@ async function run() {
       res.send(results);
     });
 
+    // ==================================
+    // all users data by id
+    // ==================================
     app.patch("/allUsers/:id", async function (req, res) {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -292,20 +295,48 @@ async function run() {
       res.send(result);
     });
 
+    // ==================================
+    // all users data by email
+    // ==================================
     app.patch("/allUser/:email", async function (req, res) {
       const email = req.params.email;
-      const {status, reason, role} = req.body;
+      const { status, reason, role } = req.body;
       const query = { email };
-      const options = {upsert: true };
+      const options = { upsert: true };
       // console.log(status,reason, role, query);
-      const update = { $set: { "vendorDocument.vendorStatus.status": status,
-                                "vendorDocument.vendorStatus.reason": reason,
-                                 "role": role || "User"
-       } };
+      const update = {
+        $set: {
+          "vendorDocument.vendorStatus.status": status,
+          "vendorDocument.vendorStatus.reason": reason,
+          "role": role || "User"
+        }
+      };
       const result = await usersCollection.updateOne(query, update, options);
       res.send(result);
     });
 
+    // ==================================
+    // profile information update by email
+    // ==================================
+    app.put('/update/:email', async (req, res) => {
+      // console.log(req.params?.email);
+      const mail = req.params?.email;
+      const request = req.body;
+      const query = { email: mail };
+      const options = { upsert: true };
+      const data = {
+        $set: {
+          ...request,
+        }
+      }
+      const result = await usersCollection.updateOne(query, data, options);
+      // console.log(result);
+      res.send(result);
+    });
+
+    // ==================================
+    // delete users data by id
+    // ==================================
     app.delete("/allUsers/:id", async function (req, res) {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -316,7 +347,6 @@ async function run() {
     // ==================================
     // Users profiles' Billing Address data
     // ==================================
-
     app.post("/billingAddress/:email", async (req, res) => {
       const mail = req.params?.email;
       const body = req?.body;
@@ -337,7 +367,6 @@ async function run() {
     // ==================================
     // All products API
     // ==================================
-
     app.get("/all-products", async (req, res) => {
       const search = req.query.search || "";
       const minPrice = parseFloat(req.query.minPrice) || 0;
@@ -378,7 +407,6 @@ async function run() {
     // ==================================
     // get all products
     // ==================================
-
     app.get("/allVendorProducts", async (req, res) => {
       const results = await productCollection.find().toArray();
       res.send(results);
@@ -395,7 +423,6 @@ async function run() {
     // ==================================
     // Post Products
     // ==================================
-
     app.post("/all-products", async (req, res) => {
       const postProduct = req.body;
       const results = await productCollection.insertOne(postProduct);
@@ -757,10 +784,6 @@ async function run() {
     });
 
     // ==================================
-    // cartList collection
-    // ==================================
-
-    // ==================================
     // insert products into cartList
     // ==================================
     app.post("/cartList", async (req, res) => {
@@ -870,7 +893,7 @@ async function run() {
           // If the conversation exists, push the new message text to the messages array
           await inboxChatCollections.updateOne(
             { messageTo, messageFrom },
-            { $push: { messages: { text} } }
+            { $push: { messages: { text } } }
           );
           res
             .status(200)
@@ -882,7 +905,7 @@ async function run() {
             messageFrom,
             sender,
             receiver,
-            messages: [{ text}], // Initialize with the first message
+            messages: [{ text }], // Initialize with the first message
           };
 
           await inboxChatCollections.insertOne(newConversation); // Insert the new conversation
@@ -896,38 +919,34 @@ async function run() {
       }
     });
 
+    // ==================================
     // all msg list that vendor get
+    // ==================================
     app.get('/inbox/:email', async (req, res) => {
       const email = req.params.email;
       try {
-          const chatList = await inboxChatCollections.find({
-              $or: [
-                  { messageTo: email },
-                  { messageFrom: email }
-              ]
-          }).toArray();
-  
-          res.status(200).json(chatList);
+        const chatList = await inboxChatCollections.find({
+          $or: [
+            { messageTo: email },
+            { messageFrom: email }
+          ]
+        }).toArray();
+
+        res.status(200).json(chatList);
       } catch (error) {
-          res.status(500).json({ error: 'Failed to fetch chat list' });
+        res.status(500).json({ error: 'Failed to fetch chat list' });
       }
-  });
-  
+    });
 
     // ==================================
-    //  Vendor Product Delete Start
+    //  Vendor Product Delete
     // ==================================
-
     app.delete("/vendorProductDelete/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await productCollection.deleteOne(query);
       res.send(result);
     });
-
-    // ==================================
-    //  Vendor Product Delete End
-    // ==================================
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
