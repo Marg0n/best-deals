@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import HoverdCardDetails from "../HoverdCardDetails/HoverdCardDetails";
 import ProductStyle from "./ProductCardStyle/ProductCardStyle.module.css";
 
-const ProductsCard = ({ product }) => {
+const ProductsCard = ({ product , showTotalSold }) => {
   const {
     productName,
     brandName,
@@ -14,7 +14,7 @@ const ProductsCard = ({ product }) => {
     category,
     ratings,
     creationDateTime,
-    _id,
+    _id, totalSold,
   } = product;
 
   const [isHovered, setIsHovered] = useState(false);
@@ -43,6 +43,9 @@ const ProductsCard = ({ product }) => {
               <h2 className="text-xl font-semibold tracking-wide">
                 {productName}
               </h2>
+              {
+                showTotalSold ? <h1>Already Sold : {totalSold}</h1> : ''
+              }
             </div>
 
             {/* Hover effect */}
