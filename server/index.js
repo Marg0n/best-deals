@@ -413,6 +413,13 @@ async function run() {
       res.send(results);
     });
 
+
+    // get top selling products api from db by shorting
+    app.get('/top-sales', async (req, res) => {
+      const result = await productCollection.find().sort({ totalSold: -1 }).toArray();
+      res.send(result);
+    });
+
     // ==================================
     // Get All orders
     // ==================================
@@ -991,7 +998,7 @@ async function run() {
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => {});
+    app.use("/user", async (req, res) => { });
 
     // await client.db("admin").command({ ping: 1 });
     console.log(
