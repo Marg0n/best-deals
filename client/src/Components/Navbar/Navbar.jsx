@@ -111,7 +111,7 @@ const Navbar = ({ toggleTheme, theme }) => {
         </Link>
       </li>
       <li className="rounded-xl p-2 m-2 text-right" onClick={handleLogout}>
-        <button className="bg-base-300 hover:bg-[#737373] hover:text-white block text-center text-base font-semibold">
+        <button className="bg-base-300 hover:bg-[#737373] hover:text-white text-red-400 block text-center text-base font-semibold font-serif">
           Logout
         </button>
       </li>
@@ -126,7 +126,7 @@ const Navbar = ({ toggleTheme, theme }) => {
       <div className="navbar  container mx-auto">
         {/* logo */}
         <div className="flex-1">
-          <Link  to='/'>
+          <Link to='/'>
             <img
               className="h-10 lg:h-16"
               src="https://i.ibb.co.com/rtTfZsH/Bestdeal-white-text-log.png"
@@ -190,7 +190,8 @@ const Navbar = ({ toggleTheme, theme }) => {
             </div>
             <div
               tabIndex={0}
-              className="card card-compact dropdown-content bg-base-100 z-[1] mt-8 w-52 shadow"
+              className={`card card-compact dropdown-content bg-base-100 z-[1] mt-12 w-52 shadow ${theme === "light" ? "bg-[#0cc0df]/80" : "bg-[#737373]/80"
+                } glass`}
             >
               <div className="card-body">
                 <p className="text-lg font-bold">
@@ -216,7 +217,7 @@ const Navbar = ({ toggleTheme, theme }) => {
                   <p
                     className={
                       cart?.cartIteams?.length === 0
-                        ? ``
+                        ? `hidden`
                         : `font-semibold text-red-500 animate-pulse hover:animate-none`
                     }
                   >
@@ -269,7 +270,7 @@ const Navbar = ({ toggleTheme, theme }) => {
                 {dropdown && (
                   <ul
                     tabIndex={0}
-                    className="mt-3 z-[2] p-2 shadow-2xl menu menu-sm dropdown-content  rounded-box w-64 bg-[#0cc0df]/90 "
+                    className="mt-3 z-[2] p-2 shadow-2xl menu menu-sm dropdown-content  rounded-box w-64 bg-[#0cc0df]/90 glass"
                   >
                     <li>
                       <p className="flex justify-center items-center font-medium text-base-100">
