@@ -24,25 +24,25 @@ const VendorSideBar = () => {
       </div>
 
       <List>
+        {/* dashboard */}
         <ListItem button component={NavLink} to="/vendorDashboard">
-          {currentPath === "/vendorDashboard" ? (
-            <div className="text-black bg-white w-full rounded-lg flex p-2">
-              <ListItemIcon>
-                <DashboardIcon className="text-black text-4xl" />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" />
-            </div>
-          ) : (
-            <div className="flex align-middle">
-              <ListItemIcon>
-                <DashboardIcon className="text-white" />
-              </ListItemIcon>
-              <ListItemText primary="Dashboard" className="text-2xl" />
-            </div>
-          )}
+          <div
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/vendorDashboard"
+              ? "bg-white text-black"
+              : "text-white"
+              }`}
+          >
+            <ListItemIcon>
+              <DashboardIcon
+                className={`${currentPath === "/vendorDashboard" ? "text-black" : "text-white"
+                  }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </div>
         </ListItem>
 
-
+        {/* order management */}
         <ListItem
           button
           component={NavLink}
@@ -66,6 +66,7 @@ const VendorSideBar = () => {
           </div>
         </ListItem>
 
+        {/* wishlists */}
         <ListItem button component={NavLink} to="/vendorDashboard/userWishlist">
           <div
             className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/vendorDashboard/userWishlist"
@@ -85,6 +86,7 @@ const VendorSideBar = () => {
           </div>
         </ListItem>
 
+        {/* notification */}
         <ListItem button component={NavLink} to="/vendorDashboard/notifications">
           <div
             className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/vendorDashboard/notifications"
@@ -104,24 +106,25 @@ const VendorSideBar = () => {
           </div>
         </ListItem>
 
+        {/* orders */}
         <ListItem button component={NavLink} to="/vendorDashboard/orders">
-          {currentPath === "/vendorDashboard/orders" ? (
-            <div className="text-black bg-white w-full rounded-lg flex p-2">
-              <ListItemIcon>
-                <ShoppingCartIcon className="text-black text-4xl" />
-              </ListItemIcon>
-              <ListItemText primary="Orders" />
-            </div>
-          ) : (
-            <div className="flex align-middle">
-              <ListItemIcon>
-                <ShoppingCartIcon className="text-white" />
-              </ListItemIcon>
-              <ListItemText primary="Orders" className="text-2xl" />
-            </div>
-          )}
+        <div
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/vendorDashboard/orders"
+              ? "bg-white text-black"
+              : "text-white"
+              }`}
+          >
+            <ListItemIcon>
+              <ShoppingCartIcon
+                className={`${currentPath === "/vendorDashboard/orders" ? "text-black" : "text-white"
+                  }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Orders" />
+          </div>
         </ListItem>
 
+        {/* add product */}
         <ListItem button component={NavLink} to="/vendorDashboard/products">
           {currentPath === "/vendorDashboard/products" ? (
             <div className="text-black bg-white w-full rounded-lg flex p-2">
@@ -140,6 +143,7 @@ const VendorSideBar = () => {
           )}
         </ListItem>
 
+        {/* inbox */}
         <ListItem button component={NavLink} to="/vendorDashboard/inbox">
           {currentPath === "/vendorDashboard/inbox" ? (
             <div className="text-black bg-white w-full rounded-lg flex p-2">
@@ -158,6 +162,7 @@ const VendorSideBar = () => {
           )}
         </ListItem>
 
+        {/* exit */}
         <ListItem className="place-self-end" button component={Link} to="/">
           <div className="w-full p-2 flex items-center justify-center">
             <ListItemIcon>
