@@ -38,10 +38,14 @@ const AdminHome = () => {
         fetchData();
     }, [axiosSecure]);
 
+//revenue calculation
+    const rvenue = totalRevenue?.toFixed(2)* .1 || 0;
+
     if (isLoading) {
         return <Typography>Loading...</Typography>;
     }
 
+    
     return (
         <div className="p-8 bg-gray-50 min-h-screen">
             {/* Stats Section */}
@@ -55,7 +59,7 @@ const AdminHome = () => {
                 />
                 <StatCard
                     title="Revenue"
-                    value={`$1000.00`} 
+                    value={`$ ${rvenue}`} 
                     percentage={-14.3}  
                     increase={false}  
                     description={`Previous: $15,312.22`} 
