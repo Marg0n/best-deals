@@ -43,6 +43,7 @@ By utilizing the MERN (MongoDB, Express, React, Node.js) stack, the platform wil
 - [styled-components](https://www.npmjs.com/package/styled-components)
 - [Uploadcare](https://uploadcare.com/docs/file-uploader/installation/)
 - [@uploadcare/react-widget](https://www.npmjs.com/package/@uploadcare/react-widget)
+- [swiper](https://swiperjs.com)
 
 ### Backend:
 
