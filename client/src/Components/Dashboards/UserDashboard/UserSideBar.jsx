@@ -1,101 +1,149 @@
-import React, { useState } from 'react';
-import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
-import DashboardIcon from '@mui/icons-material/Dashboard';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import SupportAgentIcon from '@mui/icons-material/SupportAgent';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import ListAltIcon from '@mui/icons-material/ListAlt';
-import BookmarksIcon from '@mui/icons-material/Bookmarks';
-import { Link, NavLink } from 'react-router-dom';
-import useUserProfile from '../../../hooks/useUserProfile';
-import useAuth from '../../../hooks/useAuth';
-import MessageIcon from '@mui/icons-material/Message';
-
+import React from "react";
+import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import SupportAgentIcon from "@mui/icons-material/SupportAgent";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import BookmarksIcon from "@mui/icons-material/Bookmarks";
+import MessageIcon from "@mui/icons-material/Message";
+import useUserProfile from "../../../hooks/useUserProfile";
+import useAuth from "../../../hooks/useAuth";
 
 const UserSideBar = () => {
+  const location = useLocation();
+  const currentPath = location.pathname;
 
-    const [selected, setSelected] = useState(1);
+  const { user } = useAuth();
 
-    // user profile data
-    const { profile } = useUserProfile();
-    const { user } = useAuth();
+  return (
+    <div className="w-64 min-h-screen bg-gray-800 text-white fixed top-0 left-0">
+      <div className="p-4 text-lg font-bold">
+        <span className="text-red-500">{user?.displayName}</span>'s Dashboard
+      </div>
 
+      <List>
+        <ListItem button component={NavLink} to="/userDashboard">
+          <div
+            className={`w-full rounded-lg flex p-2 ${
+              currentPath === "/userDashboard"
+                ? "bg-white text-black"
+                : "text-white"
+            }`}
+          >
+            <ListItemIcon>
+              <DashboardIcon
+                className={`${
+                  currentPath === "/userDashboard" ? "text-black" : "text-white"
+                }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Dashboard" />
+          </div>
+        </ListItem>
 
-    return (
-        <div className="w-64 min-h-screen bg-gray-800 text-white fixed top-0 left-0">
-            {/* display user name */}
-            <div className="p-4 text-lg font-bold"><span className='text-red-500'>{user?.displayName}</span>'s Dashboard</div>
-            
-            <List>
-                <ListItem onClick={() => setSelected(1)} button component={NavLink} to="/userDashboard">
-                    {
-                        selected === 1 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
-                            <DashboardIcon className='text-black text-4xl' />
-                        </ListItemIcon>
-                            <ListItemText primary="Dashboard" /></div> : <div className='flex align-middle'><ListItemIcon>
-                                <DashboardIcon className="text-white" />
-                            </ListItemIcon>
-                            <ListItemText primary="Dashboard" className='text-2xl' /></div>
-                    }
-                </ListItem>
- 
-                <ListItem onClick={() => setSelected(2)} button component={NavLink} to="/userDashboard/orderManagement">
-                    {
-                        selected === 2 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
-                            <ListAltIcon className='text-black text-4xl' />
-                        </ListItemIcon>
-                            <ListItemText primary="Order Management" /></div> : <div className='flex align-middle'><ListItemIcon>
-                                <ListAltIcon className="text-white" />
-                            </ListItemIcon>
-                            <ListItemText primary="Order Management" className='text-2xl' /></div>
-                    }
-                </ListItem>
+        <ListItem
+          button
+          component={NavLink}
+          to="/userDashboard/orderManagement"
+        >
+          <div
+            className={`w-full rounded-lg flex p-2 ${
+              currentPath === "/userDashboard/orderManagement"
+                ? "bg-white text-black"
+                : "text-white"
+            }`}
+          >
+            <ListItemIcon>
+              <ListAltIcon
+                className={`${
+                  currentPath === "/userDashboard/orderManagement"
+                    ? "text-black"
+                    : "text-white"
+                }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Order Management" />
+          </div>
+        </ListItem>
 
-                <ListItem onClick={() => setSelected(3)} button component={NavLink} to="/userDashboard/userWishlist">
-                    {
-                        selected === 3 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
-                            <BookmarksIcon className='text-black text-4xl' />
-                        </ListItemIcon>
-                            <ListItemText primary="Wishlist and Favorites" /></div> : <div className='flex align-middle'><ListItemIcon>
-                                <BookmarksIcon className="text-white" />
-                            </ListItemIcon>
-                            <ListItemText primary="Wishlist and Favorites" className='text-2xl' /></div>
-                    }
-                </ListItem>
+        <ListItem button component={NavLink} to="/userDashboard/userWishlist">
+          <div
+            className={`w-full rounded-lg flex p-2 ${
+              currentPath === "/userDashboard/userWishlist"
+                ? "bg-white text-black"
+                : "text-white"
+            }`}
+          >
+            <ListItemIcon>
+              <BookmarksIcon
+                className={`${
+                  currentPath === "/userDashboard/userWishlist"
+                    ? "text-black"
+                    : "text-white"
+                }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Wishlist and Favorites" />
+          </div>
+        </ListItem>
 
-                <ListItem onClick={() => setSelected(4)} button component={NavLink} to="/userDashboard/notifications">
-                    {
-                        selected === 4 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
-                            <NotificationsIcon className='text-black text-4xl' />
-                        </ListItemIcon>
-                            <ListItemText primary="Notifications and Alerts" /></div> : <div className='flex align-middle'><ListItemIcon>
-                                <NotificationsIcon className="text-white" />
-                            </ListItemIcon>
-                            <ListItemText primary="Notifications and Alerts" className='text-2xl' /></div>
-                    }
-                </ListItem>
+        <ListItem button component={NavLink} to="/userDashboard/notifications">
+          <div
+            className={`w-full rounded-lg flex p-2 ${
+              currentPath === "/userDashboard/notifications"
+                ? "bg-white text-black"
+                : "text-white"
+            }`}
+          >
+            <ListItemIcon>
+              <NotificationsIcon
+                className={`${
+                  currentPath === "/userDashboard/notifications"
+                    ? "text-black"
+                    : "text-white"
+                }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Notifications and Alerts" />
+          </div>
+        </ListItem>
 
-                <ListItem onClick={() => setSelected(5)} button component={NavLink} to="/userDashboard/customerSupport">
-                    {
-                        selected === 5 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
-                            <MessageIcon className='text-black text-4xl' />
-                        </ListItemIcon>
-                            <ListItemText primary="Inbox" /></div> : <div className='flex align-middle'><ListItemIcon>
-                                <MessageIcon className="text-white" />
-                            </ListItemIcon>
-                            <ListItemText primary="Inbox" className='text-2xl' /></div>
-                    }
-                </ListItem>
+        <ListItem
+          button
+          component={NavLink}
+          to="/userDashboard/customerSupport"
+        >
+          <div
+            className={`w-full rounded-lg flex p-2 ${
+              currentPath === "/userDashboard/customerSupport"
+                ? "bg-white text-black"
+                : "text-white"
+            }`}
+          >
+            <ListItemIcon>
+              <MessageIcon
+                className={`${
+                  currentPath === "/userDashboard/customerSupport"
+                    ? "text-black"
+                    : "text-white"
+                }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Inbox" />
+          </div>
+        </ListItem>
 
-                <ListItem className='place-self-end' button component={Link} to="/">
-                    <ListItemIcon>
-                        <ExitToAppIcon className="text-white" />
-                    </ListItemIcon>
-                    <ListItemText primary="Exit" />
-                </ListItem>
-            </List>
-        </div>
-    );
+        <ListItem className="place-self-end" button component={Link} to="/">
+          <ListItemIcon>
+            <ExitToAppIcon className="text-white" />
+          </ListItemIcon>
+          <ListItemText primary="Exit" />
+        </ListItem>
+      </List>
+    </div>
+  );
 };
 
 export default UserSideBar;
