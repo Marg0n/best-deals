@@ -30,10 +30,10 @@ import MyToken from "../Pages/MyToken/MyToken";
 import MyWishList from "../Pages/MyWishList/MyWishList";
 import SingleProductCheckoutPage from "../Pages/SingleProductCheckoutPage/SingleProductCheckoutPage";
 import Root from "../Root/Root";
-import AdminRoutes from './AdminRoutes';
+import AdminRoutes from "./AdminRoutes";
 import PrivateRoute from "./PrivateRoute";
 import UserRoute from "./UserRoute";
-import VendorRoute from './VendorRoute';
+import VendorRoute from "./VendorRoute";
 import Inbox from "../Components/Inbox/Inbox";
 import NewHomepage from "../Pages/NewHomePage/NewHomepage";
 import VendorRegistration from "../Components/VendorRegistration/VendorRegistration";
@@ -45,11 +45,11 @@ const Router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <Home />,
+        element: <NewHomepage/>,
       },
       {
-        path: "/home2",
-        element: <NewHomepage />,
+        path: "/all",
+        element: <Home />,
       },
       {
         path: "/details/:_id",
@@ -103,8 +103,8 @@ const Router = createBrowserRouter([
       },
       {
         path: "/VendorRegistration",
-        element: <VendorRegistration/>
-      }
+        element: <VendorRegistration />,
+      },
     ],
   },
   {
@@ -117,78 +117,90 @@ const Router = createBrowserRouter([
   },
   {
     path: "/vendorDashboard",
-    element: <VendorRoute><VendorDashboard /></VendorRoute>,
+    element: (
+      <VendorRoute>
+        <VendorDashboard />
+      </VendorRoute>
+    ),
     children: [
       {
-        path: '/vendorDashboard',
-        element: <VendorHome />
+        path: "/vendorDashboard",
+        element: <VendorHome />,
       },
       {
-        path: '/vendorDashboard/orders',
-        element: <VendorOrders />
+        path: "/vendorDashboard/orders",
+        element: <VendorOrders />,
       },
       {
-        path: '/vendorDashboard/products',
-        element: <VendorAddProduct />
+        path: "/vendorDashboard/products",
+        element: <VendorAddProduct />,
       },
       {
-        path: '/vendorDashboard/inbox',
-        element: <Inbox />
-      }
-    ]
+        path: "/vendorDashboard/inbox",
+        element: <Inbox />,
+      },
+    ],
   },
   {
-    path: '/adminDashboard',
-    element: <AdminRoutes><AdminDashboard /></AdminRoutes>,
+    path: "/adminDashboard",
+    element: (
+      <AdminRoutes>
+        <AdminDashboard />
+      </AdminRoutes>
+    ),
     children: [
       {
-        path: '/adminDashboard',
-        element: <AdminHome />
+        path: "/adminDashboard",
+        element: <AdminHome />,
       },
       {
-        path: '/adminDashboard/allUsers',
-        element: <AdminAllUsers />
+        path: "/adminDashboard/allUsers",
+        element: <AdminAllUsers />,
       },
       {
-        path: '/adminDashboard/allVendors',
-        element: <AdminAllVendors />
+        path: "/adminDashboard/allVendors",
+        element: <AdminAllVendors />,
       },
       {
-        path: '/adminDashboard/vendorRequest',
-        element: <AdminVendorRequest />
-      }
-    ]
+        path: "/adminDashboard/vendorRequest",
+        element: <AdminVendorRequest />,
+      },
+    ],
   },
   {
-    path: '/userDashboard',
-    element: <UserRoute><UserDashboard /></UserRoute>,
+    path: "/userDashboard",
+    element: (
+      <UserRoute>
+        <UserDashboard />
+      </UserRoute>
+    ),
     children: [
       {
         index: true,
         element: <UserHome />,
       },
       {
-        path: '/userDashboard/userWishlist',
+        path: "/userDashboard/userWishlist",
         element: <UserWishlist />,
       },
       {
-        path: '/userDashboard/orderManagement',
+        path: "/userDashboard/orderManagement",
         element: <OrderManagement />,
       },
       {
-        path: '/userDashboard/notifications',
+        path: "/userDashboard/notifications",
         element: <UserAlert />,
       },
       {
-        path: '/userDashboard/customerSupport',
+        path: "/userDashboard/customerSupport",
         element: <CustomerSupport />,
       },
       {
-        path: '/userDashboard/inbox',
+        path: "/userDashboard/inbox",
         element: <Inbox />,
       },
     ],
-  }
+  },
 ]);
 
 export default Router;
