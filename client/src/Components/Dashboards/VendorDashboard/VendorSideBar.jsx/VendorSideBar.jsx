@@ -108,7 +108,7 @@ const VendorSideBar = () => {
 
         {/* orders */}
         <ListItem button component={NavLink} to="/vendorDashboard/orders">
-        <div
+          <div
             className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/vendorDashboard/orders"
               ? "bg-white text-black"
               : "text-white"
@@ -126,21 +126,20 @@ const VendorSideBar = () => {
 
         {/* add product */}
         <ListItem button component={NavLink} to="/vendorDashboard/products">
-          {currentPath === "/vendorDashboard/products" ? (
-            <div className="text-black bg-white w-full rounded-lg flex p-2">
-              <ListItemIcon>
-                <AddShoppingCartIcon className="text-black text-4xl" />
-              </ListItemIcon>
-              <ListItemText primary="Add Product" />
-            </div>
-          ) : (
-            <div className="flex align-middle">
-              <ListItemIcon>
-                <AddShoppingCartIcon className="text-white" />
-              </ListItemIcon>
-              <ListItemText primary="Add Product" className="text-2xl" />
-            </div>
-          )}
+          <div
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/vendorDashboard/products"
+              ? "bg-white text-black"
+              : "text-white"
+              }`}
+          >
+            <ListItemIcon>
+              <AddShoppingCartIcon
+                className={`${currentPath === "/vendorDashboard/products" ? "text-black" : "text-white"
+                  }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Add Product" />
+          </div>
         </ListItem>
 
         {/* inbox */}
