@@ -68,10 +68,10 @@ const Inbox = () => {
 
 
     return (
-        <div className='flex flex-col gap-4 lg:flex-row md:min-h-[90vh] p-8'>
+        <div className='flex flex-col gap-4 lg:flex-row md:min-h-[90vh] md:p-8'>
             {/* Message List */}
             <div
-                className='glass bg-red-300 p-10 lg:w-1/3 w-full lg:h-[90vh] min-h-[40vh] overflow-auto'
+                className='glass bg-red-300 p-2 lg:w-1/3 w-full lg:h-[90vh] min-h-[40vh] overflow-auto'
                 style={{ marginRight: '20px' }}>
                 <Typography variant="h6" gutterBottom>
                     Inbox
@@ -103,7 +103,7 @@ const Inbox = () => {
 
             {/* Message Details */}
             <div
-                className="glass bg-red-300 lg:w-2/3 w-full p-10 min-h-[50vh] lg:h-[90vh] overflow-auto"
+                className="glass bg-red-300 lg:w-2/3 w-full p-2 min-h-[50vh] lg:h-[90vh] overflow-auto"
                 style={{ display: 'flex', flexDirection: 'column' }}>
                 {selectedMessage ? (
                     <div className='flex flex-col max-h-screen bg-white shadow-lg rounded-lg overflow-y-auto '>
