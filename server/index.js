@@ -502,8 +502,39 @@ async function run() {
     // ==================================
     app.get('/notification/:email', async (req, res) => {
       try {
-        const user = await usersCollection.findOne({ email: req.params.email }, { projection: { notification: 1 } });
+        const user = await usersCollection.findOne(
+          { email: req.params.email },
+          {
+            projection: { notification: 1, status: 1 }
+          });
         res.status(200).json(user.notification);
+      } catch (err) {
+        res.status(400).json({ error: err.message });
+      }
+    });
+
+    // ==================================
+    // Users' notification status update
+    // ==================================
+    app.patch('/updateNotification/:email', async (req, res) => {
+      try {
+        const mail = req.params?.email;
+        const body = req?.body;
+        const { status, notification } = body;
+        const options = { upsert: true };
+        const update = {}
+
+        if (status !== notification.notifyStatus) {
+          update = {
+            $set: {
+              status: status,
+              notification: { notifyStatus: status },
+            },
+          };
+        }
+
+        const result = await usersCollection.update({ email: mail }, update, options);
+        res.status(200).send(result);
       } catch (err) {
         res.status(400).json({ error: err.message });
       }
