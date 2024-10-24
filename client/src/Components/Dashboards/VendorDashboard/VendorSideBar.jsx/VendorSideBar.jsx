@@ -144,21 +144,20 @@ const VendorSideBar = () => {
 
         {/* inbox */}
         <ListItem button component={NavLink} to="/vendorDashboard/inbox">
-          {currentPath === "/vendorDashboard/inbox" ? (
-            <div className="text-black bg-white w-full rounded-lg flex p-2">
-              <ListItemIcon>
-                <MessageIcon className="text-black text-4xl" />
-              </ListItemIcon>
-              <ListItemText primary="Inbox" />
-            </div>
-          ) : (
-            <div className="flex align-middle">
-              <ListItemIcon>
-                <MessageIcon className="text-white" />
-              </ListItemIcon>
-              <ListItemText primary="Inbox" className="text-2xl" />
-            </div>
-          )}
+          <div
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/vendorDashboard/inbox"
+              ? "bg-white text-black"
+              : "text-white"
+              }`}
+          >
+            <ListItemIcon>
+              <MessageIcon
+                className={`${currentPath === "/vendorDashboard/inbox" ? "text-black" : "text-white"
+                  }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Inbox" />
+          </div>
         </ListItem>
 
         {/* exit */}
