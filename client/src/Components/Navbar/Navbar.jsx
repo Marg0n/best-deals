@@ -111,7 +111,7 @@ const Navbar = ({ toggleTheme, theme }) => {
         </Link>
       </li>
       <li className="rounded-xl p-2 m-2 text-right" onClick={handleLogout}>
-        <button className="bg-base-300 hover:bg-[#737373] hover:text-white block text-center text-base font-semibold">
+        <button className="bg-base-300 hover:bg-[#737373] hover:text-white text-red-400 block text-center text-base font-semibold font-serif">
           Logout
         </button>
       </li>
