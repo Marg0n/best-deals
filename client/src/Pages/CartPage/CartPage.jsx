@@ -75,11 +75,12 @@ const CartPage = () => {
     // const orderDate = new Date().toUTCString();
     const items = [cart.cartIteams];
     const status = 'Ordered';
+    const notification = {notifyStatus: status};
     const paymentMethod = contactInfo?.paymentMethod || "CoD";
     const shippingAddress = contactInfo?.address;
     const transactionId = contactInfo?.trackingNumber;
 
-    const booking = { orderDate, items, totalAmount, status, paymentMethod };
+    const booking = { orderDate, items, totalAmount, status, paymentMethod, notification };
     const userBookingCoD = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress, transactionId };
     const codBooking = { ...booking, ...contactInfo };
 
