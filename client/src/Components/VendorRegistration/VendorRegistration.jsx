@@ -76,7 +76,7 @@ const VendorRegistration = () => {
                         type="text"
                         id="name"
                         {...register('name', { required: 'Name is required' })}
-                        className={`shadow appearance-none border ${errors.name ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline`}
+                        className={`shadow appearance-none bg-white text-black border ${errors.name ? 'border-red-500' : ''} rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline`}
                     />
                     {errors.name && <p className="text-red-500 text-xs italic">{errors.name.message}</p>}
                 </div>
@@ -89,7 +89,7 @@ const VendorRegistration = () => {
                         type="text"
                         id="companyName"
                         {...register('companyName', { required: 'Company name is required' })}
-                        className={`shadow appearance-none border ${errors.companyName ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline`}
+                        className={`shadow appearance-none bg-white text-black border ${errors.companyName ? 'border-red-500' : ''} rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline`}
                     />
                     {errors.companyName && <p className="text-red-500 text-xs italic">{errors.companyName.message}</p>}
                 </div>
@@ -102,7 +102,7 @@ const VendorRegistration = () => {
                         type="tel"
                         id="phoneNumber"
                         {...register('phoneNumber', { required: 'Phone number is required', pattern: { value: /^[0-9]{11}$/, message: 'Phone number must be 11 digits' } })}
-                        className={`shadow appearance-none border ${errors.phoneNumber ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline`}
+                        className={`shadow appearance-none bg-white text-black border ${errors.phoneNumber ? 'border-red-500' : ''} rounded w-full py-2 px-3  leading-tight focus:outline-none focus:shadow-outline`}
                     />
                     {errors.phoneNumber && <p className="text-red-500 text-xs italic">{errors.phoneNumber.message}</p>}
                 </div>

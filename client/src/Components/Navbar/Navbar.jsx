@@ -190,7 +190,7 @@ const Navbar = ({ toggleTheme, theme }) => {
             </div>
             <div
               tabIndex={0}
-              className={`card card-compact dropdown-content bg-base-100 z-[1] mt-12 w-52 shadow ${theme === "light" ? "bg-[#0cc0df]/70" : "bg-[#737373]/70"
+              className={`card card-compact dropdown-content bg-base-100 text-white z-[1] mt-12 w-52 shadow ${theme === "light" ? "bg-[#0cc0df]/70" : "bg-[#737373]/70"
                 } glass`}
             >
               <div className="card-body">
