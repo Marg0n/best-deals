@@ -19,7 +19,7 @@ const Details = () => {
     const products = useLoaderData();
     const { _id } = useParams();
     const { user } = useAuth()
-    const product = products?.find(product => product._id === _id);
+    const product = products?.find(product => product?._id === _id);
     
 
     const axiosCommon = useAxiosCommon()
@@ -230,7 +230,7 @@ const Details = () => {
                                     <h1 className='mb-1 dark:text-white'>Please Select</h1>
                                     <select
                                         onChange={(e) => handleVerient(e)}
-                                        className="select select-bordered w-full max-w-xs"
+                                        className="select select-bordered w-full max-w-xs bg-white text-black"
                                     >
                                         {/* Placeholder option */}
                                         <option value="" disabled selected>

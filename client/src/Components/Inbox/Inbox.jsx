@@ -16,7 +16,7 @@ const Inbox = () => {
 
 
     const axiosCommon = useAxiosCommon();
-    const { data: chatList, isLoading, refetch } = useQuery({
+    const { data: chatList, isFetching, refetch } = useQuery({
         queryKey: ["chatlist"],
         queryFn: async () => {
             const res = await axiosCommon.get(`/inbox/${user?.email}`, {
@@ -31,9 +31,10 @@ const Inbox = () => {
             const updatedChat = chatList.find(chat => chat._id === selectedMessage._id);
             if (updatedChat) {
                 setSelectedMessage(updatedChat); // Update the selectedMessage with the latest data
+                refetch();
             }
         }
-    }, [chatList, selectedMessage]);
+    }, [chatList, selectedMessage, isFetching]);
 
 
     const handleSelectMessage = (message) => {
