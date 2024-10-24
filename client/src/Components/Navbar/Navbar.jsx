@@ -126,7 +126,7 @@ const Navbar = ({ toggleTheme, theme }) => {
       <div className="navbar  container mx-auto">
         {/* logo */}
         <div className="flex-1">
-          <Link  to='/'>
+          <Link to='/'>
             <img
               className="h-10 lg:h-16"
               src="https://i.ibb.co.com/rtTfZsH/Bestdeal-white-text-log.png"
@@ -190,7 +190,8 @@ const Navbar = ({ toggleTheme, theme }) => {
             </div>
             <div
               tabIndex={0}
-              className="card card-compact dropdown-content bg-base-100 z-[1] mt-8 w-52 shadow"
+              className={`card card-compact dropdown-content bg-base-100 z-[1] mt-12 w-52 shadow ${theme === "light" ? "bg-[#0cc0df]/40" : "bg-[#737373]/40"
+                } `}
             >
               <div className="card-body">
                 <p className="text-lg font-bold">
@@ -216,7 +217,7 @@ const Navbar = ({ toggleTheme, theme }) => {
                   <p
                     className={
                       cart?.cartIteams?.length === 0
-                        ? ``
+                        ? `hidden`
                         : `font-semibold text-red-500 animate-pulse hover:animate-none`
                     }
                   >
