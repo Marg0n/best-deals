@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import GroupIcon from "@mui/icons-material/Group";
-import StoreIcon from "@mui/icons-material/Store";
-import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import DomainAddIcon from "@mui/icons-material/DomainAdd";
+import React, { useState } from 'react';
+import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import GroupIcon from '@mui/icons-material/Group';
+import StoreIcon from '@mui/icons-material/Store';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import DomainAddIcon from '@mui/icons-material/DomainAdd';
+import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 import { Link, useLocation } from "react-router-dom";
 
 const AdminSideBar = () => {
@@ -119,6 +120,27 @@ const AdminSideBar = () => {
             <ListItemText
               primary="Vendor Request"
               className={selected === 4 ? "" : "text-2xl"}
+            />
+          </div>
+        </ListItem>
+        <ListItem button component={Link} to="/adminDashboard/all-orders">
+          <div
+            className={
+              selected === 5
+                ? "text-black bg-white w-full rounded-lg flex p-2"
+                : "flex align-middle"
+            }
+          >
+            <ListItemIcon>
+              <DomainAddIcon
+                className={
+                  selected === 5 ? "text-black text-4xl" : "text-white"
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary="Orders"
+              className={selected === 5 ? "" : "text-2xl"}
             />
           </div>
         </ListItem>

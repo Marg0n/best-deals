@@ -424,6 +424,43 @@ async function run() {
     });
 
     // ==================================
+    // post new orders
+    // ==================================
+    app.post('/newOrder', async (req, res) => {
+      const newOrder = req.body
+      // console.log(newOrder);
+      const result = await orderCollection.insertOne(newOrder)
+    })
+
+    // ==================================
+    // patch  orders status
+    // ==================================
+    app.patch('/orderStatus', async (req, res) => {
+      const updatedStatus = req.body;
+      const { orderID, status } = updatedStatus;
+      try {
+        const filter = { _id: new ObjectId(orderID) };
+        const updateDoc = {
+          $set: {
+            status: status,  // Update the status field
+          },
+        };
+        // Update the order status
+        const result = await orderCollection.updateOne(filter, updateDoc);
+
+        // Check if the order was modified
+        if (result.modifiedCount > 0) {
+          return res.status(200).send({ message: 'Order status updated successfully' });
+        } else {
+          return res.status(404).send({ message: 'Order not found or status unchanged' });
+        }
+      } catch (error) {
+        console.error('Error updating order status:', error);
+        return res.status(500).send({ message: 'Failed to update order status' });
+      }
+    });
+
+    // ==================================
     // Post Products
     // ==================================
     app.post("/all-products", async (req, res) => {
@@ -431,6 +468,8 @@ async function run() {
       const results = await productCollection.insertOne(postProduct);
       res.send(results);
     });
+
+
 
     // ==================================
     // Patch Users' last login
@@ -508,25 +547,27 @@ async function run() {
     // ==================================
     // vendor status against purchase of user
     // ==================================
-    app.post("/ordersReq/:email", async (req, res) => {
-      try {
-        const mail = req.params?.email;
-        const body = req?.body;
+    // app.post("/ordersReq/:email", async (req, res) => {
+    //   try {
+    //     const mail = req.params?.email;
+    //     const body = req?.body;
 
-        const result = await orderCollection.updateOne(
-          { email: mail },
-          { $push: { shippingInformation: body } },
-          { upsert: true }
-        );
+    //     const result = await orderCollection.updateOne(
+    //       { email: mail },
+    //       { $push: { shippingInformation: body } },
+    //       { upsert: true }
+    //     );
 
-        res.send(result);
-      } catch (err) {
-        console.error("Error updating user payment status:", err);
-        res
-          .status(500)
-          .json({ message: "Internal server error from user payment status!" });
-      }
-    });
+    //     res.send(result);
+    //   } catch (err) {
+    //     console.error("Error updating user payment status:", err);
+    //     res
+    //       .status(500)
+    //       .json({ message: "Internal server error from user payment status!" });
+    //   }
+    // });
+
+
 
     // ==================================
     // warning vendor
