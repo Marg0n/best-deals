@@ -76,10 +76,11 @@ const VendorOrders = () => {
     };
 
     if (isLoading) {
-        return <Typography>Loading...</Typography>; // Show loading state
+        return <Typography className='flex justify-center items-center h-screen'>Loading...</Typography>; // Show loading state
     }
 
     return (
+        <div className='p-8 min-h-screen space-y-4'>
         <div className="p-4 bg-white rounded-lg">
             <h1 className="text-3xl mb-4 text-black">All Products</h1>
 
@@ -151,6 +152,7 @@ const VendorOrders = () => {
                     Next
                 </Button>
             </div>
+        </div>
         </div>
     );
 };

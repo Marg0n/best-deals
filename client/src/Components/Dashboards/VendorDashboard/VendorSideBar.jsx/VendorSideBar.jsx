@@ -42,22 +42,6 @@ const VendorSideBar = () => {
           )}
         </ListItem>
 
-        <ListItem button component={NavLink} to="/userDashboard">
-          <div
-            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/userDashboard"
-              ? "bg-white text-black"
-              : "text-white"
-              }`}
-          >
-            <ListItemIcon>
-              <DashboardIcon
-                className={`${currentPath === "/userDashboard" ? "text-black" : "text-white"
-                  }`}
-              />
-            </ListItemIcon>
-            <ListItemText primary="Dashboard" />
-          </div>
-        </ListItem>
 
         <ListItem
           button
@@ -118,7 +102,7 @@ const VendorSideBar = () => {
             </ListItemIcon>
             <ListItemText primary="Notifications and Alerts" />
           </div>
-        </ListItem>   
+        </ListItem>
 
         <ListItem button component={NavLink} to="/vendorDashboard/orders">
           {currentPath === "/vendorDashboard/orders" ? (

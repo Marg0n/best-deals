@@ -129,6 +129,18 @@ const Router = createBrowserRouter([
         element: <VendorHome />,
       },
       {
+        path: "/vendorDashboard/orderManagement",
+        element: <OrderManagement />,
+      },
+      {
+        path: "/vendorDashboard/userWishlist",
+        element: <UserWishlist />,
+      },
+      {
+        path: "/vendorDashboard/notifications",
+        element: <UserAlert />,
+      },
+      {
         path: "/vendorDashboard/orders",
         element: <VendorOrders />,
       },
