@@ -18,7 +18,7 @@ const UserAlert = () => {
 
     // User data
     const { profile } = useUserProfile();
-    console.log('buy', profile[0]?.purchaseHistory[0])
+    // console.log('buy', profile[0])
 
     return (
         <div className="p-8 min-h-screen space-y-4">

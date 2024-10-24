@@ -86,7 +86,7 @@ const DetailsPageTabs = ({ vendorInfo, description, commnetDetails, product }) =
                     </div>
 
                     {
-                        profile[0].role === 'User' &&
+                        profile[0]?.role === 'User' &&
                         <div className='flex flex-col md:flex-row gap-5'>
                             <Link className="btn bg-[#775050] border-none text-white mt-3">
                                 Visit Vendor Store

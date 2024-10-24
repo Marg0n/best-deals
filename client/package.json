@@ -15,7 +15,7 @@
     "@egjs/react-flicking": "^4.11.4",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@headlessui/react": "^2.1.8",
+    "@headlessui/react": "^2.1.10",
     "@mui/icons-material": "^6.1.1",
     "@mui/material": "^6.1.4",
     "@mui/styled-engine-sc": "^6.1.1",

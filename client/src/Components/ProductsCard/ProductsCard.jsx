@@ -32,7 +32,7 @@ const ProductsCard = ({ product , showTotalSold }) => {
               <img
                 src={productImage}
                 alt=""
-                className={`object-fit object-center w-full h-72  duration-300 ${ProductStyle.backProductTransition
+                className={`object-fit object-center w-full h-64  duration-300 ${ProductStyle.backProductTransition
                   }  ${isHovered ? `${ProductStyle.cardProduct}` : ``}`}
               />
             </div>

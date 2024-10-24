@@ -13,8 +13,8 @@ import NothingInCart from "../../Components/NothingInCart/NothingInCart";
 import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
 import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
-import { localDate } from './../../utils/useBDdateTime';
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { localDate } from './../../utils/useBDdateTime';
 
 
 
@@ -75,11 +75,13 @@ const CartPage = () => {
     // const orderDate = new Date().toUTCString();
     const items = [cart.cartIteams];
     const status = 'Ordered';
+    const notification = { notifyStatus: status };
     const paymentMethod = contactInfo?.paymentMethod || "CoD";
     const shippingAddress = contactInfo?.address;
     const transactionId = contactInfo?.trackingNumber;
 
-    const booking = { orderDate, items, totalAmount, status, paymentMethod };
+
+    const booking = { orderDate, items, totalAmount, status, paymentMethod, notification, customerEmail: userEmail };
     const userBookingCoD = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress, transactionId };
     const codBooking = { ...booking, ...contactInfo };
 
@@ -151,7 +153,7 @@ const CartPage = () => {
             items[0]?.map(item => {
                 console.log(item?.vendorEmail)
 
-                axiosSecure.post(`/ordersReq/${item?.vendorEmail}`, codBooking)
+                axiosSecure.post(`/newOrder`, codBooking, item?.vendorEmail)
             })
             setShowInvoiceModal(false);
             dispacth(removeAllFromCartlist())

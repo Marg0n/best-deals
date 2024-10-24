@@ -26,7 +26,7 @@ const UserSideBar = () => {
       <List>
         <ListItem button component={NavLink} to="/userDashboard">
           <div
-            className={`w-full rounded-lg flex p-2 ${
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${
               currentPath === "/userDashboard"
                 ? "bg-white text-black"
                 : "text-white"
@@ -49,7 +49,7 @@ const UserSideBar = () => {
           to="/userDashboard/orderManagement"
         >
           <div
-            className={`w-full rounded-lg flex p-2 ${
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${
               currentPath === "/userDashboard/orderManagement"
                 ? "bg-white text-black"
                 : "text-white"
@@ -70,7 +70,7 @@ const UserSideBar = () => {
 
         <ListItem button component={NavLink} to="/userDashboard/userWishlist">
           <div
-            className={`w-full rounded-lg flex p-2 ${
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${
               currentPath === "/userDashboard/userWishlist"
                 ? "bg-white text-black"
                 : "text-white"
@@ -91,7 +91,7 @@ const UserSideBar = () => {
 
         <ListItem button component={NavLink} to="/userDashboard/notifications">
           <div
-            className={`w-full rounded-lg flex p-2 ${
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${
               currentPath === "/userDashboard/notifications"
                 ? "bg-white text-black"
                 : "text-white"
@@ -116,7 +116,7 @@ const UserSideBar = () => {
           to="/userDashboard/customerSupport"
         >
           <div
-            className={`w-full rounded-lg flex p-2 ${
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${
               currentPath === "/userDashboard/customerSupport"
                 ? "bg-white text-black"
                 : "text-white"
@@ -136,10 +136,12 @@ const UserSideBar = () => {
         </ListItem>
 
         <ListItem className="place-self-end" button component={Link} to="/">
+        <div className="w-full p-2 flex items-center justify-center">            
           <ListItemIcon>
             <ExitToAppIcon className="text-white" />
           </ListItemIcon>
           <ListItemText primary="Exit" />
+        </div>
         </ListItem>
       </List>
     </div>

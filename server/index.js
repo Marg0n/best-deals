@@ -145,16 +145,11 @@ async function run() {
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
-    const productCollection = client
-      .db("BestDeals")
-      .collection("ProductCollection");
-    const orderCollection = client
-      .db("BestDeals")
-      .collection("OrderManagement");
+    const productCollection = client.db("BestDeals").collection("ProductCollection");
+    const orderCollection = client.db("BestDeals").collection("OrderManagement");
     const cartList = client.db("BestDeals").collection("CartList");
-    const inboxChatCollections = client
-      .db("BestDeals")
-      .collection("inboxChatCollections");
+    const inboxChatCollections = client.db("BestDeals").collection("inboxChatCollections");
+
 
     // ==================================
     // Admin verify
@@ -429,6 +424,43 @@ async function run() {
     });
 
     // ==================================
+    // post new orders
+    // ==================================
+    app.post('/newOrder', async (req, res) => {
+      const newOrder = req.body
+      // console.log(newOrder);
+      const result = await orderCollection.insertOne(newOrder)
+    })
+
+    // ==================================
+    // patch  orders status
+    // ==================================
+    app.patch('/orderStatus', async (req, res) => {
+      const updatedStatus = req.body;
+      const { orderID, status } = updatedStatus;
+      try {
+        const filter = { _id: new ObjectId(orderID) };
+        const updateDoc = {
+          $set: {
+            status: status,  // Update the status field
+          },
+        };
+        // Update the order status
+        const result = await orderCollection.updateOne(filter, updateDoc);
+
+        // Check if the order was modified
+        if (result.modifiedCount > 0) {
+          return res.status(200).send({ message: 'Order status updated successfully' });
+        } else {
+          return res.status(404).send({ message: 'Order not found or status unchanged' });
+        }
+      } catch (error) {
+        console.error('Error updating order status:', error);
+        return res.status(500).send({ message: 'Failed to update order status' });
+      }
+    });
+
+    // ==================================
     // Post Products
     // ==================================
     app.post("/all-products", async (req, res) => {
@@ -436,6 +468,8 @@ async function run() {
       const results = await productCollection.insertOne(postProduct);
       res.send(results);
     });
+
+
 
     // ==================================
     // Patch Users' last login
@@ -464,27 +498,76 @@ async function run() {
     });
 
     // ==================================
-    // vendor status against purchase of user
+    // Users' notification get
     // ==================================
-    app.post("/ordersReq/:email", async (req, res) => {
+    app.get('/notification/:email', async (req, res) => {
+      try {
+        const user = await usersCollection.findOne(
+          { email: req.params.email },
+          {
+            projection: { notification: 1, status: 1 }
+          });
+        res.status(200).json(user.notification);
+      } catch (err) {
+        res.status(400).json({ error: err.message });
+      }
+    });
+
+    // ==================================
+    // Users' notification status update
+    // ==================================
+    app.patch('/updateNotification/:email', async (req, res) => {
       try {
         const mail = req.params?.email;
         const body = req?.body;
+        const { status, notification } = body;
+        const options = { upsert: true };
+        const update = {}
 
-        const result = await orderCollection.updateOne(
-          { email: mail },
-          { $push: { shippingInformation: body } },
-          { upsert: true }
-        );
+        if (status !== notification.notifyStatus) {
+          update = {
+            $set: {
+              status: status,
+              notification: { notifyStatus: status },
+            },
+          };
+        }
 
-        res.send(result);
+        const result = await usersCollection.update({ email: mail }, update, options);
+        res.status(200).send(result);
       } catch (err) {
-        console.error("Error updating user payment status:", err);
-        res
-          .status(500)
-          .json({ message: "Internal server error from user payment status!" });
+        res.status(400).json({ error: err.message });
       }
     });
+
+    app.listen(3000, () => {
+      console.log('Server is running on port 3000');
+    });
+
+    // ==================================
+    // vendor status against purchase of user
+    // ==================================
+    // app.post("/ordersReq/:email", async (req, res) => {
+    //   try {
+    //     const mail = req.params?.email;
+    //     const body = req?.body;
+
+    //     const result = await orderCollection.updateOne(
+    //       { email: mail },
+    //       { $push: { shippingInformation: body } },
+    //       { upsert: true }
+    //     );
+
+    //     res.send(result);
+    //   } catch (err) {
+    //     console.error("Error updating user payment status:", err);
+    //     res
+    //       .status(500)
+    //       .json({ message: "Internal server error from user payment status!" });
+    //   }
+    // });
+
+
 
     // ==================================
     // warning vendor
