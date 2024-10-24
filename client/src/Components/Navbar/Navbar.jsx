@@ -190,8 +190,8 @@ const Navbar = ({ toggleTheme, theme }) => {
             </div>
             <div
               tabIndex={0}
-              className={`card card-compact dropdown-content bg-base-100 z-[1] mt-12 w-52 shadow ${theme === "light" ? "bg-[#0cc0df]/40" : "bg-[#737373]/40"
-                } `}
+              className={`card card-compact dropdown-content bg-base-100 z-[1] mt-12 w-52 shadow ${theme === "light" ? "bg-[#0cc0df]/80" : "bg-[#737373]/80"
+                } glass`}
             >
               <div className="card-body">
                 <p className="text-lg font-bold">
@@ -270,7 +270,7 @@ const Navbar = ({ toggleTheme, theme }) => {
                 {dropdown && (
                   <ul
                     tabIndex={0}
-                    className="mt-3 z-[2] p-2 shadow-2xl menu menu-sm dropdown-content  rounded-box w-64 bg-[#0cc0df]/90 "
+                    className="mt-3 z-[2] p-2 shadow-2xl menu menu-sm dropdown-content  rounded-box w-64 bg-[#0cc0df]/90 glass"
                   >
                     <li>
                       <p className="flex justify-center items-center font-medium text-base-100">
