@@ -89,7 +89,7 @@ const VendorRegistration = () => {
                         type="text"
                         id="companyName"
                         {...register('companyName', { required: 'Company name is required' })}
-                        className={`shadow appearance-none border ${errors.companyName ? 'border-red-500' : ''} rounded w-full py-2 px-3 text-white leading-tight focus:outline-none focus:shadow-outline`}
+                        className={`shadow appearance-none bg-white text-black border ${errors.companyName ? 'border-red-500' : ''} rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline`}
                     />
                     {errors.companyName && <p className="text-red-500 text-xs italic">{errors.companyName.message}</p>}
                 </div>
