@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { TiArrowBack } from "react-icons/ti";
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ClimbingBoxLoader } from 'react-spinners';
-import { Swal } from 'sweetalert2';
+import Swal  from 'sweetalert2';
 import useAuth from '../../../hooks/useAuth';
 import useAxiosCommon from '../../../hooks/useAxiosCommon';
 import { imageUpload } from '../../../utils/imageUpload';
