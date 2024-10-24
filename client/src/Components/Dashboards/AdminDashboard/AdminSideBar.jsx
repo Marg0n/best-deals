@@ -102,30 +102,6 @@ const AdminSideBar = () => {
           </div>
         </ListItem>
 
-<<<<<<< HEAD
-                <ListItem onClick={() => setSelected(4)} button component={Link} to="/adminDashboard/vendorRequest">
-                    {
-                        selected === 4 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
-                            <DomainAddIcon className='text-black text-4xl' />
-                        </ListItemIcon>
-                            <ListItemText primary="Vendor Request" /></div> : <div className='flex align-middle'><ListItemIcon>
-                                <DomainAddIcon className="text-white" />
-                            </ListItemIcon>
-                            <ListItemText primary="Vendor Request" className='text-2xl' /></div>
-                    }
-                </ListItem>
-                <ListItem onClick={() => setSelected(5)} button component={Link} to="/adminDashboard/all-orders">
-                    {
-                        selected === 5 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
-                            <FolderRoundedIcon className='text-black text-4xl' />
-                        </ListItemIcon>
-                            <ListItemText primary="Orders" /></div> : <div className='flex align-middle'><ListItemIcon>
-                                <FolderRoundedIcon className="text-white" />
-                            </ListItemIcon>
-                            <ListItemText primary="Orders" className='text-2xl' /></div>
-                    }
-                </ListItem>
-=======
         <ListItem button component={Link} to="/adminDashboard/vendorRequest">
           <div
             className={
@@ -147,7 +123,27 @@ const AdminSideBar = () => {
             />
           </div>
         </ListItem>
->>>>>>> 91d09e91c49a52fc3b98a7e22d74bc8aa563bb8f
+        <ListItem button component={Link} to="/adminDashboard/all-orders">
+          <div
+            className={
+              selected === 5
+                ? "text-black bg-white w-full rounded-lg flex p-2"
+                : "flex align-middle"
+            }
+          >
+            <ListItemIcon>
+              <DomainAddIcon
+                className={
+                  selected === 5 ? "text-black text-4xl" : "text-white"
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary="Orders"
+              className={selected === 5 ? "" : "text-2xl"}
+            />
+          </div>
+        </ListItem>
 
         <ListItem className="place-self-end" button component={Link} to="/">
           <ListItemIcon>

@@ -163,7 +163,6 @@ const Router = createBrowserRouter([
         element: <AdminAllVendors />,
       },
       {
-<<<<<<< HEAD
         path: '/adminDashboard/vendorRequest',
         element: <AdminVendorRequest />
       }, 
@@ -172,12 +171,6 @@ const Router = createBrowserRouter([
         element: <AllOrders/>
       }
     ]
-=======
-        path: "/adminDashboard/vendorRequest",
-        element: <AdminVendorRequest />,
-      },
-    ],
->>>>>>> 91d09e91c49a52fc3b98a7e22d74bc8aa563bb8f
   },
   {
     path: "/userDashboard",
