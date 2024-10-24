@@ -24,124 +24,120 @@ const UserSideBar = () => {
       </div>
 
       <List>
+        {/* dashboard */}
         <ListItem button component={NavLink} to="/userDashboard">
           <div
-            className={`w-full rounded-lg flex p-2 items-center justify-center ${
-              currentPath === "/userDashboard"
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/userDashboard"
                 ? "bg-white text-black"
                 : "text-white"
-            }`}
+              }`}
           >
             <ListItemIcon>
               <DashboardIcon
-                className={`${
-                  currentPath === "/userDashboard" ? "text-black" : "text-white"
-                }`}
+                className={`${currentPath === "/userDashboard" ? "text-black" : "text-white"
+                  }`}
               />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
           </div>
         </ListItem>
 
+        {/* order management table */}
         <ListItem
           button
           component={NavLink}
           to="/userDashboard/orderManagement"
         >
           <div
-            className={`w-full rounded-lg flex p-2 items-center justify-center ${
-              currentPath === "/userDashboard/orderManagement"
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/userDashboard/orderManagement"
                 ? "bg-white text-black"
                 : "text-white"
-            }`}
+              }`}
           >
             <ListItemIcon>
               <ListAltIcon
-                className={`${
-                  currentPath === "/userDashboard/orderManagement"
+                className={`${currentPath === "/userDashboard/orderManagement"
                     ? "text-black"
                     : "text-white"
-                }`}
+                  }`}
               />
             </ListItemIcon>
             <ListItemText primary="Order Management" />
           </div>
         </ListItem>
 
+        {/* wishlists */}
         <ListItem button component={NavLink} to="/userDashboard/userWishlist">
           <div
-            className={`w-full rounded-lg flex p-2 items-center justify-center ${
-              currentPath === "/userDashboard/userWishlist"
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/userDashboard/userWishlist"
                 ? "bg-white text-black"
                 : "text-white"
-            }`}
+              }`}
           >
             <ListItemIcon>
               <BookmarksIcon
-                className={`${
-                  currentPath === "/userDashboard/userWishlist"
+                className={`${currentPath === "/userDashboard/userWishlist"
                     ? "text-black"
                     : "text-white"
-                }`}
+                  }`}
               />
             </ListItemIcon>
             <ListItemText primary="Wishlist and Favorites" />
           </div>
         </ListItem>
 
+        {/* notification */}
         <ListItem button component={NavLink} to="/userDashboard/notifications">
           <div
-            className={`w-full rounded-lg flex p-2 items-center justify-center ${
-              currentPath === "/userDashboard/notifications"
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/userDashboard/notifications"
                 ? "bg-white text-black"
                 : "text-white"
-            }`}
+              }`}
           >
             <ListItemIcon>
               <NotificationsIcon
-                className={`${
-                  currentPath === "/userDashboard/notifications"
+                className={`${currentPath === "/userDashboard/notifications"
                     ? "text-black"
                     : "text-white"
-                }`}
+                  }`}
               />
             </ListItemIcon>
             <ListItemText primary="Notifications and Alerts" />
           </div>
         </ListItem>
 
+        {/* inbox */}
         <ListItem
           button
           component={NavLink}
           to="/userDashboard/customerSupport"
         >
           <div
-            className={`w-full rounded-lg flex p-2 items-center justify-center ${
-              currentPath === "/userDashboard/customerSupport"
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/userDashboard/customerSupport"
                 ? "bg-white text-black"
                 : "text-white"
-            }`}
+              }`}
           >
             <ListItemIcon>
               <MessageIcon
-                className={`${
-                  currentPath === "/userDashboard/customerSupport"
+                className={`${currentPath === "/userDashboard/customerSupport"
                     ? "text-black"
                     : "text-white"
-                }`}
+                  }`}
               />
             </ListItemIcon>
             <ListItemText primary="Inbox" />
           </div>
         </ListItem>
 
+        {/* exit */}
         <ListItem className="place-self-end" button component={Link} to="/">
-        <div className="w-full p-2 flex items-center justify-center">            
-          <ListItemIcon>
-            <ExitToAppIcon className="text-white" />
-          </ListItemIcon>
-          <ListItemText primary="Exit" />
-        </div>
+          <div className="w-full p-2 flex items-center justify-center">
+            <ListItemIcon>
+              <ExitToAppIcon className="text-white" />
+            </ListItemIcon>
+            <ListItemText primary="Exit" />
+          </div>
         </ListItem>
       </List>
     </div>

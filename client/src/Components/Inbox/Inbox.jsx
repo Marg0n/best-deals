@@ -68,9 +68,11 @@ const Inbox = () => {
 
 
     return (
-        <Box display="flex" p={2} bgcolor="#f5f5f5" height="100vh">
+        <div className='flex flex-col gap-4 lg:flex-row md:min-h-[90vh] p-8'>
             {/* Message List */}
-            <Paper elevation={3} sx={{ width: '30%', padding: '10px', marginRight: '20px', height: '90vh', overflowY: 'scroll' }}>
+            <div
+                className='glass bg-red-300 p-10 lg:w-1/3 w-full lg:h-[90vh] min-h-[40vh] overflow-auto'
+                style={{ marginRight: '20px' }}>
                 <Typography variant="h6" gutterBottom>
                     Inbox
                 </Typography>
@@ -97,10 +99,12 @@ const Inbox = () => {
                         </ListItem>
                     ))}
                 </List>
-            </Paper>
+            </div>
 
             {/* Message Details */}
-            <Paper elevation={3} sx={{ width: '70%', padding: '20px', display: 'flex', flexDirection: 'column' }}>
+            <div
+                className="glass bg-red-300 lg:w-2/3 w-full p-10 min-h-[50vh] lg:h-[90vh] overflow-auto"
+                style={{ display: 'flex', flexDirection: 'column' }}>
                 {selectedMessage ? (
                     <div className='flex flex-col max-h-screen bg-white shadow-lg rounded-lg overflow-y-auto '>
                         <Typography variant="subtitle2" color="textSecondary">
@@ -108,7 +112,7 @@ const Inbox = () => {
 
                                 {
                                     selectedMessage?.messageTo === user?.email ?
-                                        <img  src={selectedMessage?.senderPic} className='rounded-full w-16 h-16 ' alt="" srcset="" /> :
+                                        <img src={selectedMessage?.senderPic} className='rounded-full w-16 h-16 ' alt="" srcset="" /> :
                                         <img src={selectedMessage?.receiverPic} className='rounded-full w-16 h-16 ' alt="" srcset="" />
                                 }
 
@@ -174,11 +178,13 @@ const Inbox = () => {
 
                 ) : (
                     <Typography variant="h6" color="textSecondary">
-                        Select a message to view details
+                        <span className='text-black'>
+                            Select a message to view details
+                        </span>
                     </Typography>
                 )}
-            </Paper>
-        </Box>
+            </div>
+        </div>
     );
 };
 
