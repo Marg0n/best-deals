@@ -502,12 +502,12 @@ async function run() {
     // ==================================
     app.get('/notification/:email', async (req, res) => {
       try {
-        const user = await usersCollection.findOne(
+        const result = await usersCollection.findOne(
           { email: req.params.email },
           {
             projection: { notification: 1, status: 1 }
           });
-        res.status(200).json(user.notification);
+        res.status(200).send(result);
       } catch (err) {
         res.status(400).json({ error: err.message });
       }
