@@ -145,16 +145,11 @@ async function run() {
     // ===================================
 
     const usersCollection = client.db("BestDeals").collection("UserCollection");
-    const productCollection = client
-      .db("BestDeals")
-      .collection("ProductCollection");
-    const orderCollection = client
-      .db("BestDeals")
-      .collection("OrderManagement");
+    const productCollection = client.db("BestDeals").collection("ProductCollection");
+    const orderCollection = client.db("BestDeals").collection("OrderManagement");
     const cartList = client.db("BestDeals").collection("CartList");
-    const inboxChatCollections = client
-      .db("BestDeals")
-      .collection("inboxChatCollections");
+    const inboxChatCollections = client.db("BestDeals").collection("inboxChatCollections");
+
 
     // ==================================
     // Admin verify
@@ -454,6 +449,22 @@ async function run() {
           .status(500)
           .json({ message: "Internal server error from last login" });
       }
+    });
+
+    // ==================================
+    // Users' notification get
+    // ==================================
+    app.get('/notification/:email', async (req, res) => {
+      try {
+        const user = await usersCollection.findOne({ email: req.params.email }, { projection: { notification: 1 } });
+        res.status(200).json(user.notification);
+      } catch (err) {
+        res.status(400).json({ error: err.message });
+      }
+    });
+
+    app.listen(3000, () => {
+      console.log('Server is running on port 3000');
     });
 
     // ==================================
@@ -991,7 +1002,7 @@ async function run() {
     // API Connections End
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    app.use("/user", async (req, res) => {});
+    app.use("/user", async (req, res) => { });
 
     // await client.db("admin").command({ ping: 1 });
     console.log(
