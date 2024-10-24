@@ -46,11 +46,11 @@ const Home = () => {
 
   return (
     <div className="flex">
-      <div>
-        <Helmet>
-          <title>Best Deals | Home</title>
-        </Helmet>
-      </div>
+
+      <Helmet>
+        <title>Best Deals | All Products</title>
+      </Helmet>
+
       {/* Left Side menubar / category bar */}
       <div>
         <LeftMenubar
@@ -84,8 +84,8 @@ const Home = () => {
               ))}
             </div> :
             <NoData></NoData>
-          )}
-          <FeaturedProducts />
+        )}
+        <FeaturedProducts />
       </div>
     </div>
   );

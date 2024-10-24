@@ -31,9 +31,9 @@ const TopSales = () => {
                 description={'All Top Selling Products Last Week'}
             ></SectionHeader>
 
-            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-black'>
+            <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-black'>
                 {
-                    topSalesProducts?.slice(0, 3)?.map(topSaleProduct =>
+                    topSalesProducts?.slice(0, 4)?.map(topSaleProduct =>
                         <div
                             key={topSaleProduct._id}
                             className="">
