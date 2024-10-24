@@ -26,7 +26,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
 
     // con
     const shippingAddress = contactInfo?.address;
-    const cardBooking = { ...booking, shippingAddress };
+    const cardBooking = { ...booking, shippingAddress , userEmail : user?.email };
 
     // payment info state
     const [paymentInfoForInvoice, setPaymentInfoForInvoice] = useState();
@@ -135,7 +135,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                 paymentInfo?.items[0]?.map(item => {
                     // console.log(item?.vendorEmail)
 
-                    axiosSecure.post(`/ordersReq/${item?.vendorEmail}`, vendorBooking)
+                    axiosSecure.post(`/newOrder`, vendorBooking)
                 })
                 // console.log('from stripe checkout =>', data1, data2)
 

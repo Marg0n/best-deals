@@ -79,7 +79,8 @@ const CartPage = () => {
     const shippingAddress = contactInfo?.address;
     const transactionId = contactInfo?.trackingNumber;
 
-    const booking = { orderDate, items, totalAmount, status, paymentMethod };
+
+    const booking = { orderDate, items, totalAmount, status, paymentMethod, customerEmail: userEmail };
     const userBookingCoD = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress, transactionId };
     const codBooking = { ...booking, ...contactInfo };
 
@@ -151,7 +152,7 @@ const CartPage = () => {
             items[0]?.map(item => {
                 console.log(item?.vendorEmail)
 
-                axiosSecure.post(`/ordersReq/${item?.vendorEmail}`, codBooking)
+                axiosSecure.post(`/newOrder`, codBooking, item?.vendorEmail)
             })
             setShowInvoiceModal(false);
             dispacth(removeAllFromCartlist())

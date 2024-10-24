@@ -37,6 +37,7 @@ import VendorRoute from './VendorRoute';
 import Inbox from "../Components/Inbox/Inbox";
 import NewHomepage from "../Pages/NewHomePage/NewHomepage";
 import VendorRegistration from "../Components/VendorRegistration/VendorRegistration";
+import AllOrders from "../Pages/AllOrders/AllOrders";
 
 const Router = createBrowserRouter([
   {
@@ -156,6 +157,10 @@ const Router = createBrowserRouter([
       {
         path: '/adminDashboard/vendorRequest',
         element: <AdminVendorRequest />
+      }, 
+      {
+        path: '/adminDashboard/all-orders',
+        element: <AllOrders/>
       }
     ]
   },

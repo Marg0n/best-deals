@@ -7,6 +7,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import ReportIcon from '@mui/icons-material/Report';
 import { Link } from 'react-router-dom';
+import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 
 const AdminSideBar = () => {
 
@@ -61,6 +62,17 @@ const AdminSideBar = () => {
                                 <DomainAddIcon className="text-white" />
                             </ListItemIcon>
                             <ListItemText primary="Vendor Request" className='text-2xl' /></div>
+                    }
+                </ListItem>
+                <ListItem onClick={() => setSelected(5)} button component={Link} to="/adminDashboard/all-orders">
+                    {
+                        selected === 5 ? <div className="text-black bg-white w-full rounded-lg flex p-2" ><ListItemIcon>
+                            <FolderRoundedIcon className='text-black text-4xl' />
+                        </ListItemIcon>
+                            <ListItemText primary="Orders" /></div> : <div className='flex align-middle'><ListItemIcon>
+                                <FolderRoundedIcon className="text-white" />
+                            </ListItemIcon>
+                            <ListItemText primary="Orders" className='text-2xl' /></div>
                     }
                 </ListItem>
 
