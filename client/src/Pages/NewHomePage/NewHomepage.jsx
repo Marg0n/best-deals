@@ -4,10 +4,14 @@ import FeaturedProducts from "../../Components/FeaturedProducts/FeaturedProducts
 import OurCategories from "../../Components/OurCategories/OurCategories";
 import Services from "../../Components/Services/Services";
 import TopSales from "../../Components/TopSales/TopSales";
+import { Helmet } from "react-helmet-async";
 
 const NewHomepage = () => {
     return (
-        <div>
+        <div className="container mx-auto">
+            <Helmet>
+                <title>Best Deals | Home</title>
+            </Helmet>
             <div className="my-10">
                 {/* banner */}
                 <Banner />
