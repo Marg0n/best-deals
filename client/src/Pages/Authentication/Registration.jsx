@@ -62,15 +62,15 @@ const Registration = () => {
     // fetch data from the form
     const { email, password, name } = data;
 
-
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()[\]{}|\\;:'",.<>/?~])(?=.{6,})/.test(password)) {
+    // /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()[\]{}|\\;:'",.<>/?~])(?=.{6,})/
+        // a numeric character,
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()[\]{}|\\;:'",.<>/?~])(?=.{6,})/.test(password)) {
 
       // console.log(watch('password'))
       return toast.error(
         `Password must contain 
         an Uppercase, 
-        a Lowercase, 
-        a numeric character, 
+        a Lowercase,  
         a special character 
         and Length must be at least 6 characters long!`,
         { autoClose: 4000, theme: "colored" })
