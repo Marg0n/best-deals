@@ -278,9 +278,9 @@ const Navbar = ({ toggleTheme, theme }) => {
                         <span
                           className={`${profile[0]?.role !== "Admin"
                             ? profile[0]?.role === "User"
-                              ? "text-[#423f3f] font-mono badge badge-neutral badge-outline"
-                              : "text-base badge badge-neutral font-mono "
-                            : "text-base badge badge-primary font-mono "
+                              ? "text-[#423f3f] font-sofadi badge badge-neutral badge-outline"
+                              : "text-base badge badge-neutral font-sofadi "
+                            : "text-base badge badge-primary font-sofadi "
                             }`}
                         >
                           {profile[0]?.role ? profile[0]?.role : "User"}

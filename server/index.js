@@ -503,17 +503,18 @@ async function run() {
     app.get('/notification/:email', async (req, res) => {
       try {
         const result = await usersCollection.findOne(
-          { email: req.params.email },
+          { email: req?.params?.email },
           {
             projection: { notification: 1, status: 1 }
           });
-        const notificationsMatchStatus = user.notification.some(n =>
-          user.purchaseHistory.some(order => order.status === n.message)
+        const notificationsMatchStatus = result.notification.some(n =>
+          result.purchaseHistory.some(order => order.status === n.message)
         );
-
+        console.log(notificationsMatchStatus)
+        console.log(result)
         res.status(200).json({
-          notification: user.notification,
-          purchaseHistory: user.purchaseHistory,
+          notification: result.notification,
+          purchaseHistory: result.purchaseHistory,
           notificationsMatchStatus
         });
       } catch (err) {
