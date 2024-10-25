@@ -94,8 +94,8 @@ const Navbar = ({ toggleTheme, theme }) => {
         </li>
       }
       <li>
-        <Link to="" className="text-base-100 font-semibold">
-          Settings
+        <Link to="/all" className="text-base-100 font-semibold">
+          All Products
         </Link>
       </li>
       {profile[0]?.role === "User" && (
@@ -107,7 +107,7 @@ const Navbar = ({ toggleTheme, theme }) => {
       )}
       <li>
         <Link to="" className="text-base-100 font-semibold">
-          anything!
+          About
         </Link>
       </li>
       <li className="rounded-xl p-2 m-2 text-right" onClick={handleLogout}>
