@@ -34,7 +34,7 @@ import AdminRoutes from "./AdminRoutes";
 import PrivateRoute from "./PrivateRoute";
 import UserRoute from "./UserRoute";
 import VendorRoute from "./VendorRoute";
-import Inbox from "../components/Inbox/Inbox";
+import Inbox from "../Components/Inbox/Inbox";
 import NewHomepage from "../Pages/NewHomePage/NewHomepage";
 import VendorRegistration from "../components/VendorRegistration/VendorRegistration";
 import AllOrders from "../Pages/AllOrders/AllOrders";

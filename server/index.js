@@ -507,7 +507,15 @@ async function run() {
           {
             projection: { notification: 1, status: 1 }
           });
-        res.status(200).send(result);
+        const notificationsMatchStatus = user.notification.some(n =>
+          user.purchaseHistory.some(order => order.status === n.message)
+        );
+
+        res.status(200).json({
+          notification: user.notification,
+          purchaseHistory: user.purchaseHistory,
+          notificationsMatchStatus
+        });
       } catch (err) {
         res.status(400).json({ error: err.message });
       }
@@ -518,30 +526,25 @@ async function run() {
     // ==================================
     app.patch('/updateNotification/:email', async (req, res) => {
       try {
-        const mail = req.params?.email;
-        const body = req?.body;
-        const { status, notification } = body;
+        const email = req.params.email;
+        const { status, notification } = req.body;
         const options = { upsert: true };
-        const update = {}
+        const update = {};
 
+        // Check if the status is different from the notification status
         if (status !== notification.notifyStatus) {
-          update = {
-            $set: {
-              status: status,
-              notification: { notifyStatus: status },
-            },
+          update.$set = {
+            status: status,
+            'notification.notifyStatus': status
           };
         }
 
-        const result = await usersCollection.update({ email: mail }, update, options);
+        // Perform the update operation
+        const result = await usersCollection.updateOne({ email: email }, update, options);
         res.status(200).send(result);
       } catch (err) {
         res.status(400).json({ error: err.message });
       }
-    });
-
-    app.listen(3000, () => {
-      console.log('Server is running on port 3000');
     });
 
     // ==================================
