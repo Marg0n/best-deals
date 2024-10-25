@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Navbar from "../Components/Navbar/Navbar";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import AOS from 'aos';
 import Footer from "../Components/Footer/Footer";
 import toast, { Toaster } from "react-hot-toast";
@@ -8,11 +8,13 @@ import useAuth from "../hooks/useAuth";
 import useCartList from "../hooks/useCartList";
 import { useDispatch } from "react-redux";
 import { setCartData } from "../features/CartSlice/CartSlice";
+import useUserProfile from "../hooks/useUserProfile";
 
 
 const Root = () => {
 
   const { user } = useAuth()
+  const { profile } = useUserProfile();
 
   // dispatch to redux
   const dispatch = useDispatch()
@@ -66,6 +68,19 @@ const Root = () => {
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
+
+  // notification handlers
+  const { displayNotification, closeNotification } = useNotification(profile[0]?.email); // Using email
+
+  const previousStatus = useRef();
+
+  useEffect(() => {
+      const currentStatus = profile[0]?.purchaseHistory[0]?.status;
+      if (previousStatus.current && previousStatus.current !== currentStatus) {
+          displayNotification('info', `Status changed to ${currentStatus}`, 5000);
+      }
+      previousStatus.current = currentStatus;
+  }, [profile]);
 
   // animation use effect
   useEffect(() => {
