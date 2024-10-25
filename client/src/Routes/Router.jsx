@@ -3,13 +3,13 @@ import { createBrowserRouter } from "react-router-dom";
 import AdminAllUsers from "../Components/Dashboards/AdminDashboard/AdminAllUser/AdminAllUsers";
 import AdminAllVendors from "../Components/Dashboards/AdminDashboard/AdminAllVendor/AdminAllVendors";
 import AdminDashboard from "../Components/Dashboards/AdminDashboard/AdminDashboard";
-import AdminHome from "../Components/Dashboards/AdminDashboard/AdminHome/AdminHome";
+import AdminHome from "../components/Dashboards/AdminDashboard/AdminHome/AdminHome";
 import AdminVendorRequest from "../Components/Dashboards/AdminDashboard/AdminVendorRequest/AdminVendorRequest";
 import CustomerSupport from "../Components/Dashboards/UserDashboard/CustomerSuport/CustomerSupport";
 import UserAlert from "../Components/Dashboards/UserDashboard/Notification/UserAlert";
 import OrderManagement from "../Components/Dashboards/UserDashboard/OrderManagement/OrderManagement";
 import UserDashboard from "../Components/Dashboards/UserDashboard/UserDashboard";
-import UserHome from "../Components/Dashboards/UserDashboard/UserHome/UserHome";
+import UserHome from "../components/Dashboards/UserDashboard/UserHome/UserHome";
 import UserWishlist from "../Components/Dashboards/UserDashboard/UserWishlist/UserWishlist";
 import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
 import VendorDashboard from "../Components/Dashboards/VendorDashboard/VendorDashboard";
@@ -34,9 +34,9 @@ import AdminRoutes from "./AdminRoutes";
 import PrivateRoute from "./PrivateRoute";
 import UserRoute from "./UserRoute";
 import VendorRoute from "./VendorRoute";
-import Inbox from "../Components/Inbox/Inbox";
+import Inbox from "../components/Inbox/Inbox";
 import NewHomepage from "../Pages/NewHomePage/NewHomepage";
-import VendorRegistration from "../Components/VendorRegistration/VendorRegistration";
+import VendorRegistration from "../components/VendorRegistration/VendorRegistration";
 import AllOrders from "../Pages/AllOrders/AllOrders";
 
 const Router = createBrowserRouter([

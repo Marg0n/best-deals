@@ -1,50 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Paper, Divider, Button } from '@mui/material';
+import { Box, Typography, List, ListItem, ListItemAvatar, ListItemText, Avatar, Divider, Button } from '@mui/material';
 import MessageIcon from '@mui/icons-material/Message';
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import { useQuery } from '@tanstack/react-query';
 import useAuth from "../../hooks/useAuth";
 import { FaLocationArrow } from 'react-icons/fa';
 
-
 const Inbox = () => {
     const [selectedMessage, setSelectedMessage] = useState(null);
     const [inputText, setInputText] = useState('');
-    const [messages, setMessages] = useState([])
+    const [messages, setMessages] = useState([]);
+    const [isMessageListVisible, setIsMessageListVisible] = useState(true); // New state for showing/hiding message list
 
     const { user } = useAuth();
-
-
     const axiosCommon = useAxiosCommon();
+
     const { data: chatList, isFetching, refetch } = useQuery({
         queryKey: ["chatlist"],
         queryFn: async () => {
-            const res = await axiosCommon.get(`/inbox/${user?.email}`, {
-            });
+            const res = await axiosCommon.get(`/inbox/${user?.email}`, {});
             return res.data;
         },
     });
 
-    // Effect to update selectedMessage when chatList changes
     useEffect(() => {
         if (chatList && selectedMessage) {
             const updatedChat = chatList.find(chat => chat._id === selectedMessage._id);
             if (updatedChat) {
-                setSelectedMessage(updatedChat); // Update the selectedMessage with the latest data
+                setSelectedMessage(updatedChat);
                 refetch();
             }
         }
     }, [chatList, selectedMessage, isFetching]);
 
-
     const handleSelectMessage = (message) => {
         setSelectedMessage(message);
-        console.log(selectedMessage);
-        console.log(messages);
+        setIsMessageListVisible(false); // Hide message list and show details
     };
 
-    console.log(inputText);
-
+    const handleReturnToInbox = () => {
+        setSelectedMessage(null);
+        setIsMessageListVisible(true); // Show the message list again
+    };
 
     const handleSend = async () => {
         if (inputText !== '') {
@@ -53,77 +50,64 @@ const Inbox = () => {
 
             try {
                 const res = await axiosCommon.post('/inbox', messageData);
-                console.log(res.data);
-                refetch()
+                refetch();
             } catch (error) {
                 console.error('Failed to send message:', error);
             }
             setInputText('');
-            refetch()
-
+            refetch();
         }
     };
 
-    console.log(selectedMessage);
-//real
-
     return (
-        <div className='flex flex-col gap-4 lg:flex-row md:min-h-[90vh] md:p-8'>
+        <div className='flex flex-col gap-4 lg:flex-row min-h-[90vh] md:p-8'>
             {/* Message List */}
-            <div
-                className='glass bg-red-300 p-2 lg:w-1/3 w-full lg:h-[90vh] min-h-[40vh] overflow-auto'
-                style={{ marginRight: '20px' }}>
-                <Typography variant="h6" gutterBottom>
-                    Inbox
-                </Typography>
-                <List>
-                    {chatList?.map((chat) => (
-                        <ListItem
-                            button
-                            key={chat.id}
-                            onClick={() => handleSelectMessage(chat)}
-                            selected={selectedMessage?.id === chat.id}
-                        >
-                            <ListItemAvatar>
-                                <Avatar>
-                                    {
-                                        chat?.messageTo === user?.email ?
+            {isMessageListVisible && (
+                <div
+                    className='glass bg-gray-200 p-2  w-full min-h-[90vh] overflow-auto'
+                    style={{ marginRight: '20px' }}>
+                    <Typography variant="h6" gutterBottom>
+                        Inbox
+                    </Typography>
+                    <List>
+                        {chatList?.map((chat) => (
+                            <ListItem
+                                button
+                                key={chat.id}
+                                onClick={() => handleSelectMessage(chat)}
+                                selected={selectedMessage?.id === chat.id}
+                            >
+                                <ListItemAvatar>
+                                    <Avatar>
+                                        {chat?.messageTo === user?.email ?
                                             <img src={chat?.senderPic} alt="" /> :
-                                            <img src={chat?.receiverPic} alt="" />
-                                    }
-                                </Avatar>
-                            </ListItemAvatar>
-                            <ListItemText
-                                primary={chat?.messageTo === user?.email ? chat.sender : chat.receiver}
-                            />
-                        </ListItem>
-                    ))}
-                </List>
-            </div>
+                                            <img src={chat?.receiverPic} alt="" />}
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText
+                                    primary={chat?.messageTo === user?.email ? chat.sender : chat.receiver}
+                                />
+                            </ListItem>
+                        ))}
+                    </List>
+                </div>
+            )}
 
             {/* Message Details */}
-            <div
-                className="glass bg-red-300 lg:w-2/3 w-full p-2 min-h-[50vh] lg:h-[90vh] overflow-auto"
-                style={{ display: 'flex', flexDirection: 'column' }}>
-                {selectedMessage ? (
-                    <div className='flex flex-col max-h-screen bg-white shadow-lg rounded-lg overflow-y-auto '>
+            {!isMessageListVisible && selectedMessage && (
+                <div
+                    className="glass bg-gray-200  w-full p-2 min-h-[90vh] overflow-auto"
+                    style={{ display: 'flex', flexDirection: 'column' }}>
+                    <div className='flex flex-col max-h-screen bg-white shadow-lg rounded-lg overflow-y-auto'>
                         <Typography variant="subtitle2" color="textSecondary">
                             <div className='flex items-end'>
-
-                                {
-                                    selectedMessage?.messageTo === user?.email ?
-                                        <img src={selectedMessage?.senderPic} className='rounded-full w-16 h-16 ' alt="" srcset="" /> :
-                                        <img src={selectedMessage?.receiverPic} className='rounded-full w-16 h-16 ' alt="" srcset="" />
-                                }
-
-                                {
-                                    selectedMessage?.messageTo === user?.email ?
-                                        <h1 className='font-bold'>{selectedMessage?.sender}</h1> :
-                                        <h1 className='font-bold'>{selectedMessage?.receiver}</h1>
-                                }
+                                {selectedMessage?.messageTo === user?.email ?
+                                    <img src={selectedMessage?.senderPic} className='rounded-full w-16 h-16 ' alt="" /> :
+                                    <img src={selectedMessage?.receiverPic} className='rounded-full w-16 h-16 ' alt="" />}
+                                <h1 className='font-bold'>
+                                    {selectedMessage?.messageTo === user?.email ? selectedMessage?.sender : selectedMessage?.receiver}
+                                </h1>
                             </div>
-
-
                         </Typography>
                         <Divider sx={{ marginY: 2 }} />
                         {/* Chat Body */}
@@ -133,7 +117,6 @@ const Inbox = () => {
                                     key={index}
                                     className={`flex ${message.sender === user?.email ? 'justify-end' : 'justify-start'}`}
                                 >
-                                    {/* Display user or vendor photo based on sender */}
                                     {message.sender === user?.email ? (
                                         <div className="flex items-start gap-2">
                                             <div className=" avatar items-center gap-1 ">
@@ -156,12 +139,11 @@ const Inbox = () => {
                                 </div>
                             ))}
                         </div>
-
                         {/* Chat Footer */}
                         <div className="flex items-center p-4 bg-gray-200 text-black">
                             <input
                                 type="text"
-                                className="flex-grow p-2 bg-white dark:bg-white  border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none"
+                                className="flex-grow p-2 bg-white border border-gray-300 rounded-lg focus:outline-none"
                                 placeholder="Type a message..."
                                 value={inputText}
                                 onChange={(e) => setInputText(e.target.value)}
@@ -174,16 +156,23 @@ const Inbox = () => {
                                 <FaLocationArrow />
                             </button>
                         </div>
-                    </div>
 
-                ) : (
-                    <Typography variant="h6" color="textSecondary">
-                        <span className='text-black'>
-                            Select a message to view details
-                        </span>
-                    </Typography>
-                )}
-            </div>
+                        {/* Return Button */}
+                        <Button onClick={handleReturnToInbox} variant="contained" color="primary" sx={{ marginTop: 2 }}>
+                            Return to Inbox
+                        </Button>
+                    </div>
+                </div>
+            )}
+
+            {/* Placeholder when no message is selected */}
+            {/* {isMessageListVisible && !selectedMessage && (
+                <Typography variant="h6" color="textSecondary">
+                    <span className='text-black'>
+                        Select a message to view details
+                    </span>
+                </Typography>
+            )} */}
         </div>
     );
 };
