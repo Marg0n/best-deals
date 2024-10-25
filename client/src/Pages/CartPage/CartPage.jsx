@@ -82,9 +82,10 @@ const CartPage = () => {
 
 
     const booking = { orderDate, items, totalAmount, status, paymentMethod, notification, customerEmail: userEmail };
-    const userBookingCoD = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress, transactionId };
+    const userBookingCoD = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress, transactionId, notification };
     const codBooking = { ...booking, ...contactInfo };
 
+    console.log(booking)
     // console.log('contactInfo=>', contactInfo)
     // console.log('booking=>', booking)
     // console.log('codBooking=>', codBooking)
