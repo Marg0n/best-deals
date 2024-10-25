@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import useAxiosCommon from './useAxiosCommon';
 import useAuth from './useAuth';
 import { useDispatch } from 'react-redux';
-import { addNotification, clearNotification } from '../features/CartSlice/notificationSlice';
+import { addNotification, clearNotification } from '../features/NotificationSlice/notificationSlice';
 
 const useNotification = () => {
     const axiosCommon = useAxiosCommon();
@@ -11,7 +11,7 @@ const useNotification = () => {
 
     useEffect(() => {
         // Fetch notifications on load
-        axiosCommon.get(`/notification/${user.email}`).then(response => {
+        axiosCommon.get(`/notification/${user?.email}`).then(response => {
             response.data.forEach(notification => {
                 dispatch(addNotification({
                     type: 'info',

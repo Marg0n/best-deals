@@ -9,6 +9,7 @@ import useCartList from "../hooks/useCartList";
 import { useDispatch } from "react-redux";
 import { setCartData } from "../features/CartSlice/CartSlice";
 import useUserProfile from "../hooks/useUserProfile";
+import useNotification from './../hooks/useNotification';
 
 
 const Root = () => {
@@ -30,7 +31,7 @@ const Root = () => {
   if (user && cartlistFromDB && cartlistFromDB.length > 0) {
     dispatch(setCartData(cartlistFromDB))
   }
-  else if(user && !cartlistFromDB){
+  else if (user && !cartlistFromDB) {
     dispatch(setCartData([]))
   }
   // if no user it will save a empty array on redux store
@@ -69,18 +70,21 @@ const Root = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
   };
 
+
   // notification handlers
-  const { displayNotification, closeNotification } = useNotification(profile[0]?.email); // Using email
+  const { displayNotification, closeNotification } = useNotification(user?.email); // Using email
 
   const previousStatus = useRef();
 
   useEffect(() => {
-      const currentStatus = profile[0]?.purchaseHistory[0]?.status;
-      if (previousStatus.current && previousStatus.current !== currentStatus) {
-          displayNotification('info', `Status changed to ${currentStatus}`, 5000);
-      }
-      previousStatus.current = currentStatus;
+    const currentStatus = profile[0]?.purchaseHistory?.status;
+    if (previousStatus.current && previousStatus.current !== currentStatus) {
+      displayNotification('info', `Status changed to ${currentStatus}`, 5000);
+    }
+    previousStatus.current = currentStatus;
   }, [profile]);
+
+
 
   // animation use effect
   useEffect(() => {
