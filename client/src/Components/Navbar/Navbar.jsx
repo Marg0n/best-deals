@@ -94,8 +94,8 @@ const Navbar = ({ toggleTheme, theme }) => {
         </li>
       }
       <li>
-        <Link to="" className="text-base-100 font-semibold">
-          Settings
+        <Link to="/all" className="text-base-100 font-semibold">
+          All Products
         </Link>
       </li>
       {profile[0]?.role === "User" && (
@@ -107,7 +107,7 @@ const Navbar = ({ toggleTheme, theme }) => {
       )}
       <li>
         <Link to="" className="text-base-100 font-semibold">
-          anything!
+          About
         </Link>
       </li>
       <li className="rounded-xl p-2 m-2 text-right" onClick={handleLogout}>
@@ -278,9 +278,9 @@ const Navbar = ({ toggleTheme, theme }) => {
                         <span
                           className={`${profile[0]?.role !== "Admin"
                             ? profile[0]?.role === "User"
-                              ? "text-[#423f3f] font-mono badge badge-neutral badge-outline"
-                              : "text-base badge badge-neutral font-mono "
-                            : "text-base badge badge-primary font-mono "
+                              ? "text-[#423f3f] font-sofadi badge badge-neutral badge-outline"
+                              : "text-base badge badge-neutral font-sofadi "
+                            : "text-base badge badge-primary font-sofadi "
                             }`}
                         >
                           {profile[0]?.role ? profile[0]?.role : "User"}
