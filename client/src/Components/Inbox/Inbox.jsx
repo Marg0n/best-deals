@@ -65,7 +65,7 @@ const Inbox = () => {
     };
 
     console.log(selectedMessage);
-
+//real
 
     return (
         <div className='flex flex-col gap-4 lg:flex-row md:min-h-[90vh] md:p-8'>
