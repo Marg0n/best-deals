@@ -37,7 +37,10 @@ const Footer = () => {
                                 <Link rel="noopener noreferrer" to="#">Privacy</Link>
                             </li>
                             <li>
-                                <Link rel="noopener noreferrer" to="#">Terms of Service</Link>
+                                <Link rel="noopener noreferrer" to="/terms">Terms and Condition</Link>
+                            </li>
+                            <li>
+                                <Link rel="noopener noreferrer" to="/aboutUs">About Us</Link>
                             </li>
                         </ul>
                     </div>

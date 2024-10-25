@@ -98,7 +98,7 @@ app.post("/jwt", async (req, res) => {
 //clearing Token
 app.get("/logout", async (req, res) => {
   const user = req.body;
-  console.log("logging out", user);
+  // console.log("logging out", user);
   res
     // .clearCookie("token", { ...cookieOptions, maxAge: 0 })
     .send({ success: true });
@@ -945,7 +945,7 @@ async function run() {
     app.delete("/cartList/:email", async (req, res) => {
       try {
         const email = req.params.email;
-        console.log(email);
+        // console.log(email);
 
         // Find the user's cart by email and clear the cartProducts array
         const result = await cartList.updateOne(
@@ -982,7 +982,7 @@ async function run() {
           receiverPic,
         } = messageData;
 
-        console.log("Incoming message data:", messageData); // For debugging
+        // console.log("Incoming message data:", messageData); // For debugging
 
         let conversation;
 
