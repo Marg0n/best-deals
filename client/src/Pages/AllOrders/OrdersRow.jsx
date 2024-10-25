@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { CiEdit } from 'react-icons/ci';
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import useAxiosCommon from '../../hooks/useAxiosCommon';
 
-const OrdersRow = ({ order,setToast, refetch}) => {
+const OrdersRow = ({ order, refetch}) => {
     const axiosCommon = useAxiosCommon()
 
     const [viewDetailsModal, setViewDetailsModal] = useState(false);
@@ -38,10 +38,10 @@ const OrdersRow = ({ order,setToast, refetch}) => {
             const res = await axiosCommon.patch('/orderStatus', updatedStatus);
 
             if (res.status === 200) { 
-                toast.success('Order Updated');  
                 handleCloseEditOrder(); 
                 refetch()
-                setToast(2)
+                toast.success('Order Updated');  
+                // setToast(2)
             }
         } catch (err) {
             console.error(err);

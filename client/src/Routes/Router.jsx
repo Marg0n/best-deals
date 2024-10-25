@@ -38,15 +38,17 @@ import Inbox from "../Components/Inbox/Inbox";
 import NewHomepage from "../Pages/NewHomePage/NewHomepage";
 import VendorRegistration from "../components/VendorRegistration/VendorRegistration";
 import AllOrders from "../Pages/AllOrders/AllOrders";
+import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 
 const Router = createBrowserRouter([
   {
     path: "/",
     element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
-        element: <NewHomepage/>,
+        element: <NewHomepage />,
       },
       {
         path: "/all",
@@ -177,10 +179,10 @@ const Router = createBrowserRouter([
       {
         path: '/adminDashboard/vendorRequest',
         element: <AdminVendorRequest />
-      }, 
+      },
       {
         path: '/adminDashboard/all-orders',
-        element: <AllOrders/>
+        element: <AllOrders />
       }
     ]
   },
