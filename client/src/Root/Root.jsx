@@ -1,13 +1,15 @@
-import { Outlet } from "react-router-dom";
-import Navbar from "../Components/Navbar/Navbar";
-import { useEffect, useRef, useState } from "react";
 import AOS from 'aos';
-import Footer from "../Components/Footer/Footer";
-import toast, { Toaster } from "react-hot-toast";
-import useAuth from "../hooks/useAuth";
-import useCartList from "../hooks/useCartList";
+import { useEffect, useRef, useState } from "react";
+import { Toaster } from "react-hot-toast";
 import { useDispatch } from "react-redux";
+import { Outlet } from "react-router-dom";
+import { toast } from "react-toastify";
+import Footer from "../Components/Footer/Footer";
+import Navbar from "../Components/Navbar/Navbar";
 import { setCartData } from "../features/CartSlice/CartSlice";
+import useAuth from "../hooks/useAuth";
+import useAxiosCommon from "../hooks/useAxiosCommon";
+import useCartList from "../hooks/useCartList";
 import useUserProfile from "../hooks/useUserProfile";
 import useNotification from './../hooks/useNotification';
 
@@ -16,6 +18,7 @@ const Root = () => {
 
   const { user } = useAuth()
   const { profile } = useUserProfile();
+  const axiosCommon = useAxiosCommon();
 
   // dispatch to redux
   const dispatch = useDispatch()
@@ -78,11 +81,24 @@ const Root = () => {
 
   useEffect(() => {
     const currentStatus = profile[0]?.purchaseHistory?.status;
+    const email = user?.email;
     if (previousStatus.current && previousStatus.current !== currentStatus) {
+      // Display notification
       displayNotification('info', `Status changed to ${currentStatus}`, 5000);
+      toast.info(`Status changed to: ${currentStatus}`, { autoClose: 4000, theme: "colored" })
+
+      // Patch request to update notification status
+      axiosCommon.patch(`/updateNotification/${email}`, {
+        status: currentStatus,
+        notification: { notifyStatus: previousStatus.current }
+      }).then(response => {
+        console.log('Notification status updated:', response.data);
+      }).catch(error => {
+        console.error('Error updating notification status:', error);
+      });
     }
     previousStatus.current = currentStatus;
-  }, [profile]);
+  }, [profile, displayNotification]);
 
 
 
