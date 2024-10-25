@@ -5,7 +5,7 @@ import SectionHeader from '../ReUsableComponent/SectionHeader';
 const Services = () => {
     return (
 
-        <div className=" grid grid-cols-3 lg:grid-cols-6 gap-5 my-10">
+        <div className=" grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-5 my-10">
             <div>
                 <ServiceCard
                     img={'https://i.ibb.co.com/Jk0LTrx/medal.png'}
