@@ -62,7 +62,7 @@ const OverviewChart = () => {
         <div className="bg-white p-6 rounded-lg shadow-md">
             <div className="flex justify-between items-center mb-4">
                 <div>
-                    <h2 className="text-lg font-bold">Overview</h2>
+                    <h2 className="text-lg font-bold">Revenue Overview</h2>
                     <p className="text-gray-400">Avg. Yearly Profit</p>
                 </div>
             </div>
