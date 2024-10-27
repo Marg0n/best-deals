@@ -8,6 +8,8 @@ import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 import { Link, useLocation } from "react-router-dom";
 import ListAltIcon from "@mui/icons-material/ListAlt";
+import BookmarksIcon from "@mui/icons-material/Bookmarks";
+
 
 const AdminSideBar = () => {
   const location = useLocation();
@@ -32,6 +34,9 @@ const AdminSideBar = () => {
         setSelected(5);
       case "/adminDashboard/orderManagement":
         setSelected(6);
+        break;
+      case "/adminDashboard/userWishlist":
+        setSelected(7);
         break;
       default:
         setSelected(1);
@@ -83,6 +88,29 @@ const AdminSideBar = () => {
             </ListItemIcon>
             <ListItemText
               primary="Order Management"
+              className={selected === 1 ? "" : "text-2xl"}
+            />
+          </div>
+        </ListItem>
+
+        {/* user Wishlist */}
+        <ListItem button component={Link} to="/adminDashboard/userWishlist">
+          <div
+            className={
+              selected === 7
+                ? "text-black bg-white w-full rounded-lg flex p-2"
+                : "flex align-middle"
+            }
+          >
+            <ListItemIcon>
+              <BookmarksIcon
+                className={
+                  selected === 7 ? "text-black text-4xl" : "text-white"
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary="Wishlist and Favorites"
               className={selected === 1 ? "" : "text-2xl"}
             />
           </div>
