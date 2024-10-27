@@ -19,7 +19,7 @@ const AllOrders = () => {
 
 
     return (
-        <div className="">
+        <div className="p-8">
             <Helmet>
                 <title>
                     Best Deal | Orders
