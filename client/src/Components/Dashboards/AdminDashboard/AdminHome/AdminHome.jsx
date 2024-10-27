@@ -151,7 +151,7 @@ const AdminHome = () => {
             </div>
 
             {/* Overview Section */}
-            <div className="bg-white rounded-lg shadow-md flex flex-col items-center justify-center text-base-300" data-aos="fade-up" data-aos-duration="2000">
+            <div className="text-base-300" data-aos="fade-up" data-aos-duration="2000">
                 <OverviewChart />
             </div>
         </div>
