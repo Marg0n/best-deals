@@ -39,7 +39,7 @@ const AdminHome = () => {
     }, [axiosSecure]);
 
 //revenue calculation
-    const rvenue = totalRevenue?.toFixed(2)* .1 || 0;
+    const rvenue = totalRevenue * .1 || 0;
 
     if (isLoading) {
         return <Typography>Loading...</Typography>;
@@ -52,14 +52,14 @@ const AdminHome = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard
                     title="Total Transaction"
-                    value={`$${totalRevenue?.toFixed(2) || '0.00'}`}
+                    value={`$ ${totalRevenue?.toFixed(2) || '0.00'}`}
                     percentage={25.2}  
                     increase={true}  
                     description={`Total Transactions: ${totalTransactions || '0'}`} // Show total transactions
                 />
                 <StatCard
                     title="Revenue"
-                    value={`$ ${rvenue}`} 
+                    value={`$ ${rvenue?.toFixed(2)}`} 
                     percentage={-14.3}  
                     increase={false}  
                     description={`Previous: $15,312.22`} 
