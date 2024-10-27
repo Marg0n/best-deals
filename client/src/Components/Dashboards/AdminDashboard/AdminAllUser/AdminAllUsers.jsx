@@ -82,71 +82,74 @@ const AdminAllUsers = () => {
     }
 
     return (
-        <div className="p-4 bg-white rounded-lg">
-            <h1 className="text-3xl mb-4 text-black">All Users</h1>
+        <div className="p-6 min-h-screen space-y-4">
+            <div className='bg-white p-2 rounded-lg'>
+                <h1 className="text-3xl text-black">All Users</h1>
 
-            <div className='w-1/3 mb-4'>
-                <TextField
-                    label="Search by Product Name"
-                    variant="outlined"
-                    className='bg-gray-200'
-                    fullWidth
-                    margin="normal"
-                    onChange={(e) => {
-                        setSearchTerm(e.target.value);
-                        setCurrentPage(0); // Reset to first page on search
-                    }}
-                />
-            </div>
+                <div className='w-1/3 mb-4'>
+                    <TextField
+                        label="Search by Product Name"
+                        variant="outlined"
+                        className='bg-gray-200'
+                        fullWidth
+                        margin="normal"
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setCurrentPage(0); // Reset to first page on search
+                        }}
+                    />
+                </div>
 
-            <div className='border-2'><TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>ID</TableCell>
-                            <TableCell>User Name</TableCell>
-                            <TableCell>E-mail</TableCell>
-                            <TableCell>Joined</TableCell>
-                            <TableCell>Last Login</TableCell>
-                            <TableCell>Action</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {currentRows.map((row, rowIndex) => (
-                            <TableRow key={rowIndex}>
-                                <TableCell>{row.id}</TableCell>
-                                <TableCell>{row.name}</TableCell>
-                                <TableCell>{row.email}</TableCell>
-                                <TableCell>{row.joined}</TableCell>
-                                <TableCell>{row.lastLogin}</TableCell>
-                                <TableCell>
-                                    <ActionMenu row={row} />
-                                </TableCell>
+                <div className='border-2'><TableContainer component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>ID</TableCell>
+                                <TableCell>User Name</TableCell>
+                                <TableCell>E-mail</TableCell>
+                                <TableCell>Joined</TableCell>
+                                <TableCell>Last Login</TableCell>
+                                <TableCell>Action</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer></div>
+                        </TableHead>
+                        <TableBody>
+                            {currentRows.map((row, rowIndex) => (
+                                <TableRow key={rowIndex}>
+                                    <TableCell>{row.id}</TableCell>
+                                    <TableCell>{row.name}</TableCell>
+                                    <TableCell>{row.email}</TableCell>
+                                    <TableCell>{row.joined}</TableCell>
+                                    <TableCell>{row.lastLogin}</TableCell>
+                                    <TableCell>
+                                        <ActionMenu row={row} />
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer></div>
 
-            <div className="flex justify-between items-center my-4">
-                <Button
-                    onClick={handlePreviousPage}
-                    disabled={currentPage === 0}
-                    variant="outlined"
-                >
-                    Previous
-                </Button>
-                <Typography>
-                    Page {currentPage + 1} of {totalPages}
-                </Typography>
-                <Button
-                    onClick={handleNextPage}
-                    disabled={currentPage === totalPages - 1}
-                    variant="outlined"
-                >
-                    Next
-                </Button>
+                <div className="flex justify-between items-center my-4">
+                    <Button
+                        onClick={handlePreviousPage}
+                        disabled={currentPage === 0}
+                        variant="outlined"
+                    >
+                        Previous
+                    </Button>
+                    <Typography>
+                        Page {currentPage + 1} of {totalPages}
+                    </Typography>
+                    <Button
+                        onClick={handleNextPage}
+                        disabled={currentPage === totalPages - 1}
+                        variant="outlined"
+                    >
+                        Next
+                    </Button>
+                </div>
             </div>
+
         </div>
     );
 };
@@ -170,41 +173,41 @@ const ActionMenu = ({ row }) => {
         // Add your edit logic here (e.g., open a modal with the product data)
     };
 
-   // Delete the user
-const handleDelete = async () => {
-    Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!'
-    }).then(async (result) => {
-        if (result.isConfirmed) {
-            try {
-                await allUsers.delete(`/usersDelete/${row.id}`); // Send DELETE request
+    // Delete the user
+    const handleDelete = async () => {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await allUsers.delete(`/usersDelete/${row.id}`); // Send DELETE request
 
-                Swal.fire(
-                    'Deleted!',
-                    'The user has been deleted.',
-                    'success'
-                );
+                    Swal.fire(
+                        'Deleted!',
+                        'The user has been deleted.',
+                        'success'
+                    );
 
-                // Optionally: Trigger a state update to remove the deleted user from the UI
-            } catch (error) {
-                console.error('Error deleting user:', error);
+                    // Optionally: Trigger a state update to remove the deleted user from the UI
+                } catch (error) {
+                    console.error('Error deleting user:', error);
 
-                Swal.fire(
-                    'Error!',
-                    'Failed to delete the user.',
-                    'error'
-                );
+                    Swal.fire(
+                        'Error!',
+                        'Failed to delete the user.',
+                        'error'
+                    );
+                }
             }
-        }
-        handleClose(); // Close the menu after the request
-    });
-};
+            handleClose(); // Close the menu after the request
+        });
+    };
 
 
     // Toggle the warning status for the user
@@ -227,8 +230,8 @@ const handleDelete = async () => {
         handleClose(); // Close the menu after the request
     };
 
-      // Toggle the ban status for the user
-      const toggleBanStatus = async () => {
+    // Toggle the ban status for the user
+    const toggleBanStatus = async () => {
         try {
             //console.log('Vendor ID:', row.id);  // Log vendor ID
             const updatedBanStatus = !row.isBanned;
