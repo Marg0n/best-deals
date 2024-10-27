@@ -3,6 +3,11 @@ import StatCard from '../../Shared/StatCard';
 import OverviewChart from './OverviewChart';
 import useAxiosSecure from '../../../../hooks/useAxiosSecure'; // Assuming this is your Axios hook
 import { Typography } from '@mui/material';
+import useUserProfile from '../../../../hooks/useUserProfile';
+import AOS from 'aos';
+import ProfileInfo from '../../Shared/ProfileInfo';
+import BarChart from '../../Shared/BarChart';
+import PropTypes from 'prop-types';
 
 const AdminHome = () => {
     const axiosSecure = useAxiosSecure();
@@ -38,52 +43,125 @@ const AdminHome = () => {
         fetchData();
     }, [axiosSecure]);
 
-//revenue calculation
+    //revenue calculation
     const rvenue = totalRevenue * .1 || 0;
+
+    // profile info
+    const { profile } = useUserProfile();
+
+    // total spending stat
+    const [totalSpending, setTotalSpending] = useState();
+
+
+    // looping through all purchases amount
+    useEffect(() => {
+        if (profile && profile[0]?.purchaseHistory) {
+            const total = profile[0]?.purchaseHistory
+                ?.map(purchase => purchase?.totalAmount)
+                .reduce((sum, amount) => sum + amount, 0);
+            setTotalSpending(total);
+        }
+    }, [profile]);
+
+    // get purchase History
+    const userData = profile[0]?.purchaseHistory;
+
+    const transformData = (data) => {
+        return data?.map(order => ({
+            orderDate: order.orderDate,
+            totalAmount: order.totalAmount
+        }));
+    };
+
+    const purchaseHistory = transformData(userData);
+
+    // get monthly total amount
+    const getMonthlyTotals = (history) => {
+        const totals = {};
+
+        history?.forEach(order => {
+            const date = new Date(order.orderDate);
+            const month = date.toLocaleString('default', { month: 'long' });
+            const year = date.getFullYear();
+            const key = `${month} ${year}`;
+
+            if (!totals[key]) {
+                totals[key] = 0;
+            }
+            totals[key] += order.totalAmount;
+        });
+
+        return totals;
+    };
+
+    const monthlyTotals = getMonthlyTotals(purchaseHistory);
+
+    // aos animation use effect
+    useEffect(() => {
+        AOS.init({
+            duration: 500
+        });
+    }, []);
 
     if (isLoading) {
         return <Typography>Loading...</Typography>;
     }
 
-    
+
     return (
-        <div className="p-8 min-h-screen">
+        <div className="p-8 min-h-screen space-y-4">
             {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard
                     title="Total Transaction"
                     value={`$ ${totalRevenue?.toFixed(2) || '0.00'}`}
-                    percentage={25.2}  
-                    increase={true}  
-                    description={`Total Transactions: ${totalTransactions || '0'}`} // Show total transactions
+                // percentage={25.2}
+                // increase={true}
+                // description={`Total Transactions: ${totalTransactions || '0'}`} // Show total transactions
                 />
                 <StatCard
                     title="Revenue"
-                    value={`$ ${rvenue?.toFixed(2)}`} 
-                    percentage={-14.3}  
-                    increase={false}  
-                    description={`Previous: $15,312.22`} 
+                    value={`$ ${rvenue?.toFixed(2)}`}
                 />
                 <StatCard
                     title="Users"
-                    value={totalUsers || '0'} 
-                    percentage={-20}
-                    increase={false}
-                    description="Previous: 750" 
+                    value={totalUsers || '0'}
                 />
                 <StatCard
                     title="Vendors"
                     value={totalVendors || '0'} count
-                    percentage={15}
-                    increase={true}
-                    description="Previous: 18" 
                 />
+                <StatCard
+                    title={'Total Times Buy'}
+                    value={profile[0]?.purchaseHistory?.length}
+                />
+                <StatCard
+                    title={'Total Spendings'}
+                    value={totalSpending}
+                />
+            </div>
+
+            {/* profile info */}
+            <ProfileInfo />
+
+            {/* Chart section */}
+            <div className="bg-white rounded-lg shadow-md flex flex-col items-center justify-center text-base-300" data-aos="fade-up" data-aos-duration="1500">
+                <h1 className='font-semibold my-4'>Monthly Purchase Totals</h1>
+                <BarChart data={monthlyTotals} />
             </div>
 
             {/* Overview Section */}
             <OverviewChart />
         </div>
     );
+};
+
+AdminHome.propTypes = {
+    title: PropTypes.string,
+    value: PropTypes.string,
+    // percentage: PropTypes.number,
+    // increase: PropTypes.bool,
+    // description: PropTypes.string,
 };
 
 export default AdminHome;
