@@ -183,7 +183,23 @@ const Router = createBrowserRouter([
       {
         path: '/adminDashboard/all-orders',
         element: <AllOrders />
-      }
+      },
+      {
+        path: "/adminDashboard/userWishlist",
+        element: <UserWishlist />,
+      },
+      {
+        path: "/adminDashboard/orderManagement",
+        element: <OrderManagement />,
+      },
+      {
+        path: "/adminDashboard/notifications",
+        element: <UserAlert />,
+      },
+      {
+        path: "/adminDashboard/inbox",
+        element: <Inbox />,
+      },
     ]
   },
   {
