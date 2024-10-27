@@ -51,7 +51,7 @@ const AdminAllUsers = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
-    const rowsPerPage = 5; // Set number of rows per page
+    const rowsPerPage = 4; // Set number of rows per page
 
     const filteredData = initialData.filter(item =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase())

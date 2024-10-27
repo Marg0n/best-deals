@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 
 import {
+    Button,
+    Modal,
+    Paper,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
     TextField,
-    Button,
     Typography,
-    Modal,
 } from '@mui/material';
 
-import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
+import useAxiosSecure from '../../../../hooks/useAxiosSecure';
 
 const AdminAllVendors = () => {
     const [vendorDet, setVendorDet] = useState(null); // Store current vendor details
@@ -120,7 +120,7 @@ const AdminAllVendors = () => {
 
     const [searchTerm, setSearchTerm] = useState('');
     const [currentPage, setCurrentPage] = useState(0);
-    const rowsPerPage = 5;
+    const rowsPerPage = 4;
 
     const filteredData = initialData.filter(item =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -151,7 +151,8 @@ const AdminAllVendors = () => {
 
     console.log(vendorDet);
     return (
-        <div className="relative p-4 bg-white rounded-lg">
+        <div className="p-6 min-h-screen space-y-4">
+            <div className="relative bg-white p-2 rounded-lg">
             <h1 className="text-3xl mb-4 text-black">All Vendors</h1>
             <div className='w-1/3 mb-4'>
                 <TextField
@@ -264,7 +265,9 @@ const AdminAllVendors = () => {
                     </div>
                 </div>
             </Modal>
+            </div>
         </div>
+        
     );
 };
 

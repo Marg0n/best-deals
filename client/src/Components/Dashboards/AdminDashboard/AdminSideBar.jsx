@@ -142,7 +142,7 @@ const AdminSideBar = () => {
               />
             </ListItemIcon>
             <ListItemText
-              primary="Notifications and Alerts status"
+              primary="Notifications and Alerts"
               className={selected === 1 ? "" : "text-2xl"}
             />
           </div>
