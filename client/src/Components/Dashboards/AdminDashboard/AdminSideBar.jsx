@@ -7,6 +7,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import DomainAddIcon from '@mui/icons-material/DomainAdd';
 import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 import { Link, useLocation } from "react-router-dom";
+import ListAltIcon from "@mui/icons-material/ListAlt";
 
 const AdminSideBar = () => {
   const location = useLocation();
@@ -27,6 +28,11 @@ const AdminSideBar = () => {
       case "/adminDashboard/vendorRequest":
         setSelected(4);
         break;
+      case "/adminDashboard/all-orders":
+        setSelected(5);
+      case "/adminDashboard/orderManagement":
+        setSelected(6);
+        break;
       default:
         setSelected(1);
     }
@@ -36,6 +42,7 @@ const AdminSideBar = () => {
     <div className="w-64 h-screen bg-gray-800 text-white fixed top-0 left-0">
       <div className="p-4 text-lg font-bold">Admin Dashboard</div>
       <List>
+        {/* dashboard */}
         <ListItem button component={Link} to="/adminDashboard">
           <div
             className={
@@ -58,6 +65,30 @@ const AdminSideBar = () => {
           </div>
         </ListItem>
 
+        {/* order management table */}
+        <ListItem button component={Link} to="/adminDashboard/orderManagement">
+          <div
+            className={
+              selected === 6
+                ? "text-black bg-white w-full rounded-lg flex p-2"
+                : "flex align-middle"
+            }
+          >
+            <ListItemIcon>
+              <ListAltIcon
+                className={
+                  selected === 6 ? "text-black text-4xl" : "text-white"
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary="Order Management"
+              className={selected === 1 ? "" : "text-2xl"}
+            />
+          </div>
+        </ListItem>
+
+        {/* all users */}
         <ListItem button component={Link} to="/adminDashboard/allUsers">
           <div
             className={
@@ -80,6 +111,7 @@ const AdminSideBar = () => {
           </div>
         </ListItem>
 
+        {/* all vendors */}
         <ListItem button component={Link} to="/adminDashboard/allVendors">
           <div
             className={
@@ -102,6 +134,7 @@ const AdminSideBar = () => {
           </div>
         </ListItem>
 
+        {/* vendor request */}
         <ListItem button component={Link} to="/adminDashboard/vendorRequest">
           <div
             className={
@@ -123,6 +156,8 @@ const AdminSideBar = () => {
             />
           </div>
         </ListItem>
+
+        {/* all orders */}
         <ListItem button component={Link} to="/adminDashboard/all-orders">
           <div
             className={
@@ -145,6 +180,7 @@ const AdminSideBar = () => {
           </div>
         </ListItem>
 
+        {/* exit */}
         <ListItem className="place-self-end" button component={Link} to="/">
           <ListItemIcon>
             <ExitToAppIcon className="text-white" />
