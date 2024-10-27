@@ -102,7 +102,7 @@ const UserSideBar = () => {
                   }`}
               />
             </ListItemIcon>
-            <ListItemText primary="Notifications and Alerts status" />
+            <ListItemText primary="Notifications and Alerts" />
           </div>
         </ListItem>
 

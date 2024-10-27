@@ -10,7 +10,8 @@ import { Link, useLocation } from "react-router-dom";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import BookmarksIcon from "@mui/icons-material/Bookmarks";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-
+import MessageIcon from "@mui/icons-material/Message";
+import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 
 const AdminSideBar = () => {
   const location = useLocation();
@@ -33,6 +34,7 @@ const AdminSideBar = () => {
         break;
       case "/adminDashboard/all-orders":
         setSelected(5);
+        break;
       case "/adminDashboard/orderManagement":
         setSelected(6);
         break;
@@ -41,6 +43,9 @@ const AdminSideBar = () => {
         break;
       case "/adminDashboard/notifications":
         setSelected(8);
+        break;
+      case "/adminDashboard/inbox":
+        setSelected(9);
         break;
       default:
         setSelected(1);
@@ -199,7 +204,7 @@ const AdminSideBar = () => {
             }
           >
             <ListItemIcon>
-              <DomainAddIcon
+              <RequestQuoteIcon
                 className={
                   selected === 4 ? "text-black text-4xl" : "text-white"
                 }
@@ -230,6 +235,29 @@ const AdminSideBar = () => {
             </ListItemIcon>
             <ListItemText
               primary="Orders"
+              className={selected === 5 ? "" : "text-2xl"}
+            />
+          </div>
+        </ListItem>
+
+        {/* inbox */}
+        <ListItem button component={Link} to="/adminDashboard/inbox">
+          <div
+            className={
+              selected === 9
+                ? "text-black bg-white w-full rounded-lg flex p-2"
+                : "flex align-middle"
+            }
+          >
+            <ListItemIcon>
+              <MessageIcon
+                className={
+                  selected === 9 ? "text-black text-4xl" : "text-white"
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary="Inbox"
               className={selected === 5 ? "" : "text-2xl"}
             />
           </div>
