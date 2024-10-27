@@ -9,6 +9,7 @@ import FolderRoundedIcon from '@mui/icons-material/FolderRounded';
 import { Link, useLocation } from "react-router-dom";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import BookmarksIcon from "@mui/icons-material/Bookmarks";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 
 
 const AdminSideBar = () => {
@@ -37,6 +38,9 @@ const AdminSideBar = () => {
         break;
       case "/adminDashboard/userWishlist":
         setSelected(7);
+        break;
+      case "/adminDashboard/notifications":
+        setSelected(8);
         break;
       default:
         setSelected(1);
@@ -111,6 +115,29 @@ const AdminSideBar = () => {
             </ListItemIcon>
             <ListItemText
               primary="Wishlist and Favorites"
+              className={selected === 1 ? "" : "text-2xl"}
+            />
+          </div>
+        </ListItem>
+
+        {/* notification */}
+        <ListItem button component={Link} to="/adminDashboard/notifications">
+          <div
+            className={
+              selected === 8
+                ? "text-black bg-white w-full rounded-lg flex p-2"
+                : "flex align-middle"
+            }
+          >
+            <ListItemIcon>
+              <NotificationsIcon
+                className={
+                  selected === 8 ? "text-black text-4xl" : "text-white"
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary="Notifications and Alerts status"
               className={selected === 1 ? "" : "text-2xl"}
             />
           </div>
