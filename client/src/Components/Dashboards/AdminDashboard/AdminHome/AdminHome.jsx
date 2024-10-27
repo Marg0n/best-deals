@@ -47,7 +47,7 @@ const AdminHome = () => {
 
     
     return (
-        <div className="p-8 bg-gray-50 min-h-screen">
+        <div className="p-8 min-h-screen">
             {/* Stats Section */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                 <StatCard
