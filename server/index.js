@@ -373,6 +373,10 @@ async function run() {
       const category = req.query.selectedCategory
         ? req.query.selectedCategory
         : "";
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
+
+
 
       // Initialize the query object
       let query = {};
@@ -394,13 +398,22 @@ async function run() {
       if (req.query.isFeatured) {
         query.isFeatured = isFeatured; // Filter for featured products
       }
+      // pagination
+      const skip = (page - 1) * limit;
+      const totalProducts = await productCollection.countDocuments(query);
+      const totalPages = Math.ceil(totalProducts / limit);
 
       // Fetch data based on the query
-      const results = await productCollection.find(query).toArray();
+      const results = await productCollection.find(query).skip(skip).limit(limit).toArray();
+      const all = await productCollection.find(query).toArray()
+      res.send({ results, totalPages, currentPage: page , all})
 
       // Send back the results
-      res.send(results);
+      // res.send(results ,totalPages );
+
     });
+
+
 
     // ==================================
     // get all products
