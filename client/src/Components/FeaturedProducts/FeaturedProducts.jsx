@@ -17,7 +17,7 @@ const FeaturedProducts = () => {
     queryKey: ['featuredProducts'],
     queryFn: async () => {
       const res = await axiosCommon.get(`/all-products?isFeatured=true`);
-      return res.data;
+      return res.data.results;
     },
   });
 
