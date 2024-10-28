@@ -95,7 +95,9 @@ app.post("/jwt", async (req, res) => {
     .send({ token });
 });
 
+// ===================================
 //clearing Token
+// ===================================
 app.get("/logout", async (req, res) => {
   const user = req.body;
   // console.log("logging out", user);
@@ -1063,13 +1065,8 @@ async function run() {
     });
 
     // ==================================
-    //  Vendor Product Delete End
-    // ==================================
-
-    // ==================================
     //  Vendor Product Edit Start
     // ==================================
-
     app.get("/vendorProductEdit/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -1077,9 +1074,6 @@ async function run() {
       res.send(result);
     });
 
-    // ==================================
-    //  Vendor Product Edit End
-    // ==================================
 
     // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // API Connections End
