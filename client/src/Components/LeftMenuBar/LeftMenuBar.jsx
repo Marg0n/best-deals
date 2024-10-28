@@ -7,7 +7,7 @@ import Drawer from "../Drawer/Drawer";
 import { AiOutlineClose } from "react-icons/ai";
 
 
-const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
+const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange , setCurrentPage }) => {
   const [searchText, setSearchText] = useState("");
   const [clickeCategory, setClickedCategory] = useState("");
   const [priceRangeFilter, setPriceRangeFilter] = useState([0, 1000]);
@@ -46,6 +46,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
 
   // Handle clean the search
   const handleClearSearch = (e) => {
+    setCurrentPage(1)
     e.preventDefault();
     setSearchText("");
     setSearch("");
@@ -57,12 +58,14 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
 
   // Select category to filter product
   const handleSelectCategory = (category) => {
+    setCurrentPage(1)
     setSelectedCategory(category);
     setClickedCategory(category);
   };
 
   // handle price rage
   const handlePriceChange = (e) => {
+    setCurrentPage(1)
     setPriceRangeFilter([0, e.target.value]);
     setPriceRange(priceRangeFilter);
   };
