@@ -224,7 +224,7 @@ const AdminAllVendors = () => {
                 aria-labelledby="vendor-details-modal"
                 aria-describedby="vendor-details-description"
             >
-                <div className="modal-box absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]">
+                <div className="modal-box absolute top-[50%] left-[50%] translate-x-[-50%] text-white translate-y-[-50%]">
                     {vendorDet && (
                         <>
                             <h3 className="font-bold text-lg mb-3">Vendor Details</h3>
