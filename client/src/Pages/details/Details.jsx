@@ -18,8 +18,9 @@ import { useQuery } from '@tanstack/react-query';
 const Details = () => {
     const products = useLoaderData();
     const { _id } = useParams();
+    console.log(products);
     const { user } = useAuth()
-    const product = products?.find(product => product?._id === _id);
+    const product = products?.all?.find(product => product?._id === _id);
     
 
     const axiosCommon = useAxiosCommon()
@@ -49,7 +50,7 @@ const Details = () => {
 
 
     // finding same category products but not the same product
-    const productsInSameCategory = products?.filter(item => {
+    const productsInSameCategory = products?.all?.filter(item => {
         // If the product category is an array, we check for intersection
         if (Array.isArray(item.category) && Array.isArray(product.category)) {
             return item.category.some(cat => product.category.includes(cat)) && item._id !== product._id;
@@ -301,7 +302,7 @@ const Details = () => {
                             <h3 className='dark:text-white text-2xl text-[#775050] font-bold mb-5'>More suggestions :</h3>
                             <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-y-5 md:gap-5'>
                                 {
-                                    productsInSameCategory.map(item =>
+                                    productsInSameCategory?.slice(0,3).map(item =>
                                         <ProductsCard
                                             key={item._id}
                                             product={item}

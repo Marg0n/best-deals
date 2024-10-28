@@ -5,9 +5,10 @@ import { useQuery } from "@tanstack/react-query";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import Drawer from "../Drawer/Drawer";
 import { AiOutlineClose } from "react-icons/ai";
+import { Slider } from "@mui/material";
 
 
-const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
+const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange, setCurrentPage }) => {
   const [searchText, setSearchText] = useState("");
   const [clickeCategory, setClickedCategory] = useState("");
   const [priceRangeFilter, setPriceRangeFilter] = useState([0, 1000]);
@@ -46,6 +47,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
 
   // Handle clean the search
   const handleClearSearch = (e) => {
+    setCurrentPage(1)
     e.preventDefault();
     setSearchText("");
     setSearch("");
@@ -57,12 +59,14 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
 
   // Select category to filter product
   const handleSelectCategory = (category) => {
+    setCurrentPage(1)
     setSelectedCategory(category);
     setClickedCategory(category);
   };
 
   // handle price rage
   const handlePriceChange = (e) => {
+    setCurrentPage(1)
     setPriceRangeFilter([0, e.target.value]);
     setPriceRange(priceRangeFilter);
   };
@@ -148,14 +152,23 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
               </h2>
               <div className="flex px-2 items-center gap-2 text-[#775050] dark:text-white">
                 <span>${priceRangeFilter[0]}</span>
-                <input
+                <Slider
+                  aria-label="Price"
+                  min={0}
+                  max={1000}
+                  value={priceRangeFilter[1]}
+                  onChange={handlePriceChange}
+                  getAriaValueText={(value) => `Price: ${value}`}
+                  color="secondary"
+                />
+                {/* <input
                   type="range"
                   min="0"
                   max="1000"
                   value={priceRangeFilter[1]}
                   onChange={handlePriceChange}
                   className="range range-info"
-                />
+                /> */}
                 <span className="px-2">${priceRangeFilter[1]}</span>
               </div>
               <hr className="w-3/4 mx-auto my-5" />

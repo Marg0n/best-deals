@@ -26,7 +26,7 @@ const ProductsCard = ({ product , showTotalSold }) => {
           <div
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="p-6 overflow-hidden rounded-md lg:h-[420px] shadow-md bg-[#D9D9D9] dark:bg-[#3f629e] dark:text-white"
+            className="p-3 overflow-hidden rounded-md shadow-md bg-[#D9D9D9] dark:bg-[#3f629e] dark:text-white"
           >
             <div className={`${ProductStyle.cardProductParent}`}>
               <img

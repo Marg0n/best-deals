@@ -10,7 +10,7 @@ import SectionHeader from "../../Components/ReUsableComponent/SectionHeader";
 import { Helmet } from "react-helmet-async";
 import CardSkelaton from "../../Components/CardSkelaton/CardSkelaton";
 import NoData from "../../Components/Shared/NoData";
-import Banner from "../../Components/Banner/Banner";
+import Pagination from "../../Components/Pagination/Pagination";
 
 const Home = () => {
 
@@ -89,7 +89,7 @@ const Home = () => {
           </div>
         ) : (
           products?.length > 0 ?
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-y-5 md:gap-5 text-black mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-y-5 md:gap-5 text-black mx-auto px-4 lg:px-0 lg:ml-5">
               {products?.map((product) => (
                 <ProductsCard
                   key={product._id}
@@ -100,25 +100,12 @@ const Home = () => {
         )}
 
         {/* Pagination Controls */}
-        <div className="flex justify-center items-center mt-5">
-          <button
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage === 1}
-            className="btn btn-primary"
-          >
-            Previous
-          </button>
-          <span className="mx-3">
-            Page {currentPage} of {totalPages}
-          </span>
-          <button
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-            className="btn btn-primary"
-          >
-            Next
-          </button>
-        </div>
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(pageNumber) => setCurrentPage(pageNumber)}
+        />
+
         <FeaturedProducts />
       </div>
     </div>
