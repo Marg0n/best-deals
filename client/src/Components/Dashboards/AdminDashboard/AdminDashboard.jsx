@@ -1,20 +1,19 @@
-import React from 'react';
-import AdminSideBar from './AdminSideBar';
-import { Outlet } from 'react-router-dom';
-import PropTypes from 'prop-types';
+import React from "react";
+import AdminSideBar from "./AdminSideBar";
+import { Outlet } from "react-router-dom";
+import PropTypes from "prop-types";
 
 // mui components
-import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
+import Box from "@mui/material/Box";
+import Drawer from "@mui/material/Drawer";
 
 // icons
-import { FaCaretRight } from 'react-icons/fa6';
+import { FaCaretRight } from "react-icons/fa6";
 
-// drawerWidth 
+// drawerWidth
 const drawerWidth = 240;
 
 const AdminDashboard = (props) => {
-
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [isClosing, setIsClosing] = React.useState(false);
@@ -34,14 +33,11 @@ const AdminDashboard = (props) => {
     }
   };
 
-  const drawer = (
-
-    <AdminSideBar />
-
-  );
+  const drawer = <AdminSideBar />;
 
   // Remove this const when copying and pasting into your project.
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
 
   return (
     <div className="flex relative">
@@ -50,11 +46,10 @@ const AdminDashboard = (props) => {
         aria-label="open drawer"
         edge="start"
         onClick={handleDrawerToggle}
-        className='absolute left-0 top-10 md:hidden py-6 px-0 bg-gray-700 rounded-r-xl'
+        className="absolute left-0 top-10 md:hidden py-6 px-0 bg-gray-700 rounded-r-xl"
       >
         <FaCaretRight className="md:text-xl"></FaCaretRight>
       </button>
-
 
       {/* side nav drawer */}
       <Box
@@ -72,8 +67,11 @@ const AdminDashboard = (props) => {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "block", sm: "none" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
         >
           {drawer}
@@ -81,8 +79,11 @@ const AdminDashboard = (props) => {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
+            display: { xs: "none", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
           }}
           open
         >
@@ -91,7 +92,7 @@ const AdminDashboard = (props) => {
       </Box>
 
       {/* outlet */}
-      <div className="w-full bg-[#0cc0df]/90 min-h-screen">
+      <div className="w-full bg-[#f5f5f9] min-h-screen">
         <Outlet />
       </div>
     </div>
