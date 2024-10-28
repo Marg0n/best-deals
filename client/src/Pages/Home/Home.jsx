@@ -20,28 +20,38 @@ const Home = () => {
   const [priceRange, setPriceRange] = useState([0, ""]);
   // console.log(priceRange);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+
 
 
   // This fetch is for collect all data from mongoDB
   const axiosCommon = useAxiosCommon();
   const { data: products, isLoading } = useQuery({
-    queryKey: ["products", search, selectedCategory, priceRange],
+    queryKey: ["products", search, selectedCategory, priceRange, currentPage],
     queryFn: async () => {
       const params = {
         search: search || '',
         selectedCategory: selectedCategory || '',
         minPrice: priceRange?.[0] || '',
         maxPrice: priceRange?.[1] || "",
+        page: currentPage,
+        limit: 10
       };
 
 
       const res = await axiosCommon.get(`/all-products`, {
         params: params ? params : {},
       });
-
-      return res.data;
+      setTotalPages(res.data.totalPages);
+      return res.data.results;
     },
   });
+
+  // handle pagination
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
 
 
   return (
@@ -56,6 +66,9 @@ const Home = () => {
         <LeftMenubar
           setSearch={setSearch}
           setSelectedCategory={setSelectedCategory}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          totalPages={totalPages}
           setPriceRange={setPriceRange} />
       </div>
 
@@ -85,6 +98,27 @@ const Home = () => {
             </div> :
             <NoData></NoData>
         )}
+
+        {/* Pagination Controls */}
+        <div className="flex justify-center items-center mt-5">
+          <button
+            onClick={() => handlePageChange(currentPage - 1)}
+            disabled={currentPage === 1}
+            className="btn btn-primary"
+          >
+            Previous
+          </button>
+          <span className="mx-3">
+            Page {currentPage} of {totalPages}
+          </span>
+          <button
+            onClick={() => handlePageChange(currentPage + 1)}
+            disabled={currentPage === totalPages}
+            className="btn btn-primary"
+          >
+            Next
+          </button>
+        </div>
         <FeaturedProducts />
       </div>
     </div>

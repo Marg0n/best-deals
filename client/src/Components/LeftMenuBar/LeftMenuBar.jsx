@@ -21,9 +21,9 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange }) => {
     queryKey: ["products"],
     queryFn: async () => {
       const res = await axiosCommon.get(`/all-products`);
-      // console.log(res.data);
+      console.log(res.data.all);
 
-      return res.data;
+      return res.data.all;
     },
   });
 

@@ -321,10 +321,10 @@ const AdminHome = () => {
       </div>
 
       {/* sale by country */}
-      <div>
-        <div className="flex md:flex-row flex-col gap-4">
-          <div>
-            <div className="bg-white shadow-md rounded-md px-6 py-4 md:w-[510px] md:ml-4 font-rajdhani">
+      <div className="">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+          <div className="">
+            <div className="bg-white shadow-md rounded-md px-6 py-4 max-w-[500px] lg:max-w-full md:ml-4 font-rajdhani ">
               <h3 className="text-[20px] font-semibold">Sales by Countries</h3>
               <p className="text-[15px] text-gray-400 font-semibold">
                 Monthly Sales Overview
@@ -372,7 +372,7 @@ const AdminHome = () => {
           </div>
           {/* delivery performance  */}
           <div>
-            <div className="bg-white p-6 font-rajdhani md:w-[510px] md:h-[492px] rounded-lg shadow-md">
+            <div className="bg-white p-6 font-rajdhani max-w-[500px] lg:max-w-full rounded-lg shadow-md">
               <h2 className="text-[20px] font-semibold  mb-2">
                 Delivery Performance
               </h2>
@@ -413,11 +413,11 @@ const AdminHome = () => {
 
       {/* Monthly Purchase Totals */}
 
-      <div className="grid grid-cols-1 gap-4 font-rajdhani md:grid-cols-2 mx-auto md:ml-4">
+      <div className="grid grid-cols-1 gap-4 font-rajdhani lg:grid-cols-2 mx-auto md:ml-4">
         <div className="col-span-1">
           <MonthlyPurchaseChart />
         </div>
-        <div className="col-span-1 md:w-[760px]">
+        <div className="col-span-1 ">
           <RevenueOverviewChart />
         </div>
       </div>

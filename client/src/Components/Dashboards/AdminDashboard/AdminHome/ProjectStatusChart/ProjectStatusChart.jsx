@@ -45,7 +45,7 @@ const ProjectStatusChart = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-4 md:w-[510px] md:h-[492px] font-rajdhani">
+    <div className="bg-white shadow-md rounded-lg p-4 max-w-[500px] lg:max-w-full  font-rajdhani">
       <h3 className="text-[20px] font-semibold">Project Status</h3>
       <div className="flex items-center mt-4">
         <div className="flex items-center space-x-2">
