@@ -591,194 +591,194 @@ async function run() {
     // ==================================
     // warning vendor
     // ==================================
-    app.put("/vendors/:id/warning", async (req, res) => {
-      const { id } = req.params;
-      const { isWarning } = req.body;
+    // app.put("/vendors/:id/warning", async (req, res) => {
+    //   const { id } = req.params;
+    //   const { isWarning } = req.body;
 
-      // console.log('Received vendor ID:', id);
-      // console.log('Received isWarning value:', isWarning);
+    //   // console.log('Received vendor ID:', id);
+    //   // console.log('Received isWarning value:', isWarning);
 
-      // Ensure ID is valid
-      if (!ObjectId.isValid(id)) {
-        return res.status(400).json({ message: "Invalid vendor ID format" });
-      }
+    //   // Ensure ID is valid
+    //   if (!ObjectId.isValid(id)) {
+    //     return res.status(400).json({ message: "Invalid vendor ID format" });
+    //   }
 
-      // Ensure isWarning is a boolean
-      if (typeof isWarning !== "boolean") {
-        return res.status(400).json({ message: "Invalid isWarning value" });
-      }
+    //   // Ensure isWarning is a boolean
+    //   if (typeof isWarning !== "boolean") {
+    //     return res.status(400).json({ message: "Invalid isWarning value" });
+    //   }
 
-      // Perform the update
-      try {
-        const result = await usersCollection.updateOne(
-          { _id: new ObjectId(id) },
-          { $set: { isWarning: isWarning } }
-        );
+    //   // Perform the update
+    //   try {
+    //     const result = await usersCollection.updateOne(
+    //       { _id: new ObjectId(id) },
+    //       { $set: { isWarning: isWarning } }
+    //     );
 
-        if (result.modifiedCount > 0) {
-          return res
-            .status(200)
-            .json({ message: "Warning status updated successfully" });
-        } else {
-          return res.status(404).json({ message: "Vendor not found" });
-        }
-      } catch (error) {
-        console.error("Error updating warning status:", error);
-        return res.status(500).json({ message: "Internal server error" });
-      }
-    });
+    //     if (result.modifiedCount > 0) {
+    //       return res
+    //         .status(200)
+    //         .json({ message: "Warning status updated successfully" });
+    //     } else {
+    //       return res.status(404).json({ message: "Vendor not found" });
+    //     }
+    //   } catch (error) {
+    //     console.error("Error updating warning status:", error);
+    //     return res.status(500).json({ message: "Internal server error" });
+    //   }
+    // });
 
     // ==================================
     // ban vendor
     // ==================================
-    app.put("/vendorss/:id/ban", async (req, res) => {
-      const { id } = req.params;
-      const { isBanned } = req.body;
+    // app.put("/vendorss/:id/ban", async (req, res) => {
+    //   const { id } = req.params;
+    //   const { isBanned } = req.body;
 
-      // Validate vendor ID and isBanned value
-      if (!ObjectId.isValid(id)) {
-        return res.status(400).json({ message: "Invalid vendor ID format" });
-      }
-      if (typeof isBanned !== "boolean") {
-        return res.status(400).json({ message: "Invalid isBanned value" });
-      }
+    //   // Validate vendor ID and isBanned value
+    //   if (!ObjectId.isValid(id)) {
+    //     return res.status(400).json({ message: "Invalid vendor ID format" });
+    //   }
+    //   if (typeof isBanned !== "boolean") {
+    //     return res.status(400).json({ message: "Invalid isBanned value" });
+    //   }
 
-      try {
-        const result = await usersCollection.updateOne(
-          { _id: new ObjectId(id) },
-          { $set: { isBanned: isBanned } }
-        );
+    //   try {
+    //     const result = await usersCollection.updateOne(
+    //       { _id: new ObjectId(id) },
+    //       { $set: { isBanned: isBanned } }
+    //     );
 
-        if (result.modifiedCount > 0) {
-          return res
-            .status(200)
-            .json({ message: "Ban status updated successfully" });
-        } else {
-          return res.status(404).json({ message: "Vendor not found" });
-        }
-      } catch (error) {
-        console.error("Error updating ban status:", error);
-        return res.status(500).json({ message: "Internal server error" });
-      }
-    });
+    //     if (result.modifiedCount > 0) {
+    //       return res
+    //         .status(200)
+    //         .json({ message: "Ban status updated successfully" });
+    //     } else {
+    //       return res.status(404).json({ message: "Vendor not found" });
+    //     }
+    //   } catch (error) {
+    //     console.error("Error updating ban status:", error);
+    //     return res.status(500).json({ message: "Internal server error" });
+    //   }
+    // });
 
     // ==================================
     // warning users
     // ==================================
-    app.put("/Users/:id/warning", async (req, res) => {
-      const { id } = req.params;
-      const { isWarning } = req.body;
+    // app.put("/Users/:id/warning", async (req, res) => {
+    //   const { id } = req.params;
+    //   const { isWarning } = req.body;
 
-      // console.log('Received vendor ID:', id);
-      // console.log('Received isWarning value:', isWarning);
+    //   // console.log('Received vendor ID:', id);
+    //   // console.log('Received isWarning value:', isWarning);
 
-      // Ensure ID is valid
-      if (!ObjectId.isValid(id)) {
-        return res.status(400).json({ message: "Invalid vendor ID format" });
-      }
+    //   // Ensure ID is valid
+    //   if (!ObjectId.isValid(id)) {
+    //     return res.status(400).json({ message: "Invalid vendor ID format" });
+    //   }
 
-      // Ensure isWarning is a boolean
-      if (typeof isWarning !== "boolean") {
-        return res.status(400).json({ message: "Invalid isWarning value" });
-      }
+    //   // Ensure isWarning is a boolean
+    //   if (typeof isWarning !== "boolean") {
+    //     return res.status(400).json({ message: "Invalid isWarning value" });
+    //   }
 
-      // Perform the update
-      try {
-        const result = await usersCollection.updateOne(
-          { _id: new ObjectId(id) },
-          { $set: { isWarning: isWarning } }
-        );
+    //   // Perform the update
+    //   try {
+    //     const result = await usersCollection.updateOne(
+    //       { _id: new ObjectId(id) },
+    //       { $set: { isWarning: isWarning } }
+    //     );
 
-        if (result.modifiedCount > 0) {
-          return res
-            .status(200)
-            .json({ message: "Warning status updated successfully" });
-        } else {
-          return res.status(404).json({ message: "Vendor not found" });
-        }
-      } catch (error) {
-        console.error("Error updating warning status:", error);
-        return res.status(500).json({ message: "Internal server error" });
-      }
-    });
+    //     if (result.modifiedCount > 0) {
+    //       return res
+    //         .status(200)
+    //         .json({ message: "Warning status updated successfully" });
+    //     } else {
+    //       return res.status(404).json({ message: "Vendor not found" });
+    //     }
+    //   } catch (error) {
+    //     console.error("Error updating warning status:", error);
+    //     return res.status(500).json({ message: "Internal server error" });
+    //   }
+    // });
 
     // ==================================
     // ban users
     // ==================================
-    app.put("/Userss/:id/ban", async (req, res) => {
-      const { id } = req.params;
-      const { isBanned } = req.body;
+    // app.put("/Userss/:id/ban", async (req, res) => {
+    //   const { id } = req.params;
+    //   const { isBanned } = req.body;
 
-      // Validate user ID and isBanned value
-      if (!ObjectId.isValid(id)) {
-        return res.status(400).json({ message: "Invalid vendor ID format" });
-      }
-      if (typeof isBanned !== "boolean") {
-        return res.status(400).json({ message: "Invalid isBanned value" });
-      }
+    //   // Validate user ID and isBanned value
+    //   if (!ObjectId.isValid(id)) {
+    //     return res.status(400).json({ message: "Invalid vendor ID format" });
+    //   }
+    //   if (typeof isBanned !== "boolean") {
+    //     return res.status(400).json({ message: "Invalid isBanned value" });
+    //   }
 
-      try {
-        const result = await usersCollection.updateOne(
-          { _id: new ObjectId(id) },
-          { $set: { isBanned: isBanned } }
-        );
+    //   try {
+    //     const result = await usersCollection.updateOne(
+    //       { _id: new ObjectId(id) },
+    //       { $set: { isBanned: isBanned } }
+    //     );
 
-        if (result.modifiedCount > 0) {
-          return res
-            .status(200)
-            .json({ message: "Ban status updated successfully" });
-        } else {
-          return res.status(404).json({ message: "Vendor not found" });
-        }
-      } catch (error) {
-        console.error("Error updating ban status:", error);
-        return res.status(500).json({ message: "Internal server error" });
-      }
-    });
-
-    // ==================================
-    // delete users
-    // ==================================
-    app.delete("/usersDelete/:id", async (req, res) => {
-      const { id } = req.params;
-
-      try {
-        const result = await usersCollection.deleteOne({
-          _id: new ObjectId(id),
-        });
-
-        if (result.deletedCount > 0) {
-          res.status(200).json({ message: "User deleted successfully" });
-        } else {
-          res.status(404).json({ message: "User not found" });
-        }
-      } catch (error) {
-        console.error("Error deleting user:", error);
-        res.status(500).json({ message: "Internal server error" });
-      }
-    });
+    //     if (result.modifiedCount > 0) {
+    //       return res
+    //         .status(200)
+    //         .json({ message: "Ban status updated successfully" });
+    //     } else {
+    //       return res.status(404).json({ message: "Vendor not found" });
+    //     }
+    //   } catch (error) {
+    //     console.error("Error updating ban status:", error);
+    //     return res.status(500).json({ message: "Internal server error" });
+    //   }
+    // });
 
     // ==================================
     // delete users
     // ==================================
-    app.delete("/vendorsDelete/:id", async (req, res) => {
-      const { id } = req.params;
+    // app.delete("/usersDelete/:id", async (req, res) => {
+    //   const { id } = req.params;
 
-      try {
-        const result = await usersCollection.deleteOne({
-          _id: new ObjectId(id),
-        });
+    //   try {
+    //     const result = await usersCollection.deleteOne({
+    //       _id: new ObjectId(id),
+    //     });
 
-        if (result.deletedCount > 0) {
-          res.status(200).json({ message: "User deleted successfully" });
-        } else {
-          res.status(404).json({ message: "User not found" });
-        }
-      } catch (error) {
-        console.error("Error deleting user:", error);
-        res.status(500).json({ message: "Internal server error" });
-      }
-    });
+    //     if (result.deletedCount > 0) {
+    //       res.status(200).json({ message: "User deleted successfully" });
+    //     } else {
+    //       res.status(404).json({ message: "User not found" });
+    //     }
+    //   } catch (error) {
+    //     console.error("Error deleting user:", error);
+    //     res.status(500).json({ message: "Internal server error" });
+    //   }
+    // });
+
+    // ==================================
+    // delete vendors
+    // ==================================
+    // app.delete("/vendorsDelete/:id", async (req, res) => {
+    //   const { id } = req.params;
+
+    //   try {
+    //     const result = await usersCollection.deleteOne({
+    //       _id: new ObjectId(id),
+    //     });
+
+    //     if (result.deletedCount > 0) {
+    //       res.status(200).json({ message: "User deleted successfully" });
+    //     } else {
+    //       res.status(404).json({ message: "User not found" });
+    //     }
+    //   } catch (error) {
+    //     console.error("Error deleting user:", error);
+    //     res.status(500).json({ message: "Internal server error" });
+    //   }
+    // });
 
     // ==================================
     // total users

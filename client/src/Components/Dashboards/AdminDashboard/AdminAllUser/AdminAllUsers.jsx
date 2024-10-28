@@ -44,8 +44,8 @@ const AdminAllUsers = () => {
         email: user.email, // Assuming you might want to add category
         lastLogin: user.lastLogin,
         joined: user.createdTime,
-        isWarning: user.isWarning || false,
-        isBanned: user.isBanned || false,
+        // isWarning: user.isWarning || false,
+        // isBanned: user.isBanned || false,
         // Assuming you might want to add price
     }));
 
@@ -173,82 +173,82 @@ const ActionMenu = ({ row }) => {
         // Add your edit logic here (e.g., open a modal with the product data)
     };
 
-    // Delete the user
-    const handleDelete = async () => {
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, delete it!'
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                try {
-                    await allUsers.delete(`/usersDelete/${row.id}`); // Send DELETE request
+    // // Delete the user
+    // const handleDelete = async () => {
+    //     Swal.fire({
+    //         title: 'Are you sure?',
+    //         text: "You won't be able to revert this!",
+    //         icon: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonColor: '#3085d6',
+    //         cancelButtonColor: '#d33',
+    //         confirmButtonText: 'Yes, delete it!'
+    //     }).then(async (result) => {
+    //         if (result.isConfirmed) {
+    //             try {
+    //                 await allUsers.delete(`/usersDelete/${row.id}`); // Send DELETE request
 
-                    Swal.fire(
-                        'Deleted!',
-                        'The user has been deleted.',
-                        'success'
-                    );
+    //                 Swal.fire(
+    //                     'Deleted!',
+    //                     'The user has been deleted.',
+    //                     'success'
+    //                 );
 
-                    // Optionally: Trigger a state update to remove the deleted user from the UI
-                } catch (error) {
-                    console.error('Error deleting user:', error);
+    //                 // Optionally: Trigger a state update to remove the deleted user from the UI
+    //             } catch (error) {
+    //                 console.error('Error deleting user:', error);
 
-                    Swal.fire(
-                        'Error!',
-                        'Failed to delete the user.',
-                        'error'
-                    );
-                }
-            }
-            handleClose(); // Close the menu after the request
-        });
-    };
+    //                 Swal.fire(
+    //                     'Error!',
+    //                     'Failed to delete the user.',
+    //                     'error'
+    //                 );
+    //             }
+    //         }
+    //         handleClose(); // Close the menu after the request
+    //     });
+    // };
 
 
-    // Toggle the warning status for the user
-    const toggleWarningStatus = async () => {
-        try {
-            //console.log('Vendor ID:', row.id);  // Log vendor ID
-            const updatedWarningStatus = !row.isWarning;
-            //console.log('Payload:', { isWarning: updatedWarningStatus }); // Log the payload
+    // // Toggle the warning status for the user
+    // const toggleWarningStatus = async () => {
+    //     try {
+    //         //console.log('Vendor ID:', row.id);  // Log vendor ID
+    //         const updatedWarningStatus = !row.isWarning;
+    //         //console.log('Payload:', { isWarning: updatedWarningStatus }); // Log the payload
 
-            // Send PUT request to update warning status
-            await allUsers.put(`/Users/${row.id}/warning`, {
-                isWarning: updatedWarningStatus,
-            });
+    //         // Send PUT request to update warning status
+    //         await allUsers.put(`/Users/${row.id}/warning`, {
+    //             isWarning: updatedWarningStatus,
+    //         });
 
-            // Update the UI locally after the request succeeds
-            row.isWarning = updatedWarningStatus;
-        } catch (error) {
-            console.error('Error updating warning status:', error);
-        }
-        handleClose(); // Close the menu after the request
-    };
+    //         // Update the UI locally after the request succeeds
+    //         row.isWarning = updatedWarningStatus;
+    //     } catch (error) {
+    //         console.error('Error updating warning status:', error);
+    //     }
+    //     handleClose(); // Close the menu after the request
+    // };
 
-    // Toggle the ban status for the user
-    const toggleBanStatus = async () => {
-        try {
-            //console.log('Vendor ID:', row.id);  // Log vendor ID
-            const updatedBanStatus = !row.isBanned;
-            //console.log('Payload:', { isBanned: updatedBanStatus }); // Log the payload
+    // // Toggle the ban status for the user
+    // const toggleBanStatus = async () => {
+    //     try {
+    //         //console.log('Vendor ID:', row.id);  // Log vendor ID
+    //         const updatedBanStatus = !row.isBanned;
+    //         //console.log('Payload:', { isBanned: updatedBanStatus }); // Log the payload
 
-            // Send PUT request to update ban status
-            await allUsers.put(`/Userss/${row.id}/ban`, {
-                isBanned: updatedBanStatus,
-            });
+    //         // Send PUT request to update ban status
+    //         await allUsers.put(`/Userss/${row.id}/ban`, {
+    //             isBanned: updatedBanStatus,
+    //         });
 
-            // Update the UI locally after the request succeeds
-            row.isBanned = updatedBanStatus;
-        } catch (error) {
-            console.error('Error updating ban status:', error);
-        }
-        handleClose(); // Close the menu after the request
-    };
+    //         // Update the UI locally after the request succeeds
+    //         row.isBanned = updatedBanStatus;
+    //     } catch (error) {
+    //         console.error('Error updating ban status:', error);
+    //     }
+    //     handleClose(); // Close the menu after the request
+    // };
 
 
     return (
@@ -260,21 +260,21 @@ const ActionMenu = ({ row }) => {
                 <MenuItem onClick={handleClose}>
                     <InfoIcon fontSize="small" className='text-green-600' /> Details
                 </MenuItem>
-                <MenuItem onClick={() => toggleWarningStatus(row)}>
+                <MenuItem>
                     <WarningIcon
                         fontSize="small"
-                        className={row.isWarning ? 'text-red-500' : 'text-yellow-500'}
+                        className= 'text-yellow-500'
                     />
-                    {row.isWarning ? 'Remove Warning' : 'Warning'}
+                    Warning
                 </MenuItem>
-                <MenuItem onClick={() => toggleBanStatus(row)}>
+                <MenuItem>
                     <BlockIcon
                         fontSize="small"
-                        className={row.isBanned ? 'text-red-500' : 'text-gray-500'}
+                        className= 'text-red-500'
                     />
-                    {row.isBanned ? 'Unban' : 'Ban'}
+                    Ban
                 </MenuItem>
-                <MenuItem onClick={handleDelete}>
+                <MenuItem >
                     <DeleteIcon fontSize="small" className="text-red-500" /> Delete
                 </MenuItem>
             </Menu>
