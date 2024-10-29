@@ -133,7 +133,7 @@ const AdminHome = () => {
     {
       id: 1,
       icon: <FaChartLine />,
-      value: `${totalRevenue?.toFixed(2) || "0.00"}$`,
+      value: `${totalRevenue?.toFixed(2) || "0.00"}   $`,
       label: "Total Transactions",
       hoverColor: "hover:bg-blue-100",
       iconColor: "text-blue-500",
@@ -141,7 +141,7 @@ const AdminHome = () => {
     {
       id: 2,
       icon: <FaDollarSign />,
-      value: `${rvenue?.toFixed(2)}$`,
+      value: `${rvenue?.toFixed(2)} $`,
       label: "Revenue",
       hoverColor: "hover:bg-green-100",
       iconColor: "text-green-500",
@@ -149,7 +149,7 @@ const AdminHome = () => {
     {
       id: 3,
       icon: <FaUsers />,
-      value: `${totalUsers || "0"}+`,
+      value: `${totalUsers || "0"}`,
       label: "Users",
       hoverColor: "hover:bg-purple-100",
       iconColor: "text-purple-500",
@@ -157,7 +157,7 @@ const AdminHome = () => {
     {
       id: 4,
       icon: <FaStore />,
-      value: `${totalVendors || "0"}+`,
+      value: `${totalVendors || "0"}`,
       label: "Vendors",
       hoverColor: "hover:bg-orange-100",
       iconColor: "text-orange-500",
@@ -165,7 +165,7 @@ const AdminHome = () => {
     {
       id: 5,
       icon: <FaShoppingCart />,
-      value: "0+",
+      value: `${profile[0]?.purchaseHistory?.length || 0}`,
       label: "Total Times Buy",
       hoverColor: "hover:bg-red-100",
       iconColor: "text-red-500",
@@ -173,7 +173,7 @@ const AdminHome = () => {
     {
       id: 6,
       icon: <FaMoneyBillWave />,
-      value: `0+`,
+      value: `${totalSpending || 0} $`,
       label: "Total Spendings",
       hoverColor: "hover:bg-teal-100",
       iconColor: "text-teal-500",
