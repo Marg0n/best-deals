@@ -4,17 +4,29 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
   const handlePrevious = () => {
     if (currentPage > 1) {
       onPageChange(currentPage - 1);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    });
     }
   };
 
   const handleNext = () => {
     if (currentPage < totalPages) {
       onPageChange(currentPage + 1);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+    });
     }
   };
 
   const handlePageClick = (pageNumber) => {
     onPageChange(pageNumber);
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
   };
 
   const renderPageNumbers = () => {
@@ -25,9 +37,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
         <button
           key={i}
           onClick={() => handlePageClick(i)}
-          className={`mx-1 px-3 py-1 rounded-full bg-[#775050]  text-white hover:bg-blue-300 transition-all duration-300 transform hover:scale-110 ${
-            currentPage === i ? "bg-blue-500 text-white shadow-lg text-lg" : ""
-          }`}
+          className={`mx-1 px-3 py-1 rounded-full bg-[#775050]  text-white hover:bg-blue-300 transition-all duration-300 transform hover:scale-110 ${currentPage === i ? "bg-blue-500 text-white shadow-lg text-lg" : ""
+            }`}
         >
           {i}
         </button>
@@ -42,9 +53,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={handlePrevious}
         disabled={currentPage === 1}
-        className={`px-4 py-1 rounded-full bg-[#775050] text-white hover:bg-[#3B9DF8] hover:text-[#fff] transition-all duration-300 ${
-          currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={`px-4 py-1 rounded-full bg-[#775050] text-white hover:bg-[#3B9DF8] hover:text-[#fff] transition-all duration-300 ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""
+          }`}
       >
         Previous
       </button>
@@ -54,9 +64,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }) => {
       <button
         onClick={handleNext}
         disabled={currentPage === totalPages}
-        className={`px-4 py-1 rounded-full bg-[#775050] text-white hover:bg-[#3B9DF8] hover:text-[#fff] transition-all duration-300 ${
-          currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
-        }`}
+        className={`px-4 py-1 rounded-full bg-[#775050] text-white hover:bg-[#3B9DF8] hover:text-[#fff] transition-all duration-300 ${currentPage === totalPages ? "opacity-50 cursor-not-allowed" : ""
+          }`}
       >
         Next
       </button>
