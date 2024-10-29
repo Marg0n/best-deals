@@ -298,6 +298,7 @@ const AdminHome = () => {
       </div> */}
 
       <div>
+        {/* stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 font-rajdhani">
           {stats.map((stat) => (
             <div
@@ -415,7 +416,7 @@ const AdminHome = () => {
 
       <div className="grid grid-cols-1 gap-4 font-rajdhani lg:grid-cols-2 mx-auto md:ml-4">
         <div className="col-span-1">
-          <MonthlyPurchaseChart />
+          <MonthlyPurchaseChart data={monthlyTotals} />
         </div>
         <div className="col-span-1 ">
           <RevenueOverviewChart />
