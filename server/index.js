@@ -406,7 +406,7 @@ async function run() {
       // Fetch data based on the query
       const results = await productCollection.find(query).skip(skip).limit(limit).toArray();
       const all = await productCollection.find(query).toArray()
-      res.send({ results, totalPages, currentPage: page , all})
+      res.send({ results, totalPages, currentPage: page, all })
 
       // Send back the results
       // res.send(results ,totalPages );
@@ -432,6 +432,32 @@ async function run() {
 
     // ==================================
     // Get All orders
+    // ==================================
+    app.get("/vendor-orders/:vendorEmail", async (req, res) => {
+      const vendorEmail = req.params.vendorEmail
+
+      try {
+
+        const query = {
+          "items": {
+            $elemMatch: {
+              $elemMatch: { "vendorEmail": vendorEmail }
+            }
+          }
+        }
+        const result = await orderCollection.find(query).toArray();
+        res.status(200).json(result);
+      }
+      catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "An error occurred while fetching vendor orders" });
+      }
+      // const results = await orderCollection.find().toArray();
+      // res.send(results);
+    });
+
+    // ==================================
+    // Get verndor specific orders
     // ==================================
     app.get("/all-orders", async (req, res) => {
       const results = await orderCollection.find().toArray();
