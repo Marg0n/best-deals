@@ -20,7 +20,7 @@ const ProductsCard = ({ product , showTotalSold }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="w-full max-w-72 mx-auto">
+    <div className="w-full max-w-80 mx-auto">
       <div className="relative ">
         <Link to={`/details/${_id}`}>
           <div
