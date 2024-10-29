@@ -9,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import PropTypes from "prop-types";
 
 ChartJS.register(
   CategoryScale,
@@ -19,13 +20,19 @@ ChartJS.register(
   Legend
 );
 
-const MonthlyPurchaseChart = () => {
-  const data = {
-    labels: ["January", "February", "March", "April", "May", "June", "July"],
+const MonthlyPurchaseChart = ({ data }) => {
+
+  const labels = Object.keys(data);
+  const values = Object.values(data);
+
+  const chartData = {
+    // labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    labels: labels,
     datasets: [
       {
         label: "Total Amount Bought",
-        data: [60, 55, 80, 75, 50, 50, 40], // Example data, replace with your actual data
+        data: values,
+        // data: [60, 55, 80, 75, 50, 50, 40], // Example data, replace with your actual data
         backgroundColor: [
           "rgba(255, 99, 132, 0.5)",
           "rgba(255, 159, 64, 0.5)",
@@ -78,9 +85,13 @@ const MonthlyPurchaseChart = () => {
 
   return (
     <div className="bg-white p-4 rounded-lg shadow-lg">
-      <Bar data={data} options={options} width={600} height={400} />
+      <Bar data={chartData} options={options} width={600} height={400} />
     </div>
   );
 };
+
+MonthlyPurchaseChart.propTypes = {
+  data: PropTypes.Object
+}
 
 export default MonthlyPurchaseChart;
