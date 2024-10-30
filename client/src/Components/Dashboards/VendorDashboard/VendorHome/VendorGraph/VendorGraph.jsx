@@ -25,8 +25,18 @@ const VendorGraph = () => {
     }, 0);
 
     const data = [
-        { month: 'Jan', earnings: total, expenses: 400 },
-        { month: 'Feb', earnings: total, expenses: 200 }
+        { month: 'Jan', earnings: 200, expenses: 400 },
+        { month: 'Feb', earnings: 100, expenses: 200 },
+        { month: 'Mar', earnings: 50, expenses: 300 },
+        { month: 'Apr', earnings: 50, expenses: 300 },
+        { month: 'May', earnings: 50, expenses: 300 },
+        { month: 'Jun', earnings: 50, expenses: 300 },
+        { month: 'Jul', earnings: 50, expenses: 300 },
+        { month: 'Aug', earnings: 50, expenses: 300 },
+        { month: 'Sep', earnings: 50, expenses: 300 },
+        { month: 'Oct', earnings: 50, expenses: 300 },
+        { month: 'Nov', earnings: 50, expenses: 300 },
+        { month: 'Dec', earnings: 50, expenses: 300 },
 
         // Add more data
     ];

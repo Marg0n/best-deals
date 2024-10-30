@@ -14,15 +14,14 @@ import PropTypes from 'prop-types';
 
 const VendorHome = () => {
 
-
-  const { user } = useAuth()
+  const { user } = useAuth();
   const vendorProducts = useAxiosSecure();
 
   const { data: products = [], isLoading } = useQuery({
     queryKey: ["vendorProductsForVendorDashboard"],
     queryFn: async () => {
       const res = await vendorProducts.get('/allVendorProducts');
-      return res.data; // Ensure you handle the data correctly here
+      return res.data;
     },
   });
 
@@ -30,15 +29,12 @@ const VendorHome = () => {
     queryKey: ["allOrdersForHome"],
     queryFn: async () => {
       const res = await vendorProducts.get('/all-orders');
-      console.log(res.data);
-      return res.data; // Ensure you handle the data correctly here
+      return res.data;
     },
   });
 
   const allVendorOrders = allOrders?.filter(product => product?.vendorEmail === user?.email);
-
   const allVendorProducts = products?.filter(product => product?.vendorEmail === user?.email);
-
 
   let total = allVendorOrders?.reduce((previousValue, currentValue) => {
     return (previousValue + (currentValue.itemsCount * currentValue.totalAmount));
@@ -50,14 +46,9 @@ const VendorHome = () => {
     totalEarnings: Math.round(total) || 0,
   };
 
-  // profile info
   const { profile } = useUserProfile();
-
-  // total spending stat
   const [totalSpending, setTotalSpending] = useState();
 
-
-  // looping through all purchases amount
   useEffect(() => {
     if (profile && profile[0]?.purchaseHistory) {
       const total = profile[0]?.purchaseHistory
@@ -67,7 +58,6 @@ const VendorHome = () => {
     }
   }, [profile]);
 
-  // get purchase History
   const userData = profile[0]?.purchaseHistory;
 
   const transformData = (data) => {
@@ -79,7 +69,6 @@ const VendorHome = () => {
 
   const purchaseHistory = transformData(userData);
 
-  // get monthly total amount
   const getMonthlyTotals = (history) => {
     const totals = {};
 
@@ -100,39 +89,69 @@ const VendorHome = () => {
 
   const monthlyTotals = getMonthlyTotals(purchaseHistory);
 
-  // aos animation use effect
+  // State to manage input for expense and selected month
+  const [expense, setExpense] = useState('');
+  const [selectedMonth, setSelectedMonth] = useState('');
+
+  const handleExpenseSubmit = (e) => {
+    e.preventDefault();
+    console.log(`Expense: ${expense}, Month: ${selectedMonth}`);
+    // Here you can add logic to handle the expense submission
+    setExpense('');
+    setSelectedMonth('');
+  };
+
   useEffect(() => {
-    AOS.init({
-      duration: 500
-    });
+    AOS.init({ duration: 500 });
   }, []);
 
   return (
     <div className="p-8 min-h-screen space-y-4">
-      {/* helmet */}
+      {/* Helmet */}
       <Helmet>
         <title>Best Deal | Vendor Dashboard</title>
       </Helmet>
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 place-items-center mx-auto">
 
-      </div>
-      {/* stat section */}
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 items-center justify-center' data-aos="fade-up">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 items-center justify-center">
         <StatCard title="Total Products" value={stats.totalProducts} />
         <StatCard title="Total Orders" value={stats.totalOrders} />
         <StatCard title="Total Earnings" value={stats.totalEarnings} />
-        <StatCard
-          title={'Total Times Buy'}
-          value={profile[0]?.purchaseHistory?.length}
-        />
-        <StatCard
-          title={'Total Spendings'}
-          value={totalSpending}
-        />
+        <StatCard title={'Total Times Buy'} value={profile[0]?.purchaseHistory?.length} />
+        <StatCard title={'Total Spendings'} value={totalSpending} />
       </div>
 
-      {/* profile info */}
+      {/* Expense Input Section */}
+      <div className="my-6 text-white">
+        <h2 className="text-lg font-semibold mb-4">Record Monthly Expense</h2>
+        <form onSubmit={handleExpenseSubmit} className="flex flex-col gap-4 max-w-md">
+          <input
+            type="number"
+            value={expense}
+            onChange={(e) => setExpense(e.target.value)}
+            placeholder="Enter Expense Amount"
+            className="input input-bordered w-full"
+          />
+          <select
+            value={selectedMonth}
+            onChange={(e) => setSelectedMonth(e.target.value)}
+            className="select select-bordered w-full"
+          >
+            <option value="">Select Month</option>
+            {Array.from({ length: 12 }, (_, i) => {
+              const month = new Date(0, i).toLocaleString('default', { month: 'long' });
+              return (
+                <option key={i} value={month}>
+                  {month}
+                </option>
+              );
+            })}
+          </select>
+          <button type="submit" className="btn btn-primary w-full">Submit Expense</button>
+        </form>
+      </div>
+
+      {/* Profile Info */}
       <ProfileInfo />
 
       {/* Chart section */}
@@ -144,6 +163,7 @@ const VendorHome = () => {
       {/* Revenue Graph */}
       <VendorGraph />
 
+      {/* Vendor Products */}
       <VendorProducts />
     </div>
   );
@@ -152,9 +172,6 @@ const VendorHome = () => {
 VendorHome.propTypes = {
   title: PropTypes.string,
   value: PropTypes.string,
-  // percentage: PropTypes.number,
-  // increase: PropTypes.bool,
-  // description: PropTypes.string,
 };
 
 export default VendorHome;
