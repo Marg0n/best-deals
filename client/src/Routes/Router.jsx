@@ -39,6 +39,7 @@ import NewHomepage from "../Pages/NewHomePage/NewHomepage";
 import VendorRegistration from "../components/VendorRegistration/VendorRegistration";
 import AllOrders from "../Pages/AllOrders/AllOrders";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
+import OrderTracking from "../Pages/OrderTracking/OrderTracking";
 
 const Router = createBrowserRouter([
   {
@@ -53,6 +54,10 @@ const Router = createBrowserRouter([
       {
         path: "/all",
         element: <Home />,
+      },
+      {
+        path: "/track-order",
+        element: <OrderTracking />,
       },
       {
         path: "/details/:_id",
