@@ -48,7 +48,7 @@ const PaymentModal = ({ CheckoutPrice, contactInfo, handleClearCartList, showInv
     // const orderId = Date.now();
     const orderDate = new Date().toUTCString();
     const items = [cart.cartIteams];
-    const status = 'Payed';
+    const status = 'New Order';
     const notification = {notifyStatus: status};
     const paymentMethod = contactInfo.paymentMethod;
 
