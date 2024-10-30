@@ -910,6 +910,22 @@ async function run() {
     });
 
     // ==================================
+    // monthly revenue
+    // ==================================
+    app.get("/monthlyRevenue", async (req, res) => {
+      try {
+        const monthlyRevenue = await usersCollection.countDocuments({
+          status: "Delivered",
+        });
+        res.json({ totalVendors });
+      } catch (error) {
+        res
+          .status(500)
+          .json({ message: "Error fetching monthly revenue", error });
+      }
+    });
+
+    // ==================================
     // fetch comments
     // ==================================
     app.get("/api/products/:id", async (req, res) => {
