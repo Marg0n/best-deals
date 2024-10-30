@@ -93,13 +93,31 @@ const VendorHome = () => {
   const [expense, setExpense] = useState('');
   const [selectedMonth, setSelectedMonth] = useState('');
 
-  const handleExpenseSubmit = (e) => {
+  const handleExpenseSubmit = async (e) => {
     e.preventDefault();
-    console.log(`Expense: ${expense}, Month: ${selectedMonth}`);
-    // Here you can add logic to handle the expense submission
-    setExpense('');
-    setSelectedMonth('');
+  
+    if (!expense || !selectedMonth) {
+      alert('Please enter an expense amount and select a month.');
+      return;
+    }
+  
+    try {
+      // Send PUT request to update expense based on user email
+      await vendorProducts.put('/userCollection/expense', {
+        email: user?.email,
+        month: selectedMonth,
+        amount: parseFloat(expense),
+      });
+  
+      // Clear input fields and refetch data if necessary
+      setExpense('');
+      setSelectedMonth('');
+      refetch();
+    } catch (error) {
+      console.error('Error updating expense:', error);
+    }
   };
+  
 
   useEffect(() => {
     AOS.init({ duration: 500 });

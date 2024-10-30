@@ -806,6 +806,40 @@ async function run() {
     //   }
     // });
 
+    app.put('/userCollection/expense', async (req, res) => {
+      const { email, month, amount } = req.body;
+  
+      try {
+          // Validate request
+          if (!email || !month || amount === undefined) {
+              return res.status(400).json({ error: 'Email, month, and amount are required' });
+          }
+  
+          // Fetch the user by email
+          const user = await usersCollection.findOne({ email });
+  
+          // Check if user exists
+          if (!user) {
+              return res.status(404).json({ error: 'User not found' });
+          }
+  
+          // Prepare the update
+          const update = {
+              $set: { [`expense.${month}`]: (user.expense?.[month] || 0) + amount }
+          };
+  
+          // Update the user's expense in the database
+          await usersCollection.updateOne({ email }, update);
+  
+          // Send a success response
+          res.status(200).json({ message: 'Expense updated successfully', expense: { ...user.expense, [month]: (user.expense?.[month] || 0) + amount } });
+          
+      } catch (error) {
+          console.error('Error updating expense:', error);
+          res.status(500).json({ error: 'Internal server error' });
+      }
+  });
+    
     // ==================================
     // total users
     // ==================================
