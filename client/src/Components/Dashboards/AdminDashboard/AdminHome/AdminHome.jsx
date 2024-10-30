@@ -30,6 +30,7 @@ import {
 import ProjectStatusChart from "./ProjectStatusChart/ProjectStatusChart";
 import MonthlyPurchaseChart from "./MonthlyPurchaseChart/MonthlyPurchaseChart";
 import RevenueOverviewChart from "./RevenueOverviewChart/RevenueOverviewChart";
+
 const AdminHome = () => {
   const axiosSecure = useAxiosSecure();
 
@@ -65,6 +66,8 @@ const AdminHome = () => {
 
     fetchData();
   }, [axiosSecure]);
+
+  console.log(totalUsers, totalVendors,totalTransactions)
 
   //revenue calculation
   const rvenue = totalRevenue * 0.1 || 0;
