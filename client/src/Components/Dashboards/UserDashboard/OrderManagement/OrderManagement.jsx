@@ -9,8 +9,11 @@ const OrderManagement = () => {
     // profile info
     const { profile } = useUserProfile();
 
+    
+    
     // get purchase History
     const purchaseHistory = profile[0]?.purchaseHistory || [];
+    console.log(purchaseHistory);
 
     // console.log(purchaseHistory[0]?.items)
 
