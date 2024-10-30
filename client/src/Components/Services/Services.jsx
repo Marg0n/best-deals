@@ -1,6 +1,7 @@
 import React from 'react';
 import ServiceCard from './ServiceCard';
 import SectionHeader from '../ReUsableComponent/SectionHeader';
+import { Link } from 'react-router-dom';
 
 const Services = () => {
     return (
@@ -24,12 +25,14 @@ const Services = () => {
                     title={'Replacement'}
                     text={'7-Days Replacement'} />
             </div>
-            <div>
-                <ServiceCard
-                    img={'https://i.ibb.co.com/NyRppNJ/track.png'}
-                    title={'Track'}
-                    text={'Track your order'} />
-            </div>
+            <Link to='/track-order'>
+                <div>
+                    <ServiceCard
+                        img={'https://i.ibb.co.com/NyRppNJ/track.png'}
+                        title={'Track'}
+                        text={'Track your order'} />
+                </div>
+            </Link>
             <div>
                 <ServiceCard
                     img={'https://i.ibb.co.com/rcNNr81/measurement.png'}

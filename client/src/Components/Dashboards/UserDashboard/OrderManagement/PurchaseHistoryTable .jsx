@@ -30,16 +30,42 @@ const PurchaseHistoryTable = ({ data }) => {
         header: 'Payment Method',
       },
       {
-        accessorKey: 'shippingAddress',
+        accessorKey: 'address',
         header: 'Shipping Address',
       },
       {
         accessorKey: 'transactionId',
         header: 'Transaction ID',
       },
+      {
+        accessorKey: 'trackingNumber',
+        header: 'Tracking ID',
+      },
+      {
+        accessorKey: 'trackingNumber',
+        header: 'Tracking ID',
+        cell: ({ row }) => (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span>{row.original.trackingNumber}</span>
+            <button
+              onClick={() => handleTrackNow(row.original.trackingNumber)}
+              className="btn-active btn-link"
+            >
+              Track Now
+            </button>
+          </div>
+        ),
+      },
     ],
     []
   );
+
+  // Handler function for tracking button
+  const handleTrackNow = (trackingNumber) => {
+    // Replace with actual tracking URL or logic
+    const trackingUrl = `https://tracking.example.com/${trackingNumber}`;
+    window.open(trackingUrl, '_blank');
+  };
 
   // useEffect(() => {
   //   setFilteredData(
@@ -54,7 +80,7 @@ const PurchaseHistoryTable = ({ data }) => {
   // search items
   useEffect(() => {
     setFilteredData(
-      data.map(entry => ({
+      data?.map(entry => ({
         ...entry,
         items: entry?.items.flat().filter(item =>
           Object.values(item).some(value =>
@@ -130,7 +156,7 @@ const PurchaseHistoryTable = ({ data }) => {
             <React.Fragment key={row.id}>
               <tr onClick={() => handleRowClick(row.id)} style={{ cursor: 'pointer' }}>
                 {row.getVisibleCells().map(cell => (
-                  <td key={cell.id} data-label={cell.column.columnDef.header} className=' bg-green-300 text-xs'>
+                  <td key={cell.id} data-label={cell.column.columnDef.header} className=' bg-green-300 text-xs text-black'>
                     {/* {cell.column.columnDef.accessorKey ? row.original[cell.column.columnDef.accessorKey] : null} */}
                     {/* {cell.getValue()} */}
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -140,7 +166,7 @@ const PurchaseHistoryTable = ({ data }) => {
               {row.getIsExpanded() && (
                 <tr data-aos='fade-up' data-aos-duration="500">
                   <td colSpan={columns.length} className='pl-2'>
-                    <table className="nested-table">
+                    <table className="nested-table text-black">
                       <thead>
                         <tr>
                           <th>Product Name</th>
@@ -151,9 +177,9 @@ const PurchaseHistoryTable = ({ data }) => {
                           <th>Description</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className='text-black'>
                         {row.original.items.flat().map((item, index) => (
-                          <tr key={index} className='text-xs'>
+                          <tr key={index} className='text-xs text-black'>
                             <td data-label="Product Name">{item.productName}</td>
                             <td data-label="Price">${item.price}</td>
                             <td data-label="Price">{item.cartQuantity
