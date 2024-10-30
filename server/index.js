@@ -431,7 +431,7 @@ async function run() {
     });
 
     // ==================================
-    // Get All orders
+    // Get verndor specific orders
     // ==================================
     app.get("/vendor-orders/:vendorEmail", async (req, res) => {
       const vendorEmail = req.params.vendorEmail
@@ -457,11 +457,27 @@ async function run() {
     });
 
     // ==================================
-    // Get verndor specific orders
+    // Get all orders for admin
     // ==================================
     app.get("/all-orders", async (req, res) => {
       const results = await orderCollection.find().toArray();
       res.send(results);
+    });
+
+    // ==================================
+    // Get all orders for user
+    // ==================================
+    app.get("/user-orders/:userEmail", async (req, res) => {
+      const userEmail = req.params.userEmail
+      try {
+        const query = { customerEmail: userEmail }
+        const results = await orderCollection.find(query).toArray();
+        res.send(results)
+      }
+      catch (err) {
+        console.log(err);
+        res.send(err)
+      }
     });
 
     // ==================================
