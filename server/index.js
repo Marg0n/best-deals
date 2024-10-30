@@ -479,12 +479,34 @@ async function run() {
         res.send(err)
       }
     });
+    // ==================================
+    // Get trackingOrder
+    // ==================================
+    app.get("/order-track/:trackingID", async (req, res) => {
+      const trackingID = req.params.trackingID
+      try {
+        const query = {trackingNumber : trackingID}
+        const result = await orderCollection.find(query).toArray()
+        res.send(result)
+      }
+      catch (err) {
+        console.log(err);
+        res.send(err)
+      }
+    });
 
     // ==================================
     // post new orders
     // ==================================
     app.post('/newOrder', async (req, res) => {
       const newOrder = req.body
+      newOrder.status = "New Order";
+      newOrder.statusHistory = [
+        {
+          status: "New Order",  // Initial status
+          date: new Date()      // Timestamp of order creation
+        }
+      ];
       // console.log(newOrder);
       const result = await orderCollection.insertOne(newOrder)
     })
@@ -501,6 +523,12 @@ async function run() {
           $set: {
             status: status,  // Update the status field
           },
+          $push: {
+            statusHistory: {
+              status,  // New status
+              date: new Date(),  // Timestamp of the update
+            }
+          }
         };
         // Update the order status
         const result = await orderCollection.updateOne(filter, updateDoc);
