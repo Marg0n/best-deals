@@ -810,20 +810,20 @@ async function run() {
       const { email, month, amount } = req.body;
   
       try {
-          // Validate request
+         
           if (!email || !month || amount === undefined) {
               return res.status(400).json({ error: 'Email, month, and amount are required' });
           }
   
-          // Fetch the user by email
+          
           const user = await usersCollection.findOne({ email });
   
-          // Check if user exists
+          
           if (!user) {
               return res.status(404).json({ error: 'User not found' });
           }
   
-          // Prepare the update
+          // Prepare the update for the specific month
           const update = {
               $set: { [`expense.${month}`]: (user.expense?.[month] || 0) + amount }
           };
@@ -831,14 +831,30 @@ async function run() {
           // Update the user's expense in the database
           await usersCollection.updateOne({ email }, update);
   
+          // Calculate the total expense after the update
+          const updatedUser = await usersCollection.findOne({ email }); 
+          const totalExpense = Object.values(updatedUser.expense || {}).reduce((acc, val) => acc + val, 0);
+  
+          // Update the totalExpense attribute in the database
+          await usersCollection.updateOne(
+              { email },
+              { $set: { totalExpense: totalExpense } } 
+          );
+  
           // Send a success response
-          res.status(200).json({ message: 'Expense updated successfully', expense: { ...user.expense, [month]: (user.expense?.[month] || 0) + amount } });
-          
+          res.status(200).json({
+              message: 'Expense updated successfully',
+              expense: { ...updatedUser.expense, [month]: (user.expense?.[month] || 0) + amount },
+              totalExpense: totalExpense 
+          });
+  
       } catch (error) {
           console.error('Error updating expense:', error);
           res.status(500).json({ error: 'Internal server error' });
       }
   });
+  
+  
     
     // ==================================
     // total users
