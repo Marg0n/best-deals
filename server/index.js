@@ -850,6 +850,81 @@ async function run() {
     //   }
     // });
 
+
+    // ==================================
+    // update monthly expense and total expense
+    // ==================================
+    app.put('/userCollection/expense', async (req, res) => {
+      const { email, month, amount } = req.body;
+
+      try {
+
+        if (!email || !month || amount === undefined) {
+          return res.status(400).json({ error: 'Email, month, and amount are required' });
+        }
+
+
+        const user = await usersCollection.findOne({ email });
+
+
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Prepare the update for the specific month
+        const update = {
+          $set: { [`expense.${month}`]: (user.expense?.[month] || 0) + amount }
+        };
+
+        // Update the user's expense in the database
+        await usersCollection.updateOne({ email }, update);
+
+        // Calculate the total expense after the update
+        const updatedUser = await usersCollection.findOne({ email });
+        const totalExpense = Object.values(updatedUser.expense || {}).reduce((acc, val) => acc + val, 0);
+
+        // Update the totalExpense attribute in the database
+        await usersCollection.updateOne(
+          { email },
+          { $set: { totalExpense: totalExpense } }
+        );
+
+        // Send a success response
+        res.status(200).json({
+          message: 'Expense updated successfully',
+          expense: { ...updatedUser.expense, [month]: (user.expense?.[month] || 0) + amount },
+          totalExpense: totalExpense
+        });
+
+      } catch (error) {
+        console.error('Error updating expense:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+    // ==================================
+    // fetch expense
+    // ==================================
+    app.get('/userCollection/expense', async (req, res) => {
+      const { email } = req.query;
+
+      try {
+
+        if (!email) {
+          return res.status(400).json({ error: 'Email is required' });
+        }
+        const user = await usersCollection.findOne({ email });
+
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+
+        return res.status(200).json({ expense: user.expense });
+      } catch (error) {
+        console.error('Error fetching user expenses:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+
     // ==================================
     // total users
     // ==================================
