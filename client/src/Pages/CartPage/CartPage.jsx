@@ -81,7 +81,7 @@ const CartPage = () => {
     const transactionId = contactInfo?.trackingNumber;
 
 
-    const booking = { orderDate, items, totalAmount, status, paymentMethod, notification, customerEmail: userEmail };
+    const booking = { orderDate, items, totalAmount, status, paymentMethod, notification, customerEmail: userEmail, transactionId };
     const userBookingCoD = { orderDate, items, totalAmount, status, paymentMethod, shippingAddress, transactionId, notification };
     const codBooking = { ...booking, ...contactInfo };
 
