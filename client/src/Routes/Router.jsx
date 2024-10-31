@@ -9,7 +9,7 @@ import CustomerSupport from "../Components/Dashboards/UserDashboard/CustomerSupo
 import UserAlert from "../Components/Dashboards/UserDashboard/Notification/UserAlert";
 import OrderManagement from "../Components/Dashboards/UserDashboard/OrderManagement/OrderManagement";
 import UserDashboard from "../Components/Dashboards/UserDashboard/UserDashboard";
-import UserHome from "../components/Dashboards/UserDashboard/UserHome/UserHome";
+import UserHome from "../Components/Dashboards/UserDashboard/UserHome/UserHome";
 import UserWishlist from "../Components/Dashboards/UserDashboard/UserWishlist/UserWishlist";
 import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
 import VendorDashboard from "../Components/Dashboards/VendorDashboard/VendorDashboard";
