@@ -26,7 +26,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
 
     // con
     const shippingAddress = contactInfo?.address;
-    const cardBooking = { ...booking, shippingAddress , userEmail : user?.email };
+    const cardBooking = { ...booking, shippingAddress , customerEmail : user?.email };
 
     // payment info state
     const [paymentInfoForInvoice, setPaymentInfoForInvoice] = useState();
