@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
 import { IoSaveOutline } from "react-icons/io5";
@@ -15,6 +15,8 @@ import useAuth from "../../hooks/useAuth";
 import useAxiosCommon from "../../hooks/useAxiosCommon";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { localDate } from './../../utils/useBDdateTime';
+import useAllUsers from "../../hooks/useAllUsers";
+import Countdown from "react-countdown";
 
 
 
@@ -24,6 +26,49 @@ const CartPage = () => {
     const axiosSecure = useAxiosSecure()
     const { user } = useAuth();
     const userEmail = user?.email
+
+    //countdown function
+    const [remainingTime, setRemainingTime] = useState(0);
+    const [allUsers] = useAllUsers();
+    const onlyUser = allUsers?.filter(userin => userin?.email == user?.email);
+    const getBanEndTime = onlyUser[0]?.banTime;
+    console.log(getBanEndTime);
+    const banEndTime = new Date(getBanEndTime).getTime(); // Converts to milliseconds
+ 
+    const currentTime = Date.now();
+    const [timer, setTimer] = useState(false);
+
+    console.log(typeof banEndTime, typeof currentTime);
+
+    useEffect(() => {
+        const fetchAndSetBanEndTime = () => {
+            // Only set the remaining time if it's a valid positive value
+            const timeLeft = banEndTime - currentTime;
+
+            if (banEndTime > currentTime) {
+                setRemainingTime(timeLeft);
+                setTimer(true)
+            }
+            else setTimer(false)
+
+        };
+
+        fetchAndSetBanEndTime();
+    }, [remainingTime]);
+
+    console.log(remainingTime);
+
+    // console.log(timer);
+    // useEffect(()=>{
+
+    // },[])
+
+    //countdown
+    const renderer = ({ days, hours, minutes, seconds }) => {
+        return <div><span className='text-red-500'>You have been banned for - {days}Days {hours}Hours {minutes}Minutes {seconds}Seconds</span> <p>Refresh the page after your Ban Time is Over</p></div>;
+    };
+
+
 
     // state of invoice button
     const [showInvoiceModal, setShowInvoiceModal] = useState(false);
@@ -166,127 +211,136 @@ const CartPage = () => {
     }
 
     return (
-        <div className=" mx-auto p-5 gap-y-5 md:gap-5">
-            <Helmet>
-                <title>Best Deal | Cart list</title>
-            </Helmet>
-            <ScrollRestoration></ScrollRestoration>
+        <div>
+            {
+                timer ? <Countdown
+                    date={Date.now() + remainingTime}
+                    renderer={renderer}
+                /> :
+                    <div className=" mx-auto p-5 gap-y-5 md:gap-5">
+                        <Helmet>
+                            <title>Best Deal | Cart list</title>
+                        </Helmet>
+                        <ScrollRestoration></ScrollRestoration>
 
-            {/*Left Side menubar / categorybar  */}
-            {/* <div className="">
+                        {/*Left Side menubar / categorybar  */}
+                        {/* <div className="">
                 <LeftMenubar></LeftMenubar>
             </div> */}
 
-            {/* cart list */}
-            <div className="w-full  mx-auto lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
-                <div className="w-full lg:w-[65%] ">
-                    {
-                        cart?.cartIteams?.length === 0 ?
-                            <div><NothingInCart /></div> :
-                            <div>
-                                <div>
-                                    {cart?.cartIteams?.map(product => (
-                                        <CartCard
-                                            key={product?._id}
-                                            product={product}
-                                        />
-                                    ))}
-                                </div>
+                        {/* cart list */}
+                        <div className="w-full  mx-auto lg:w-3/4 flex flex-col lg:flex-row gap-5 justify-around ">
+                            <div className="w-full lg:w-[65%] ">
+                                {
+                                    cart?.cartIteams?.length === 0 ?
+                                        <div><NothingInCart /></div> :
+                                        <div>
+                                            <div>
+                                                {cart?.cartIteams?.map(product => (
+                                                    <CartCard
+                                                        key={product?._id}
+                                                        product={product}
+                                                    />
+                                                ))}
+                                            </div>
 
-                                <div className="flex gap-4">
+                                            <div className="flex gap-4">
 
-                                    <div onClick={handleSaveCart} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
-                                        <IoSaveOutline />
-                                        <h1>Save Cart</h1>
-                                    </div>
+                                                <div onClick={handleSaveCart} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
+                                                    <IoSaveOutline />
+                                                    <h1>Save Cart</h1>
+                                                </div>
 
-                                    <div onClick={handleClearCartList} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
-                                        <MdDeleteSweep />
-                                        <h1>Clear Cartlist</h1>
-                                    </div>
-                                </div>
+                                                <div onClick={handleClearCartList} className="flex btn items-center dark:text-white gap-2 text-lg  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]">
+                                                    <MdDeleteSweep />
+                                                    <h1>Clear Cartlist</h1>
+                                                </div>
+                                            </div>
+                                        </div>
+                                }
                             </div>
-                    }
-                </div>
 
-                {/* Total bill Table */}
-                <div className="flex-grow" >
-                    {/* bill table */}
-                    <div className=" bg-[rgb(217,217,217)] dark:bg-[#34394C] dark:text-white  h-fit">
-                        <div className="overflow-x-auto">
-                            <table className="table">
-                                {/* head */}
-                                <thead>
-                                    <tr>
-                                        <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Quantity</th>
-                                        <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Amounts</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="text-black dark:text-white">
-                                    {/* Quantity & Total Amounts */}
-                                    <tr>
-                                        <td>Item {totalQuantity} pcs</td>
-                                        <td>$ {totalAmount?.toFixed(2)}</td>
-                                    </tr>
-                                    {/* Discount */}
-                                    <tr className="dark:bg-[#34394C]">
-                                        <td>Discount</td>
-                                        <td>0%</td>
-                                    </tr>
-                                    {/* Grand Total */}
-                                    <tr>
-                                        <td>Grand Total</td>
-                                        <td>$ {grandTotal?.toFixed(2)}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                            {/* Total bill Table */}
+                            <div className="flex-grow" >
+                                {/* bill table */}
+                                <div className=" bg-[rgb(217,217,217)] dark:bg-[#34394C] dark:text-white  h-fit">
+                                    <div className="overflow-x-auto">
+                                        <table className="table">
+                                            {/* head */}
+                                            <thead>
+                                                <tr>
+                                                    <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Quantity</th>
+                                                    <th className="text-white dark:text-black dark:bg-[#D6DFF2] bg-[#775050]">Total Amounts</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="text-black dark:text-white">
+                                                {/* Quantity & Total Amounts */}
+                                                <tr>
+                                                    <td>Item {totalQuantity} pcs</td>
+                                                    <td>$ {totalAmount?.toFixed(2)}</td>
+                                                </tr>
+                                                {/* Discount */}
+                                                <tr className="dark:bg-[#34394C]">
+                                                    <td>Discount</td>
+                                                    <td>0%</td>
+                                                </tr>
+                                                {/* Grand Total */}
+                                                <tr>
+                                                    <td>Grand Total</td>
+                                                    <td>$ {grandTotal?.toFixed(2)}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                {/* payment */}
+                                {
+                                    (cart?.cartIteams?.length === 0 && !showInvoiceModal)
+                                        ? ''
+                                        : <div>
+                                            {/* address form */}
+                                            {
+                                                (!showInvoiceModal)
+                                                && <CheckOutForm
+                                                    onSubmit={onSubmit}
+                                                    contactInfo={contactInfo}
+                                                ></CheckOutForm>
+                                            }
+
+
+                                            {/* payment method */}
+                                            {
+                                                contactInfo?.paymentMethod === "Card"
+                                                && <PaymentModal
+                                                    CheckoutPrice={parseInt(grandTotal.toFixed(2))}
+                                                    contactInfo={contactInfo}
+                                                    handleClearCartList={handleClearCartList}
+                                                    setShowInvoiceModal={setShowInvoiceModal}
+                                                    showInvoiceModal={showInvoiceModal}
+                                                />
+                                            }
+                                            {
+                                                contactInfo?.paymentMethod === "Cash on delivery"
+                                                && <button
+                                                    className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
+                                                    onClick={() => handleCoDStatus()}
+                                                >
+                                                    {/* {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? 'Checkout' : 'Invoice')} */}
+                                                    Proceed
+                                                </button>
+                                            }
+
+                                        </div>
+                                }
+
+                            </div>
+
                         </div>
                     </div>
-
-                    {/* payment */}
-                    {
-                        (cart?.cartIteams?.length === 0 && !showInvoiceModal)
-                            ? ''
-                            : <div>
-                                {/* address form */}
-                                {
-                                    (!showInvoiceModal)
-                                    && <CheckOutForm
-                                        onSubmit={onSubmit}
-                                        contactInfo={contactInfo}
-                                    ></CheckOutForm>
-                                }
-
-
-                                {/* payment method */}
-                                {
-                                    contactInfo?.paymentMethod === "Card"
-                                    && <PaymentModal
-                                        CheckoutPrice={parseInt(grandTotal.toFixed(2))}
-                                        contactInfo={contactInfo}
-                                        handleClearCartList={handleClearCartList}
-                                        setShowInvoiceModal={setShowInvoiceModal}
-                                        showInvoiceModal={showInvoiceModal}
-                                    />
-                                }
-                                {
-                                    contactInfo?.paymentMethod === "Cash on delivery"
-                                    && <button
-                                        className="mt-8 w-full btn block px-8 py-2.5  dark:bg-[#1D2236] dark:hover:bg-[#4e6386] bg-[#775050] text-white hover:bg-[#533131]"
-                                        onClick={() => handleCoDStatus()}
-                                    >
-                                        {/* {(loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : (!changeInvoice ? 'Checkout' : 'Invoice')} */}
-                                        Proceed
-                                    </button>
-                                }
-
-                            </div>
-                    }
-
-                </div>
-
-            </div>
+            }
         </div>
+
     );
 };
 

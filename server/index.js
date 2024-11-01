@@ -273,9 +273,13 @@ async function run() {
     // ==================================
     app.get("/allUsers", async function (req, res) {
       const vendor = req?.query?.role;
+      const user = req?.query?.role;
       let query = {};
       if (vendor) {
         query = { role: { $eq: vendor } };
+      }
+      if (user){
+        query = { role: { $eq: user } };
       }
       const results = await usersCollection.find(query).toArray();
       res.send(results);
