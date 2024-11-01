@@ -11,7 +11,7 @@ import {
 
 
 // const labels = Utils.months({ count: 7 });
-const labels = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+const labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 const data = {
     labels: labels,
     datasets: [

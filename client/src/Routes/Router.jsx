@@ -9,7 +9,7 @@ import CustomerSupport from "../Components/Dashboards/UserDashboard/CustomerSupo
 import UserAlert from "../Components/Dashboards/UserDashboard/Notification/UserAlert";
 import OrderManagement from "../Components/Dashboards/UserDashboard/OrderManagement/OrderManagement";
 import UserDashboard from "../Components/Dashboards/UserDashboard/UserDashboard";
-import UserHome from "../components/Dashboards/UserDashboard/UserHome/UserHome";
+import UserHome from "../Components/Dashboards/UserDashboard/UserHome/UserHome";
 import UserWishlist from "../Components/Dashboards/UserDashboard/UserWishlist/UserWishlist";
 import VendorAddProduct from "../Components/Dashboards/VendorDashboard/VendorAddProduct/VendorAddProduct";
 import VendorDashboard from "../Components/Dashboards/VendorDashboard/VendorDashboard";
@@ -39,6 +39,7 @@ import NewHomepage from "../Pages/NewHomePage/NewHomepage";
 import VendorRegistration from "../components/VendorRegistration/VendorRegistration";
 import AllOrders from "../Pages/AllOrders/AllOrders";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
+import OrderTracking from "../Pages/OrderTracking/OrderTracking";
 
 const Router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const Router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "/track-order",
+        element: <OrderTracking />,
+      },
+      {
         path: "/details/:_id",
         element: <Details></Details>,
         loader: () => fetch(`${import.meta.env.VITE_SERVER}/all-products`),
@@ -69,15 +74,15 @@ const Router = createBrowserRouter([
       },
       {
         path: "/InvoiceHistory",
-        element: <InvoiceHistory />,
+        element:  <PrivateRoute><InvoiceHistory /></PrivateRoute>,
       },
       {
         path: "/myOrders",
-        element: <MyOrders />,
+        element:  <PrivateRoute><MyOrders /></PrivateRoute>,
       },
       {
         path: "/myWishList",
-        element: <MyWishList />,
+        element:  <PrivateRoute><MyWishList /></PrivateRoute>,
       },
       {
         path: "/myToken",
@@ -128,11 +133,11 @@ const Router = createBrowserRouter([
     children: [
       {
         path: "/vendorDashboard",
-        element: <VendorHome />,
+        element: <VendorRoute> <VendorHome /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/orderManagement",
-        element: <OrderManagement />,
+        element: <VendorRoute><OrderManagement /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/userWishlist",
@@ -144,11 +149,11 @@ const Router = createBrowserRouter([
       },
       {
         path: "/vendorDashboard/orders",
-        element: <VendorOrders />,
+        element: <VendorRoute><VendorOrders /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/products",
-        element: <VendorAddProduct />,
+        element: <VendorRoute><VendorAddProduct /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/inbox",

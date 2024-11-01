@@ -30,6 +30,7 @@ import {
 import ProjectStatusChart from "./ProjectStatusChart/ProjectStatusChart";
 import MonthlyPurchaseChart from "./MonthlyPurchaseChart/MonthlyPurchaseChart";
 import RevenueOverviewChart from "./RevenueOverviewChart/RevenueOverviewChart";
+
 const AdminHome = () => {
   const axiosSecure = useAxiosSecure();
 
@@ -65,6 +66,8 @@ const AdminHome = () => {
 
     fetchData();
   }, [axiosSecure]);
+
+  console.log(totalUsers, totalVendors,totalTransactions)
 
   //revenue calculation
   const rvenue = totalRevenue * 0.1 || 0;
@@ -133,7 +136,7 @@ const AdminHome = () => {
     {
       id: 1,
       icon: <FaChartLine />,
-      value: `${totalRevenue?.toFixed(2) || "0.00"}$`,
+      value: `${totalRevenue?.toFixed(2) || "0.00"}   $`,
       label: "Total Transactions",
       hoverColor: "hover:bg-blue-100",
       iconColor: "text-blue-500",
@@ -141,7 +144,7 @@ const AdminHome = () => {
     {
       id: 2,
       icon: <FaDollarSign />,
-      value: `${rvenue?.toFixed(2)}$`,
+      value: `${rvenue?.toFixed(2)} $`,
       label: "Revenue",
       hoverColor: "hover:bg-green-100",
       iconColor: "text-green-500",
@@ -149,7 +152,7 @@ const AdminHome = () => {
     {
       id: 3,
       icon: <FaUsers />,
-      value: `${totalUsers || "0"}+`,
+      value: `${totalUsers || "0"}`,
       label: "Users",
       hoverColor: "hover:bg-purple-100",
       iconColor: "text-purple-500",
@@ -157,7 +160,7 @@ const AdminHome = () => {
     {
       id: 4,
       icon: <FaStore />,
-      value: `${totalVendors || "0"}+`,
+      value: `${totalVendors || "0"}`,
       label: "Vendors",
       hoverColor: "hover:bg-orange-100",
       iconColor: "text-orange-500",
@@ -165,7 +168,7 @@ const AdminHome = () => {
     {
       id: 5,
       icon: <FaShoppingCart />,
-      value: "0+",
+      value: `${profile[0]?.purchaseHistory?.length || 0}`,
       label: "Total Times Buy",
       hoverColor: "hover:bg-red-100",
       iconColor: "text-red-500",
@@ -173,7 +176,7 @@ const AdminHome = () => {
     {
       id: 6,
       icon: <FaMoneyBillWave />,
-      value: `0+`,
+      value: `${totalSpending || 0} $`,
       label: "Total Spendings",
       hoverColor: "hover:bg-teal-100",
       iconColor: "text-teal-500",
@@ -298,6 +301,7 @@ const AdminHome = () => {
       </div> */}
 
       <div>
+        {/* stats */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 px-4 font-rajdhani">
           {stats.map((stat) => (
             <div
@@ -415,7 +419,7 @@ const AdminHome = () => {
 
       <div className="grid grid-cols-1 gap-4 font-rajdhani lg:grid-cols-2 mx-auto md:ml-4">
         <div className="col-span-1">
-          <MonthlyPurchaseChart />
+          <MonthlyPurchaseChart data={monthlyTotals} />
         </div>
         <div className="col-span-1 ">
           <RevenueOverviewChart />

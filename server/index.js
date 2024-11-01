@@ -410,7 +410,7 @@ async function run() {
       // Fetch data based on the query
       const results = await productCollection.find(query).skip(skip).limit(limit).toArray();
       const all = await productCollection.find(query).toArray()
-      res.send({ results, totalPages, currentPage: page , all})
+      res.send({ results, totalPages, currentPage: page, all })
 
       // Send back the results
       // res.send(results ,totalPages );
@@ -435,7 +435,33 @@ async function run() {
     });
 
     // ==================================
-    // Get All orders
+    // Get verndor specific orders
+    // ==================================
+    app.get("/vendor-orders/:vendorEmail", async (req, res) => {
+      const vendorEmail = req.params.vendorEmail
+
+      try {
+
+        const query = {
+          "items": {
+            $elemMatch: {
+              $elemMatch: { "vendorEmail": vendorEmail }
+            }
+          }
+        }
+        const result = await orderCollection.find(query).toArray();
+        res.status(200).json(result);
+      }
+      catch (err) {
+        console.log(err);
+        res.status(500).json({ error: "An error occurred while fetching vendor orders" });
+      }
+      // const results = await orderCollection.find().toArray();
+      // res.send(results);
+    });
+
+    // ==================================
+    // Get all orders for admin
     // ==================================
     app.get("/all-orders", async (req, res) => {
       const results = await orderCollection.find().toArray();
@@ -443,10 +469,48 @@ async function run() {
     });
 
     // ==================================
+    // Get all orders for user
+    // ==================================
+    app.get("/user-orders/:userEmail", async (req, res) => {
+      const userEmail = req.params.userEmail
+      try {
+        const query = { customerEmail: userEmail }
+        const results = await orderCollection.find(query).toArray();
+        res.send(results)
+      }
+      catch (err) {
+        console.log(err);
+        res.send(err)
+      }
+    });
+    // ==================================
+    // Get trackingOrder
+    // ==================================
+    app.get("/order-track/:trackingID", async (req, res) => {
+      const trackingID = req.params.trackingID
+      try {
+        const query = {trackingNumber : trackingID}
+        const result = await orderCollection.find(query).toArray()
+        res.send(result)
+      }
+      catch (err) {
+        console.log(err);
+        res.send(err)
+      }
+    });
+
+    // ==================================
     // post new orders
     // ==================================
     app.post('/newOrder', async (req, res) => {
       const newOrder = req.body
+      newOrder.status = "New Order";
+      newOrder.statusHistory = [
+        {
+          status: "New Order",  // Initial status
+          date: new Date()      // Timestamp of order creation
+        }
+      ];
       // console.log(newOrder);
       const result = await orderCollection.insertOne(newOrder)
     })
@@ -463,6 +527,12 @@ async function run() {
           $set: {
             status: status,  // Update the status field
           },
+          $push: {
+            statusHistory: {
+              status,  // New status
+              date: new Date(),  // Timestamp of the update
+            }
+          }
         };
         // Update the order status
         const result = await orderCollection.updateOne(filter, updateDoc);
@@ -784,6 +854,81 @@ async function run() {
     //   }
     // });
 
+
+    // ==================================
+    // update monthly expense and total expense
+    // ==================================
+    app.put('/userCollection/expense', async (req, res) => {
+      const { email, month, amount } = req.body;
+
+      try {
+
+        if (!email || !month || amount === undefined) {
+          return res.status(400).json({ error: 'Email, month, and amount are required' });
+        }
+
+
+        const user = await usersCollection.findOne({ email });
+
+
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Prepare the update for the specific month
+        const update = {
+          $set: { [`expense.${month}`]: (user.expense?.[month] || 0) + amount }
+        };
+
+        // Update the user's expense in the database
+        await usersCollection.updateOne({ email }, update);
+
+        // Calculate the total expense after the update
+        const updatedUser = await usersCollection.findOne({ email });
+        const totalExpense = Object.values(updatedUser.expense || {}).reduce((acc, val) => acc + val, 0);
+
+        // Update the totalExpense attribute in the database
+        await usersCollection.updateOne(
+          { email },
+          { $set: { totalExpense: totalExpense } }
+        );
+
+        // Send a success response
+        res.status(200).json({
+          message: 'Expense updated successfully',
+          expense: { ...updatedUser.expense, [month]: (user.expense?.[month] || 0) + amount },
+          totalExpense: totalExpense
+        });
+
+      } catch (error) {
+        console.error('Error updating expense:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+    // ==================================
+    // fetch expense
+    // ==================================
+    app.get('/userCollection/expense', async (req, res) => {
+      const { email } = req.query;
+
+      try {
+
+        if (!email) {
+          return res.status(400).json({ error: 'Email is required' });
+        }
+        const user = await usersCollection.findOne({ email });
+
+        if (!user) {
+          return res.status(404).json({ error: 'User not found' });
+        }
+
+        return res.status(200).json({ expense: user.expense });
+      } catch (error) {
+        console.error('Error fetching user expenses:', error);
+        return res.status(500).json({ error: 'Internal server error' });
+      }
+    });
+
     // ==================================
     // total users
     // ==================================
@@ -840,6 +985,22 @@ async function run() {
           message: "Error fetching total transactions or amount",
           error,
         });
+      }
+    });
+
+    // ==================================
+    // monthly revenue
+    // ==================================
+    app.get("/monthlyRevenue", async (req, res) => {
+      try {
+        const monthlyRevenue = await usersCollection.countDocuments({
+          status: "Delivered",
+        });
+        res.json({ totalVendors });
+      } catch (error) {
+        res
+          .status(500)
+          .json({ message: "Error fetching monthly revenue", error });
       }
     });
 

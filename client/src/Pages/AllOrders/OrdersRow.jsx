@@ -3,10 +3,11 @@ import { CiEdit } from 'react-icons/ci';
 import { toast } from "react-toastify";
 import { Button, Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import useAxiosCommon from '../../hooks/useAxiosCommon';
+import { localDate } from '../../utils/useBDdateTime';
 
 const OrdersRow = ({ order, refetch}) => {
     const axiosCommon = useAxiosCommon()
-
+    
     const [viewDetailsModal, setViewDetailsModal] = useState(false);
     const [editModal, setEditModal] = useState(false);
 
@@ -60,7 +61,7 @@ const OrdersRow = ({ order, refetch}) => {
                 <td>{order.contact}</td>
                 <td>{order.address}</td>
                 <td>{order.totalAmount}</td>
-                <td>{order.status === 'Payed' || order.status === 'Ordered' ? 'New Order' : order.status}</td>
+                <td>{order.status}</td>
                 <td>{order.paymentMethod === 'Card' ? 'Paid' : order.paymentMethod}</td>
                 <td>
                     <button className='btn bg-[#775050] border-none text-white ' onClick={handleViewOrderDetails}>
@@ -136,11 +137,11 @@ const OrdersRow = ({ order, refetch}) => {
                                     value={selectedStatus}
                                     onChange={handleStatusChange}
                                 >
-                                    <option value="newOrder">New Order</option>
-                                    <option value="inWarehouse">In Warehouse</option>
-                                    <option value="onTheWayToDelivery">On the way to delivery</option>
-                                    <option value="delivered">Delivered</option>
-                                    <option value="canceled">Canceled</option>
+                                    <option value="New Order">New Order</option>
+                                    <option value="In Warehouse">In Warehouse</option>
+                                    <option value="On the way to delivery">On the way to delivery</option>
+                                    <option value="Delivered">Delivered</option>
+                                    <option value="Canceled">Canceled</option>
                                 </select>
                             </div>
                             <div className="mt-6">

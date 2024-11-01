@@ -11,11 +11,13 @@ import Swal from "sweetalert2";
 import InvoiceModal from "../Invoice/InvoiceModal";
 import { useDispatch } from "react-redux";
 import { removeAllFromCartlist } from "../../features/CartSlice/CartSlice";
+import { localDate } from "../../utils/useBDdateTime";
 
 
 const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, handleClearCartList, setShowInvoiceModal, showInvoiceModal }) => {
 
     const dispatch = useDispatch()
+    const orderDate = localDate(new Date());
 
     // strip hooks
     const stripe = useStripe();
@@ -26,7 +28,9 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
 
     // con
     const shippingAddress = contactInfo?.address;
-    const cardBooking = { ...booking, shippingAddress , userEmail : user?.email };
+    const trackingNumber = contactInfo?.contact + Date.now()
+
+    const cardBooking = { ...booking, shippingAddress, customerEmail: user?.email , trackingNumber };
 
     // payment info state
     const [paymentInfoForInvoice, setPaymentInfoForInvoice] = useState();
@@ -121,7 +125,7 @@ const StripeCheckoutForm = ({ CheckoutPrice, contactInfo, closeModal, booking, h
                 transactionId: paymentIntent.id,
             };
             const billingAddress = { ...contactInfo, transactionId: paymentIntent.id, };
-            
+
             setPaymentInfoForInvoice(paymentInfo);
 
             delete paymentInfo._id

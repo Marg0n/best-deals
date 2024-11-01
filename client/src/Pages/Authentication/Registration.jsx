@@ -61,10 +61,8 @@ const Registration = () => {
 
     // fetch data from the form
     const { email, password, name } = data;
-
-    // /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()[\]{}|\\;:'",.<>/?~])(?=.{6,})/
-        // a numeric character,
-    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()[\]{}|\\;:'",.<>/?~])(?=.{6,})/.test(password)) {
+    
+    if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()[\]{}|\\;:'",.<>/?~])(?=.{6,})/.test(password)) {
 
       // console.log(watch('password'))
       return toast.error(

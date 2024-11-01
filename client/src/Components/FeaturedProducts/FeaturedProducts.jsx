@@ -33,7 +33,7 @@ const FeaturedProducts = () => {
         description={'Find all Featured Products, On Going Discount and sales, HurryUP..!!'}
       ></SectionHeader>
 
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-black px-4 lg:px-0 lg:ml-5'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 text-black px-4 lg:px-0 lg:ml-5'>
         {
           featuredProducts?.map(featuredProduct =>
             <ProductsCard
