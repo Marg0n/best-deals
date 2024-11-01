@@ -27,41 +27,37 @@ const AdminAllVendors = () => {
     const vendor = 'Vendor';
 
     const { data: allVendorInAdmin = [], isLoading, refetch } = useQuery({
-        queryKey: ["allVendorsInAdmin"],
+        queryKey: ["allVendorInAdmin"],
         queryFn: async () => {
             const res = await allVendors.get(`/allUsers?role=${vendor}`);
             return res.data; // Ensure you handle the data correctly here
         },
     });
+    refetch();
 
     const initialData = allVendorInAdmin.map(user => ({
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        lastLogin: user.lastLogin,
-        joined: user.createdTime,
-        banStatus: user?.banStatus 
+        id: user?._id,
+        name: user?.name,
+        email: user?.email,
+        bantime: user?.banTime,
     }));
 
     const openModal = (id) => {
-        console.log(id);
-        
         const vendorDetails = allVendorInAdmin.find(vendor => vendor._id === id);
         setVendorDet(vendorDetails);
         setIsModalOpen(true);   // Open the details modal
     };
 
     const currentTime = Date.now();
-    let banTime = 0
+    let banTime = 0;
 
     const handleBan = async (duration, id) => {
-        console.log(`Banning vendor with id: ${id} for ${duration}`);
         if (duration == '5 Minutes') {
             banTime = currentTime + 300000;
         }
         else if (duration == '20 Seconds') {
             banTime = currentTime + 20000;
-        }
+        } 
         else if (duration == '3 Days') {
             banTime = currentTime + 259200000
         }
@@ -70,18 +66,16 @@ const AdminAllVendors = () => {
         }
 
         const banVendor = {
-            banStatus: true,
             banTime: banTime,
         }
 
         const banUpdate = await allVendors.patch(`/allUsers/${id}`, banVendor)
-        console.log(banUpdate);
-
+        refetch();
         setIsBanModalOpen(false);
     };
 
     const handleDelete = async (id) => {
-        console.log(id);
+       
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -104,7 +98,6 @@ const AdminAllVendors = () => {
 
                 
             } catch (error) {
-                console.error('Error deleting user:', error);
 
                 Swal.fire(
                     'Error!',
@@ -150,13 +143,14 @@ const AdminAllVendors = () => {
     }
 
     console.log(vendorDet);
+   
     return (
         <div className="p-6 min-h-screen space-y-4">
             <div className="relative bg-white p-2 rounded-lg">
             <h1 className="text-3xl mb-4 text-black">All Vendors</h1>
             <div className='w-1/3 mb-4'>
                 <TextField
-                    label="Search by Product Name"
+                    label="Search by Name"
                     variant="outlined"
                     className="bg-gray-200"
                     fullWidth
@@ -185,7 +179,10 @@ const AdminAllVendors = () => {
                                 <TableCell>{row.id}</TableCell>
                                 <TableCell>{row.name}</TableCell>
                                 <TableCell>{row.email}</TableCell>
-                                <TableCell>{row.joined}</TableCell>
+                                {
+                                    row?.bantime > currentTime ? <TableCell><span className='text-red-500 font-bold'>Banned</span></TableCell>:<TableCell><span className='text-green-500 font-bold'>Open</span></TableCell>
+                                }
+                                
                                 <TableCell>
                                     <div>
                                         <button className="btn" onClick={() => openModal(row.id)}>Details</button>
@@ -233,7 +230,6 @@ const AdminAllVendors = () => {
                                 <div>
                                     <p><strong>Name:</strong> {vendorDet?.name}</p>
                                     <p><strong>Email:</strong> {vendorDet?.email}</p>
-                                    <p><strong>Joined:</strong> {vendorDet?.joined}</p>
                                     <p><strong>Last Login:</strong> {vendorDet?.lastLogin}</p>
                                 </div>
                             </div>

@@ -25,7 +25,7 @@ const VendorAddProduct = () => {
     const banEndTime = new Date(getBanEndTime).getTime(); // Converts to milliseconds
     const currentTime = Date.now();
     const [timer, setTimer] = useState(false);
-
+ 
     useEffect(() => {
         const fetchAndSetBanEndTime = () => {
             // Only set the remaining time if it's a valid positive value
