@@ -74,7 +74,7 @@ const CartPage = () => {
     const orderDate = localDate(new Date());
     // const orderDate = new Date().toUTCString();
     const items = [cart.cartIteams];
-    const status = 'Ordered';
+    const status = 'New Order';
     const notification = { notifyStatus: status };
     const paymentMethod = contactInfo?.paymentMethod || "CoD";
     const shippingAddress = contactInfo?.address;

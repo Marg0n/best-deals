@@ -74,15 +74,15 @@ const Router = createBrowserRouter([
       },
       {
         path: "/InvoiceHistory",
-        element: <InvoiceHistory />,
+        element:  <PrivateRoute><InvoiceHistory /></PrivateRoute>,
       },
       {
         path: "/myOrders",
-        element: <MyOrders />,
+        element:  <PrivateRoute><MyOrders /></PrivateRoute>,
       },
       {
         path: "/myWishList",
-        element: <MyWishList />,
+        element:  <PrivateRoute><MyWishList /></PrivateRoute>,
       },
       {
         path: "/myToken",
@@ -133,11 +133,11 @@ const Router = createBrowserRouter([
     children: [
       {
         path: "/vendorDashboard",
-        element: <VendorHome />,
+        element: <VendorRoute> <VendorHome /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/orderManagement",
-        element: <OrderManagement />,
+        element: <VendorRoute><OrderManagement /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/userWishlist",
@@ -149,11 +149,11 @@ const Router = createBrowserRouter([
       },
       {
         path: "/vendorDashboard/orders",
-        element: <VendorOrders />,
+        element: <VendorRoute><VendorOrders /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/products",
-        element: <VendorAddProduct />,
+        element: <VendorRoute><VendorAddProduct /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/inbox",
