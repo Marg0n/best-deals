@@ -9,6 +9,7 @@ import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { List, ListItem, ListItemIcon, ListItemText } from "@mui/material";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import useAuth from "../../../../hooks/useAuth";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const VendorSideBar = () => {
   const location = useLocation();
@@ -39,6 +40,24 @@ const VendorSideBar = () => {
               />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
+          </div>
+        </ListItem>
+
+        {/* Profile */}
+        <ListItem button component={NavLink} to="/vendorDashboard/vendorProfile">
+          <div
+            className={`w-full rounded-lg flex p-2 items-center justify-center ${currentPath === "/vendorDashboard/vendorProfile"
+              ? "bg-white text-black"
+              : "text-white"
+              }`}
+          >
+            <ListItemIcon>
+              <AccountCircleIcon
+                className={`${currentPath === "/vendorDashboard/vendorProfile" ? "text-black" : "text-white"
+                  }`}
+              />
+            </ListItemIcon>
+            <ListItemText primary="Profile" />
           </div>
         </ListItem>
 

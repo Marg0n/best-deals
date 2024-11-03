@@ -40,6 +40,7 @@ import VendorRegistration from "../components/VendorRegistration/VendorRegistrat
 import AllOrders from "../Pages/AllOrders/AllOrders";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import OrderTracking from "../Pages/OrderTracking/OrderTracking";
+import VendorProfile from "../Components/Dashboards/VendorDashboard/VendorProfile/VendorProfile";
 
 const Router = createBrowserRouter([
   {
@@ -134,6 +135,10 @@ const Router = createBrowserRouter([
       {
         path: "/vendorDashboard",
         element: <VendorRoute> <VendorHome /></VendorRoute>,
+      },
+      {
+        path: "/vendorDashboard/vendorProfile",
+        element: <VendorRoute> <VendorProfile /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/orderManagement",
