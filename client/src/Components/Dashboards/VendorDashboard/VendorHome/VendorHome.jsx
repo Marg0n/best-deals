@@ -94,6 +94,16 @@ const VendorHome = () => {
   const getMonthlyTotals = (history) => {
     const totals = {};
 
+    // Initialize all months to 0
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const currentYear = new Date().getFullYear();
+    months.forEach(month => {
+      totals[`${month} ${currentYear}`] = 0;
+    });
+
     history?.forEach((order) => {
       const date = new Date(order.orderDate);
       const month = date.toLocaleString("default", { month: "long" });
@@ -108,6 +118,7 @@ const VendorHome = () => {
 
     return totals;
   };
+
 
   const monthlyTotals = getMonthlyTotals(purchaseHistory);
 
@@ -244,7 +255,7 @@ const VendorHome = () => {
       <div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <VendorMonthlyPurchase />
+            <VendorMonthlyPurchase data={monthlyTotals} />
           </div>
           <div>
             <VendorExpenseGraph />

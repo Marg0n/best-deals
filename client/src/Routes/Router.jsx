@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import AdminAllUsers from "../Components/Dashboards/AdminDashboard/AdminAllUser/AdminAllUsers";
 import AdminAllVendors from "../Components/Dashboards/AdminDashboard/AdminAllVendor/AdminAllVendors";
 import AdminDashboard from "../Components/Dashboards/AdminDashboard/AdminDashboard";
-import AdminHome from "../components/Dashboards/AdminDashboard/AdminHome/AdminHome";
+import AdminHome from "../Components/Dashboards/AdminDashboard/AdminHome/AdminHome";
 import AdminVendorRequest from "../Components/Dashboards/AdminDashboard/AdminVendorRequest/AdminVendorRequest";
 import CustomerSupport from "../Components/Dashboards/UserDashboard/CustomerSuport/CustomerSupport";
 import UserAlert from "../Components/Dashboards/UserDashboard/Notification/UserAlert";
@@ -40,6 +40,8 @@ import VendorRegistration from "../components/VendorRegistration/VendorRegistrat
 import AllOrders from "../Pages/AllOrders/AllOrders";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import OrderTracking from "../Pages/OrderTracking/OrderTracking";
+import VendorProfile from "../Components/Dashboards/VendorDashboard/VendorProfile/VendorProfile";
+import AdminProfile from "../Components/Dashboards/AdminDashboard/AdminProfile/AdminProfile";
 
 const Router = createBrowserRouter([
   {
@@ -90,11 +92,11 @@ const Router = createBrowserRouter([
       },
       {
         path: "/favoriteVendor",
-        element: <FavoriteVendor />,
+        element: <PrivateRoute><FavoriteVendor /></PrivateRoute>,
       },
       {
         path: "/accountSettings",
-        element: <AccountSettings />,
+        element: <PrivateRoute><AccountSettings /></PrivateRoute>,
       },
       {
         path: "/aboutUs",
@@ -136,16 +138,20 @@ const Router = createBrowserRouter([
         element: <VendorRoute> <VendorHome /></VendorRoute>,
       },
       {
+        path: "/vendorDashboard/vendorProfile",
+        element: <VendorRoute> <VendorProfile /></VendorRoute>,
+      },
+      {
         path: "/vendorDashboard/orderManagement",
         element: <VendorRoute><OrderManagement /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/userWishlist",
-        element: <UserWishlist />,
+        element: <VendorRoute><UserWishlist /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/notifications",
-        element: <UserAlert />,
+        element: <VendorRoute><UserAlert /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/orders",
@@ -171,39 +177,43 @@ const Router = createBrowserRouter([
     children: [
       {
         path: "/adminDashboard",
-        element: <AdminHome />,
+        element: <AdminRoutes><AdminHome /></AdminRoutes>,
+      },
+      {
+        path: "/adminDashboard/adminProfile",
+        element: <AdminRoutes><AdminProfile /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/allUsers",
-        element: <AdminAllUsers />,
+        element: <AdminRoutes><AdminAllUsers /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/allVendors",
-        element: <AdminAllVendors />,
+        element: <AdminRoutes><AdminAllVendors /></AdminRoutes>,
       },
       {
         path: '/adminDashboard/vendorRequest',
-        element: <AdminVendorRequest />
+        element: <AdminRoutes><AdminVendorRequest /></AdminRoutes>,
       },
       {
         path: '/adminDashboard/all-orders',
-        element: <AllOrders />
+        element: <AdminRoutes><AllOrders /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/userWishlist",
-        element: <UserWishlist />,
+        element: <AdminRoutes><UserWishlist /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/orderManagement",
-        element: <OrderManagement />,
+        element: <AdminRoutes><OrderManagement /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/notifications",
-        element: <UserAlert />,
+        element:<AdminRoutes><UserAlert /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/inbox",
-        element: <Inbox />,
+        element: <AdminRoutes><Inbox /></AdminRoutes>,
       },
     ]
   },
@@ -217,27 +227,27 @@ const Router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <UserHome />,
+        element: <UserRoute><UserHome /></UserRoute>,
       },
       {
         path: "/userDashboard/userWishlist",
-        element: <UserWishlist />,
+        element: <UserRoute><UserWishlist /></UserRoute>,
       },
       {
         path: "/userDashboard/orderManagement",
-        element: <OrderManagement />,
+        element: <UserRoute><OrderManagement /></UserRoute>,
       },
       {
         path: "/userDashboard/notifications",
-        element: <UserAlert />,
+        element: <UserRoute><UserAlert /></UserRoute>,
       },
       {
         path: "/userDashboard/customerSupport",
-        element: <CustomerSupport />,
+        element: <UserRoute><CustomerSupport /></UserRoute>,
       },
       {
         path: "/userDashboard/inbox",
-        element: <Inbox />,
+        element: <UserRoute><Inbox /></UserRoute>,
       },
     ],
   },

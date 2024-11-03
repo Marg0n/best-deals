@@ -104,6 +104,16 @@ const AdminHome = () => {
   const getMonthlyTotals = (history) => {
     const totals = {};
 
+    // Initialize all months to 0
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const currentYear = new Date().getFullYear();
+    months.forEach(month => {
+      totals[`${month} ${currentYear}`] = 0;
+    });
+
     history?.forEach((order) => {
       const date = new Date(order.orderDate);
       const month = date.toLocaleString("default", { month: "long" });
@@ -118,6 +128,7 @@ const AdminHome = () => {
 
     return totals;
   };
+
 
   const monthlyTotals = getMonthlyTotals(purchaseHistory);
 
@@ -356,9 +367,8 @@ const AdminHome = () => {
                         <FaArrowDown className="text-red-500" />
                       )}
                       <span
-                        className={`text-base ${
-                          data.increase ? "text-green-500" : "text-red-500"
-                        }`}
+                        className={`text-base ${data.increase ? "text-green-500" : "text-red-500"
+                          }`}
                       >
                         {data.change}
                       </span>
