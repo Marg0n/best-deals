@@ -50,11 +50,13 @@ const VendorHome = () => {
   let total = allVendorOrders?.reduce((previousValue, currentValue) => {
     return previousValue + currentValue.itemsCount * currentValue.totalAmount;
   }, 0);
-
+  let totalProducts = allVendorProducts.length
+  let totalOrders = allVendorOrders.length
+  let totalEarnings = Math.round(total) || 0
   const stats = {
-    totalProducts: allVendorProducts.length,
-    totalOrders: allVendorOrders.length,
-    totalEarnings: Math.round(total) || 0,
+    //totalProducts: allVendorProducts.length,
+    //totalOrders: allVendorOrders.length,
+    //totalEarnings: Math.round(total) || 0,
   };
 
   const { profile } = useUserProfile();
@@ -136,21 +138,21 @@ const VendorHome = () => {
   const cardData = [
     {
       title: "Total Products",
-      value: "500",
+      value: `${totalProducts}`,
       icon: <FaBox />,
       iconColor: "text-purple-500",
       bgColor: "hover:bg-purple-50",
     },
     {
       title: "Total Orders",
-      value: "1200",
+      value: `${totalOrders}`,
       icon: <FaShoppingCart />,
       iconColor: "text-green-500",
       bgColor: "hover:bg-green-50",
     },
     {
       title: "Total Earnings",
-      value: "$80,000",
+      value: `${totalEarnings}`,
       icon: <FaDollarSign />,
       iconColor: "text-blue-500",
       bgColor: "hover:bg-blue-50",
@@ -164,7 +166,7 @@ const VendorHome = () => {
     },
     {
       title: "Total Spendings",
-      value: "$30,000",
+      value: `$${totalSpending}`,
       icon: <FaWallet />,
       iconColor: "text-red-500",
       bgColor: "hover:bg-red-50",
