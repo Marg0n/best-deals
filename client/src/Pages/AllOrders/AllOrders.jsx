@@ -1,32 +1,70 @@
 import { useQuery } from "@tanstack/react-query";
-import useAxiosCommon from "../../hooks/useAxiosCommon";
-import OrdersRow from "./OrdersRow";
-import { Helmet } from "react-helmet-async";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useState } from "react";
-import toast from "react-hot-toast";
+import Pagination from "../../Components/Pagination/Pagination";
+import OrdersRow from "./OrdersRow";
+import { ClimbingBoxLoader } from "react-spinners";
 
 const AllOrders = () => {
+    const axiosSecure = useAxiosSecure();
+    const [searchText, setSearchText] = useState("");
+    const [currentPage, setCurrentPage] = useState(1);
+    const [orders, setOrders] = useState([])
 
-
-    const axiosCommon = useAxiosCommon()
-    const { data: allOrders, isLoading, refetch } = useQuery({
-        queryKey: ['allOrders'],
+    const { data, isLoading, refetch } = useQuery({
+        queryKey: ['allOrders', searchText, currentPage],
         queryFn: async () => {
-            const res = axiosCommon.get('/all-orders')
-            return (await res).data;
-        }
-    })
+            const res = await axiosSecure.get('/all-orders', {
+                params: {
+                    search: searchText,
+                    page: currentPage,
+                    limit: 10
+                }
+            });
+            setOrders(res.data.orders)
+            return res.data;
+        },
+    });
 
+    console.log(data);
+
+
+    const handleSearch = (e) => {
+        e.preventDefault();
+        setCurrentPage(1);
+        refetch();
+    };
+
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+    // // loader
+    // if (isLoading) {
+    //     return <div className="flex justify-center items-center h-screen">
+    //         <ClimbingBoxLoader color="#36d7b7" />
+    //     </div>;
+    // }
 
     return (
-        <div className="p-8">
-            <Helmet>
-                <title>
-                    Best Deal | Orders
-                </title>
-            </Helmet>
-            <div className="">
-                <table className="table">
+        <div>
+            {/* Search bar */}
+            <div className="p-5 mx-auto lg:mt-5 max-w-[500px]">
+                <form onSubmit={handleSearch}>
+                    <label className="input input-bordered flex w-full pr-0 items-center bg-gray-200">
+                        <input
+                            value={searchText}
+                            onChange={(e) => setSearchText(e.target.value)}
+                            placeholder="Enter Customer Name/Number"
+                            type="text"
+                            className="w-full"
+                        />
+                        <button type="submit" className="btn btn-primary">Seach</button>
+                    </label>
+                </form>
+            </div>
+
+            <div className="overflow-x-auto lg:ml-4">
+                <table className="table w-full min-w-max">
                     {/* head */}
                     <thead >
                         <tr >
@@ -44,7 +82,7 @@ const AllOrders = () => {
                     </thead>
                     <tbody>
                         {
-                            allOrders?.map(order => <OrdersRow
+                            orders?.map(order => <OrdersRow
                                 key={order._id}
                                 order={order}
                                 refetch={refetch}
@@ -53,6 +91,12 @@ const AllOrders = () => {
                     </tbody>
                 </table>
             </div>
+
+            <Pagination
+                currentPage={currentPage}
+                totalPages={data?.totalPages}
+                onPageChange={handlePageChange}
+            />
         </div>
     );
 };
