@@ -38,7 +38,7 @@ const VendorHome = () => {
       const res = await vendorProducts.get("/all-orders");
       return res.data.orders;
     },
-  });console.log(allOrders);
+  }); console.log(allOrders);
 
   const allVendorOrders = allOrders?.filter((order) =>
     order.items.some((itemArray) =>
@@ -50,12 +50,12 @@ const VendorHome = () => {
   );
 
   const totalEarnings = allVendorOrders
-  .filter(order => 
-    order.items.flat().some(item => item.vendorEmail === user?.email) // Check if any item in the order matches vendorEmail
-  )
-  .reduce((total, order) => total + order.totalAmount, 0); // Sum the totalAmount of matched orders
+    .filter(order =>
+      order.items.flat().some(item => item.vendorEmail === user?.email) // Check if any item in the order matches vendorEmail
+    )
+    .reduce((total, order) => total + order.totalAmount, 0); // Sum the totalAmount of matched orders
 
-  
+
   // let total = allVendorOrders?.reduce((previousValue, currentValue) => {
   //   return previousValue + currentValue.itemsCount * currentValue.totalAmount;
   // }, 0);
@@ -91,8 +91,19 @@ const VendorHome = () => {
 
   const purchaseHistory = transformData(userData);
 
+  // get monthly total amount
   const getMonthlyTotals = (history) => {
     const totals = {};
+
+    // Initialize all months to 0
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const currentYear = new Date().getFullYear();
+    months.forEach(month => {
+      totals[`${month} ${currentYear}`] = 0;
+    });
 
     history?.forEach((order) => {
       const date = new Date(order.orderDate);
@@ -244,7 +255,7 @@ const VendorHome = () => {
       <div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <VendorMonthlyPurchase />
+            <VendorMonthlyPurchase data={monthlyTotals}/>
           </div>
           <div>
             <VendorExpenseGraph />
