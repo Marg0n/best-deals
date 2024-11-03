@@ -49,12 +49,13 @@ const VendorHome = () => {
     (product) => product?.vendorEmail === user?.email
   );
 
-  const totalEarnings = allVendorOrders.reduce((total, order) => {
-    const vendorItemAmounts = order.items
-      .filter((item) => item.vendorEmail === user?.email)
-      .reduce((sum, item) => sum + item.totalAmount, 0);
-    return total + vendorItemAmounts;
-  }, 0);
+  const totalEarnings = allVendorOrders
+  .filter(order => 
+    order.items.flat().some(item => item.vendorEmail === user?.email) // Check if any item in the order matches vendorEmail
+  )
+  .reduce((total, order) => total + order.totalAmount, 0); // Sum the totalAmount of matched orders
+
+  
   let total = allVendorOrders?.reduce((previousValue, currentValue) => {
     return previousValue + currentValue.itemsCount * currentValue.totalAmount;
   }, 0);
