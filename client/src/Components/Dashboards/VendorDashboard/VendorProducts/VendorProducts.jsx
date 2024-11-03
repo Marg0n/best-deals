@@ -1,34 +1,28 @@
-import React, { useEffect, useState } from "react";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import {
+  Button,
+  Paper,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
   TextField,
-  Button,
-  Typography,
-  IconButton,
-  Menu,
-  MenuItem,
+  Typography
 } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import useAxiosSecure from "../../../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
-import useAuth from "../../../../hooks/useAuth";
-import useAxiosCommon from "./../../../../hooks/useAxiosCommon";
-import Swal from "sweetalert2";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import Select from "react-select";
-import { imageUpload } from "../../../../utils/imageUpload";
 import { FaTrashAlt } from "react-icons/fa";
+import Select from "react-select";
+import Swal from "sweetalert2";
+import useAuth from "../../../../hooks/useAuth";
+import useAxiosSecure from "../../../../hooks/useAxiosSecure";
+import { imageUpload } from "../../../../utils/imageUpload";
+import useAxiosCommon from "./../../../../hooks/useAxiosCommon";
 const style = {
   position: "absolute",
   bgcolor: "#EEEEEE",
@@ -281,14 +275,25 @@ const VendorProducts = () => {
 
   const handleDelete = async (id) => {
     try {
-      const resp = await axiosCommon.delete(`/vendorProductDelete/${id}`);
-      refetch();
       Swal.fire({
-        position: "top-center",
-        icon: "success",
-        title: "Your work has been Deleted",
-        showConfirmButton: false,
-        timer: 1500,
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!"
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          const resp = await axiosCommon.delete(`/vendorProductDelete/${id}`);
+          refetch();
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your product has been deleted!",
+            icon: "success",
+            timer: 1500,
+          });
+        }
       });
     } catch (error) {
       // console.log(error);
@@ -450,20 +455,20 @@ const VendorProducts = () => {
                                                 value={
                                                   value && value.length
                                                     ? sizeOptions.filter(
-                                                        (option) =>
-                                                          value.includes(
-                                                            option.value
-                                                          )
-                                                      )
+                                                      (option) =>
+                                                        value.includes(
+                                                          option.value
+                                                        )
+                                                    )
                                                     : []
                                                 } // Ensure the value is an array of objects
                                                 onChange={(selectedOptions) => {
                                                   const selectedValues =
                                                     selectedOptions
                                                       ? selectedOptions.map(
-                                                          (option) =>
-                                                            option.value
-                                                        )
+                                                        (option) =>
+                                                          option.value
+                                                      )
                                                       : [];
                                                   onChange(selectedValues); // Update the field with selected values
 

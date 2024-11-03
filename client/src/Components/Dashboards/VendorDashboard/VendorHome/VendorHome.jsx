@@ -36,9 +36,9 @@ const VendorHome = () => {
     queryKey: ["allOrdersForHome"],
     queryFn: async () => {
       const res = await vendorProducts.get("/all-orders");
-      return res.data;
+      return res.data.orders;
     },
-  });
+  }); console.log(allOrders);
 
   const allVendorOrders = allOrders?.filter((order) =>
     order.items.some((itemArray) =>
@@ -50,12 +50,12 @@ const VendorHome = () => {
   );
 
   const totalEarnings = allVendorOrders
-  .filter(order => 
-    order.items.flat().some(item => item.vendorEmail === user?.email) // Check if any item in the order matches vendorEmail
-  )
-  .reduce((total, order) => total + order.totalAmount, 0); // Sum the totalAmount of matched orders
+    .filter(order =>
+      order.items.flat().some(item => item.vendorEmail === user?.email) // Check if any item in the order matches vendorEmail
+    )
+    .reduce((total, order) => total + order.totalAmount, 0); // Sum the totalAmount of matched orders
 
-  
+
   // let total = allVendorOrders?.reduce((previousValue, currentValue) => {
   //   return previousValue + currentValue.itemsCount * currentValue.totalAmount;
   // }, 0);
@@ -91,8 +91,19 @@ const VendorHome = () => {
 
   const purchaseHistory = transformData(userData);
 
+  // get monthly total amount
   const getMonthlyTotals = (history) => {
     const totals = {};
+
+    // Initialize all months to 0
+    const months = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    const currentYear = new Date().getFullYear();
+    months.forEach(month => {
+      totals[`${month} ${currentYear}`] = 0;
+    });
 
     history?.forEach((order) => {
       const date = new Date(order.orderDate);
@@ -244,7 +255,7 @@ const VendorHome = () => {
       <div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div>
-            <VendorMonthlyPurchase />
+            <VendorMonthlyPurchase data={monthlyTotals}/>
           </div>
           <div>
             <VendorExpenseGraph />
@@ -253,7 +264,7 @@ const VendorHome = () => {
       </div>
 
       {/* Expense Input Section */}
-      <div className="my-6 text-white">
+      <div className="my-6 text-black dark:text-white">
         <h2 className="text-lg font-semibold text-black mb-4">
           Record Monthly Expense
         </h2>
@@ -266,12 +277,12 @@ const VendorHome = () => {
             value={expense}
             onChange={(e) => setExpense(e.target.value)}
             placeholder="Enter Expense Amount"
-            className="input input-bordered w-full"
+            className="input input-bordered w-full bg-white focus-visible:outline-black border-gray-700"
           />
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="select select-bordered w-full"
+            className="select select-bordered w-full bg-white focus-visible:outline-black border-gray-700"
           >
             <option value="">Select Month</option>
             {Array.from({ length: 12 }, (_, i) => {
@@ -285,7 +296,7 @@ const VendorHome = () => {
               );
             })}
           </select>
-          <button type="submit" className="btn btn-primary w-full">
+          <button type="submit" className="btn btn-primary w-full text-white">
             Submit Expense
           </button>
         </form>

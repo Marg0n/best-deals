@@ -25,7 +25,10 @@ const Services = () => {
                     title={'Replacement'}
                     text={'7-Days Replacement'} />
             </div>
-            <Link to='/track-order'>
+            <Link 
+            to='/track-order'
+            className=''
+            >
                 <div>
                     <ServiceCard
                         img={'https://i.ibb.co.com/NyRppNJ/track.png'}
@@ -33,12 +36,12 @@ const Services = () => {
                         text={'Track your order'} />
                 </div>
             </Link>
-            <div>
+            <Link to='/all'>
                 <ServiceCard
                     img={'https://i.ibb.co.com/rcNNr81/measurement.png'}
                     title={'Range'}
-                    text={'Vast Range of Device'} />
-            </div>
+                    text={'Vast Range of Products'} />
+            </Link>
             <div>
                 <ServiceCard
                     img={'https://i.ibb.co.com/zfW3kms/leaves.png'}
