@@ -36,9 +36,9 @@ const VendorHome = () => {
     queryKey: ["allOrdersForHome"],
     queryFn: async () => {
       const res = await vendorProducts.get("/all-orders");
-      return res.data;
+      return res.data.orders;
     },
-  });
+  });console.log(allOrders);
 
   const allVendorOrders = allOrders?.filter((order) =>
     order.items.some((itemArray) =>

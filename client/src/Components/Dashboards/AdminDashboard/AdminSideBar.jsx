@@ -100,7 +100,7 @@ const AdminSideBar = () => {
               />
             </ListItemIcon>
             <ListItemText
-              primary="Dashboard"
+              primary="Profile"
               className={selected === 10 ? "" : "text-2xl"}
             />
           </div>
