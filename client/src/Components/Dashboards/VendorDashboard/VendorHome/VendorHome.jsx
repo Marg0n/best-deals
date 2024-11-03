@@ -56,9 +56,9 @@ const VendorHome = () => {
   .reduce((total, order) => total + order.totalAmount, 0); // Sum the totalAmount of matched orders
 
   
-  let total = allVendorOrders?.reduce((previousValue, currentValue) => {
-    return previousValue + currentValue.itemsCount * currentValue.totalAmount;
-  }, 0);
+  // let total = allVendorOrders?.reduce((previousValue, currentValue) => {
+  //   return previousValue + currentValue.itemsCount * currentValue.totalAmount;
+  // }, 0);
   let totalProducts = allVendorProducts.length
   let totalOrders = allVendorOrders.length
   //let totalEarnings = Math.round(total) || 0
