@@ -43,21 +43,32 @@ const UserHome = () => {
     // get monthly total amount
     const getMonthlyTotals = (history) => {
         const totals = {};
-
-        history?.forEach(order => {
-            const date = new Date(order.orderDate);
-            const month = date.toLocaleString('default', { month: 'long' });
-            const year = date.getFullYear();
-            const key = `${month} ${year}`;
-
-            if (!totals[key]) {
-                totals[key] = 0;
-            }
-            totals[key] += order.totalAmount;
+      
+        // Initialize all months to 0
+        const months = [
+          "January", "February", "March", "April", "May", "June",
+          "July", "August", "September", "October", "November", "December"
+        ];
+        const currentYear = new Date().getFullYear();
+        months.forEach(month => {
+          totals[`${month} ${currentYear}`] = 0;
         });
-
+      
+        history?.forEach((order) => {
+          const date = new Date(order.orderDate);
+          const month = date.toLocaleString("default", { month: "long" });
+          const year = date.getFullYear();
+          const key = `${month} ${year}`;
+      
+          if (!totals[key]) {
+            totals[key] = 0;
+          }
+          totals[key] += order.totalAmount;
+        });
+      
         return totals;
-    };
+      };
+      
 
     const monthlyTotals = getMonthlyTotals(purchaseHistory);
 
