@@ -1,12 +1,10 @@
 import React from "react";
-import { Bar, Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
   BarElement,
-  PointElement,
-  LineElement,
   Title,
   Tooltip,
   Legend,
@@ -16,14 +14,17 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   BarElement,
-  PointElement,
-  LineElement,
   Title,
   Tooltip,
   Legend
 );
 
-const RevenueOverviewChart = () => {
+const RevenueOverviewChart = ({ TotalRevenue, TotalTransaction }) => {
+  // Assuming TotalRevenue and TotalTransaction are single values for the total revenue and total transaction
+  const monthlyRevenue = TotalRevenue / 12; // Average monthly revenue
+  const monthlyExpense = TotalTransaction / 12; // Average monthly expense
+
+  // Prepare the data for the chart
   const data = {
     labels: [
       "Jan",
@@ -42,7 +43,7 @@ const RevenueOverviewChart = () => {
     datasets: [
       {
         label: "Revenue",
-        data: [30, 40, 25, 45, 35, 50, 60, 55, 45, 50, 65, 70],
+        data: Array(12).fill(monthlyRevenue), // Fill with average revenue
         backgroundColor: "orange",
         type: "bar",
         barThickness: 12, // Slightly thicker bars
@@ -50,13 +51,10 @@ const RevenueOverviewChart = () => {
       },
       {
         label: "Expense",
-        data: [20, 30, 25, 35, 30, 40, 45, 40, 35, 38, 50, 55],
+        data: Array(12).fill(monthlyExpense), // Fill with average expense
         borderColor: "blue",
         backgroundColor: "blue",
-        pointBackgroundColor: "blue",
-        pointBorderColor: "#fff",
         borderWidth: 3, // Slightly thicker line
-        pointRadius: 4, // Slightly larger points
         type: "line",
         yAxisID: "y",
       },
@@ -76,7 +74,7 @@ const RevenueOverviewChart = () => {
         display: true,
         text: "Revenue Overview",
         font: {
-          size: 16, // Set font size to 20px
+          size: 16, // Set font size to 16px
         },
       },
       subtitle: {
@@ -92,9 +90,6 @@ const RevenueOverviewChart = () => {
         ticks: {
           callback: (value) => value, // Show numbers without %
         },
-      },
-      y1: {
-        display: false, // Hide right-side y-axis
       },
     },
   };
