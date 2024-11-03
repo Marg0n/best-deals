@@ -92,11 +92,11 @@ const Router = createBrowserRouter([
       },
       {
         path: "/favoriteVendor",
-        element: <FavoriteVendor />,
+        element: <PrivateRoute><FavoriteVendor /></PrivateRoute>,
       },
       {
         path: "/accountSettings",
-        element: <AccountSettings />,
+        element: <PrivateRoute><AccountSettings /></PrivateRoute>,
       },
       {
         path: "/aboutUs",
@@ -147,11 +147,11 @@ const Router = createBrowserRouter([
       },
       {
         path: "/vendorDashboard/userWishlist",
-        element: <UserWishlist />,
+        element: <VendorRoute><UserWishlist /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/notifications",
-        element: <UserAlert />,
+        element: <VendorRoute><UserAlert /></VendorRoute>,
       },
       {
         path: "/vendorDashboard/orders",
@@ -177,43 +177,43 @@ const Router = createBrowserRouter([
     children: [
       {
         path: "/adminDashboard",
-        element: <AdminHome />,
+        element: <AdminRoutes><AdminHome /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/adminProfile",
-        element: <AdminProfile />,
+        element: <AdminRoutes><AdminProfile /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/allUsers",
-        element: <AdminAllUsers />,
+        element: <AdminRoutes><AdminAllUsers /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/allVendors",
-        element: <AdminAllVendors />,
+        element: <AdminRoutes><AdminAllVendors /></AdminRoutes>,
       },
       {
         path: '/adminDashboard/vendorRequest',
-        element: <AdminVendorRequest />
+        element: <AdminRoutes><AdminVendorRequest /></AdminRoutes>,
       },
       {
         path: '/adminDashboard/all-orders',
-        element: <AllOrders />
+        element: <AdminRoutes><AllOrders /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/userWishlist",
-        element: <UserWishlist />,
+        element: <AdminRoutes><UserWishlist /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/orderManagement",
-        element: <OrderManagement />,
+        element: <AdminRoutes><OrderManagement /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/notifications",
-        element: <UserAlert />,
+        element:<AdminRoutes><UserAlert /></AdminRoutes>,
       },
       {
         path: "/adminDashboard/inbox",
-        element: <Inbox />,
+        element: <AdminRoutes><Inbox /></AdminRoutes>,
       },
     ]
   },
@@ -227,27 +227,27 @@ const Router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <UserHome />,
+        element: <UserRoute><UserHome /></UserRoute>,
       },
       {
         path: "/userDashboard/userWishlist",
-        element: <UserWishlist />,
+        element: <UserRoute><UserWishlist /></UserRoute>,
       },
       {
         path: "/userDashboard/orderManagement",
-        element: <OrderManagement />,
+        element: <UserRoute><OrderManagement /></UserRoute>,
       },
       {
         path: "/userDashboard/notifications",
-        element: <UserAlert />,
+        element: <UserRoute><UserAlert /></UserRoute>,
       },
       {
         path: "/userDashboard/customerSupport",
-        element: <CustomerSupport />,
+        element: <UserRoute><CustomerSupport /></UserRoute>,
       },
       {
         path: "/userDashboard/inbox",
-        element: <Inbox />,
+        element: <UserRoute><Inbox /></UserRoute>,
       },
     ],
   },
