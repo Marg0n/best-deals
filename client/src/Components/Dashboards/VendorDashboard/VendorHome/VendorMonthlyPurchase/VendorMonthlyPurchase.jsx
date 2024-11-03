@@ -1,15 +1,15 @@
-import React from "react";
-import { Bar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
 import PropTypes from "prop-types";
+import React from "react";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -21,20 +21,21 @@ ChartJS.register(
 );
 
 const VendorMonthlyPurchase = ({ data }) => {
+
   // উদাহরণ ডেটা তৈরি করা
   const exampleData = {
-    January: 60,
-    February: 55,
-    March: 80,
-    April: 75,
-    May: 50,
-    June: 50,
-    July: 40,
-    August: 65,
-    September: 70,
-    October: 85,
-    November: 90,
-    December: 55,
+    January: 0,
+    February: 0,
+    March: 0,
+    April: 0,
+    May: 0,
+    June: 0,
+    July: 0,
+    August: 0,
+    September: 0,
+    October: 0,
+    November: 0,
+    December: 0,
   };
 
   // যদি ডেটা প্রপস না পাওয়া যায়, তাহলে উদাহরণ ডেটা ব্যবহার করা হবে
@@ -95,7 +96,7 @@ const VendorMonthlyPurchase = ({ data }) => {
     scales: {
       y: {
         beginAtZero: true,
-        max: 100,
+        // max: 100,
       },
     },
   };

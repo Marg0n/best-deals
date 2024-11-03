@@ -278,7 +278,7 @@ async function run() {
       if (vendor) {
         query = { role: { $eq: vendor } };
       }
-      if (user){
+      if (user) {
         query = { role: { $eq: user } };
       }
       const results = await usersCollection.find(query).toArray();
@@ -464,9 +464,41 @@ async function run() {
     // Get all orders for admin
     // ==================================
     app.get("/all-orders", async (req, res) => {
-      const results = await orderCollection.find().toArray();
-      res.send(results);
+      const { search = "", page = 1, limit = 10 } = req.query;
+      const skip = (page - 1) * limit;
+      console.log(search);
+      
+
+      try {
+        const searchFilter = search
+          ? {
+            $or: [
+              { name: { $regex: search, $options: "i" } },
+              { contact: { $regex: search, $options: "i" } }
+            ]
+          }
+          : {};
+
+        const results = await orderCollection
+          .find(searchFilter)
+          .skip(skip)
+          .limit(parseInt(limit))
+          .toArray();
+
+        const totalCount = await orderCollection.countDocuments(searchFilter);
+
+        res.send({
+          orders: results,
+          totalPages: Math.ceil(totalCount / limit),
+          currentPage: parseInt(page)
+        });
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+        res.status(500).send({ message: "Error fetching orders" });
+      }
     });
+
+
 
     // ==================================
     // Get all orders for user
@@ -489,7 +521,7 @@ async function run() {
     app.get("/order-track/:trackingID", async (req, res) => {
       const trackingID = req.params.trackingID
       try {
-        const query = {trackingNumber : trackingID}
+        const query = { trackingNumber: trackingID }
         const result = await orderCollection.find(query).toArray()
         res.send(result)
       }

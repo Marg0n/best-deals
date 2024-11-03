@@ -78,7 +78,7 @@ const MonthlyPurchaseChart = ({ data }) => {
     scales: {
       y: {
         beginAtZero: true,
-        max: 90,
+        // max: 90,
       },
     },
   };

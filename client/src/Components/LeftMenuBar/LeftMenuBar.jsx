@@ -171,9 +171,9 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange, setCurrent
                 /> */}
                 <span className="px-2">${priceRangeFilter[1]}</span>
               </div>
-              <hr className="w-3/4 mx-auto my-5" />
+              {/* <hr className="w-3/4 mx-auto my-5" /> */}
               <div>
-                <div className="ml-5 mt-5 text-[#775050] dark:text-white">
+                {/* <div className="ml-5 mt-5 text-[#775050] dark:text-white">
                   <h1>My List :</h1>
                   <ul className="ml-10">
                     <li>
@@ -192,10 +192,10 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange, setCurrent
                       <Link to="/invoiceHistory">Invoice History</Link>
                     </li>
                   </ul>
-                </div>
+                </div> */}
               </div>
-              <hr className="w-3/4 mx-auto my-5" />
-              <div>
+              {/* <hr className="w-3/4 mx-auto my-5" /> */}
+              {/* <div>
                 <div className="ml-5 mt-5 text-[#775050] dark:text-white">
                   <ul className="ml-10">
                     <li>
@@ -220,7 +220,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange, setCurrent
                     <li>Complain Vendor</li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
             </form>
           </div>
         </div>

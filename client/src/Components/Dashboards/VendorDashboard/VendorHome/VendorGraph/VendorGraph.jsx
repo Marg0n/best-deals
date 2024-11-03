@@ -25,7 +25,7 @@ const VendorGraph = () => {
         queryKey: ["userExpenses", vendorMail.profile[0]?.email],
         queryFn: async () => {
             const res = await vendorProducts.get(`/userCollection/expense?email=${vendorMail.profile[0]?.email}`);
-            return res.data.expense; // Adjust based on your API response
+            return res.data.expense; 
         },
     });
 
@@ -40,7 +40,7 @@ const VendorGraph = () => {
 
             return {
                 month,
-                earnings: 0, // Set earnings to 0 as per your request
+                earnings: 100, 
                 expenses: monthlyExpenses,
             };
         });

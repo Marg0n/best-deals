@@ -40,21 +40,32 @@ const VendorHome = () => {
     },
   });
 
-  const allVendorOrders = allOrders?.filter(
-    (product) => product?.vendorEmail === user?.email
+  const allVendorOrders = allOrders?.filter((order) =>
+    order.items.some((itemArray) =>
+      itemArray.some((item) => item.vendorEmail === user?.email)
+    )
   );
   const allVendorProducts = products?.filter(
     (product) => product?.vendorEmail === user?.email
   );
 
-  let total = allVendorOrders?.reduce((previousValue, currentValue) => {
-    return previousValue + currentValue.itemsCount * currentValue.totalAmount;
-  }, 0);
+  const totalEarnings = allVendorOrders
+  .filter(order => 
+    order.items.flat().some(item => item.vendorEmail === user?.email) // Check if any item in the order matches vendorEmail
+  )
+  .reduce((total, order) => total + order.totalAmount, 0); // Sum the totalAmount of matched orders
 
+  
+  // let total = allVendorOrders?.reduce((previousValue, currentValue) => {
+  //   return previousValue + currentValue.itemsCount * currentValue.totalAmount;
+  // }, 0);
+  let totalProducts = allVendorProducts.length
+  let totalOrders = allVendorOrders.length
+  //let totalEarnings = Math.round(total) || 0
   const stats = {
-    totalProducts: allVendorProducts.length,
-    totalOrders: allVendorOrders.length,
-    totalEarnings: Math.round(total) || 0,
+    //totalProducts: allVendorProducts.length,
+    //totalOrders: allVendorOrders.length,
+    //totalEarnings: Math.round(total) || 0,
   };
 
   const { profile } = useUserProfile();
@@ -136,21 +147,21 @@ const VendorHome = () => {
   const cardData = [
     {
       title: "Total Products",
-      value: "500",
+      value: `${totalProducts}`,
       icon: <FaBox />,
       iconColor: "text-purple-500",
       bgColor: "hover:bg-purple-50",
     },
     {
       title: "Total Orders",
-      value: "1200",
+      value: `${totalOrders}`,
       icon: <FaShoppingCart />,
       iconColor: "text-green-500",
       bgColor: "hover:bg-green-50",
     },
     {
       title: "Total Earnings",
-      value: "$80,000",
+      value: `$${Math.round(totalEarnings)}`,
       icon: <FaDollarSign />,
       iconColor: "text-blue-500",
       bgColor: "hover:bg-blue-50",
@@ -164,7 +175,7 @@ const VendorHome = () => {
     },
     {
       title: "Total Spendings",
-      value: "$30,000",
+      value: `$${totalSpending}`,
       icon: <FaWallet />,
       iconColor: "text-red-500",
       bgColor: "hover:bg-red-50",
