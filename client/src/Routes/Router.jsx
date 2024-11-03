@@ -3,7 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import AdminAllUsers from "../Components/Dashboards/AdminDashboard/AdminAllUser/AdminAllUsers";
 import AdminAllVendors from "../Components/Dashboards/AdminDashboard/AdminAllVendor/AdminAllVendors";
 import AdminDashboard from "../Components/Dashboards/AdminDashboard/AdminDashboard";
-import AdminHome from "../components/Dashboards/AdminDashboard/AdminHome/AdminHome";
+import AdminHome from "../Components/Dashboards/AdminDashboard/AdminHome/AdminHome";
 import AdminVendorRequest from "../Components/Dashboards/AdminDashboard/AdminVendorRequest/AdminVendorRequest";
 import CustomerSupport from "../Components/Dashboards/UserDashboard/CustomerSuport/CustomerSupport";
 import UserAlert from "../Components/Dashboards/UserDashboard/Notification/UserAlert";
