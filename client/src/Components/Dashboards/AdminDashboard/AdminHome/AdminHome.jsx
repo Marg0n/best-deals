@@ -67,7 +67,7 @@ const AdminHome = () => {
     fetchData();
   }, [axiosSecure]);
 
-  console.log(totalUsers, totalVendors,totalTransactions)
+  console.log(totalUsers, totalVendors, totalTransactions);
 
   //revenue calculation
   const rvenue = totalRevenue * 0.1 || 0;

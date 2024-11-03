@@ -3,12 +3,15 @@ import AOS from 'aos';
 import React, { useEffect, useState } from 'react';
 import './TableStyles.css';
 import { TextField } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 const PurchaseHistoryTable = ({ data }) => {
   const [sorting, setSorting] = useState([]);
   const [expanded, setExpanded] = useState({});
   const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState(data);
+  const navigate = useNavigate();
+
 
   const columns = React.useMemo(
     () => [
@@ -42,14 +45,14 @@ const PurchaseHistoryTable = ({ data }) => {
         header: 'Tracking ID',
       },
       {
-        accessorKey: 'trackingNumber',
-        header: 'Tracking ID',
+        accessorKey: 'track',
+        header: 'Track',
         cell: ({ row }) => (
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span>{row.original.trackingNumber}</span>
+            {/* <span>{row.original.trackingNumber}</span> */}
             <button
               onClick={() => handleTrackNow(row.original.trackingNumber)}
-              className="btn-active btn-link"
+              className="btn-active btn-link btn"
             >
               Track Now
             </button>
@@ -63,8 +66,9 @@ const PurchaseHistoryTable = ({ data }) => {
   // Handler function for tracking button
   const handleTrackNow = (trackingNumber) => {
     // Replace with actual tracking URL or logic
-    const trackingUrl = `https://tracking.example.com/${trackingNumber}`;
-    window.open(trackingUrl, '_blank');
+    navigate(`/track-order?trackingID=${trackingNumber}`);
+    // const trackingUrl = `https://tracking.example.com/${trackingNumber}`;
+    // window.open(trackingUrl, '_blank');
   };
 
   // useEffect(() => {
@@ -102,7 +106,7 @@ const PurchaseHistoryTable = ({ data }) => {
     state: { sorting, expanded },
     onSortingChange: setSorting,
     onExpandedChange: setExpanded,
-    initialState: { pagination: { pageSize: 7 } }, // Set initial page size
+    initialState: { pagination: { pageSize: 5 } }, // Set initial page size
   });
 
   const handleRowClick = (rowId) => {

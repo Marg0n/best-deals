@@ -45,7 +45,7 @@ const Login = () => {
     // console.log(location)
     const whereTo = location?.state || '/';
     console.log(location);
-    
+
 
     // React hook form
     const {
@@ -61,27 +61,27 @@ const Login = () => {
 
         signInUser(email, password)
             .then(result => {
-                    setCustomLoader(true);
-                    // console.log(result.user)
-                    const loggedUser = { email };
-                    axios.post(`${import.meta.env.VITE_SERVER}/jwt`, loggedUser, { withCredentials: true })
-                    // .then(res => {
-                    //     console.log(res.data)
-                    // })
+                setCustomLoader(true);
+                // console.log(result.user)
+                const loggedUser = { email };
+                axios.post(`${import.meta.env.VITE_SERVER}/jwt`, loggedUser, { withCredentials: true })
+                // .then(res => {
+                //     console.log(res.data)
+                // })
 
-                    // last login timestamp
-                    axiosCommon.patch(`/lastLogin/${email}`, userInfo)
+                // last login timestamp
+                axiosCommon.patch(`/lastLogin/${email}`, userInfo)
 
-                    toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
+                toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
 
-                    if (result.user) {
-                        setCustomLoader(false);
-                        navigate(whereTo, { replace: true });
-                    }
-                    else{                        
-                        setCustomLoader(false);
-                        toast.error(`Something went wrong!`, { autoClose: 2000, theme: "colored" })
-                    }
+                if (result.user) {
+                    setCustomLoader(false);
+                    navigate(whereTo, { replace: true });
+                }
+                else {
+                    setCustomLoader(false);
+                    toast.error(`Something went wrong!`, { autoClose: 2000, theme: "colored" })
+                }
 
             })
             .catch(error => {
@@ -113,6 +113,7 @@ const Login = () => {
                         photo: result?.user?.photoURL,
                         createdTime: result?.user?.metadata.creationTime,
                         lastLogin: result?.user?.metadata.lastSignInTime,
+                        banTime: 0,
                         role: "User"
                     }
 

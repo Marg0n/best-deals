@@ -49,7 +49,7 @@ const AdminVendorRequest = () => {
 
     const [searchTerm, setSearchTerm] = useState("");
     const [currentPage, setCurrentPage] = useState(0);
-    const rowsPerPage = 4; // Set number of rows per page
+    const rowsPerPage = 10; // Set number of rows per page
 
     const filteredData = initialData.filter((vendor) =>
         vendor.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -89,7 +89,8 @@ const AdminVendorRequest = () => {
                 const vendStatus = {
                     status: 'Approved',
                     reason: '',
-                    role: 'Vendor'
+                    role: 'Vendor',
+                    banTime: 0
                 }
                 const role = 'Vendor'
                 const res = await vendorRequests.patch(`/allUser/${mail}`, vendStatus, role)
@@ -200,7 +201,8 @@ const AdminVendorRequest = () => {
                                                         ? (
                                                             row?.vendorStatus?.status === 'Approved'
                                                                 ? <button onClick={() => handleDecline(row.email)} className="bg-red-600 text-white p-2 rounded-lg hover:bg-gray-700">Revert to User</button>
-                                                                : <button onClick={() => handleApprove(row.email)} className="bg-green-600 text-white p-2 rounded-lg mr-2 hover:bg-gray-700">Approve</button>
+                                                                : <div><button onClick={() => handleApprove(row.email)} className="bg-green-600 text-white p-2 rounded-lg mr-2 hover:bg-gray-700">Approve</button>
+                                                                    <button onClick={() => handleDecline(row.email)} className="bg-red-600 text-white p-2 rounded-lg hover:bg-gray-700">Decline</button></div>
                                                         )
                                                         : <>
                                                             <button onClick={() => handleApprove(row.email)} className="bg-green-600 text-white p-2 rounded-lg mr-2 hover:bg-gray-700">Approve</button>
