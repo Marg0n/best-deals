@@ -1,12 +1,12 @@
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import ProfileInfo from '../../Shared/ProfileInfo';
+import { Helmet } from 'react-helmet-async';
 
-const VendorProfile = () => {
+const AdminProfile = () => {
     return (
         <div className="p-8 min-h-screen space-y-4">
              <Helmet>
-                <title>Best Deal | Vendor Profile</title>
+                <title>Best Deal | Admin Profile</title>
             </Helmet>
             
             {/* profile info */}
@@ -15,4 +15,4 @@ const VendorProfile = () => {
     );
 };
 
-export default VendorProfile;
+export default AdminProfile;

@@ -12,6 +12,7 @@ import BookmarksIcon from "@mui/icons-material/Bookmarks";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MessageIcon from "@mui/icons-material/Message";
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const AdminSideBar = () => {
   const location = useLocation();
@@ -47,6 +48,9 @@ const AdminSideBar = () => {
       case "/adminDashboard/inbox":
         setSelected(9);
         break;
+      case "/adminDashboard/adminProfile":
+        setSelected(10);
+        break;
       default:
         setSelected(1);
     }
@@ -75,6 +79,29 @@ const AdminSideBar = () => {
             <ListItemText
               primary="Dashboard"
               className={selected === 1 ? "" : "text-2xl"}
+            />
+          </div>
+        </ListItem>
+
+        {/* profile */}
+        <ListItem button component={Link} to="/adminDashboard/adminProfile">
+          <div
+            className={
+              selected === 10
+                ? "text-black bg-white w-full rounded-lg flex p-2"
+                : "flex align-middle"
+            }
+          >
+            <ListItemIcon>
+              <AccountCircleIcon
+                className={
+                  selected === 10 ? "text-black text-4xl" : "text-white"
+                }
+              />
+            </ListItemIcon>
+            <ListItemText
+              primary="Dashboard"
+              className={selected === 10 ? "" : "text-2xl"}
             />
           </div>
         </ListItem>

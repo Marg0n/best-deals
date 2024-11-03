@@ -41,6 +41,7 @@ import AllOrders from "../Pages/AllOrders/AllOrders";
 import ErrorPage from "../Pages/ErrorPage/ErrorPage";
 import OrderTracking from "../Pages/OrderTracking/OrderTracking";
 import VendorProfile from "../Components/Dashboards/VendorDashboard/VendorProfile/VendorProfile";
+import AdminProfile from "../Components/Dashboards/AdminDashboard/AdminProfile/AdminProfile";
 
 const Router = createBrowserRouter([
   {
@@ -177,6 +178,10 @@ const Router = createBrowserRouter([
       {
         path: "/adminDashboard",
         element: <AdminHome />,
+      },
+      {
+        path: "/adminDashboard/adminProfile",
+        element: <AdminProfile />,
       },
       {
         path: "/adminDashboard/allUsers",
