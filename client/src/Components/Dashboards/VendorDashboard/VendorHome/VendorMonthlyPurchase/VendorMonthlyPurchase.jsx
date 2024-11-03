@@ -1,15 +1,15 @@
-import React from "react";
-import { Bar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
   BarElement,
+  CategoryScale,
+  Chart as ChartJS,
+  Legend,
+  LinearScale,
   Title,
   Tooltip,
-  Legend,
 } from "chart.js";
 import PropTypes from "prop-types";
+import React from "react";
+import { Bar } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -96,7 +96,7 @@ const VendorMonthlyPurchase = ({ data }) => {
     scales: {
       y: {
         beginAtZero: true,
-        max: 100,
+        // max: 100,
       },
     },
   };
