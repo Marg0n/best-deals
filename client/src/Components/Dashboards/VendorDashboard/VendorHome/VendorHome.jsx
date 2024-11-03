@@ -253,7 +253,7 @@ const VendorHome = () => {
       </div>
 
       {/* Expense Input Section */}
-      <div className="my-6 text-white">
+      <div className="my-6 text-black dark:text-white">
         <h2 className="text-lg font-semibold text-black mb-4">
           Record Monthly Expense
         </h2>
@@ -266,12 +266,12 @@ const VendorHome = () => {
             value={expense}
             onChange={(e) => setExpense(e.target.value)}
             placeholder="Enter Expense Amount"
-            className="input input-bordered w-full"
+            className="input input-bordered w-full bg-white focus-visible:outline-black border-gray-700"
           />
           <select
             value={selectedMonth}
             onChange={(e) => setSelectedMonth(e.target.value)}
-            className="select select-bordered w-full"
+            className="select select-bordered w-full bg-white focus-visible:outline-black border-gray-700"
           >
             <option value="">Select Month</option>
             {Array.from({ length: 12 }, (_, i) => {
@@ -285,7 +285,7 @@ const VendorHome = () => {
               );
             })}
           </select>
-          <button type="submit" className="btn btn-primary w-full">
+          <button type="submit" className="btn btn-primary w-full text-white">
             Submit Expense
           </button>
         </form>
