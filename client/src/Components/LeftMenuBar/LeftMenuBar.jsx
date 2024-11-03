@@ -72,7 +72,7 @@ const LeftMenubar = ({ setSearch, setSelectedCategory, setPriceRange, setCurrent
   };
 
   return (
-    <div className="sticky top-16 z-30 bg-gray-200 dark:bg-[#34394C]">
+    <div className="sticky top-16 z-30 bg-none">
 
       {/* drawer */}
       <div className="drawer lg:drawer-open">
