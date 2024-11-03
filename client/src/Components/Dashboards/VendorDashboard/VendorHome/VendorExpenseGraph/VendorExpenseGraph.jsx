@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import useUserProfile from '../../../../../hooks/useUserProfile';
 import useAxiosSecure from '../../../../../hooks/useAxiosSecure';
 
-const VendorExpenseGraph = () => {
+const VendorExpenseGraph = ({data}) => {
     const vendorMail = useUserProfile();
     const vendorProducts = useAxiosSecure();
     const [graphData, setGraphData] = useState({
@@ -15,6 +15,7 @@ const VendorExpenseGraph = () => {
         datasets: [
             {
                 label: "Expenses",
+                // data: data,
                 data: Array(12).fill(0), // Initial empty data for each month
                 backgroundColor: "rgba(88, 85, 255, 0.8)",
             }
