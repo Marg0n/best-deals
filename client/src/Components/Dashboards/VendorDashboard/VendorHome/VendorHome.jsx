@@ -40,19 +40,27 @@ const VendorHome = () => {
     },
   });
 
-  const allVendorOrders = allOrders?.filter(
-    (product) => product?.vendorEmail === user?.email
+  const allVendorOrders = allOrders?.filter((order) =>
+    order.items.some((itemArray) =>
+      itemArray.some((item) => item.vendorEmail === user?.email)
+    )
   );
   const allVendorProducts = products?.filter(
     (product) => product?.vendorEmail === user?.email
   );
 
+  const totalEarnings = allVendorOrders.reduce((total, order) => {
+    const vendorItemAmounts = order.items
+      .filter((item) => item.vendorEmail === user?.email)
+      .reduce((sum, item) => sum + item.totalAmount, 0);
+    return total + vendorItemAmounts;
+  }, 0);
   let total = allVendorOrders?.reduce((previousValue, currentValue) => {
     return previousValue + currentValue.itemsCount * currentValue.totalAmount;
   }, 0);
   let totalProducts = allVendorProducts.length
   let totalOrders = allVendorOrders.length
-  let totalEarnings = Math.round(total) || 0
+  //let totalEarnings = Math.round(total) || 0
   const stats = {
     //totalProducts: allVendorProducts.length,
     //totalOrders: allVendorOrders.length,
@@ -152,7 +160,7 @@ const VendorHome = () => {
     },
     {
       title: "Total Earnings",
-      value: `${totalEarnings}`,
+      value: `$${Math.round(totalEarnings)}`,
       icon: <FaDollarSign />,
       iconColor: "text-blue-500",
       bgColor: "hover:bg-blue-50",
