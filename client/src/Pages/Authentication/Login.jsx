@@ -1,21 +1,30 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { RxEyeClosed } from "react-icons/rx";
+import { TbFidgetSpinner } from "react-icons/tb";
 import { TfiEye } from "react-icons/tfi";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { ClimbingBoxLoader } from "react-spinners";
 import 'react-toastify/dist/ReactToastify.css';
 import bgImg from '../../assets/login.png';
 import useAuth from "../../hooks/useAuth";
-import { ClimbingBoxLoader } from "react-spinners";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import useCartList from "../../hooks/useCartList";
 import logo from '/rmv_bg_logo1.png';
-import axios from "axios";
 
 
 const Login = () => {
+    const dispatch = useDispatch()
+    const userCartListFromDB = useCartList()
+    const cartlistFromDB = userCartListFromDB?.cartProducts[0]
+    const cart = useSelector((state) => state.cart);
 
-    const { signInUser, googleLogin, user } = useAuth();
+    const { signInUser, googleLogin, user, loading } = useAuth();
 
     // custom loader for login
     const [customLoader, setCustomLoader] = useState(false);
@@ -23,10 +32,20 @@ const Login = () => {
     // password show
     const [passShow, setPassShow] = useState(false);
 
+    // import custom axios functions
+    const axiosCommon = useAxiosCommon();
+    const axiosSecoure = useAxiosSecure();
+
+    // creation date and last login date
+    const lastLogin = new Date().toUTCString();
+
     // Navigation
     const navigate = useNavigate();
     const location = useLocation();
+    // console.log(location)
     const whereTo = location?.state || '/';
+    console.log(location);
+
 
     // React hook form
     const {
@@ -38,21 +57,30 @@ const Login = () => {
     const onSubmit = (data) => {
         const { email, password } = data;
 
+        const userInfo = { lastLogin };
+
         signInUser(email, password)
             .then(result => {
-
                 setCustomLoader(true);
                 // console.log(result.user)
                 const loggedUser = { email };
                 axios.post(`${import.meta.env.VITE_SERVER}/jwt`, loggedUser, { withCredentials: true })
-                    .then(res => {
-                        console.log(res.data)
-                    })
+                // .then(res => {
+                //     console.log(res.data)
+                // })
+
+                // last login timestamp
+                axiosCommon.patch(`/lastLogin/${email}`, userInfo)
+
                 toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
 
                 if (result.user) {
                     setCustomLoader(false);
                     navigate(whereTo, { replace: true });
+                }
+                else {
+                    setCustomLoader(false);
+                    toast.error(`Something went wrong!`, { autoClose: 2000, theme: "colored" })
                 }
 
             })
@@ -74,30 +102,50 @@ const Login = () => {
     const handleSocialLogin = socialLoginProvider => {
         socialLoginProvider()
             .then(result => {
-                if (result.user) {
-                    // console.log(result.user)
-                    axios.post(`${import.meta.env.VITE_SERVER}/jwt`, {
-                        email: (result?.user?.email !== null ? result.user?.email : result.user?.displayName),
-                        // email: result?.user?.email,
-                    },
-                        { withCredentials: true }
-                    )
-                    // .then(res => {
-                    //   console.log(res.data)
-                    // })
-                    toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
-                    navigate(whereTo)
+
+                if (result?.user) {
+
+                    setCustomLoader(true);
+
+                    const userData = {
+                        email: result?.user?.email,
+                        name: result?.user?.displayName,
+                        photo: result?.user?.photoURL,
+                        createdTime: result?.user?.metadata.creationTime,
+                        lastLogin: result?.user?.metadata.lastSignInTime,
+                        banTime: 0,
+                        role: "User"
+                    }
+
+                    // Send user data to your server
+                    axiosCommon.post('/users', userData)
+                    // last login timestamp
+                    axiosCommon.patch(`/lastLogin/${result?.user.email}`, lastLogin)
+
+                    // jwt token
+                    axiosSecoure.post(`/jwt`, {
+                        email: result?.user?.email,
+                    })
+                        .then(() => {
+                            setCustomLoader(false);
+                            toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
+                        })
+                    setTimeout(() => {
+                        navigate(whereTo, { replace: true })
+                    }, 1000);
+
+
                 }
             })
             .catch(error => {
                 const errorCode = error.code;
                 // Remove 'auth/' prefix and '-' characters
-                const cleanedErrorCode = errorCode.replace(/^auth\/|-/g, ' ');
-                const words = cleanedErrorCode.split('-');
-                const capitalizedWords = words.map(word => word.charAt(1).toUpperCase() + word.slice(2));
-                const message = capitalizedWords.join(' ');
+                // const cleanedErrorCode = errorCode.replace(/^auth\/|-/g, ' ');
+                // const words = cleanedErrorCode.split('-');
+                // const capitalizedWords = words.map(word => word.charAt(1).toUpperCase() + word.slice(2));
+                // const message = capitalizedWords.join(' ');
 
-                toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
+                // toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
                 navigate('/login')
             })
     }
@@ -201,7 +249,7 @@ const Login = () => {
                                 id='LoggingEmailAddress'
                                 autoComplete='email'
                                 name='email'
-                                className='block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300'
+                                className='block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300 lowercase'
                                 type='email'
                                 {...register("email", { required: true })}
                             />
@@ -245,7 +293,7 @@ const Login = () => {
                                 type='submit'
                                 className='w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50'
                             >
-                                Log In
+                                {(customLoader || loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : 'Log In'}
                             </button>
                         </div>
                     </form>

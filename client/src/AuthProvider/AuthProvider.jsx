@@ -39,14 +39,14 @@ const AuthProvider = ({ children }) => {
   };
 
   // Google login
-  const googleLogin = () => {
+  const googleLogin = async () => {
     setLoading(true);
-    return signInWithPopup(auth, googleProvider);
+    return await signInWithPopup(auth, googleProvider);
   };
 
   // Update user Profile
-  const updateUserProfile = (name, image) => {
-    return updateProfile(auth.currentUser, {
+  const updateUserProfile = async (name, image) => {
+    return await updateProfile(auth.currentUser, {
       displayName: name,
       photoURL: image,
     });
@@ -59,12 +59,14 @@ const AuthProvider = ({ children }) => {
     // setUser(null);
     // return signOut(auth);
     try {
+
       setLoading(true);
       const response = await axios.get(
         `${import.meta.env.VITE_SERVER}/logout`,
         {
           withCredentials: true,
         }
+
       );
 
       if (response.data.success) {
@@ -80,38 +82,56 @@ const AuthProvider = ({ children }) => {
     }
   };
 
+  // Get token from server
+  const getToken = async email => {
+    const { data } = await axios.post(
+      `${import.meta.env.VITE_SERVER}/jwt`,
+      { email },
+      { withCredentials: true }
+    )
+    // console.log(data)
+    if (data.token) {
+      await localStorage.setItem('token', data.token)
+    }
+    return data
+  }
+
   // Observer
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
+    const unsubscribe = onAuthStateChanged(auth, async currentUser => {
 
+      setUser(currentUser);
+      //token get
+      if (currentUser) {
+        await getToken(currentUser.email)
+      } else {
+        await localStorage.removeItem('token')
+      }
       setLoading(false);
     });
 
     // cleanup function
     return () => {
-      // setLoading(false);
-      // axios(`${import.meta.env.VITE_SERVER}/logout`,{withCredentials: true});
       return unsubscribe();
-    };
-  }, []);
-
-  console.log(user);
-
-  const userInfo = {
-    createUser,
-    signInUser,
-    googleLogin,
-    loggedOut,
-    user,
-    loading,
-    setLoading,
-    updateUserProfile,
   };
+}, []);
 
-  return (
-    <AuthContext.Provider value={userInfo}>{children}</AuthContext.Provider>
-  );
+// console.log(user);
+
+const userInfo = {
+  createUser,
+  signInUser,
+  googleLogin,
+  loggedOut,
+  user,
+  loading,
+  setLoading,
+  updateUserProfile,
+};
+
+return (
+  <AuthContext.Provider value={userInfo}>{children}</AuthContext.Provider>
+);
 };
 
 AuthProvider.propTypes = {

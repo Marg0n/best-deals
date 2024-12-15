@@ -8,6 +8,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Provider } from 'react-redux'
+import store from "./app/store.js";
+import 'aos/dist/aos.css';
 
 const queryClient = new QueryClient();
 
@@ -16,8 +19,10 @@ createRoot(document.getElementById("root")).render(
     <QueryClientProvider client={queryClient}>
       <HelmetProvider>
         <AuthProvider>
-          <RouterProvider router={Router}/>
-          <ToastContainer />
+          <Provider store={store}>
+            <RouterProvider router={Router} />
+            <ToastContainer />
+          </Provider>
         </AuthProvider>
       </HelmetProvider>
     </QueryClientProvider>

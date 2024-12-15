@@ -3,22 +3,31 @@ import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { FcGoogle } from "react-icons/fc";
 import { RxEyeClosed } from "react-icons/rx";
+import { TbFidgetSpinner } from "react-icons/tb";
 import { TfiEye } from "react-icons/tfi";
 import { Link, Navigate, useNavigate } from "react-router-dom";
+import { ClimbingBoxLoader } from "react-spinners";
 import { toast } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
 import bgImg from '../../assets/register.png';
 import useAuth from "../../hooks/useAuth";
-import { ClimbingBoxLoader } from "react-spinners";
+import useAxiosCommon from "../../hooks/useAxiosCommon";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { imageUpload } from "../../utils/imageUpload";
 import logo from '/rmv_bg_logo1.png';
 
 
 const Registration = () => {
 
-  const { createUser, user, updateUserProfile, loggedOut, googleLogin } = useAuth();
+  const { createUser, user, updateUserProfile, loggedOut, googleLogin, loading } = useAuth();
+
+  // import custom axios functions
+  const axiosCommon = useAxiosCommon();
+  const axiosSecure = useAxiosSecure();
 
   // custom loader for registration
   const [customLoader, setCustomLoader] = useState(false);
+  const [processLoader, setProcessLoader] = useState(false);
 
   // password show
   const [passShow, setPassShow] = useState('');
@@ -26,6 +35,9 @@ const Registration = () => {
   // Navigation
   const navigate = useNavigate();
   const whereTo = '/login';
+
+  // last login date
+  const lastLogin = new Date().toUTCString();
 
   // react form
   const {
@@ -35,33 +47,52 @@ const Registration = () => {
     formState: { errors },
   } = useForm()
 
-  const onSubmit = async (data) => {
+  const onSubmit = async (data, e) => {
+
+    setProcessLoader(true);
 
     const image = e.target.avatar.files[0]
 
-    // upload image and get image url
-    const image_url = await imageUpload(image);
+    // creation date
+    const createdTime = new Date().toUTCString();
 
+    // role
+    const role = 'User';
+
+    // fetch data from the form
     const { email, password, name } = data;
-
-
+    
     if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()[\]{}|\\;:'",.<>/?~])(?=.{6,})/.test(password)) {
 
       // console.log(watch('password'))
       return toast.error(
         `Password must contain 
         an Uppercase, 
-        a Lowercase, 
-        a numeric character, 
+        a Lowercase,  
         a special character 
         and Length must be at least 6 characters long!`,
         { autoClose: 4000, theme: "colored" })
     }
 
+
+
+
     // create user profile and update user
     createUser(email, password)
-      .then(() => {
-        updateUserProfile(name, image_url)
+      .then(async () => {
+
+
+        // upload image and get image url
+        const photo = await imageUpload(image);
+
+
+        const userInfo = { email, name, photo, createdTime, role };
+
+        // insert user data in mongo DB    
+        await axiosCommon.post('/users', userInfo);
+
+        //update user profile in firebase
+        updateUserProfile(name, photo)
           .then(() => {
 
             setCustomLoader(true)
@@ -71,17 +102,19 @@ const Registration = () => {
 
             // loader
             setCustomLoader(false)
+            setProcessLoader(false);
             loggedOut();
             navigate(whereTo, { replace: true })
 
           }).catch((errors) => {
 
             setCustomLoader(false)
+            setProcessLoader(false);
             // An error occurred
             const errorMessage = errors.message.split(':')[1].split('(')[0].trim();
 
             toast.error(errorMessage, { autoClose: 3000, theme: "colored" });
-            navigate('/register');
+            navigate('/registration');
           });
 
         // console.log(result)
@@ -90,6 +123,7 @@ const Registration = () => {
       .catch(errors => {
 
         setCustomLoader(false)
+        setProcessLoader(false);
         // An error occurred                
         const errorCode = errors.code;
         // Remove 'auth/' prefix and '-' characters
@@ -99,17 +133,44 @@ const Registration = () => {
         const message = capitalizedWords.join(' ');
 
         toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
-        navigate('/register');
+        navigate('/registration');
       })
+
+    setProcessLoader(false);
   }
 
   // Navigation handler for all social platform
-  const handleSocialLogin = socialLoginProvider => {
-    socialLoginProvider()
-      .then(result => {
-        if (result.user) {
-          toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
-          navigate(whereTo)
+  const handleSocialLogin = async socialLoginProvider => {
+    await socialLoginProvider()
+      .then(async result => {
+
+        setProcessLoader(true);
+
+        if (result?.user) {
+
+          const userData = {
+            email: result?.user?.email,
+            name: result?.user?.displayName,
+            photo: result?.user?.photoURL,
+            createdTime: result?.user?.metadata.creationTime,
+            lastLogin: result?.user?.metadata.lastSignInTime,
+            banTime:0,
+            role: "User"
+          }
+
+          // Send user data to your server
+          await axiosCommon.post('/users', userData)
+          // jwt token
+          axiosSecure.post(`/jwt`, {
+            email: result?.user?.email,
+          })
+            .then(() => {
+              setProcessLoader(false)
+              toast.success("Logged in successful!🎉", { autoClose: 2000, theme: "colored" })
+              setTimeout(() => {
+                navigate('/')
+              }, 1000);
+            })
         }
       })
       .catch(error => {
@@ -119,6 +180,8 @@ const Registration = () => {
         const words = cleanedErrorCode.split('-');
         const capitalizedWords = words.map(word => word.charAt(1).toUpperCase() + word.slice(2));
         const message = capitalizedWords.join(' ');
+
+        setProcessLoader(false);
 
         toast.error(`${message}`, { autoClose: 5000, theme: "colored" })
         navigate('/login')
@@ -144,7 +207,6 @@ const Registration = () => {
   }
 
   if (user && location?.pathname == '/login' && location?.state == null) {
-    // toast.info(`Dear, ${user?.displayName || user?.email}! You are already Logged in!`, { autoClose: 3000, theme: "colored" });
     return <Navigate to='/' state={location?.pathname || '/'} />
   }
 
@@ -224,7 +286,7 @@ const Registration = () => {
                 id='LoggingEmailAddress'
                 autoComplete='email'
                 name='email'
-                className='block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300'
+                className='block w-full px-4 py-2 text-gray-700 bg-white border rounded-lg    focus:border-blue-400 focus:ring-opacity-40  focus:outline-none focus:ring focus:ring-blue-300 lowercase'
                 type='email'
                 {...register("email", { required: true })}
               />
@@ -267,7 +329,7 @@ const Registration = () => {
 
             {/* photo */}
             <div className='mt-4'>
-              <label htmlFor='image' className='block mb-2 text-sm  font-medium '>
+              <label htmlFor='image' className='block mb-2 text-sm  font-medium text-gray-600'>
                 Upload Avatar:
               </label>
 
@@ -291,7 +353,7 @@ const Registration = () => {
                 type='submit'
                 className='w-full px-6 py-3 text-sm font-medium tracking-wide text-white capitalize transition-colors duration-300 transform bg-gray-800 rounded-lg hover:bg-gray-700 focus:outline-none focus:ring focus:ring-gray-300 focus:ring-opacity-50'
               >
-                Register
+                {(customLoader || processLoader || loading) ? <TbFidgetSpinner size={20} className="animate-spin w-full" /> : 'Register'}
               </button>
             </div>
           </form>

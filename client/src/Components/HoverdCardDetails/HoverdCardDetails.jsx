@@ -13,7 +13,7 @@ const HoverdCardDetails = ({ product }) => {
         creationDateTime,
         _id } = product;
     return (
-        <div>
+        <div className="hidden lg:block">
             <div
                 data-aos="fade-in"
                 data-aos-duration="1500"
@@ -32,8 +32,8 @@ const HoverdCardDetails = ({ product }) => {
                 <p className="text-white">
                     {description.length > 20 ? description.substring(0, 50) + '...' : description}
                 </p>
-                <Link to={`/details/${_id}`}>
-                    <button className="btn bg-[#775050] border-none text-white w-full mt-3"> View Details</button>
+                <Link to={`/details/${_id}`} className="btn bg-[#775050] border-none text-white w-full mt-3">
+                    View Details
                 </Link>
             </div>
 
